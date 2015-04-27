@@ -19,7 +19,7 @@
 
 # Learn more: http://github.com/javan/whenever
 
-set :output, "/Users/leoli/work/rails_pro/amazon_tmall/log/cron_log.log"
+set :output, "/root/web/amazon_tmall/log/cron_log.log"
 set :environment, "development"
 
 every 20.minutes do

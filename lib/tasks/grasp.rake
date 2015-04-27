@@ -157,6 +157,6 @@ def grasp link
 
 end
 
-def ungrasp_tmall_links
+def ungrasp_tmall_link
 	TmallLink.where(status:false).first
 end
