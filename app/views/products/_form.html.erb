@@ -1,0 +1,137 @@
+<%= form_for(@product) do |f| %>
+  <% if @product.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@product.errors.count, "error") %> prohibited this product from being saved:</h2>
+
+      <ul>
+      <% @product.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :ProductType %><br>
+    <%= f.collection_select :product_type_id, ProductType.all, "id", "name" %>
+  </div>
+  <div class="field">
+    <%= f.label :title %><br>
+    <%= f.text_area :title, size:'60x3' %>
+  </div>
+  <div class="field">
+    <%= f.label 'Images' %><br>
+    <% @product.valid_images.each_with_index do |img,index| %>
+      <%= image_tag(img, style:'width:50px;', class:"product_image") %>
+      <%= hidden_field_tag "product[images#{index+1}]", nil, class:'product_hidden_field_value', value:img %>
+    <% end %>
+  </div>
+  <div class="field">
+    <%= f.label :product_number %><br>
+    <%= f.text_field :product_number, size:60 %>
+  </div>
+  <div class="field">
+    <%= f.label :brand %><br>
+    <%= f.text_field :brand, size:60 %>
+  </div>
+  <div class="field">
+    <%= f.label :price %><br>
+    <%= f.text_field :price %>
+  </div>
+  <div class="field">
+    <%= f.label :outer_material_type %><br>
+    <%= f.text_field :outer_material_type %>
+  </div>
+  <div class="field">
+    <%= f.label :inner_material_type %><br>
+    <%= f.text_field :inner_material_type %>
+  </div>
+  <div class="field">
+    <%= f.label :sole_material %><br>
+    <%= f.text_field :sole_material %>
+  </div>
+  <div class="field">
+    <%= f.label :heel_type %><br>
+    <%= f.text_field :heel_type %>
+  </div>
+  <div class="field">
+    <%= f.label :closure_type %><br>
+    <%= f.text_field :closure_type %>
+  </div>
+  <div class="field">
+    <%= f.label :heel_height %><br>
+    <%= f.text_field :heel_height %>
+  </div>
+  <div class="field">
+    <%= f.label :producer %><br>
+    <%= f.text_field :producer %>
+  </div>
+  <div class="field">
+    <%= f.label :origin_address %><br>
+    <%= f.text_area :origin_address, size:'60x3' %>
+  </div>
+  <div class="field">
+    <%= f.label :desc1 %><br>
+    <%= f.text_area :desc1, size:'60x3' %>
+  </div>
+  <div class="field">
+    <%= f.label :desc2 %><br>
+    <%= f.text_area :desc2, size:'60x3' %>
+  </div>
+  <div class="field">
+    <%= f.label :desc3 %><br>
+    <%= f.text_area :desc3, size:'60x3' %>
+  </div>
+
+  <div class="field">
+    <%= f.label :details %><br>
+    <%= f.text_area :details, size:'60x20' %>
+  </div>
+  
+  <hr/>
+  <h3>Editing Variables</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th><%= check_box_tag 'check_all' %></th>
+          <th><%= '颜色' %></th>
+          <th>图片(双击删除同类图片/右键删除单个图片)</th>
+          <th><%= '尺寸' %></th>
+          <th>Price</th>
+          <th>Options</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% pre_color = nil; count = 0; %>
+        <% @product.variables.each_with_index do |v,v_index| %>
+          <%
+            if !pre_color || pre_color == v.color
+            else
+              count = count + 1
+            end
+            pre_color = v.color
+          %>
+          <%= hidden_field_tag 'variable[][index]', nil, value:v.id %>
+          <tr>
+            <td><%= check_box_tag 'item' %></td>
+            <td><%= text_field_tag 'variable[][color]', nil, value:v.color %></td>
+            <td>
+              <% v.valid_images.each_with_index do |img,index| %>
+                <%= image_tag(img, style:'width:50px;', class:"variable_image image_#{count}_#{index} ") %>
+                <%= hidden_field_tag "variable[][image_url#{index+1}]", nil, class:'hidden_field_value', value: v.read_attribute("image_url#{index+1}") %>
+              <% end %>
+            </td>
+            <td><%= text_field_tag 'variable[][size]', nil, value:v.size %></td>
+            <td><%= text_field_tag 'variable[][price]', nil, value:v.price, class:'variable_price' %></td>
+            <td><input type='button' class='remove_variable' value='Remove' /></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+  <hr/>
+  <div class="actions">
+    <input type='button' class='remove_item', value='删除选中变体' />
+    <%= f.submit %>
+  </div>
+<% end %>

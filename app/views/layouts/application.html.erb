@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+  <title>AmazonTmall</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+  <%= favicon_link_tag 'favicon.ico' %>
+</head>
+<body>
+  <%= javascript_include_tag "#{params[:controller]}.js" %>
+  <%= render 'layouts/header' %>
+	<div style="width:80%; margin: 0 auto; margin-top:40px;" >
+	  <%= yield %>
+	</div>
+  <%= render 'layouts/footer' %>
+</div>
+</body>
+</html>

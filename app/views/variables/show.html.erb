@@ -1,0 +1,39 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Color:</strong>
+  <%= @variable.color %>
+</p>
+
+<p>
+  <strong>Size:</strong>
+  <%= @variable.size %>
+</p>
+
+<p>
+  <strong>Price:</strong>
+  <%= @variable.price %>
+</p>
+
+<p>
+  <strong>Product:</strong>
+  <%= @variable.product %>
+</p>
+
+<p>
+  <strong>Deleted at:</strong>
+  <%= @variable.deleted_at %>
+</p>
+
+<p>
+  <strong>Image url1:</strong>
+  <%= @variable.image_url1 %>
+</p>
+
+<p>
+  <strong>Stock:</strong>
+  <%= @variable.stock %>
+</p>
+
+<%= link_to 'Edit', edit_variable_path(@variable) %> |
+<%= link_to 'Back', variables_path %>

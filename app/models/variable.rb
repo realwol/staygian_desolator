@@ -1,0 +1,51 @@
+class Variable < ActiveRecord::Base
+	acts_as_paranoid
+  belongs_to :product
+
+  default_scope {where(update_status:true)}
+
+  def valid_images
+  	image_names = []
+  	1.upto(30) do |t|
+  		image_names << "image_url#{t}"
+  	end
+
+  	@valid_images = []
+  	image_names.each do |attr|
+  		@valid_images << self.read_attribute("#{attr}") unless self.read_attribute("#{attr}").blank?
+  	end
+
+  	@valid_images
+  end
+
+  def self.update_product_variable options, product
+    variables = product.variables
+    variable =''
+    options.each do |option|
+        variables.each do |v|
+          if v.id == option["index"].to_i
+            variable = v
+            break
+          end
+        end
+      option.delete("index")
+      if option.blank?
+        variable.update_attributes(update_status:false)
+      else
+        option["update_status"] = true
+        variable.update_attributes(variable_params(option))
+      end
+    end
+  end
+
+  private
+    def self.variable_params option
+      option.permit(:color, :size, :price, :product_id, :deleted_at, :stock, :update_status, :translate_status,
+                                       :image_url1, :image_url2,:image_url3,:image_url4, :image_url5,:image_url6, :image_url7, :image_url8,:image_url9, :image_url10,
+                                       :image_url11, :image_url12,:image_url13,:image_url14, :image_url15,:image_url16, :image_url17, :image_url18,:image_url19, :image_url20,
+                                       :image_url21, :image_url22,:image_url23,:image_url24, :image_url25,:image_url26, :image_url27, :image_url28,:image_url29, :image_url30,
+                                       :england_color, :england_size, :germany_color, :germany_size, :france_color, :france_size, :spain_color, :spain_size,
+                                       :italy_color, :italy_size,
+                                       )
+    end
+end
