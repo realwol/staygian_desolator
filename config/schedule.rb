@@ -24,5 +24,4 @@ set :environment, "development"
 
 every 1.minute do
 	rake 'grasp:start'
-	rake 'grasp:start'
 end
