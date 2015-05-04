@@ -22,6 +22,7 @@
 set :output, "/root/web/amazon_tmall/log/cron_log.log"
 set :environment, "development"
 
-every 20.seconds do
+every 1.minute do
+	rake 'grasp:start'
 	rake 'grasp:start'
 end
