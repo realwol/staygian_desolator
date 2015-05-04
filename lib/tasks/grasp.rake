@@ -93,7 +93,7 @@ def grasp link
   # Create variables
   @variable_images = @images.dup
   html.css('div.tb-sku dl.tb-prop.tm-sale-prop.tm-clear.tm-img-prop li').each do |img|
-    image_url = img.children[1].attributes["style"].value
+    image_url = img.children[1].attributes["style"].try(:value)
     start_index = image_url.index('http://')
     end_index   = image_url.index('.jpg')
     url = image_url[start_index..(end_index+3)]
@@ -114,18 +114,18 @@ def grasp link
   variables = html.css('div.tb-key div.tb-skin div.tb-sku dl dd ul')
   variables.each do |variable|
     if variable.attributes["data-property"]
-      @var_title << variable.attributes["data-property"].value
+      @var_title << variable.attributes["data-property"].try(:value)
     end
   end
 
   html.css('div.tb-key div.tb-skin div.tb-sku dl dd ul.tm-clear.J_TSaleProp.tb-img li').each do |li|
-    @colors << li.attributes["title"].value
-    @colors_value << li.attributes["data-value"].value
+    @colors << li.attributes["title"].try(:value)
+    @colors_value << li.attributes["data-value"].try(:value)
   end
 
   html.css('div.tb-key div.tb-skin div.tb-sku dl dd ul.tm-clear.J_TSaleProp li').each do |li|
     @sizes << li.children.children.text.strip
-    @sizes_value << li.attributes["data-value"].value
+    @sizes_value << li.attributes["data-value"].try(:value)
   end
 
   @sizes = @sizes - @colors
