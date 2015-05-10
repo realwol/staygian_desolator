@@ -1,0 +1,65 @@
+<h2>当前汇率（1人民币可兑换外币数）</h2>
+  <div class="field">
+    <%= label_tag '英国' %>
+    <%= @current_rate.try(:england) %>
+  </div>
+  <div class="field">
+    <%= label_tag '德国' %>
+    <%= @current_rate.try(:germany) %>
+  </div>
+  <div class="field">
+    <%= label_tag '法国' %>
+    <%= @current_rate.try(:france) %>
+  </div>
+  <div class="field">
+    <%= label_tag '西班牙' %>
+    <%= @current_rate.try(:spain) %>
+  </div>
+  <div class="field">
+    <%= label_tag '意大利' %>
+    <%= @current_rate.try(:italy) %>
+  </div>
+  <div class="field">
+    <%= label_tag '美国' %>
+    <%= @current_rate.try(:america) %>
+  </div>
+  <div class="field">
+    <%= label_tag '加拿大' %>
+    <%= @current_rate.try(:canada) %>
+  </div>
+
+<hr/>
+<h2>汇率设定</h2>
+<%= form_for(@rate) do |f| %>
+  <div class="field">
+    <%= f.label :england %><br>
+    <%= f.text_field :england, value: @current_rate.try(:england) %>
+  </div>
+  <div class="field">
+    <%= f.label :germany %><br>
+    <%= f.text_field :germany, value: @current_rate.try(:germany) %>
+  </div>
+  <div class="field">
+    <%= f.label :france %><br>
+    <%= f.text_field :france, value: @current_rate.try(:france) %>
+  </div>
+  <div class="field">
+    <%= f.label :spain %><br>
+    <%= f.text_field :spain, value: @current_rate.try(:spain) %>
+  </div>
+  <div class="field">
+    <%= f.label :italy %><br>
+    <%= f.text_field :italy, value: @current_rate.try(:italy) %>
+  </div>
+  <div class="field">
+    <%= f.label :america %><br>
+    <%= f.text_field :america, value: @current_rate.try(:america) %>
+  </div>
+  <div class="field">
+    <%= f.label :canada %><br>
+    <%= f.text_field :canada, value: @current_rate.try(:canada) %>
+  </div>
+  <div class="actions">
+    <%= f.submit '确定' %>
+  </div>
+<% end %>

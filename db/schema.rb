@@ -11,7 +11,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150507170742) do
+ActiveRecord::Schema.define(version: 20150510154502) do
+
+  create_table "cash_rates", force: :cascade do |t|
+    t.integer  "england",    limit: 4
+    t.integer  "germany",    limit: 4
+    t.integer  "france",     limit: 4
+    t.integer  "spain",      limit: 4
+    t.integer  "italy",      limit: 4
+    t.integer  "amercia",    limit: 4
+    t.integer  "canada",     limit: 4
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+  end
 
   create_table "product_info_translations", force: :cascade do |t|
     t.string   "e_t",        limit: 255

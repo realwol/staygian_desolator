@@ -38,6 +38,10 @@ class Variable < ActiveRecord::Base
     end
   end
 
+  def choose_variable_translation(language, type)
+    self.public_send("#{language}_#{type}")
+  end
+
   private
     def self.variable_params option
       option.permit(:color, :size, :price, :product_id, :deleted_at, :stock, :update_status, :translate_status,

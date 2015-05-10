@@ -2,6 +2,21 @@ class ProductsController < ApplicationController
   before_action :set_product, only: [:show, :edit, :update, :destroy, :shield_product]
   before_action :authenticate_user!
 
+  def export_page
+    
+  end
+
+  def export_products
+    @products = Product.where(product_type_id: params[:export_type]).order('created_at desc')
+    cookies[:export_language] = params[:language]
+    cookies[:export_type] = params[:export_type]
+    request.format = 'xls'
+    respond_to do |f|
+      f.xls {send_data @products.to_csv(params[:language], col_sep: "\t")}
+      # f.xls
+    end
+  end
+
   def shield_product
     @product.update_attributes(product_from:'1')
     redirect_to root_path
@@ -52,7 +67,7 @@ class ProductsController < ApplicationController
   end
 
   def index
-    @products = Product.all.updated.page(params[:page])
+    @products = Product.all.updated.order('id desc').page(params[:page])
   end
 
   # GET /products/1

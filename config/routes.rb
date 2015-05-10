@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :cash_rates, only:[:index, :create]
+
   resources :variables
 
   resources :products do
@@ -6,6 +8,8 @@ Rails.application.routes.draw do
       get 'get_tmall_links'
       post 'save_tmall_links'
       get 'un_updated_page'
+      get 'export_page'
+      get 'export_products'
     end
 
     member do
