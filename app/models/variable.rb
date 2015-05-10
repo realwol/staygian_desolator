@@ -2,7 +2,7 @@ class Variable < ActiveRecord::Base
 	acts_as_paranoid
   belongs_to :product
 
-  default_scope {where(update_status:true)}
+  default_scope {where(update_status:false)}
 
   def valid_images
   	image_names = []
