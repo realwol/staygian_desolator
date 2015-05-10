@@ -12,7 +12,7 @@ end
 def start
 	tmall_link = ungrasp_tmall_link
 	# tmall_links.each do |link|
-  if tmall_link.blank?
+  unless tmall_link.blank?
 		grasp tmall_link.address
 		tmall_link.update_attributes(status:true)
   else

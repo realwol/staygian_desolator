@@ -91,7 +91,7 @@ class ProductsController < ApplicationController
       if @product.update(product_params)
         @product.update_attributes(update_status:true)
         Variable.update_product_variable(params["variable"], @product)
-        TranslateToken.create(t_id:@product.id, t_type:'product', t_status: true, method:'update')
+        TranslateToken.create(t_id:@product.id, t_type:'product', t_status: true, t_method:'update')
         format.html { redirect_to @product, notice: 'Product was successfully updated.' }
         format.json { render :show, status: :ok, location: @product }
       else
