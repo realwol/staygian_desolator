@@ -30,9 +30,9 @@ class Variable < ActiveRecord::Base
         end
       option.delete("index")
       if option.blank?
-        variable.update_attributes(update_status:false)
+        variable.update_attributes(update_status:true)
       else
-        option["update_status"] = true
+        option["update_status"] = false
         variable.update_attributes(variable_params(option))
       end
     end
