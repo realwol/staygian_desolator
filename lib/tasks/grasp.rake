@@ -12,9 +12,12 @@ end
 def start
 	tmall_link = ungrasp_tmall_link
 	# tmall_links.each do |link|
+  if tmall_link.blank?
 		grasp tmall_link.address
 		tmall_link.update_attributes(status:true)
-	# end
+  else
+    puts 'sleeping'
+	end
 end
 
 def grasp link
@@ -22,6 +25,7 @@ def grasp link
     #   flash[:alert] = '不能重复抓取了哟！'
     #   render 'grasp_product'
     # end
+
   agent = UserAgents.rand()
   html = Nokogiri::HTML(open(link, 'User-Agent' => agent, :allow_redirections => :all ))
 

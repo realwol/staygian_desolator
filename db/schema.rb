@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150424142831) do
+ActiveRecord::Schema.define(version: 20150507170742) do
 
   create_table "product_info_translations", force: :cascade do |t|
     t.string   "e_t",        limit: 255
@@ -118,17 +118,30 @@ ActiveRecord::Schema.define(version: 20150424142831) do
     t.text     "spain_detail",           limit: 65535
     t.text     "italy_detail",           limit: 65535
     t.boolean  "update_status",          limit: 1
+    t.string   "shop_id",                limit: 255
   end
 
   add_index "products", ["product_type_id"], name: "index_products_on_product_type_id", using: :btree
   add_index "products", ["user_id"], name: "index_products_on_user_id", using: :btree
 
-  create_table "tmall_links", force: :cascade do |t|
-    t.text     "address",    limit: 65535
-    t.boolean  "status",     limit: 1
+  create_table "shops", force: :cascade do |t|
+    t.string   "name",       limit: 255
     t.integer  "user_id",    limit: 4
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.boolean  "status",     limit: 1,   default: true
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+  end
+
+  add_index "shops", ["user_id"], name: "index_shops_on_user_id", using: :btree
+
+  create_table "tmall_links", force: :cascade do |t|
+    t.text     "address",         limit: 65535
+    t.boolean  "status",          limit: 1
+    t.integer  "user_id",         limit: 4
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.string   "shop_id",         limit: 255
+    t.string   "product_link_id", limit: 255
   end
 
   add_index "tmall_links", ["user_id"], name: "index_tmall_links_on_user_id", using: :btree
@@ -221,7 +234,7 @@ ActiveRecord::Schema.define(version: 20150424142831) do
     t.text     "image_url28",      limit: 65535
     t.text     "image_url29",      limit: 65535
     t.text     "image_url30",      limit: 65535
-    t.boolean  "update_status",    limit: 1,     default: false
+    t.boolean  "update_status",    limit: 1,     default: true
     t.boolean  "translate_status", limit: 1,     default: false
   end
 
@@ -230,6 +243,7 @@ ActiveRecord::Schema.define(version: 20150424142831) do
   add_foreign_key "product_info_translations", "products"
   add_foreign_key "products", "product_types"
   add_foreign_key "products", "users"
+  add_foreign_key "shops", "users"
   add_foreign_key "tmall_links", "users"
   add_foreign_key "variables", "products"
 end

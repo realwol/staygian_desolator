@@ -30,5 +30,6 @@ gem "lazy_high_charts"
 
 gem 'open_uri_redirections'
 gem 'useragents'
+gem 'mechanize'
 gem 'execjs'
 gem 'therubyracer'

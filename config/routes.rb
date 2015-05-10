@@ -7,6 +7,10 @@ Rails.application.routes.draw do
       post 'save_tmall_links'
       get 'un_updated_page'
     end
+
+    member do
+      get 'shield_product'
+    end
   end
 
   resources :product_types

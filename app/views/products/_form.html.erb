@@ -12,64 +12,87 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :ProductType %><br>
-    <%= f.collection_select :product_type_id, ProductType.all, "id", "name" %>
-  </div>
-  <div class="field">
     <%= f.label :title %><br>
     <%= f.text_area :title, size:'60x3' %>
+  </div>
+  <div class="field">
+    <%= f.label :origin_address %><br>
+    <%= f.text_area :origin_address, size:'60x3' %>
+  </div>
+  <table>
+    <tr>
+      <td>
+        <%= f.label :product_number %>
+        <%= f.text_field :product_number, size:30 %>
+      </td>
+      <td>
+        <%= f.label :brand %>
+        <%= f.text_field :brand, size:30 %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <%= f.label "帮面材质:" %>
+        <%= f.text_field :outer_material_type %>
+      </td>
+      <td>
+        <%= f.label "内里材质:" %>
+        <%= f.text_field :inner_material_type %>
+      </td>
+      <td>
+        <%= f.label "生产商家:" %>
+        <%= f.text_field :producer %>  
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <%= f.label "鞋底材质:" %>
+        <%= f.text_field :sole_material %>
+      </td>
+      <td>
+        <%= f.label "跟底款式:" %>
+        <%= f.text_field :heel_type %>
+      </td>
+      <td>
+        <%= f.label "闭合方式:" %>
+        <%= f.text_field :closure_type %>
+      </td>
+    </tr>
+  </table>
+
+  <hr/>
+  <div class="field">
+    <%= f.label :ProductType %><br>
+    <%= f.collection_select :product_type_id, ProductType.all, "id", "name" %>
   </div>
   <div class="field">
     <%= f.label 'Images' %><br>
     <% @product.valid_images.each_with_index do |img,index| %>
       <%= image_tag(img, style:'width:50px;', class:"product_image") %>
       <%= hidden_field_tag "product[images#{index+1}]", nil, class:'product_hidden_field_value', value:img %>
-    <% end %>
+    <% end %><br/>
+    <%= f.label '图片裁剪方式' %>
+    <select name='cut_type' id='cut_type'>
+      <option>不裁剪</option>
+      <option value=1 >左上</option>
+      <option value=2 >右上</option>
+      <option value=3 >右下</option>
+      <option value=4 >左下</option>
+    </select>
   </div>
   <div class="field">
-    <%= f.label :product_number %><br>
-    <%= f.text_field :product_number, size:60 %>
-  </div>
-  <div class="field">
-    <%= f.label :brand %><br>
-    <%= f.text_field :brand, size:60 %>
-  </div>
-  <div class="field">
-    <%= f.label :price %><br>
+    <%= f.label :price %>
     <%= f.text_field :price %>
-  </div>
-  <div class="field">
-    <%= f.label :outer_material_type %><br>
-    <%= f.text_field :outer_material_type %>
-  </div>
-  <div class="field">
-    <%= f.label :inner_material_type %><br>
-    <%= f.text_field :inner_material_type %>
-  </div>
-  <div class="field">
-    <%= f.label :sole_material %><br>
-    <%= f.text_field :sole_material %>
-  </div>
-  <div class="field">
-    <%= f.label :heel_type %><br>
-    <%= f.text_field :heel_type %>
-  </div>
-  <div class="field">
-    <%= f.label :closure_type %><br>
-    <%= f.text_field :closure_type %>
-  </div>
-  <div class="field">
-    <%= f.label :heel_height %><br>
+    <%= f.label :heel_height %>
     <%= f.text_field :heel_height %>
+    <%= f.label :seasons %>
+    <select name='seasons' id='seasons'>
+      <option>请选择季节:</option>
+      <option value=1 >春夏</option>
+      <option value=2 >秋冬</option>
+    </select>
   </div>
-  <div class="field">
-    <%= f.label :producer %><br>
-    <%= f.text_field :producer %>
-  </div>
-  <div class="field">
-    <%= f.label :origin_address %><br>
-    <%= f.text_area :origin_address, size:'60x3' %>
-  </div>
+
   <div class="field">
     <%= f.label :desc1 %><br>
     <%= f.text_area :desc1, size:'60x3' %>
