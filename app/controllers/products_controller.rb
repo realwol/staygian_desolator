@@ -102,6 +102,7 @@ class ProductsController < ApplicationController
   # PATCH/PUT /products/1
   # PATCH/PUT /products/1.json
   def update
+    respond_to do |format|
       if @product.update(product_params)
         @product.update_attributes(update_status:true)
         Variable.update_product_variable(params["variable"], @product)

@@ -66,4 +66,17 @@ $(function(){
     $(this).parents('tr').remove();
   });
 
+  $('#ul-sortable').sortable({
+    placeholder: "ui-state-default"
+  });
+
+  $('#ul-sortable').mouseout(function(){
+    $('.hidden_field_value').each(function(i,l){
+      i = i + 1;
+      $(this).attr('name',"variable[][image_url"+i+"]");
+    })
+  });
+
+  $('#ul-sortable').disableSelection();
+
 })
