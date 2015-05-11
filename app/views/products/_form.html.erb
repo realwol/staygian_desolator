@@ -94,19 +94,6 @@
   </div>
 
   <div class="field">
-    <%= f.label :desc1 %><br>
-    <%= f.text_area :desc1, size:'60x3' %>
-  </div>
-  <div class="field">
-    <%= f.label :desc2 %><br>
-    <%= f.text_area :desc2, size:'60x3' %>
-  </div>
-  <div class="field">
-    <%= f.label :desc3 %><br>
-    <%= f.text_area :desc3, size:'60x3' %>
-  </div>
-
-  <div class="field">
     <%= f.label :details %><br>
     <%= f.text_area :details, size:'60x20' %>
   </div>
@@ -121,6 +108,7 @@
           <th>图片(双击删除同类图片/右键删除单个图片)</th>
           <th><%= '尺寸' %></th>
           <th>Price</th>
+          <th>Stock</th>
           <th>Options</th>
         </tr>
       </thead>
@@ -144,8 +132,9 @@
                 <%= hidden_field_tag "variable[][image_url#{index+1}]", nil, class:'hidden_field_value', value: v.read_attribute("image_url#{index+1}") %>
               <% end %>
             </td>
-            <td><%= text_field_tag 'variable[][size]', nil, value:v.size %></td>
-            <td><%= text_field_tag 'variable[][price]', nil, value:v.price, class:'variable_price' %></td>
+            <td><%= text_field_tag 'variable[][size]', nil, value:v.size, style:'width:90px' %></td>
+            <td><%= text_field_tag 'variable[][price]', nil, value:v.price, class:'variable_price', style:'width:60px' %></td>
+            <td><%= text_field_tag 'variable[][stock]', nil, value:v.stock, style:'width:60px' %></td>
             <td><input type='button' class='remove_variable' value='Remove' /></td>
           </tr>
         <% end %>

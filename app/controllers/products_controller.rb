@@ -102,7 +102,6 @@ class ProductsController < ApplicationController
   # PATCH/PUT /products/1
   # PATCH/PUT /products/1.json
   def update
-    respond_to do |format|
       if @product.update(product_params)
         @product.update_attributes(update_status:true)
         Variable.update_product_variable(params["variable"], @product)
@@ -135,7 +134,7 @@ class ProductsController < ApplicationController
       params.require(:product).permit(:product_type_id, :title, :sku, :sku_number, :product_number, :user_id, :origin_address, 
                                       :desc1, :desc2, :desc3, :brand, :price, :on_sale, :translate_status, :product_from,
                                       :details, :producer, :heel_height, :closure_type, :heel_type, :sole_material, :inner_material_type,
-                                      :outer_material_type, :update_status)
+                                      :outer_material_type, :update_status, :seasons)
     end
 
     def avaliable? link

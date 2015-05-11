@@ -11,7 +11,7 @@ class Product < ActiveRecord::Base
   scope :un_updated, -> {where(update_status:false).order("id desc")}
   scope :updated, -> {where(update_status:true)}
 
-  before_create :save_sku
+  before_create :save_sku, :transform_seasons
 
   def valid_images
   	image_names = []
@@ -84,7 +84,7 @@ class Product < ActiveRecord::Base
                         "main_image_url", "switch_image_url", "other_image_url1", "other_image_url2",
                         "other_image_url3", "other_image_url4","other_image_url5", "other_image_url6",
                         "other_image_url7", "other_image_url8", "parent_child", "parent_sku", "relationship_type",
-                        "variation_theme", "color_name", "color_map", "size_name", "size_map", "Product Description"]
+                        "variation_theme", "color_name", "color_map", "size_name", "size_map", "Seasons"]
 
     country_currency = {england:'GBP', germany:'EUR', france: 'EUR', spain:'EUR', italy:'EUR', china:'人民币', america:'USD', canada:'CAD'}
 
@@ -105,7 +105,7 @@ class Product < ActiveRecord::Base
         product_translation = Product.choose_language(language, product)
         xls_column_values << product_translation[:title]
         xls_column_values << ""
-        xls_column_values << product.try(:price).try(:to_f) * cash_rate
+        xls_column_values << product.try(:price).try(:to_f) / cash_rate
         xls_column_values << country_currency[language.to_sym]
         xls_column_values << product_translation[:des1]
         xls_column_values << product_translation[:des2]
@@ -155,6 +155,7 @@ class Product < ActiveRecord::Base
         xls_column_values << "" # color
         xls_column_values << "" # size
         xls_column_values << "" # size
+        xls_column_values << product.seasons
         
         csv << xls_column_values
         # 子产品
@@ -196,7 +197,7 @@ class Product < ActiveRecord::Base
             xls_column_values << "#{product_translation[:title]}-#{v_size}"
           end
           xls_column_values << ""
-          xls_column_values << v.price.to_f * cash_rate
+          xls_column_values << v.price.to_f / cash_rate
           xls_column_values << country_currency[language.to_sym]
           xls_column_values << product_translation[:des1]
           xls_column_values << product_translation[:des2]
@@ -232,6 +233,7 @@ class Product < ActiveRecord::Base
           xls_column_values << "#{v_color}"
           xls_column_values << "#{v_size}"
           xls_column_values << "#{v_size}"
+          xls_column_values << product.seasons
 
           csv << xls_column_values
         end
@@ -251,5 +253,14 @@ class Product < ActiveRecord::Base
     self.sku_number = base_number + 1
 
     self.sku = self.sku_number.to_s.prepend(("T" + "0" * (7- self.sku_number.to_s.length)) )
+  end
+
+  def transform_seasons
+    case self.seasons.to_i
+    when 1
+      self.seasons = '春夏'
+    when 2
+      self.seasons = '秋冬'
+    end
   end
 end

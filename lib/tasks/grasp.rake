@@ -32,7 +32,7 @@ def grasp link
   # Create Product
   @product = Product.new(translate_status:false, update_status:false, on_sale:true)
   @product.origin_address = link
-  @product.title = html.css('div.tb-detail-hd').text.strip
+  @product.title = html.css('div.tb-detail-hd h1').text.strip
   @product.brand = html.css('li#J_attrBrandName').text.slice(4..-1)
 
   html.css('ul#J_AttrUL li').each do |li|
@@ -80,12 +80,9 @@ def grasp link
       @product.closure_type = d.text.gsub!('闭合方式:', '').lstrip[1..-1]
       flag5 = false
     end
-
-    if flag6 && d.text.index('制造商') 
-      @product.producer = d.text.gsub!('制造商:', '').lstrip[1..-1]
-      flag6 = false
-    end
   end
+
+  @product.producer = html.css('div#shopExtra strong').text
 
   @product.details = @details.join
 
@@ -157,7 +154,6 @@ def grasp link
   		  @variable_images.each_with_index do |img,index|
   			  variable_hash["image_url#{index+1}".to_sym] = img
   		  end
-
         variable_array << variable_hash.dup
       end
     end
