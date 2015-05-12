@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150511080009) do
+ActiveRecord::Schema.define(version: 20150512151438) do
 
   create_table "cash_rates", force: :cascade do |t|
     t.float    "england",    limit: 24
@@ -133,6 +133,7 @@ ActiveRecord::Schema.define(version: 20150511080009) do
     t.string   "shop_id",                limit: 255
     t.string   "shield_type",            limit: 255,   default: "0"
     t.datetime "shield_untill"
+    t.datetime "presale_date"
   end
 
   add_index "products", ["product_type_id"], name: "index_products_on_product_type_id", using: :btree

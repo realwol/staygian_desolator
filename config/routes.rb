@@ -14,6 +14,7 @@ Rails.application.routes.draw do
 
     member do
       get 'shield_product'
+      get 'presale_product'
     end
   end
 

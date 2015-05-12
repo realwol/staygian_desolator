@@ -20,10 +20,10 @@
 </table>
 
 <hr/>
-<h1>Input tmall links below</h1>
+<h1>输入店铺id号码：</h1>
 
 <%= form_tag(save_tmall_links_products_path) do %>
-  <%= text_area_tag 'links', nil, size:"125x2" %><br/>
+  <%= text_area_tag 'links', nil, size:"100x3" %><br/>
   选择商铺名称：
   <%= select 'product','shop_id', Shop.all.collect {|p| [p.name, p.id] }, { include_blank: true} %><br/>
   如果商铺不存在，填写商铺名称：(商铺名称存在填写内容，则已此内容为准，忽略上一步选择的商铺名称)<br/>

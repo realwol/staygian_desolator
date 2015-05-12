@@ -22,6 +22,11 @@ class ProductsController < ApplicationController
     redirect_to root_path
   end
 
+  def presale_product
+    @product.update_attributes(shield_type:'2', presale_date: params[:presale_date])
+    redirect_to root_path
+  end
+
   def un_updated_page
     @products = Product.all.un_updated.page(params[:page])
   end
@@ -50,7 +55,7 @@ class ProductsController < ApplicationController
       end
 
       page = agent.get(uri)
-
+      binding.pry
       if page.at('#J_ItemList')
         a = page.at('#J_ItemList').children
       else
@@ -72,7 +77,7 @@ class ProductsController < ApplicationController
           links_array << link_hash.dup
         end
       end
-      if page.at('.ui-page-next')
+      if (page.at('.ui-page-next') && page.at('.ui-page-next').attributes["href"])
         next_uri = page.at('.ui-page-next').attributes["href"].value
       else
         next_uri = ''
