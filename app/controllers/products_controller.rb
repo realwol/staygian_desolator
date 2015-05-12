@@ -1,5 +1,5 @@
 class ProductsController < ApplicationController
-  before_action :set_product, only: [:show, :edit, :update, :destroy, :shield_product]
+  before_action :set_product, only: [:show, :edit, :update, :destroy, :shield_product, :presale_product]
   before_action :authenticate_user!
 
   def export_page
@@ -31,7 +31,7 @@ class ProductsController < ApplicationController
     @products = Product.all.un_updated.page(params[:page])
   end
 
-  def get_tmall_links
+  def get_tmall_links 
     
   end
 
@@ -55,7 +55,6 @@ class ProductsController < ApplicationController
       end
 
       page = agent.get(uri)
-      binding.pry
       if page.at('#J_ItemList')
         a = page.at('#J_ItemList').children
       else

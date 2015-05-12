@@ -147,8 +147,13 @@
 
   <hr/>
   <div class="actions">
-    <%= link_to '屏蔽产品', shield_product_product_path(@product) %>
-    <%= link_to '预售产品', presale_product_product_path(@product) %>
     <%= f.submit %>
   </div>
 <% end %>
+    <div >
+      <%= form_tag(presale_product_product_path(@product), method:'get') do %>
+        <input type="text" id="datetimepicker" name='presale_date' data-date-format="yyyy-mm-dd">
+        <%= button_tag '设产品为预售并选择日期' %>
+      <%end%>
+      <%= link_to '屏蔽产品', shield_product_product_path(@product) %>
+    </div>
