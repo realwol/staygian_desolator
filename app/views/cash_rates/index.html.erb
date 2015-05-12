@@ -21,7 +21,7 @@
   </div>
   <div class="field">
     <%= label_tag '美国' %>
-    <%= @current_rate.try(:america) %>
+    <%= @current_rate.try(:amercia) %>
   </div>
   <div class="field">
     <%= label_tag '加拿大' %>
@@ -52,8 +52,8 @@
     <%= f.text_field :italy, value: @current_rate.try(:italy) %>
   </div>
   <div class="field">
-    <%= f.label :america %><br>
-    <%= f.text_field :america, value: @current_rate.try(:america) %>
+    <%= f.label :amercia %><br>
+    <%= f.text_field :amercia, value: @current_rate.try(:amercia) %>
   </div>
   <div class="field">
     <%= f.label :canada %><br>

@@ -35,7 +35,7 @@ class ProductsController < ApplicationController
     link_hash = {}
     next_uri = 'start_uri'
     agent = Mechanize.new
-    uri = params[:links]
+    uri = "http://list.tmall.com/search_shopitem.htm?user_id=" + params[:links]
     redirect_to root_path if uri.blank?
 
     shop_id = nil
@@ -50,10 +50,12 @@ class ProductsController < ApplicationController
       end
 
       page = agent.get(uri)
+
       if page.at('#J_ItemList')
         a = page.at('#J_ItemList').children
       else
         render text:'抓取请求被屏蔽，请稍候重试'
+        return
       end
 
       1.step(a.count - 2,2) do |i|
@@ -70,7 +72,7 @@ class ProductsController < ApplicationController
           links_array << link_hash.dup
         end
       end
-      if page.at('.ui-page-next').attributes["href"]
+      if page.at('.ui-page-next')
         next_uri = page.at('.ui-page-next').attributes["href"].value
       else
         next_uri = ''

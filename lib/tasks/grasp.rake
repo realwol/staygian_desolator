@@ -92,7 +92,8 @@ def grasp link
   @product.save
 
   # Create variables
-  @variable_images = @images.dup
+  @variable_images = []
+  # @variable_images = @images.dup
   html.css('div.tb-sku dl.tb-prop.tm-sale-prop.tm-clear.tm-img-prop li').each do |img|
     image_url = img.children[1].attributes["style"].try(:value)
     if image_url
@@ -101,6 +102,10 @@ def grasp link
       url = image_url[start_index..(end_index+3)]
       @variable_images << url unless @variable_images.include?(url)
     end
+  end
+
+  @images.each do |image|
+    @variable_images << image
   end
 
   variable_image_hash = {}

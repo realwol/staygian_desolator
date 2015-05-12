@@ -16,8 +16,8 @@
     <%= f.text_area :title, size:'60x3' %>
   </div>
   <div class="field">
-    <%= f.label :origin_address %><br>
-    <%= f.text_area :origin_address, size:'60x3' %>
+    <label>源地址：</label>
+    <%= link_to "#{@product.origin_address}", "#{@product.origin_address}", :target => 'blank' %><br>
   </div>
   <table>
     <tr>
@@ -105,7 +105,7 @@
         <tr>
           <th><%= check_box_tag 'check_all' %></th>
           <th><%= '颜色' %></th>
-          <th>图片(双击删除同类图片/右键删除单个图片)</th>
+          <th>图片(左键单机选中裁剪图片/左键双击删除同类图片/右键删除单个图片)</th>
           <th><%= '尺寸' %></th>
           <th>Price</th>
           <th>Stock</th>
@@ -129,7 +129,7 @@
             <td>
               <ul id="ul-sortable" style="list-style-type: none; margin: 0; padding: 0; width: 450px;">
               <% v.valid_images.each_with_index do |img,index| %>
-                <li class="ui-state-default" style="float: left; width: 50px; height: 50px; font-size: 4em; text-align: center;">
+                <li class="ui-state-default" style="float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px;">
                   <%= image_tag(img, style:'width:50px;', class:"variable_image image_#{count}_#{index} ") %>
                   <%= hidden_field_tag "variable[][image_url#{index+1}]", nil, class:'hidden_field_value', value: v.read_attribute("image_url#{index+1}") %>
                 </li>

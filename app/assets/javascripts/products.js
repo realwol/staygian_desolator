@@ -79,4 +79,13 @@ $(function(){
 
   $('#ul-sortable').disableSelection();
 
+  $('.variable_image').click(function(){
+    var classString = $(this).attr('class');
+    var classNames = classString.split(" ");
+    var names = "."+classNames[1];
+    $(names).each(function(){
+      $(this).css("border","2px solid red");
+    })
+  });
+
 })
