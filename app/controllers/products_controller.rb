@@ -18,7 +18,7 @@ class ProductsController < ApplicationController
   end
 
   def shield_product
-    @product.update_attributes(product_from:'1')
+    @product.update_attributes(shield_type:'1')
     redirect_to root_path
   end
 
@@ -33,6 +33,7 @@ class ProductsController < ApplicationController
   def save_tmall_links
     links_array = []
     link_hash = {}
+    next_uri = 'start_uri'
     agent = Mechanize.new
     uri = params[:links]
     redirect_to root_path if uri.blank?
@@ -43,21 +44,36 @@ class ProductsController < ApplicationController
       shop_id = shop.id
     end
 
-    page = agent.get(uri)
-    a = page.at('#J_ItemList').children
+    while !next_uri.blank?
+      unless next_uri == 'start_uri'
+        uri = uri[0..(uri.index('?')-1)] + next_uri
+      end
 
-    1.step(a.count - 2,2) do |i|
-      link_hash[:address] = "http://" + a[i].at('a.productImg').attributes["href"].value[2..-1]
-      product_link_start = link_hash[:address].index('id') + 3
-      product_link_end = link_hash[:address][product_link_start..-1].index('&') - 1 + product_link_start
+      page = agent.get(uri)
+      if page.at('#J_ItemList')
+        a = page.at('#J_ItemList').children
+      else
+        render text:'抓取请求被屏蔽，请稍候重试'
+      end
 
-      product_link_id = link_hash[:address][product_link_start..product_link_end]
-      unless TmallLink.where(product_link_id: product_link_id).first
-        link_hash[:product_link_id] = product_link_id
-        link_hash[:user_id] = current_user.id
-        link_hash[:status]  = false
-        link_hash[:shop_id]  = (shop_id || params[:product][:shop_id])
-        links_array << link_hash.dup
+      1.step(a.count - 2,2) do |i|
+        link_hash[:address] = "http://" + a[i].at('a.productImg').attributes["href"].value[2..-1]
+        product_link_start = link_hash[:address].index('id') + 3
+        product_link_end = link_hash[:address][product_link_start..-1].index('&') - 1 + product_link_start
+
+        product_link_id = link_hash[:address][product_link_start..product_link_end]
+        unless TmallLink.where(product_link_id: product_link_id).first
+          link_hash[:product_link_id] = product_link_id
+          link_hash[:user_id] = current_user.id
+          link_hash[:status]  = false
+          link_hash[:shop_id]  = (shop_id || params[:product][:shop_id])
+          links_array << link_hash.dup
+        end
+      end
+      if page.at('.ui-page-next').attributes["href"]
+        next_uri = page.at('.ui-page-next').attributes["href"].value
+      else
+        next_uri = ''
       end
     end
 
@@ -67,7 +83,7 @@ class ProductsController < ApplicationController
   end
 
   def index
-    @products = Product.all.updated.order('id desc').page(params[:page])
+    @products = Product.all.updated.un_shield.order('id desc').page(params[:page])
   end
 
   # GET /products/1

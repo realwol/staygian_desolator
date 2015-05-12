@@ -10,6 +10,7 @@ class Product < ActiveRecord::Base
 
   scope :un_updated, -> {where(update_status:false).order("id desc")}
   scope :updated, -> {where(update_status:true)}
+  scope :un_shield, -> {where(shield_type: 0)}
 
   before_create :save_sku, :transform_seasons
 

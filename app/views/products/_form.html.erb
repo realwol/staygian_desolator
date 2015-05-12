@@ -147,7 +147,7 @@
 
   <hr/>
   <div class="actions">
-    <input type='button' class='remove_item', value='删除选中变体' />
+    <%= link_to '屏蔽产品', shield_product_product_path(@product) %>
     <%= f.submit %>
   </div>
 <% end %>

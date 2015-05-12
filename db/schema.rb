@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150510165433) do
+ActiveRecord::Schema.define(version: 20150511080009) do
 
   create_table "cash_rates", force: :cascade do |t|
     t.float    "england",    limit: 24
@@ -79,8 +79,8 @@ ActiveRecord::Schema.define(version: 20150510165433) do
     t.string   "product_from",           limit: 255
     t.text     "details",                limit: 65535
     t.datetime "deleted_at"
-    t.datetime "created_at",                           null: false
-    t.datetime "updated_at",                           null: false
+    t.datetime "created_at",                                         null: false
+    t.datetime "updated_at",                                         null: false
     t.string   "images1",                limit: 255
     t.string   "images2",                limit: 255
     t.string   "images3",                limit: 255
@@ -131,6 +131,8 @@ ActiveRecord::Schema.define(version: 20150510165433) do
     t.text     "italy_detail",           limit: 65535
     t.boolean  "update_status",          limit: 1
     t.string   "shop_id",                limit: 255
+    t.string   "shield_type",            limit: 255,   default: "0"
+    t.datetime "shield_untill"
   end
 
   add_index "products", ["product_type_id"], name: "index_products_on_product_type_id", using: :btree
