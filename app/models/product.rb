@@ -11,6 +11,7 @@ class Product < ActiveRecord::Base
   scope :un_updated, -> {where(update_status:false).order("id desc")}
   scope :updated, -> {where(update_status:true)}
   scope :un_shield, -> {where(shield_type: 0)}
+  scope :pre_saled, -> {where.not(presale_date: nil).where(shield_type:2)}
 
   before_create :save_sku, :transform_seasons
 
@@ -158,28 +159,26 @@ class Product < ActiveRecord::Base
         xls_column_values << "" # size
         xls_column_values << "" # size
         xls_column_values << product.read_attribute("#{language}_detail")
-        xls_column_values << product.outer_material_type
-        xls_column_values << product.inner_material_type
-        xls_column_values << product.sole_material
-        xls_column_values << product.heel_type
-        xls_column_values << product.closure_type
+        xls_column_values << product.read_attribute("outer_material_type_#{language}")
+        xls_column_values << product.read_attribute("inner_material_type_#{language}")
+        xls_column_values << product.read_attribute("sole_material_#{language}")
+        xls_column_values << product.read_attribute("heel_type_#{language}")
+        xls_column_values << product.read_attribute("closure_type_#{language}")
         
         csv << xls_column_values
         # 子产品
         product.variables.each do |v|
           xls_column_values = []
+          v_color = ''
+          v_size = ''
           v_variable_info_translation = v
           if v.color && v.size
-              if product.product_from == 2
-                xls_column_values << "#{product.sku}-#{v_variable_info_translation.england_color}#{v_variable_info_translation.england_size}"[0..35].lstrip
-              else
-                v_color = v_variable_info_translation.choose_variable_translation(language, 'color')
-                v_size = v_variable_info_translation.choose_variable_translation(language, 'size')
-                xls_column_values << "#{product.sku}-#{v_color}#{v_size}"[0..35].lstrip
-              end
+            xls_column_values << "#{product.sku}-#{v_variable_info_translation.england_color}#{v_variable_info_translation.england_size}"[0..35].lstrip
+            v_color = v_variable_info_translation.england_color
+            v_size = v_variable_info_translation.england_size
           elsif v.color
             if v_variable_info_translation
-              v_color = v_variable_info_translation.choose_variable_translation(language, 'color')
+              v_color = v_variable_info_translation.england_color
               v_size = ""
               xls_column_values << "#{product.sku}-#{v_color}"[0..35].lstrip
             else
@@ -187,8 +186,7 @@ class Product < ActiveRecord::Base
             end
           elsif v.size
             if v_variable_info_translation
-              v_color = ""
-              v_size = v_variable_info_translation.choose_variable_translation(language, 'size')
+              v_size = v_variable_info_translation.england_size
               xls_column_values << "#{product.sku}-#{v_size}"[0..35].lstrip
             else
               xls_column_values << "这个变体没有翻译，请重新翻译"  
@@ -241,11 +239,11 @@ class Product < ActiveRecord::Base
           xls_column_values << "#{v_size}"
           xls_column_values << "#{v_size}"
           xls_column_values << product.read_attribute("#{language}_detail")
-          xls_column_values << product.outer_material_type
-          xls_column_values << product.inner_material_type
-          xls_column_values << product.sole_material
-          xls_column_values << product.heel_type
-          xls_column_values << product.closure_type
+          xls_column_values << product.read_attribute("outer_material_type_#{language}")
+          xls_column_values << product.read_attribute("inner_material_type_#{language}")
+          xls_column_values << product.read_attribute("sole_material_#{language}")
+          xls_column_values << product.read_attribute("heel_type_#{language}")
+          xls_column_values << product.read_attribute("closure_type_#{language}")
 
           csv << xls_column_values
         end

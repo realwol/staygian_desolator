@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150512151438) do
+ActiveRecord::Schema.define(version: 20150513074034) do
 
   create_table "cash_rates", force: :cascade do |t|
     t.float    "england",    limit: 24
@@ -62,82 +62,93 @@ ActiveRecord::Schema.define(version: 20150512151438) do
   end
 
   create_table "products", force: :cascade do |t|
-    t.integer  "product_type_id",        limit: 4
-    t.text     "title",                  limit: 65535
-    t.string   "sku",                    limit: 255
-    t.integer  "sku_number",             limit: 4
-    t.string   "product_number",         limit: 255
-    t.integer  "user_id",                limit: 4
-    t.text     "origin_address",         limit: 65535
-    t.text     "desc1",                  limit: 65535
-    t.text     "desc2",                  limit: 65535
-    t.text     "desc3",                  limit: 65535
-    t.string   "brand",                  limit: 255
-    t.string   "price",                  limit: 255
-    t.boolean  "on_sale",                limit: 1
-    t.boolean  "translate_status",       limit: 1
-    t.string   "product_from",           limit: 255
-    t.text     "details",                limit: 65535
+    t.integer  "product_type_id",             limit: 4
+    t.text     "title",                       limit: 65535
+    t.string   "sku",                         limit: 255
+    t.integer  "sku_number",                  limit: 4
+    t.string   "product_number",              limit: 255
+    t.integer  "user_id",                     limit: 4
+    t.text     "origin_address",              limit: 65535
+    t.text     "desc1",                       limit: 65535
+    t.text     "desc2",                       limit: 65535
+    t.text     "desc3",                       limit: 65535
+    t.string   "brand",                       limit: 255
+    t.string   "price",                       limit: 255
+    t.boolean  "on_sale",                     limit: 1
+    t.boolean  "translate_status",            limit: 1
+    t.string   "product_from",                limit: 255
+    t.text     "details",                     limit: 65535
     t.datetime "deleted_at"
-    t.datetime "created_at",                                         null: false
-    t.datetime "updated_at",                                         null: false
-    t.string   "images1",                limit: 255
-    t.string   "images2",                limit: 255
-    t.string   "images3",                limit: 255
-    t.string   "images4",                limit: 255
-    t.string   "images5",                limit: 255
-    t.string   "images6",                limit: 255
-    t.string   "images7",                limit: 255
-    t.string   "images8",                limit: 255
-    t.string   "images9",                limit: 255
-    t.string   "images10",               limit: 255
-    t.string   "outer_material_type",    limit: 255
-    t.string   "outer_material_type_uk", limit: 255
-    t.string   "outer_material_type_de", limit: 255
-    t.string   "outer_material_type_fr", limit: 255
-    t.string   "outer_material_type_es", limit: 255
-    t.string   "outer_material_type_it", limit: 255
-    t.string   "inner_material_type",    limit: 255
-    t.string   "inner_material_type_uk", limit: 255
-    t.string   "inner_material_type_de", limit: 255
-    t.string   "inner_material_type_fr", limit: 255
-    t.string   "inner_material_type_es", limit: 255
-    t.string   "inner_material_type_it", limit: 255
-    t.string   "sole_material",          limit: 255
-    t.string   "sole_material_uk",       limit: 255
-    t.string   "sole_material_de",       limit: 255
-    t.string   "sole_material_fr",       limit: 255
-    t.string   "sole_material_es",       limit: 255
-    t.string   "sole_material_it",       limit: 255
-    t.string   "heel_type",              limit: 255
-    t.string   "heel_type_uk",           limit: 255
-    t.string   "heel_type_de",           limit: 255
-    t.string   "heel_type_fr",           limit: 255
-    t.string   "heel_type_es",           limit: 255
-    t.string   "heel_type_it",           limit: 255
-    t.string   "closure_type",           limit: 255
-    t.string   "closure_type_uk",        limit: 255
-    t.string   "closure_type_de",        limit: 255
-    t.string   "closure_type_fr",        limit: 255
-    t.string   "closure_type_es",        limit: 255
-    t.string   "closure_type_it",        limit: 255
-    t.string   "seasons",                limit: 255
-    t.string   "heel_height",            limit: 255
-    t.string   "producer",               limit: 255
-    t.text     "england_detail",         limit: 65535
-    t.text     "germany_detail",         limit: 65535
-    t.text     "france_detail",          limit: 65535
-    t.text     "spain_detail",           limit: 65535
-    t.text     "italy_detail",           limit: 65535
-    t.boolean  "update_status",          limit: 1
-    t.string   "shop_id",                limit: 255
-    t.string   "shield_type",            limit: 255,   default: "0"
+    t.datetime "created_at",                                              null: false
+    t.datetime "updated_at",                                              null: false
+    t.string   "images1",                     limit: 255
+    t.string   "images2",                     limit: 255
+    t.string   "images3",                     limit: 255
+    t.string   "images4",                     limit: 255
+    t.string   "images5",                     limit: 255
+    t.string   "images6",                     limit: 255
+    t.string   "images7",                     limit: 255
+    t.string   "images8",                     limit: 255
+    t.string   "images9",                     limit: 255
+    t.string   "images10",                    limit: 255
+    t.string   "outer_material_type",         limit: 255
+    t.string   "outer_material_type_england", limit: 255
+    t.string   "outer_material_type_germany", limit: 255
+    t.string   "outer_material_type_france",  limit: 255
+    t.string   "outer_material_type_spain",   limit: 255
+    t.string   "outer_material_type_italy",   limit: 255
+    t.string   "inner_material_type",         limit: 255
+    t.string   "inner_material_type_england", limit: 255
+    t.string   "inner_material_type_germany", limit: 255
+    t.string   "inner_material_type_france",  limit: 255
+    t.string   "inner_material_type_spain",   limit: 255
+    t.string   "inner_material_type_italy",   limit: 255
+    t.string   "sole_material",               limit: 255
+    t.string   "sole_material_england",       limit: 255
+    t.string   "sole_material_germany",       limit: 255
+    t.string   "sole_material_france",        limit: 255
+    t.string   "sole_material_spain",         limit: 255
+    t.string   "sole_material_italy",         limit: 255
+    t.string   "heel_type",                   limit: 255
+    t.string   "heel_type_england",           limit: 255
+    t.string   "heel_type_germany",           limit: 255
+    t.string   "heel_type_france",            limit: 255
+    t.string   "heel_type_spain",             limit: 255
+    t.string   "heel_type_italy",             limit: 255
+    t.string   "closure_type",                limit: 255
+    t.string   "closure_type_england",        limit: 255
+    t.string   "closure_type_germany",        limit: 255
+    t.string   "closure_type_france",         limit: 255
+    t.string   "closure_type_spain",          limit: 255
+    t.string   "closure_type_italy",          limit: 255
+    t.string   "seasons",                     limit: 255
+    t.string   "heel_height",                 limit: 255
+    t.string   "producer",                    limit: 255
+    t.text     "england_detail",              limit: 65535
+    t.text     "germany_detail",              limit: 65535
+    t.text     "france_detail",               limit: 65535
+    t.text     "spain_detail",                limit: 65535
+    t.text     "italy_detail",                limit: 65535
+    t.boolean  "update_status",               limit: 1
+    t.string   "shop_id",                     limit: 255
+    t.string   "shield_type",                 limit: 255,   default: "0"
     t.datetime "shield_untill"
     t.datetime "presale_date"
   end
 
   add_index "products", ["product_type_id"], name: "index_products_on_product_type_id", using: :btree
   add_index "products", ["user_id"], name: "index_products_on_user_id", using: :btree
+
+  create_table "shoes_attributes_values", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.string   "england",    limit: 255
+    t.string   "germany",    limit: 255
+    t.string   "france",     limit: 255
+    t.string   "spain",      limit: 255
+    t.string   "italy",      limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
 
   create_table "shops", force: :cascade do |t|
     t.string   "name",       limit: 255

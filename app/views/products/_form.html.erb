@@ -128,7 +128,13 @@
             <td><%= text_field_tag 'variable[][color]', nil, value:v.color %></td>
             <td>
               <ul id="ul-sortable" style="list-style-type: none; margin: 0; padding: 0; width: 450px;">
-              <% v.valid_images.each_with_index do |img,index| %>
+              <%
+                v_valid_images = v.valid_images
+                switch_image = v_valid_images[count]
+                v_valid_images[count] = v_valid_images[0]
+                v_valid_images[0] = switch_image
+              %>
+              <% v_valid_images.each_with_index do |img,index| %>
                 <li class="ui-state-default" style="float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px;">
                   <%= image_tag(img, style:'width:50px;', class:"variable_image image_#{count}_#{index} ") %>
                   <%= hidden_field_tag "variable[][image_url#{index+1}]", nil, class:'hidden_field_value', value: v.read_attribute("image_url#{index+1}") %>

@@ -51,33 +51,78 @@ def grasp link
   @details = []
   @details_string = html.css('div#attributes div#J_AttrList ul#J_AttrUL li')
 
-  flag1 = flag2 = flag3 = flag4 = flag5 = flag6 = true  
+  flag1 = flag2 = flag3 = flag4 = flag5 = flag6 = true
 
   @details_string.each do |d|
     @details << d.text+"<br/>\n"
 
     if flag1 && d.text.index('帮面材质') 
-      @product.outer_material_type = d.text.gsub!('帮面材质:', '').lstrip[1..-1]
+      outer_material_type = d.text.gsub!('帮面材质:', '').lstrip[1..-1]
+      @product.outer_material_type = outer_material_type
+      attribute_value = ShoesAttributesValue.where(name:outer_material_type).last
+      if attribute_value
+        @product.outer_material_type_england = attribute_value.england
+        @product.outer_material_type_germany = attribute_value.germany
+        @product.outer_material_type_france = attribute_value.france
+        @product.outer_material_type_spain = attribute_value.spain
+        @product.outer_material_type_italy = attribute_value.italy
+      end
       flag1 = false
     end
 
     if flag2 && d.text.index('内里材质') 
-      @product.inner_material_type = d.text.gsub!('内里材质:', '').lstrip[1..-1]
+      inner_material_type = d.text.gsub!('内里材质:', '').lstrip[1..-1]
+      @product.inner_material_type = inner_material_type
+      attribute_value = ShoesAttributesValue.where(name:inner_material_type).last
+      if attribute_value
+        @product.inner_material_type_england = attribute_value.england
+        @product.inner_material_type_germany = attribute_value.germany
+        @product.inner_material_type_france = attribute_value.france
+        @product.inner_material_type_spain = attribute_value.spain
+        @product.inner_material_type_italy = attribute_value.italy
+      end
       flag2 = false
     end
 
     if flag3 && d.text.index('鞋底材质') 
-      @product.sole_material = d.text.gsub!('鞋底材质:', '').lstrip[1..-1]
+      sole_material = d.text.gsub!('鞋底材质:', '').lstrip[1..-1]
+      @product.sole_material = sole_material
+      attribute_value = ShoesAttributesValue.where(name:sole_material).last
+      if attribute_value
+        @product.sole_material_england = attribute_value.england
+        @product.sole_material_germany = attribute_value.germany
+        @product.sole_material_france = attribute_value.france
+        @product.sole_material_spain = attribute_value.spain
+        @product.sole_material_italy = attribute_value.italy
+      end
       flag3 = false
     end
 
     if flag4 && d.text.index('跟底款式') 
-      @product.heel_type = d.text.gsub!('跟底款式:', '').lstrip[1..-1]
+      heel_type = d.text.gsub!('跟底款式:', '').lstrip[1..-1]
+      @product.heel_type = heel_type
+      attribute_value = ShoesAttributesValue.where(name:heel_type).last
+      if attribute_value
+        @product.heel_type_england = attribute_value.england
+        @product.heel_type_germany = attribute_value.germany
+        @product.heel_type_france = attribute_value.france
+        @product.heel_type_spain = attribute_value.spain
+        @product.heel_type_italy = attribute_value.italy
+      end
       flag4 = false
     end
 
     if flag5 && d.text.index('闭合方式') 
-      @product.closure_type = d.text.gsub!('闭合方式:', '').lstrip[1..-1]
+      closure_type = d.text.gsub!('闭合方式:', '').lstrip[1..-1]
+      @product.closure_type = closure_type
+      attribute_value = ShoesAttributesValue.where(name:closure_type).last
+      if attribute_value
+        @product.closure_type_england = attribute_value.england
+        @product.closure_type_germany = attribute_value.germany
+        @product.closure_type_france = attribute_value.france
+        @product.closure_type_spain = attribute_value.spain
+        @product.closure_type_italy = attribute_value.italy
+      end
       flag5 = false
     end
   end
@@ -133,10 +178,13 @@ def grasp link
 
   html.css('div.tb-key div.tb-skin div.tb-sku dl dd ul.tm-clear.J_TSaleProp li').each do |li|
     @sizes << li.children.children.text.strip
-    @sizes_value << li.attributes["data-value"].try(:value)
+    unless li.attributes["data-value"].try(:value).index('-1')
+      @sizes_value << li.attributes["data-value"].try(:value)
+    end
   end
 
   @sizes = @sizes - @colors
+  @sizes_value = @sizes_value - @colors_value
   @stock = []
   variable_array = []
   variable_hash = {}
@@ -148,18 +196,20 @@ def grasp link
     @colors.each_with_index do |color,c_index|
       @sizes.each_with_index do |size,s_index|
         start = js.index("#{@sizes_value[s_index]};#{@colors_value[c_index]}")
-        startt = js[start..-1].index('stock')
-        endd = js[start..-1].index('}')
-        @stock << js[start..-1][startt..endd].match(/\d+/)[0]
-        variable_hash[:color] = color
-        variable_hash[:size] = size
-        variable_hash[:stock] = @stock[stock_count]
-        stock_count = stock_count + 1
-        variable_hash[:product_id] = @product.id
-  		  @variable_images.each_with_index do |img,index|
-  			  variable_hash["image_url#{index+1}".to_sym] = img
-  		  end
-        variable_array << variable_hash.dup
+        if start
+          startt = js[start..-1].index('stock')
+          endd = js[start..-1].index('}')
+          @stock << js[start..-1][startt..endd].match(/\d+/)[0]
+          variable_hash[:color] = color
+          variable_hash[:size] = size
+          variable_hash[:stock] = @stock[stock_count]
+          stock_count = stock_count + 1
+          variable_hash[:product_id] = @product.id
+    		  @variable_images.each_with_index do |img,index|
+    			  variable_hash["image_url#{index+1}".to_sym] = img
+    		  end
+          variable_array << variable_hash.dup
+        end
       end
     end
     Variable.create(variable_array)

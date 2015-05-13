@@ -25,3 +25,7 @@ set :environment, "development"
 every 1.minute do
 	rake 'grasp:start'
 end
+
+every 1.day do
+	rake 'product_check:pre_sale'
+end
