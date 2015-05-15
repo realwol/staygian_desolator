@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150513074034) do
+ActiveRecord::Schema.define(version: 20150515094907) do
 
   create_table "cash_rates", force: :cascade do |t|
     t.float    "england",    limit: 24
@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(version: 20150513074034) do
     t.float    "canada",     limit: 24
     t.datetime "created_at",            null: false
     t.datetime "updated_at",            null: false
+    t.datetime "deleted_at"
   end
 
   create_table "product_info_translations", force: :cascade do |t|
@@ -49,6 +50,7 @@ ActiveRecord::Schema.define(version: 20150513074034) do
     t.integer  "product_id", limit: 4
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
+    t.datetime "deleted_at"
   end
 
   add_index "product_info_translations", ["product_id"], name: "index_product_info_translations_on_product_id", using: :btree
@@ -148,6 +150,7 @@ ActiveRecord::Schema.define(version: 20150513074034) do
     t.string   "italy",      limit: 255
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
+    t.datetime "deleted_at"
   end
 
   create_table "shops", force: :cascade do |t|
@@ -156,6 +159,9 @@ ActiveRecord::Schema.define(version: 20150513074034) do
     t.boolean  "status",     limit: 1,   default: true
     t.datetime "created_at",                            null: false
     t.datetime "updated_at",                            null: false
+    t.string   "shop_id",    limit: 255
+    t.string   "shop_from",  limit: 255
+    t.datetime "deleted_at"
   end
 
   add_index "shops", ["user_id"], name: "index_shops_on_user_id", using: :btree
@@ -168,6 +174,7 @@ ActiveRecord::Schema.define(version: 20150513074034) do
     t.datetime "updated_at",                    null: false
     t.string   "shop_id",         limit: 255
     t.string   "product_link_id", limit: 255
+    t.datetime "deleted_at"
   end
 
   add_index "tmall_links", ["user_id"], name: "index_tmall_links_on_user_id", using: :btree
@@ -179,6 +186,7 @@ ActiveRecord::Schema.define(version: 20150513074034) do
     t.string   "t_method",   limit: 255
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
+    t.datetime "deleted_at"
   end
 
   create_table "users", force: :cascade do |t|
@@ -209,6 +217,7 @@ ActiveRecord::Schema.define(version: 20150513074034) do
     t.string   "it",         limit: 255
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
+    t.datetime "deleted_at"
   end
 
   create_table "variables", force: :cascade do |t|

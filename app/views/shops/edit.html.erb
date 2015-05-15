@@ -1,0 +1,10 @@
+<h3>商铺编辑</h3>
+<hr/>
+
+<%= form_for(@shop) do |f|%>
+  <%= f.label :name %>
+  <%= f.text_field :name %><br/>
+  <%= f.label :shop_id %>
+  <%= f.text_field :shop_id, disabled:true %><br/>
+  <%= f.submit %>
+<% end %>

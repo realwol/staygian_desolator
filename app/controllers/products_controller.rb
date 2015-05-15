@@ -2,6 +2,14 @@ class ProductsController < ApplicationController
   before_action :set_product, only: [:show, :edit, :update, :destroy, :shield_product, :presale_product]
   before_action :authenticate_user!
 
+  def check_shop_id
+    if Shop.shop_avaliable? params[:shop_id]
+      render json: 1
+    else
+      render json: 0
+    end
+  end
+
   def export_page
     
   end
@@ -17,9 +25,21 @@ class ProductsController < ApplicationController
     end
   end
 
+  def off_sale_products
+    @products = Product.offsale.page(params[:page])
+  end
+
+  def shield_products
+    @products = Product.shield.page(params[:page])
+  end
+
   def shield_product
     @product.update_attributes(shield_type:'1')
     redirect_to root_path
+  end
+
+  def presaled_products
+    @products = Product.pre_saled.page(params[:page])
   end
 
   def presale_product
@@ -32,10 +52,12 @@ class ProductsController < ApplicationController
   end
 
   def get_tmall_links 
-    
+    @shops = current_user.shops.page(params[:page])
   end
 
   def save_tmall_links
+    redirect_to root_path unless Shop.shop_avaliable? params[:links]
+
     links_array = []
     link_hash = {}
     next_uri = 'start_uri'
@@ -45,7 +67,7 @@ class ProductsController < ApplicationController
 
     shop_id = nil
     unless params[:shop_name].blank?
-      shop = Shop.create(name:params[:shop_name], user_id: current_user, status:true)
+      shop = Shop.create(name:params[:shop_name], user_id: current_user, status:true, shop_from: 'tmall', shop_id: params[:links])
       shop_id = shop.id
     end
 
@@ -125,6 +147,7 @@ class ProductsController < ApplicationController
   # PATCH/PUT /products/1.json
   def update
     respond_to do |format|
+      product_params["user_id"] = current_user.id
       if @product.update(product_params)
         @product.update_attributes(update_status:true)
         Variable.update_product_variable(params["variable"], @product)
@@ -141,10 +164,18 @@ class ProductsController < ApplicationController
   # DELETE /products/1
   # DELETE /products/1.json
   def destroy
-    @product.destroy
-    respond_to do |format|
-      format.html { redirect_to products_url, notice: 'Product was successfully destroyed.' }
-      format.json { head :no_content }
+    if @product.update_status
+      @product.destroy
+      respond_to do |format|
+        format.html { redirect_to products_url, notice: 'Product was successfully destroyed.' }
+        format.json { head :no_content }
+      end
+    else
+      @product.destroy
+      respond_to do |format|
+        format.html { redirect_to un_updated_page_products_url, notice: 'Product was successfully destroyed.' }
+        format.json { head :no_content }
+      end
     end
   end
 
@@ -157,7 +188,7 @@ class ProductsController < ApplicationController
       params.require(:product).permit(:product_type_id, :title, :sku, :sku_number, :product_number, :user_id, :origin_address, 
                                       :desc1, :desc2, :desc3, :brand, :price, :on_sale, :translate_status, :product_from,
                                       :details, :producer, :heel_height, :closure_type, :heel_type, :sole_material, :inner_material_type,
-                                      :outer_material_type, :update_status, :seasons)
+                                      :outer_material_type, :update_status, :seasons, :images1, :images2, :images3, :images4, :images5)
     end
 
     def avaliable? link

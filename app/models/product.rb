@@ -11,6 +11,9 @@ class Product < ActiveRecord::Base
   scope :un_updated, -> {where(update_status:false).order("id desc")}
   scope :updated, -> {where(update_status:true)}
   scope :un_shield, -> {where(shield_type: 0)}
+  scope :shield, -> {where(shield_type: 1)}
+  scope :onsale, -> {where(on_sale: true)}
+  scope :offsale, -> {where(on_sale: false)}
   scope :pre_saled, -> {where.not(presale_date: nil).where(shield_type:2)}
 
   before_create :save_sku, :transform_seasons

@@ -88,8 +88,40 @@ $(function(){
     })
   });
 
+  $.fn.datetimepicker.dates['en'] = {
+      // days: ["Sunday1", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+      // daysShort: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+      daysMin: ["日", "一", "二", "三", "四", "五", "六"],
+      months: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+      monthsShort: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"],
+      today: "今天",
+      todayHighlight: true
+  };
+
   $('#datetimepicker').datetimepicker({
-    format: 'yyyy-mm-dd'
+    format: 'yyyy-mm-dd',
+    language: 'zh-CN',
+    minView: "month",
+    autoclose: true
   });
+
+  $('#check_button').click(function(){
+    var link = $(this).data('link');
+    var notice = $('#check_notice');
+    var shop_id = $('#test_links').val();
+    $.get( link, {
+      shop_id : shop_id
+    }).success(function(json){
+      if(json==0){
+        notice.css({'display':'block', 'color':'green'});
+        notice.text('店铺尚未抓取');
+        return
+      }else if(json==1){
+        notice.css({'display':'block', 'color':'red'});
+        notice.text('店铺已被抓取');
+        return
+      }
+    })
+  })
 
 })

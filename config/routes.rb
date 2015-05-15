@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   resources :cash_rates, only:[:index, :create]
 
   resources :variables
+  resources :shops
 
   resources :products do
     collection do
@@ -10,6 +11,10 @@ Rails.application.routes.draw do
       get 'un_updated_page'
       get 'export_page'
       get 'export_products'
+      get 'shield_products'
+      get 'presaled_products'
+      get 'off_sale_products'
+      get 'check_shop_id'
     end
 
     member do

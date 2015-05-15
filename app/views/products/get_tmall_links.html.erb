@@ -1,29 +1,33 @@
-<h1>Shops</h1>
+<h3>当前用户商铺列表：</h3>
 
 <table class='table'>
 	<tr>
 			<th>商铺名称</th>
 			<th>操作</th>
 	</tr>
-	<%current_user.shops.each do |shop|%>
+	<% @shops.each do |shop|%>
 		<tr>
 			<td>
 				<%= shop.name %>
 			</td>
 			<td>
-				编辑
-
-				删除
+			<%= link_to '编辑', edit_shop_path(shop) %>
+			<%= link_to '删除', shop, method: :delete, data: { confirm: 'Are you sure?' }  %>
 			</td>
 		</tr>
 	<% end %>
 </table>
+<%= paginate @shops %>
 
 <hr/>
-<h1>输入店铺id号码：</h1>
-
+<h4>店铺ID检测：</h4>
+  <%= text_area_tag 'test_links', nil, size:"80x2" %><br/>
+  <label style='display:none;' id='check_notice'></label>
+  <%= button_tag '检测', id:'check_button', "data-link"=> check_shop_id_products_path %>
+<hr/>
+<h4>输入店铺id号码：</h4>
 <%= form_tag(save_tmall_links_products_path) do %>
-  <%= text_area_tag 'links', nil, size:"100x3" %><br/>
+  <%= text_area_tag 'links', nil, size:"80x2" %><br/>
   选择商铺名称：
   <%= select 'product','shop_id', Shop.all.collect {|p| [p.name, p.id] }, { include_blank: true} %><br/>
   如果商铺不存在，填写商铺名称：(商铺名称存在填写内容，则已此内容为准，忽略上一步选择的商铺名称)<br/>
