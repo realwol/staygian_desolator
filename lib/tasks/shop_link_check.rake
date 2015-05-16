@@ -7,6 +7,8 @@ namespace :shop_link do
   	if shop_link
       grasp_link shop_link
       shop_link.update_attributes(status:true)
+    else
+      puts 'no shop'
   	end
   end
 end
@@ -27,7 +29,7 @@ def grasp_link shop_link
       if page.at('#J_ItemList')
         a = page.at('#J_ItemList').children
       else
-        puts 'Grasp end or forbidden'
+        puts page.title
         return
       end
 

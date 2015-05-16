@@ -28,9 +28,6 @@
 <h4>输入店铺id号码：</h4>
 <%= form_tag(save_tmall_links_products_path) do %>
   <%= text_area_tag 'links', nil, size:"80x2" %><br/>
-  选择商铺名称：
-  <%= select 'product','shop_id', Shop.all.collect {|p| [p.name, p.id] }, { include_blank: true} %><br/>
-  如果商铺不存在，填写商铺名称：(商铺名称存在填写内容，则已此内容为准，忽略上一步选择的商铺名称)<br/>
   <%= text_field_tag 'shop_name' %><br/><br/>
   <%= button_tag '抓取' %>
 <% end %>
