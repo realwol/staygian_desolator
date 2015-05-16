@@ -3,7 +3,7 @@ namespace :grasp do
 	task :start => :environment do
     sleep (0..9).to_a.sample
     start
-    sleep 20
+    sleep 10
     sleep (0..9).to_a.sample
     start
 	end
