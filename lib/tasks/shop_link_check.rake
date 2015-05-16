@@ -27,7 +27,7 @@ def grasp_link shop_link
       if page.at('#J_ItemList')
         a = page.at('#J_ItemList').children
       else
-        render text:'抓取请求被屏蔽，请稍候重试'
+        puts 'Grasp end or forbidden'
         return
       end
 
