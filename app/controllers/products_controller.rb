@@ -146,7 +146,8 @@ class ProductsController < ApplicationController
       params.require(:product).permit(:product_type_id, :title, :sku, :sku_number, :product_number, :user_id, :origin_address, 
                                       :desc1, :desc2, :desc3, :brand, :price, :on_sale, :translate_status, :product_from,
                                       :details, :producer, :heel_height, :closure_type, :heel_type, :sole_material, :inner_material_type,
-                                      :outer_material_type, :update_status, :seasons, :images1, :images2, :images3, :images4, :images5)
+                                      :outer_material_type, :update_status, :seasons, :images1, :images2, :images3, :images4, :images5,
+                                      :shield_type, :shop_id, :shield_untill, :presale_date)
     end
 
     def avaliable? link

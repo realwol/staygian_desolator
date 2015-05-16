@@ -19,6 +19,7 @@ class Variable < ActiveRecord::Base
   end
 
   def self.update_product_variable options, product
+    return if options.blank?
     variables = product.variables
     variable =''
     options.each do |option|
