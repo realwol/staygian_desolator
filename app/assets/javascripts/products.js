@@ -112,11 +112,11 @@ $(function(){
     $.get( link, {
       shop_id : shop_id
     }).success(function(json){
-      if(json==0){
+      if(json==1){
         notice.css({'display':'block', 'color':'green'});
         notice.text('店铺尚未抓取');
         return
-      }else if(json==1){
+      }else if(json==0){
         notice.css({'display':'block', 'color':'red'});
         notice.text('店铺已被抓取');
         return

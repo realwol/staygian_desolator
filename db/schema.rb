@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150515094907) do
+ActiveRecord::Schema.define(version: 20150516050633) do
 
   create_table "cash_rates", force: :cascade do |t|
     t.float    "england",    limit: 24
@@ -153,6 +153,18 @@ ActiveRecord::Schema.define(version: 20150515094907) do
     t.datetime "deleted_at"
   end
 
+  create_table "shop_links", force: :cascade do |t|
+    t.string   "shop_id_string", limit: 255
+    t.text     "link",           limit: 65535
+    t.integer  "user_id",        limit: 4
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
+    t.string   "status",         limit: 255
+    t.string   "shop_id",        limit: 255
+  end
+
+  add_index "shop_links", ["user_id"], name: "index_shop_links_on_user_id", using: :btree
+
   create_table "shops", force: :cascade do |t|
     t.string   "name",       limit: 255
     t.integer  "user_id",    limit: 4
@@ -278,6 +290,7 @@ ActiveRecord::Schema.define(version: 20150515094907) do
   add_foreign_key "product_info_translations", "products"
   add_foreign_key "products", "product_types"
   add_foreign_key "products", "users"
+  add_foreign_key "shop_links", "users"
   add_foreign_key "shops", "users"
   add_foreign_key "tmall_links", "users"
   add_foreign_key "variables", "products"

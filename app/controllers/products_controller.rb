@@ -55,58 +55,16 @@ class ProductsController < ApplicationController
     @shops = current_user.shops.page(params[:page])
   end
 
+  # Move grasp tmall_links to a rake task and keep one shop in 60-80 sec
   def save_tmall_links
-    redirect_to root_path unless Shop.shop_avaliable? params[:links]
-
-    links_array = []
-    link_hash = {}
-    next_uri = 'start_uri'
-    agent = Mechanize.new
-    uri = "http://list.tmall.com/search_shopitem.htm?user_id=" + params[:links]
-    redirect_to root_path if uri.blank?
-
-    shop_id = nil
+    unless Shop.shop_avaliable? params[:links]
+      redirect_to root_path and return 
+    end
+    link = "http://list.tmall.com/search_shopitem.htm?user_id=" + params[:links]
     unless params[:shop_name].blank?
-      shop = Shop.create(name:params[:shop_name], user_id: current_user, status:true, shop_from: 'tmall', shop_id: params[:links])
-      shop_id = shop.id
+      shop = Shop.create(name:params[:shop_name], user_id: current_user.id, status:true, shop_from: 'tmall', shop_id: params[:links])
     end
-
-    while !next_uri.blank?
-      unless next_uri == 'start_uri'
-        uri = uri[0..(uri.index('?')-1)] + next_uri
-      end
-
-      page = agent.get(uri)
-      if page.at('#J_ItemList')
-        a = page.at('#J_ItemList').children
-      else
-        render text:'抓取请求被屏蔽，请稍候重试'
-        return
-      end
-
-      1.step(a.count - 2,2) do |i|
-        link_hash[:address] = "http://" + a[i].at('a.productImg').attributes["href"].value[2..-1]
-        product_link_start = link_hash[:address].index('id') + 3
-        product_link_end = link_hash[:address][product_link_start..-1].index('&') - 1 + product_link_start
-
-        product_link_id = link_hash[:address][product_link_start..product_link_end]
-        unless TmallLink.where(product_link_id: product_link_id).first
-          link_hash[:product_link_id] = product_link_id
-          link_hash[:user_id] = current_user.id
-          link_hash[:status]  = false
-          link_hash[:shop_id]  = (shop_id || params[:product][:shop_id])
-          links_array << link_hash.dup
-        end
-      end
-      if (page.at('.ui-page-next') && page.at('.ui-page-next').attributes["href"])
-        next_uri = page.at('.ui-page-next').attributes["href"].value
-      else
-        next_uri = ''
-      end
-    end
-
-    TmallLink.create(links_array)
-
+    ShopLink.create(shop_id_string:params[:links], link:link, user: current_user, status: 0, shop_id: shop.try(:id))
     redirect_to root_path
   end
 

@@ -7,9 +7,10 @@ module QiniuUploadHelper
 			path = Rails.root.join('public', "#{name}.jpg")
 			cut_position = get_cut_position cut_type
 			image.combine_options do |c|
-				c.gravity cut_position
-				c.draw 'rectangle 0,0 400,200'
-				c.fill 'white'
+				# Do not cut in the first time
+				# c.gravity cut_position
+				# c.draw 'rectangle 0,0 400,200'
+				# c.fill 'whites'
 				c.resize '1200x1200'
 			end
 			image.write path

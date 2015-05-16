@@ -48,6 +48,8 @@ def grasp link
     @images << img["src"][0..img["src"].index('.jpg')+3]
   end
 
+
+
   @details = []
   @details_string = html.css('div#attributes div#J_AttrList ul#J_AttrUL li')
 
@@ -131,11 +133,6 @@ def grasp link
 
   @product.details = @details.join
 
-  @images.each_with_index do |img, index|
-  	@product["images#{index+1}".to_sym] = img
-  end
-  @product.save
-
   # Create variables
   @variable_images = []
   # @variable_images = @images.dup
@@ -149,14 +146,30 @@ def grasp link
     end
   end
 
-  @images.each do |image|
-    @variable_images << image
+  test_start = Time.now
+
+  @variable_images.each_with_index do |image, index|
+    @variable_images[index] = QiniuUploadHelper::QiNiu.upload(image,'')
   end
 
-  variable_image_hash = {}
-  @variable_images.each_with_index do |img,index|
-  	variable_image_hash["image_url#{index+1}".to_sym] = img
+  # Upload image and replace the link
+  @images.each do |image|
+    upload_image = QiniuUploadHelper::QiNiu.upload(image,'')
+    @variable_images << upload_image
   end
+
+  puts '========upload time cost============'
+  puts Time.now - test_start
+
+  @variable_images.each_with_index do |img, index|
+    @product["images#{index+1}".to_sym] = img
+  end
+  @product.save
+
+  # variable_image_hash = {}
+  # @variable_images.each_with_index do |img,index|
+  # 	variable_image_hash["image_url#{index+1}".to_sym] = img
+  # end
 
   @sizes = []
   @colors = []
