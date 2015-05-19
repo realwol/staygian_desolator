@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150516050633) do
+ActiveRecord::Schema.define(version: 20150519090903) do
 
   create_table "cash_rates", force: :cascade do |t|
     t.float    "england",    limit: 24
@@ -136,6 +136,46 @@ ActiveRecord::Schema.define(version: 20150516050633) do
     t.string   "shield_type",                 limit: 255,   default: "0"
     t.datetime "shield_untill"
     t.datetime "presale_date"
+    t.text     "image_url11",                 limit: 65535
+    t.text     "image_url12",                 limit: 65535
+    t.text     "image_url13",                 limit: 65535
+    t.text     "image_url14",                 limit: 65535
+    t.text     "image_url15",                 limit: 65535
+    t.text     "image_url16",                 limit: 65535
+    t.text     "image_url17",                 limit: 65535
+    t.text     "image_url18",                 limit: 65535
+    t.text     "image_url19",                 limit: 65535
+    t.text     "image_url20",                 limit: 65535
+    t.text     "image_url21",                 limit: 65535
+    t.text     "image_url22",                 limit: 65535
+    t.text     "image_url23",                 limit: 65535
+    t.text     "image_url24",                 limit: 65535
+    t.text     "image_url25",                 limit: 65535
+    t.text     "image_url26",                 limit: 65535
+    t.text     "image_url27",                 limit: 65535
+    t.text     "image_url28",                 limit: 65535
+    t.text     "image_url29",                 limit: 65535
+    t.text     "image_url30",                 limit: 65535
+    t.text     "images11",                    limit: 65535
+    t.text     "images12",                    limit: 65535
+    t.text     "images13",                    limit: 65535
+    t.text     "images14",                    limit: 65535
+    t.text     "images15",                    limit: 65535
+    t.text     "images16",                    limit: 65535
+    t.text     "images17",                    limit: 65535
+    t.text     "images18",                    limit: 65535
+    t.text     "images19",                    limit: 65535
+    t.text     "images20",                    limit: 65535
+    t.text     "images21",                    limit: 65535
+    t.text     "images22",                    limit: 65535
+    t.text     "images23",                    limit: 65535
+    t.text     "images24",                    limit: 65535
+    t.text     "images25",                    limit: 65535
+    t.text     "images26",                    limit: 65535
+    t.text     "images27",                    limit: 65535
+    t.text     "images28",                    limit: 65535
+    t.text     "images29",                    limit: 65535
+    t.text     "images30",                    limit: 65535
   end
 
   add_index "products", ["product_type_id"], name: "index_products_on_product_type_id", using: :btree
@@ -157,23 +197,25 @@ ActiveRecord::Schema.define(version: 20150516050633) do
     t.string   "shop_id_string", limit: 255
     t.text     "link",           limit: 65535
     t.integer  "user_id",        limit: 4
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
     t.string   "status",         limit: 255
     t.string   "shop_id",        limit: 255
+    t.boolean  "check_status",   limit: 1,     default: true
   end
 
   add_index "shop_links", ["user_id"], name: "index_shop_links_on_user_id", using: :btree
 
   create_table "shops", force: :cascade do |t|
-    t.string   "name",       limit: 255
-    t.integer  "user_id",    limit: 4
-    t.boolean  "status",     limit: 1,   default: true
-    t.datetime "created_at",                            null: false
-    t.datetime "updated_at",                            null: false
-    t.string   "shop_id",    limit: 255
-    t.string   "shop_from",  limit: 255
+    t.string   "name",         limit: 255
+    t.integer  "user_id",      limit: 4
+    t.boolean  "status",       limit: 1,   default: true
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+    t.string   "shop_id",      limit: 255
+    t.string   "shop_from",    limit: 255
     t.datetime "deleted_at"
+    t.boolean  "check_status", limit: 1,   default: true
   end
 
   add_index "shops", ["user_id"], name: "index_shops_on_user_id", using: :btree
@@ -283,6 +325,8 @@ ActiveRecord::Schema.define(version: 20150516050633) do
     t.text     "image_url30",      limit: 65535
     t.boolean  "update_status",    limit: 1,     default: true
     t.boolean  "translate_status", limit: 1,     default: false
+    t.string   "color_dup",        limit: 255
+    t.string   "size_dup",         limit: 255
   end
 
   add_index "variables", ["product_id"], name: "index_variables_on_product_id", using: :btree

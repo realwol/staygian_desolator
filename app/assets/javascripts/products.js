@@ -1,29 +1,8 @@
 $(function(){
-  $('.variable_image').dblclick(function(){
-    var classString = $(this).attr('class');
-    var classNames = classString.split(" ");
-    var names = "."+classNames[1];
-    $(names).each(function(){
-      $(this).next('.hidden_field_value:first').attr('value', '');
-      $(this).remove();
-    })
-  });
 
-  $('.variable_image').mousedown(function(e){
-    switch (e.which) {
-      case 3:
-      $(this).next('.hidden_field_value:first').attr('value', '');
-      $(this).remove();
-    }
-  });
 
   $('#product_price').change(function(){
     $('.variable_price').val($(this).val());
-  });
-
-  $('.product_image').dblclick(function(){
-    $(this).next('.product_hidden_field_value:first').attr('value','')
-    $(this).remove();
   });
 
   $('.remove_item').click(function(){
@@ -66,27 +45,37 @@ $(function(){
     $(this).parents('tr').remove();
   });
 
-  $('#ul-sortable').sortable({
-    placeholder: "ui-state-default"
-  });
+  // $('#ul-sortable').sortable({
+  //   placeholder: "ui-state-default"
+  // });
 
-  $('#ul-sortable').mouseout(function(){
-    $('.hidden_field_value').each(function(i,l){
-      i = i + 1;
-      $(this).attr('name',"variable[][image_url"+i+"]");
-    })
-  });
+  // $('#ul-sortable').mouseout(function(){
+  //   $('.hidden_field_value').each(function(i,l){
+  //     i = i + 1;
+  //     $(this).attr('name',"variable[][image_url"+i+"]");
+  //   })
+  // });
 
-  $('#ul-sortable').disableSelection();
+  // $('#ul-sortable').disableSelection();
 
-  $('.variable_image').click(function(){
-    var classString = $(this).attr('class');
-    var classNames = classString.split(" ");
-    var names = "."+classNames[1];
-    $(names).each(function(){
-      $(this).css("border","2px solid red");
-    })
-  });
+  // $('.variable_image').mousedown(function(e){
+  //   var flag = $(this).attr("src");
+  //   var src = $(this).data("src");
+  //   if(flag==''){
+  //     switch (e.which) {
+  //       case 3:
+  //       $(this).next('.hidden_field_value:first').attr('value', src);
+  //       $(this).attr('src', src);
+  //     }
+  //   }else{
+  //     switch (e.which) {
+  //       case 3:
+  //       $(this).next('.hidden_field_value:first').attr('value', '');
+  //       $(this).attr('src','');
+  //     }
+  //   }
+  // });
+
 
   $('#datetimepicker').datetimepicker({
     format: 'yyyy-mm-dd',

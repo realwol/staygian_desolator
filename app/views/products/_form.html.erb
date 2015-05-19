@@ -68,8 +68,10 @@
   <div class="field">
     <%= f.label 'Images' %><br>
     <% @product.valid_images.each_with_index do |img,index| %>
-      <%= image_tag(img, style:'width:50px;', class:"product_image") %>
-      <%= hidden_field_tag "product[images#{index+1}]", nil, class:'product_hidden_field_value', value:img %>
+      <div style="float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px; background: grey;">
+        <%= image_tag(img, style:'width:50px;', class:"product_image", alt:'', "data-src"=>img) %>
+        <%= hidden_field_tag "product[images#{index+1}]", nil, class:'product_hidden_field_value', value:img %>
+      </div>
     <% end %><br/>
     <%= f.label '图片裁剪方式' %>
     <select name='cut_type' id='cut_type'>
@@ -105,7 +107,7 @@
         <tr>
           <th><%= check_box_tag 'check_all' %></th>
           <th><%= '颜色' %></th>
-          <th>图片(左键单机选中裁剪图片/左键双击删除同类图片/右键删除单个图片)</th>
+          <th>图片(左键双击删除同类图片)</th>
           <th><%= '尺寸' %></th>
           <th>Price</th>
           <th>Stock</th>
@@ -116,7 +118,7 @@
         <% pre_color = nil; count = 0; %>
         <% @product.variables.each_with_index do |v,v_index| %>
           <%
-            if !pre_color || pre_color == v.color
+            if ((!pre_color) || (pre_color == v.color))
             else
               count = count + 1
             end
@@ -128,16 +130,10 @@
             <td><%= text_field_tag 'variable[][color]', nil, value:v.color %></td>
             <td>
               <ul id="ul-sortable" style="list-style-type: none; margin: 0; padding: 0; width: 450px;">
-              <%
-                v_valid_images = v.valid_images
-                switch_image = v_valid_images[count]
-                v_valid_images[count] = v_valid_images[0]
-                v_valid_images[0] = switch_image
-              %>
-              <% v_valid_images.each_with_index do |img,index| %>
+              <% v.valid_images.each_with_index do |img,vv_index| %>
                 <li class="ui-state-default" style="float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px;">
-                  <%= image_tag(img, style:'width:50px;', class:"variable_image image_#{count}_#{index} ") %>
-                  <%= hidden_field_tag "variable[][image_url#{index+1}]", nil, class:'hidden_field_value', value: v.read_attribute("image_url#{index+1}") %>
+                  <%= image_tag(img, style:'width:50px;', class:"variable_image image_#{count}_#{vv_index} ", "data-src"=>img, alt:'' ) %>
+                  <%= hidden_field_tag "variable[][image_url#{vv_index+1}]", nil, class:'hidden_field_value', value: v.read_attribute("image_url#{vv_index+1}") %>
                 </li>
               <% end %>
               </ul>
@@ -163,3 +159,43 @@
       <%end%>
       <%= link_to '屏蔽产品', shield_product_product_path(@product) %>
     </div>
+
+<%= javascript_tag do %>
+
+  $('.product_image').dblclick(function(){
+    var flag = $(this).attr("src");
+    if(flag == ''){
+      var src = $(this).data("src");
+      $(this).attr('src', src);
+      $(this).next('.product_hidden_field_value:first').attr('value', src);
+    }else{
+      $(this).attr('src','');
+      $(this).next('.product_hidden_field_value:first').attr('value', '');
+    }
+  });
+
+  $('.product_image').click(function(){
+      $(this).toggleClass('click_select');
+  });
+
+  $('.variable_image').dblclick(function(){
+    var flag = $(this).attr("src");
+    var src = $(this).data("src");
+    var classString = $(this).attr('class');
+    var classNames = classString.split(" ");
+    var names = "."+classNames[1];
+    if(flag==''){
+      $(names).each(function(){
+        $(this).next('.hidden_field_value:first').attr('value', src);
+        $(this).attr('src',src);
+      })
+    }else{
+      $(names).each(function(){
+        $(this).next('.hidden_field_value:first').attr('value', '');
+        $(this).attr('src','');
+      })
+    }
+  });
+
+<% end %>
+

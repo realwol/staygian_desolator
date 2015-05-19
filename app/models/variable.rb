@@ -4,6 +4,8 @@ class Variable < ActiveRecord::Base
 
   default_scope {where(update_status:false)}
 
+  before_save :save_dup
+
   def valid_images
   	image_names = []
   	1.upto(30) do |t|
@@ -18,7 +20,7 @@ class Variable < ActiveRecord::Base
   	@valid_images
   end
 
-  def self.update_product_variable options, product
+  def self.update_product_variable(options, product)
     return if options.blank?
     variables = product.variables
     variable =''
@@ -30,10 +32,27 @@ class Variable < ActiveRecord::Base
           end
         end
       option.delete("index")
+
       if option.blank?
         variable.update_attributes(update_status:true)
       else
+        image_urls = []
+        1.upto(30) do |n|
+          image_urls << "image_url#{n}".to_sym
+        end
+        urls = []
+        image_urls.each do |i|
+          unless option[i].blank?
+            urls << option[i]
+            option[i] = ''
+          end
+        end
+        urls.each_with_index do |url,index|
+          option[image_urls[index]] = url
+        end
+
         option["update_status"] = false
+
         variable.update_attributes(variable_params(option))
       end
     end
@@ -50,7 +69,11 @@ class Variable < ActiveRecord::Base
                                        :image_url11, :image_url12,:image_url13,:image_url14, :image_url15,:image_url16, :image_url17, :image_url18,:image_url19, :image_url20,
                                        :image_url21, :image_url22,:image_url23,:image_url24, :image_url25,:image_url26, :image_url27, :image_url28,:image_url29, :image_url30,
                                        :england_color, :england_size, :germany_color, :germany_size, :france_color, :france_size, :spain_color, :spain_size,
-                                       :italy_color, :italy_size,
-                                       )
+                                       :italy_color, :italy_size, :color_dup, :size_dup)
+    end
+
+    def save_dup
+      color_dup = color
+      size_dup = size
     end
 end

@@ -13,8 +13,8 @@ def start
 	tmall_link = ungrasp_tmall_link
 	# tmall_links.each do |link|
   unless tmall_link.blank?
-		grasp tmall_link.address
 		tmall_link.update_attributes(status:true)
+    grasp tmall_link.address
   else
     puts 'sleeping'
 	end
@@ -36,16 +36,16 @@ def grasp link
   @product.brand = html.css('li#J_attrBrandName').text.slice(4..-1)
 
   html.css('ul#J_AttrUL li').each do |li|
-    if li.text.include?('货号:')
+    if (li.text.include?('货号:') || li.text.include?('款号:'))
       @product_number = li.text.slice(4..-1)
     end
   end
 
   @product.product_number = @product_number
 
-  @images = []
+  @main_images = []
   html.css('ul#J_UlThumb li a img').each do |img|
-    @images << img["src"][0..img["src"].index('.jpg')+3]
+    @main_images << img["src"][0..img["src"].index('.jpg')+3]
   end
 
 
@@ -134,8 +134,9 @@ def grasp link
   @product.details = @details.join
 
   # Create variables
+  @product_images = []
   @variable_images = []
-  # @variable_images = @images.dup
+  # @product_images = @images.dup
   html.css('div.tb-sku dl.tb-prop.tm-sale-prop.tm-clear.tm-img-prop li').each do |img|
     image_url = img.children[1].attributes["style"].try(:value)
     if image_url
@@ -149,25 +150,25 @@ def grasp link
   test_start = Time.now
 
   @variable_images.each_with_index do |image, index|
-    @variable_images[index] = QiniuUploadHelper::QiNiu.upload(image,'')
+    v_image = QiniuUploadHelper::QiNiu.upload(image,'')
+    @variable_images[index] = v_image
+    @product_images[index] = v_image
   end
 
   # Upload image and replace the link
-  @images.each do |image|
+  @main_images.each_with_index do |image,index|
     upload_image = QiniuUploadHelper::QiNiu.upload(image,'')
-    @variable_images << upload_image
+    @main_images[index] = upload_image
+    @product_images << upload_image
   end
 
-  puts '========upload time cost============'
-  puts Time.now - test_start
-
-  @variable_images.each_with_index do |img, index|
-    @product["images#{index+1}".to_sym] = img
+  @product_images.each_with_index do |img, index|
+    @product["images#{index+1}".to_sym] = upload_img
   end
   @product.save
 
   # variable_image_hash = {}
-  # @variable_images.each_with_index do |img,index|
+  # @product_images.each_with_index do |img,index|
   # 	variable_image_hash["image_url#{index+1}".to_sym] = img
   # end
 
@@ -209,7 +210,7 @@ def grasp link
     @colors.each_with_index do |color,c_index|
       @sizes.each_with_index do |size,s_index|
         start = js.index("#{@sizes_value[s_index]};#{@colors_value[c_index]}")
-        if start
+        if (start && @stock[stock_count] != 0)
           startt = js[start..-1].index('stock')
           endd = js[start..-1].index('}')
           @stock << js[start..-1][startt..endd].match(/\d+/)[0]
@@ -218,10 +219,13 @@ def grasp link
           variable_hash[:stock] = @stock[stock_count]
           stock_count = stock_count + 1
           variable_hash[:product_id] = @product.id
-    		  @variable_images.each_with_index do |img,index|
-    			  variable_hash["image_url#{index+1}".to_sym] = img
+          variable_hash["image_url1"] = @variable_images[c_index]
+    		  @main_images.each_with_index do |img,index|
+    			  variable_hash["image_url#{index+2}".to_sym] = img
     		  end
           variable_array << variable_hash.dup
+          variable_hash = {}
+          # todo: check variable images
         end
       end
     end

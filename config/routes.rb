@@ -2,7 +2,12 @@ Rails.application.routes.draw do
   resources :cash_rates, only:[:index, :create]
 
   resources :variables
-  resources :shops
+  resources :shops do
+    member do
+      get 'shield'
+      get 'recover'
+    end
+  end
 
   resources :products do
     collection do
@@ -14,12 +19,18 @@ Rails.application.routes.draw do
       get 'shield_products'
       get 'presaled_products'
       get 'off_sale_products'
+      get 'temp_off_sale_products'
       get 'check_shop_id'
+      get 'search'
+      get 'update_price'
     end
 
     member do
       get 'shield_product'
       get 'presale_product'
+      get 'offsale_product'
+      get 'onsale_product'
+      get 'temp_offsale_product'
     end
   end
 

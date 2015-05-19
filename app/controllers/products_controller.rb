@@ -1,6 +1,58 @@
 class ProductsController < ApplicationController
-  before_action :set_product, only: [:show, :edit, :update, :destroy, :shield_product, :presale_product]
+  before_action :set_product, only: [:show, :edit, :update, :destroy, :shield_product, :presale_product, :offsale_product, :temp_offsale_product, :onsale_product]
   before_action :authenticate_user!
+
+  def update_price
+    product = Product.find(params["product_id"])
+    price = params["price"]
+
+    if product.update_attributes(price:price)
+      product.variables.each do |v|
+        v.update_attributes(price:price)
+      end
+      render json:0
+    else
+      render json:1
+    end
+  end
+
+  def search
+    product_type = params[:search_type]
+    product_shop = params[:product_shop]
+    sku_value = params[:sku_value]
+    action_from = params[:action_from]
+
+    search_query = []
+    unless product_type.empty?
+      search_query << "product_type_id = '#{product_type}'"
+    end
+
+    unless product_shop.empty?
+      search_query << "product_number like '%#{product_shop}%'"
+    end
+    unless sku_value.empty?
+      search_query << "sku like '%#{sku_value}%'"
+    end
+    case action_from
+    when 'index'
+      @search_value = Product.updated.un_shield.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
+    when 'off_sale_products'
+      @result_type = '下线产品'
+      @search_value = Product.offsale.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
+    when 'presaled_products'
+      @result_type = '预售产品'
+      @search_value = Product.pre_saled.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
+    when 'shield_products'
+      @result_type = '屏蔽产品'
+      @search_value = Product.shield.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
+    when 'un_updated_page'
+      @result_type = '未更新产品'
+      @search_value = Product.un_updated.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
+    when 'temp_offsale_products'
+      @result_type = '临时下线产品'
+      @search_value = Product.temp_offsale.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
+    end
+  end
 
   def check_shop_id
     if Shop.shop_avaliable? params[:shop_id]
@@ -15,7 +67,21 @@ class ProductsController < ApplicationController
   end
 
   def export_products
-    @products = Product.where(product_type_id: params[:export_type]).order('created_at desc')
+    start_sku = params[:start_sku]
+    start_product = Product.where(sku:start_sku).last
+
+    unless start_product
+      redirect_to export_page_products_url, notice:'Sku错误'
+      return
+    end
+    
+    unless start_product.try(:product_type_id) == params[:export_type]
+      redirect_to export_page_products_url, notice:'Sku与所选分类不匹配'
+      return
+    end
+
+    @products = Product.where("product_type_id = ? and id > ?", params[:export_type], start_product.id).order('id desc').limit(1000)
+
     cookies[:export_language] = params[:language]
     cookies[:export_type] = params[:export_type]
     request.format = 'xls'
@@ -25,8 +91,27 @@ class ProductsController < ApplicationController
     end
   end
 
+  def onsale_product
+    @product.update_attributes(on_sale:true, shield_type:0)
+    redirect_to root_path
+  end
+
   def off_sale_products
     @products = Product.offsale.page(params[:page])
+  end
+
+  def temp_off_sale_products
+    @products = Product.temp_offsale.page(params[:page])
+  end
+
+  def offsale_product
+    @product.update_attributes(on_sale:false)
+    redirect_to off_sale_products_products_url
+  end
+
+  def temp_offsale_product
+    @product.update_attributes(shield_type:3, on_sale:false)
+    redirect_to temp_off_sale_products_products_url
   end
 
   def shield_products
@@ -35,7 +120,7 @@ class ProductsController < ApplicationController
 
   def shield_product
     @product.update_attributes(shield_type:'1')
-    redirect_to root_path
+    redirect_to shield_product_product_path
   end
 
   def presaled_products
@@ -44,7 +129,7 @@ class ProductsController < ApplicationController
 
   def presale_product
     @product.update_attributes(shield_type:'2', presale_date: params[:presale_date])
-    redirect_to root_path
+    redirect_to presale_product_products_url
   end
 
   def un_updated_page
@@ -90,6 +175,7 @@ class ProductsController < ApplicationController
   # POST /products.json
   def create
     @product = Product.new(product_params)
+    @product.update_attributes(user_id: current_user.id)
     respond_to do |format|
       if @product.save
         format.html { redirect_to root_path, notice: 'Product was successfully created.' }
@@ -105,12 +191,11 @@ class ProductsController < ApplicationController
   # PATCH/PUT /products/1.json
   def update
     respond_to do |format|
-      product_params["user_id"] = current_user.id
       if @product.update(product_params)
-        @product.update_attributes(update_status:true)
+        @product.update_attributes(update_status:true, user_id: current_user.id)
         Variable.update_product_variable(params["variable"], @product)
         TranslateToken.create(t_id:@product.id, t_type:'product', t_status: true, t_method:'update')
-        format.html { redirect_to @product, notice: 'Product was successfully updated.' }
+        format.html { redirect_to un_updated_page_products_url, notice: 'Product was successfully updated.' }
         format.json { render :show, status: :ok, location: @product }
       else
         format.html { render :edit }
@@ -147,6 +232,9 @@ class ProductsController < ApplicationController
                                       :desc1, :desc2, :desc3, :brand, :price, :on_sale, :translate_status, :product_from,
                                       :details, :producer, :heel_height, :closure_type, :heel_type, :sole_material, :inner_material_type,
                                       :outer_material_type, :update_status, :seasons, :images1, :images2, :images3, :images4, :images5,
+                                      :images6, :images7, :images8, :images9, :images10, :images11, :images12, :images13, :images14, :images15,
+                                      :images16, :images17, :images18, :images19, :images20, :images21, :images22, :images23, :images24, :images25,
+                                      :images26, :images27, :images28, :images29, :images30,
                                       :shield_type, :shop_id, :shield_untill, :presale_date)
     end
 

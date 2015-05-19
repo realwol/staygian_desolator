@@ -3,15 +3,28 @@
 <table class='table'>
 	<tr>
 			<th>商铺名称</th>
+			<th>状态</th>
 			<th>操作</th>
 	</tr>
 	<% @shops.each do |shop|%>
 		<tr>
-			<td>
-				<%= shop.name %>
-			</td>
+			<td><%= shop.name %></td>
+			<td><%= 
+			  if shop.check_status
+			  	'正常'
+			  else
+			    '屏蔽'
+			  end
+			%></td>
 			<td>
 			<%= link_to '编辑', edit_shop_path(shop) %>
+			<%=
+			  if shop.check_status
+			  	link_to '屏蔽', shield_shop_path(shop)
+			  else
+			  	link_to '恢复', recover_shop_path(shop)
+			  end
+			%>
 			<%= link_to '删除', shop, method: :delete, data: { confirm: 'Are you sure?' }  %>
 			</td>
 		</tr>

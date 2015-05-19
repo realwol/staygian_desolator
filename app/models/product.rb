@@ -14,6 +14,7 @@ class Product < ActiveRecord::Base
   scope :shield, -> {where(shield_type: 1)}
   scope :onsale, -> {where(on_sale: true)}
   scope :offsale, -> {where(on_sale: false)}
+  scope :temp_offsale, -> {where(shield_type: 3).offsale}
   scope :pre_saled, -> {where.not(presale_date: nil).where(shield_type:2)}
 
   before_create :save_sku, :transform_seasons
@@ -96,7 +97,7 @@ class Product < ActiveRecord::Base
 
     CSV.generate(options) do |csv|
       csv << xls_column_names
-      all.each do |product|
+      all.un_shield.updated.each do |product|
         # Custome the xls values
         # csv << ['product.attributes.values_at(*column_names)', 'hello', 'world']
           # 父产品

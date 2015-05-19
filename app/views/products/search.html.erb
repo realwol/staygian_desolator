@@ -1,6 +1,6 @@
-<%= render 'search_div' %>
-
-<h2>待修改产品列表：<%= @products.total_count %></h2>
+<h4>
+  <%= @result_type %>查询结果:<%= @search_value.total_count %>件产品
+</h4>
 
 <table class='table'>
   <thead>
@@ -14,7 +14,7 @@
   </thead>
 
   <tbody>
-    <% @products.each do |product| %>
+    <% @search_value.each do |product| %>
       <tr>
         <td><%= link_to product.product_type.name, product_type_path(product.product_type) if product.product_type%></td>
         <td><%= product.title %></td>
@@ -27,4 +27,6 @@
     <% end %>
   </tbody>
 </table>
-<%= paginate @products %>
+<%= paginate @search_value %>
+
+<%= link_to '返回', root_path %>

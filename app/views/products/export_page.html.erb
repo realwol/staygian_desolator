@@ -1,3 +1,4 @@
+<%= flash[:notice] %>
 <h2>导出选项：</h2>
 <%= form_tag(export_products_products_path, method:'get') do%>
   <label>选择国家：</label>
@@ -13,6 +14,8 @@
   </select><br/>
   <label>选择分类：</label>
   <%= select_tag "export_type", options_from_collection_for_select(ProductType.all, "id", "name"), prompt:'请选择分类:'%><br/>
+  <label>输入开始SKU：</label>
+  <%= text_field_tag 'start_sku' %><br/>
   <%= button_tag '导出', format:'xls' %>
 <% end %>
 <%= javascript_tag do%>
