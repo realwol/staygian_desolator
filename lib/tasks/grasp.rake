@@ -163,7 +163,7 @@ def grasp link
   end
 
   @product_images.each_with_index do |img, index|
-    @product["images#{index+1}".to_sym] = upload_img
+    @product["images#{index+1}".to_sym] = img
   end
   @product.save
 
