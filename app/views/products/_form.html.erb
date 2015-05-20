@@ -21,7 +21,7 @@
   </div>
   <div class="field">
     <label>备注：</label>
-    <%= @product.shop.back_up %><br>
+    <%= @product.try(:shop).try(:back_up) %><br>
   </div>
   <table>
     <tr>
