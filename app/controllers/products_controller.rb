@@ -17,40 +17,51 @@ class ProductsController < ApplicationController
   end
 
   def search
-    product_type = params[:search_type]
-    product_shop = params[:product_shop]
-    sku_value = params[:sku_value]
-    action_from = params[:action_from]
+    @result = {}
+    @result[:type] = product_type = params[:search_type]
+    @result[:shop] = product_shop = params[:product_shop]
+    @result[:brand] = product_brand = params[:product_brand]
+    @result[:sku] = sku_value = params[:sku_value]
+    @action_from = params[:action_from]
 
+    @products = Product.all
     search_query = []
     unless product_type.empty?
       search_query << "product_type_id = '#{product_type}'"
     end
 
     unless product_shop.empty?
-      search_query << "product_number like '%#{product_shop}%'"
+      shop = Shop.where(name:product_shop).first
+      @products = shop.products if shop
     end
+
+    unless product_brand.empty?
+      search_query << "brand like '%#{product_brand}%'"
+    end
+
     unless sku_value.empty?
       search_query << "sku like '%#{sku_value}%'"
     end
-    case action_from
+
+    
+    case @action_from
     when 'index'
-      @search_value = Product.updated.un_shield.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
+      @search_value = @products.updated.un_shield.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
     when 'off_sale_products'
       @result_type = '下线产品'
-      @search_value = Product.offsale.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
+      @search_value = @products.offsale.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
     when 'presaled_products'
       @result_type = '预售产品'
-      @search_value = Product.pre_saled.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
+      @search_value = @products.pre_saled.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
     when 'shield_products'
       @result_type = '屏蔽产品'
-      @search_value = Product.shield.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
+      @search_value = @products.shield.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
     when 'un_updated_page'
       @result_type = '未更新产品'
-      @search_value = Product.un_updated.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
+      @search_value = @products.un_updated.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
     when 'temp_offsale_products'
       @result_type = '临时下线产品'
-      @search_value = Product.temp_offsale.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
+      @search_value = @products.temp_offsale.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
     end
   end
 
@@ -80,7 +91,7 @@ class ProductsController < ApplicationController
       return
     end
 
-    @products = Product.where("product_type_id = ? and id > ?", params[:export_type], start_product.id).order('id desc').limit(1000)
+    @products = Product.where("product_type_id = ? and first_updated_time > ?", params[:export_type], start_product.first_updated_time).order('id desc').limit(1000)
 
     cookies[:export_language] = params[:language]
     cookies[:export_type] = params[:export_type]
@@ -102,6 +113,13 @@ class ProductsController < ApplicationController
 
   def temp_off_sale_products
     @products = Product.temp_offsale.page(params[:page])
+  end
+
+  def temp_off_sale_all
+    unless params[:all_products].blank?
+      Product.where(id:params[:all_products].split(' ')).update_all(shield_type:3, on_sale:false)
+    end
+    redirect_to root_path
   end
 
   def offsale_product
@@ -154,7 +172,7 @@ class ProductsController < ApplicationController
   end
 
   def index
-    @products = Product.all.updated.un_shield.order('id desc').page(params[:page])
+    @products = Product.all.updated.un_shield.order('first_updated_time desc').page(params[:page])
   end
 
   # GET /products/1
@@ -192,7 +210,11 @@ class ProductsController < ApplicationController
   def update
     respond_to do |format|
       if @product.update(product_params)
-        @product.update_attributes(update_status:true, user_id: current_user.id)
+        if @product.first_updated_time
+          @product.update_attributes(update_status:true, user_id: current_user.id)
+        else
+          @product.update_attributes(update_status:true, user_id: current_user.id, first_updated_time: Time.now)
+        end
         Variable.update_product_variable(params["variable"], @product)
         TranslateToken.create(t_id:@product.id, t_type:'product', t_status: true, t_method:'update')
         format.html { redirect_to un_updated_page_products_url, notice: 'Product was successfully updated.' }

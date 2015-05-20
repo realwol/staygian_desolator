@@ -20,6 +20,7 @@ Rails.application.routes.draw do
       get 'presaled_products'
       get 'off_sale_products'
       get 'temp_off_sale_products'
+      post 'temp_off_sale_all'
       get 'check_shop_id'
       get 'search'
       get 'update_price'

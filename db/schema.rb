@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150519090903) do
+ActiveRecord::Schema.define(version: 20150520015620) do
 
   create_table "cash_rates", force: :cascade do |t|
     t.float    "england",    limit: 24
@@ -136,26 +136,6 @@ ActiveRecord::Schema.define(version: 20150519090903) do
     t.string   "shield_type",                 limit: 255,   default: "0"
     t.datetime "shield_untill"
     t.datetime "presale_date"
-    t.text     "image_url11",                 limit: 65535
-    t.text     "image_url12",                 limit: 65535
-    t.text     "image_url13",                 limit: 65535
-    t.text     "image_url14",                 limit: 65535
-    t.text     "image_url15",                 limit: 65535
-    t.text     "image_url16",                 limit: 65535
-    t.text     "image_url17",                 limit: 65535
-    t.text     "image_url18",                 limit: 65535
-    t.text     "image_url19",                 limit: 65535
-    t.text     "image_url20",                 limit: 65535
-    t.text     "image_url21",                 limit: 65535
-    t.text     "image_url22",                 limit: 65535
-    t.text     "image_url23",                 limit: 65535
-    t.text     "image_url24",                 limit: 65535
-    t.text     "image_url25",                 limit: 65535
-    t.text     "image_url26",                 limit: 65535
-    t.text     "image_url27",                 limit: 65535
-    t.text     "image_url28",                 limit: 65535
-    t.text     "image_url29",                 limit: 65535
-    t.text     "image_url30",                 limit: 65535
     t.text     "images11",                    limit: 65535
     t.text     "images12",                    limit: 65535
     t.text     "images13",                    limit: 65535
@@ -176,6 +156,7 @@ ActiveRecord::Schema.define(version: 20150519090903) do
     t.text     "images28",                    limit: 65535
     t.text     "images29",                    limit: 65535
     t.text     "images30",                    limit: 65535
+    t.datetime "first_updated_time"
   end
 
   add_index "products", ["product_type_id"], name: "index_products_on_product_type_id", using: :btree

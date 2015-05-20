@@ -2,13 +2,14 @@ class Product < ActiveRecord::Base
 	acts_as_paranoid
   belongs_to :product_type
   belongs_to :user
+  belongs_to :shop
 
   has_many :variables
   accepts_nested_attributes_for :variables
 
   has_one :product_info_translation
 
-  scope :un_updated, -> {where(update_status:false).order("id desc")}
+  scope :un_updated, -> {where(update_status:false)}
   scope :updated, -> {where(update_status:true)}
   scope :un_shield, -> {where(shield_type: 0)}
   scope :shield, -> {where(shield_type: 1)}
@@ -17,7 +18,8 @@ class Product < ActiveRecord::Base
   scope :temp_offsale, -> {where(shield_type: 3).offsale}
   scope :pre_saled, -> {where.not(presale_date: nil).where(shield_type:2)}
 
-  before_create :save_sku, :transform_seasons
+  before_create :save_sku
+  before_update :transform_seasons
 
   def valid_images
   	image_names = []

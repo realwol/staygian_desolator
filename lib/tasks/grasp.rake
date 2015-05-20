@@ -1,11 +1,11 @@
 namespace :grasp do
 	desc "Grasp from tmall"
 	task :start => :environment do
-    sleep (0..9).to_a.sample
+    # sleep (0..9).to_a.sample
     start
-    sleep 20
-    sleep (0..9).to_a.sample
-    start
+    # sleep 20
+    # sleep (0..9).to_a.sample
+    # start
 	end
 end
 
@@ -56,7 +56,8 @@ def grasp link
   flag1 = flag2 = flag3 = flag4 = flag5 = flag6 = true
 
   @details_string.each do |d|
-    @details << d.text+"<br/>\n"
+    d_text = d.text.gsub(' ', '/').gsub(':/', ': ')
+    @details << d_text + "<br/>\n"
 
     if flag1 && d.text.index('帮面材质') 
       outer_material_type = d.text.gsub!('帮面材质:', '').lstrip[1..-1]
@@ -161,6 +162,9 @@ def grasp link
     @main_images[index] = upload_image
     @product_images << upload_image
   end
+
+  puts "===========upload cost"
+  puts Time.now - test_start
 
   @product_images.each_with_index do |img, index|
     @product["images#{index+1}".to_sym] = img
