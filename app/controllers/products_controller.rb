@@ -79,20 +79,23 @@ class ProductsController < ApplicationController
 
   def export_products
     start_sku = params[:start_sku]
-    start_product = Product.where(sku:start_sku).last
+    if start_sku
+      start_product = Product.where(sku:start_sku).last
 
-    unless start_product
-      redirect_to export_page_products_url, notice:'Sku错误'
-      return
+      unless start_product
+        redirect_to export_page_products_url, notice:'Sku错误'
+        return
+      end
+      
+      unless start_product.try(:product_type_id) == params[:export_type]
+        redirect_to export_page_products_url, notice:'Sku与所选分类不匹配'
+        return
+      end
+
+      @products = Product.where("product_type_id = ? and first_updated_time > ?", params[:export_type], start_product.first_updated_time).order('id desc').limit(1000)
+    else
+      @products = Product.where("product_type_id = ?", params[:export_type]).order('id desc').limit(1000)
     end
-    
-    unless start_product.try(:product_type_id) == params[:export_type]
-      redirect_to export_page_products_url, notice:'Sku与所选分类不匹配'
-      return
-    end
-
-    @products = Product.where("product_type_id = ? and first_updated_time > ?", params[:export_type], start_product.first_updated_time).order('id desc').limit(1000)
-
     cookies[:export_language] = params[:language]
     cookies[:export_type] = params[:export_type]
     request.format = 'xls'
@@ -108,7 +111,15 @@ class ProductsController < ApplicationController
   end
 
   def off_sale_products
+    @action_from = params[:action]
     @products = Product.offsale.page(params[:page])
+  end
+
+  def off_sale_all
+    unless params[:all_offsale_products].blank?
+      Product.where(id:params[:all_offsale_products].split(' ')).update_all(shield_type:0, on_sale:false)
+    end
+    redirect_to root_path
   end
 
   def temp_off_sale_products
@@ -123,7 +134,7 @@ class ProductsController < ApplicationController
   end
 
   def offsale_product
-    @product.update_attributes(on_sale:false)
+    @product.update_attributes(on_sale:false, shield_type: 0)
     redirect_to off_sale_products_products_url
   end
 
@@ -133,24 +144,27 @@ class ProductsController < ApplicationController
   end
 
   def shield_products
+    @action_from = params[:action]
     @products = Product.shield.page(params[:page])
   end
 
   def shield_product
-    @product.update_attributes(shield_type:'1')
+    @product.update_attributes(shield_type:'1', on_sale:false)
     redirect_to shield_product_product_path
   end
 
   def presaled_products
+    @action_from = params[:action]
     @products = Product.pre_saled.page(params[:page])
   end
 
   def presale_product
-    @product.update_attributes(shield_type:'2', presale_date: params[:presale_date])
-    redirect_to presale_product_products_url
+    @product.update_attributes(shield_type:'2', presale_date: params[:presale_date], on_sale:false)
+    redirect_to presaled_product_products_url
   end
 
   def un_updated_page
+    @action_from = params[:action]
     @products = Product.all.un_updated.page(params[:page])
   end
 
@@ -172,7 +186,8 @@ class ProductsController < ApplicationController
   end
 
   def index
-    @products = Product.all.updated.un_shield.order('first_updated_time desc').page(params[:page])
+    @action_from = params[:action]
+    @products = Product.all.updated.onsale.un_shield.order('first_updated_time desc').page(params[:page])
   end
 
   # GET /products/1

@@ -35,6 +35,10 @@
     <%= hidden_field_tag 'all_products', nil, value: @search_value.map(&:id).join(' ') %>
     <%= submit_tag '全部临时下线' %>
   <% end %>
+  <%= form_tag off_sale_all_products_path do %>
+    <%= hidden_field_tag 'all_offsale_products', nil, value: @search_value.map(&:id).join(' ') %>
+    <%= submit_tag '全部下线' %>
+  <% end %>
 <% end %>
 
 <%= link_to '返回', root_path %>

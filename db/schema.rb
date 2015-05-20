@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150520015620) do
+ActiveRecord::Schema.define(version: 20150520170414) do
 
   create_table "cash_rates", force: :cascade do |t|
     t.float    "england",    limit: 24
@@ -190,13 +190,14 @@ ActiveRecord::Schema.define(version: 20150520015620) do
   create_table "shops", force: :cascade do |t|
     t.string   "name",         limit: 255
     t.integer  "user_id",      limit: 4
-    t.boolean  "status",       limit: 1,   default: true
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
+    t.boolean  "status",       limit: 1,     default: true
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
     t.string   "shop_id",      limit: 255
     t.string   "shop_from",    limit: 255
     t.datetime "deleted_at"
-    t.boolean  "check_status", limit: 1,   default: true
+    t.boolean  "check_status", limit: 1,     default: true
+    t.text     "back_up",      limit: 65535
   end
 
   add_index "shops", ["user_id"], name: "index_shops_on_user_id", using: :btree

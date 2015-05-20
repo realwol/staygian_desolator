@@ -56,6 +56,7 @@ def grasp link
   flag1 = flag2 = flag3 = flag4 = flag5 = flag6 = true
 
   @details_string.each do |d|
+    # Todo
     d_text = d.text.gsub(' ', '/').gsub(':/', ': ')
     @details << d_text + "<br/>\n"
 

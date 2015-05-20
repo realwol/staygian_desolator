@@ -7,6 +7,7 @@
 			<th>操作</th>
 	</tr>
 	<% @shops.each do |shop|%>
+			<%= form_tag(add_back_up_shop_path(shop)) do %>
 		<tr>
 			<td><%= shop.name %></td>
 			<td><%= 
@@ -25,7 +26,9 @@
 			  	link_to '恢复', recover_shop_path(shop)
 			  end
 			%>
-			<%= link_to '删除', shop, method: :delete, data: { confirm: 'Are you sure?' }  %>
+			  <%= submit_tag '备注'%>
+			  <%= text_field_tag 'back_ups', nil, value: shop.back_up %>
+			<%end%>
 			</td>
 		</tr>
 	<% end %>

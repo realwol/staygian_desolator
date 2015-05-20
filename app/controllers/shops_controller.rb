@@ -1,5 +1,5 @@
 class ShopsController < ApplicationController
-	before_action :set_shop, only: [:edit, :update, :destroy, :shield, :recover]
+	before_action :set_shop, only: [:edit, :update, :destroy, :shield, :recover, :add_back_up]
 
 	def edit
 	end
@@ -21,6 +21,11 @@ class ShopsController < ApplicationController
 
 	def recover
 		@shop.update_attributes(check_status:true)
+		redirect_to get_tmall_links_products_url
+	end
+
+	def add_back_up
+		@shop.update_attributes(back_up:params[:back_ups])
 		redirect_to get_tmall_links_products_url
 	end
 

@@ -14,12 +14,11 @@ class Product < ActiveRecord::Base
   scope :un_shield, -> {where(shield_type: 0)}
   scope :shield, -> {where(shield_type: 1)}
   scope :onsale, -> {where(on_sale: true)}
-  scope :offsale, -> {where(on_sale: false)}
+  scope :offsale, -> {where(on_sale: false).un_shield}
   scope :temp_offsale, -> {where(shield_type: 3).offsale}
-  scope :pre_saled, -> {where.not(presale_date: nil).where(shield_type:2)}
+  scope :pre_saled, -> {where.not(presale_date: nil).where(shield_type:2).offsale}
 
   before_create :save_sku
-  before_update :transform_seasons
 
   def valid_images
   	image_names = []
@@ -269,14 +268,5 @@ class Product < ActiveRecord::Base
     self.sku_number = base_number + 1
 
     self.sku = self.sku_number.to_s.prepend(("T" + "0" * (7- self.sku_number.to_s.length)) )
-  end
-
-  def transform_seasons
-    case self.seasons.to_i
-    when 1
-      self.seasons = '春夏'
-    when 2
-      self.seasons = '秋冬'
-    end
   end
 end

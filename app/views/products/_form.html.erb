@@ -88,11 +88,7 @@
     <%= f.label :heel_height %>
     <%= f.text_field :heel_height %>
     <%= f.label :seasons %>
-    <select name='product[seasons]' id='seasons'>
-      <option>请选择季节:</option>
-      <option value=1 >春夏</option>
-      <option value=2 >秋冬</option>
-    </select>
+    <%= select_tag 'product[seasons]', options_for_select(['春夏','秋冬'], @product.seasons) %>
   </div>
 
   <div class="field">

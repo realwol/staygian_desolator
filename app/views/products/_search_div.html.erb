@@ -9,7 +9,7 @@
   <%= text_field_tag 'product_brand', nil, value: @result[:brand] %>
   <label>SKU：</label>
   <%= text_field_tag 'sku_value', nil, value: @result[:sku] %>
-  <%= hidden_field_tag 'action_from', value= params[:action] %>
+  <%= hidden_field_tag 'action_from', value= @action_from %>
   <%= button_tag '搜索' %>
 <% end %>
 <hr/>

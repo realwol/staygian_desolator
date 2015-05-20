@@ -6,6 +6,7 @@ Rails.application.routes.draw do
     member do
       get 'shield'
       get 'recover'
+      post 'add_back_up'
     end
   end
 
@@ -21,6 +22,7 @@ Rails.application.routes.draw do
       get 'off_sale_products'
       get 'temp_off_sale_products'
       post 'temp_off_sale_all'
+      post 'off_sale_all'
       get 'check_shop_id'
       get 'search'
       get 'update_price'
