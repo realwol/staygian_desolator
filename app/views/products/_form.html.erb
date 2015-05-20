@@ -19,6 +19,10 @@
     <label>源地址：</label>
     <%= link_to "#{@product.origin_address}", "#{@product.origin_address}", :target => 'blank' %><br>
   </div>
+  <div class="field">
+    <label>备注：</label>
+    <%= @product.shop.back_up %><br>
+  </div>
   <table>
     <tr>
       <td>

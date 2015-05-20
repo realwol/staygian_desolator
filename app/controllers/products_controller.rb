@@ -46,7 +46,7 @@ class ProductsController < ApplicationController
     
     case @action_from
     when 'index'
-      @search_value = @products.updated.un_shield.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
+      @search_value = @products.updated.un_shield.onsale.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
     when 'off_sale_products'
       @result_type = '下线产品'
       @search_value = @products.offsale.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)

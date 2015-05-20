@@ -14,26 +14,27 @@ def start
 	# tmall_links.each do |link|
   unless tmall_link.blank?
 		tmall_link.update_attributes(status:true)
-    grasp tmall_link.address
+    grasp tmall_link
   else
     puts 'sleeping'
 	end
 end
 
-def grasp link
-    # if Product.where(origin_address: link).count > 0
+def grasp tmall_link
+    # if Product.where(origin_address: tmall_link).count > 0
     #   flash[:alert] = '不能重复抓取了哟！'
     #   render 'grasp_product'
     # end
 
   agent = UserAgents.rand()
-  html = Nokogiri::HTML(open(link, 'User-Agent' => agent, :allow_redirections => :all ))
+  html = Nokogiri::HTML(open(tmall_link.address, 'User-Agent' => agent, :allow_redirections => :all ))
 
   # Create Product
   @product = Product.new(translate_status:false, update_status:false, on_sale:true)
-  @product.origin_address = link
+  @product.origin_address = tmall_link.address
   @product.title = html.css('div.tb-detail-hd h1').text.strip
   @product.brand = html.css('li#J_attrBrandName').text.slice(4..-1)
+  @product.shop_id = tmall_link.shop_id
 
   html.css('ul#J_AttrUL li').each do |li|
     if (li.text.include?('货号:') || li.text.include?('款号:'))
