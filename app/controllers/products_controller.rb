@@ -79,7 +79,9 @@ class ProductsController < ApplicationController
 
   def export_products
     start_sku = params[:start_sku]
-    if start_sku
+    if start_sku.blank?
+      @products = Product.where("product_type_id = ?", params[:export_type]).order('id desc').limit(1000)
+    else
       start_product = Product.where(sku:start_sku).last
 
       unless start_product
@@ -93,8 +95,6 @@ class ProductsController < ApplicationController
       end
 
       @products = Product.where("product_type_id = ? and first_updated_time > ?", params[:export_type], start_product.first_updated_time).order('id desc').limit(1000)
-    else
-      @products = Product.where("product_type_id = ?", params[:export_type]).order('id desc').limit(1000)
     end
     cookies[:export_language] = params[:language]
     cookies[:export_type] = params[:export_type]
@@ -160,7 +160,7 @@ class ProductsController < ApplicationController
 
   def presale_product
     @product.update_attributes(shield_type:'2', presale_date: params[:presale_date], on_sale:false)
-    redirect_to presaled_product_products_url
+    redirect_to presaled_products_products_url
   end
 
   def un_updated_page

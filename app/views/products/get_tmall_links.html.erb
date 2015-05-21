@@ -5,32 +5,36 @@
 			<th>商铺名称</th>
 			<th>状态</th>
 			<th>操作</th>
+			<th>备注</th>
 	</tr>
 	<% @shops.each do |shop|%>
-			<%= form_tag(add_back_up_shop_path(shop)) do %>
-		<tr>
-			<td><%= shop.name %></td>
-			<td><%= 
-			  if shop.check_status
-			  	'正常'
-			  else
-			    '屏蔽'
-			  end
-			%></td>
-			<td>
-			<%= link_to '编辑', edit_shop_path(shop) %>
-			<%=
-			  if shop.check_status
-			  	link_to '屏蔽', shield_shop_path(shop)
-			  else
-			  	link_to '恢复', recover_shop_path(shop)
-			  end
-			%>
-			  <%= submit_tag '备注'%>
-			  <%= text_field_tag 'back_ups', nil, value: shop.back_up %>
-			<%end%>
-			</td>
-		</tr>
+				<tr>
+					<td><%= shop.name %></td>
+					<td><%= 
+					  if shop.check_status
+					  	'正常'
+					  else
+					    '屏蔽'
+					  end
+					%></td>
+					<td>
+					<%= link_to '编辑', edit_shop_path(shop) %>
+					<%=
+					  if shop.check_status
+					  	link_to '屏蔽', shield_shop_path(shop)
+					  else
+					  	link_to '恢复', recover_shop_path(shop)
+					  end
+					%>
+
+					</td>
+					<td>
+						<%= form_tag(add_back_up_shop_path(shop)) do %>
+					    <%= text_field_tag 'back_ups', nil, value: shop.back_up %>
+					    <%= submit_tag '备注'%>
+			      <%end%>
+					</td>
+				</tr>
 	<% end %>
 </table>
 <%= paginate @shops %>
