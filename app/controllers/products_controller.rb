@@ -89,7 +89,7 @@ class ProductsController < ApplicationController
         return
       end
       
-      unless start_product.try(:product_type_id) == params[:export_type]
+      unless start_product.try(:product_type_id) == params[:export_type].to_i
         redirect_to export_page_products_url, notice:'Sku与所选分类不匹配'
         return
       end
