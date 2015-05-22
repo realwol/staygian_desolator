@@ -35,11 +35,13 @@ module QiniuUploadHelper
 		def self.update(uri, position, x_pos, y_pos)
       image = MiniMagick::Image.open uri
       path = Rails.root.join('public', "#{name}.jpg")
-      image.combine_options do |c|
-        c.gravity position
-        c.draw "rectangle 0,0 #{get_x_end(x_pos)},#{get_y_end(y_pos)}"
-        c.fill 'white'
-        c.resize '1001x1001'
+      unless position.blank? || x_pos.blank? || y_pos.blank?
+	      image.combine_options do |c|
+	        c.gravity position
+	        c.draw "rectangle 0,0 #{get_x_end(x_pos)},#{get_y_end(y_pos)}"
+	        c.fill 'white'
+	        c.resize '1001x1001'
+				end
 			end
 			image.write path
 
