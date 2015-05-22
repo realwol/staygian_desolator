@@ -231,10 +231,11 @@ class ProductsController < ApplicationController
           @product.update_attributes(update_status:true, user_id: current_user.id, first_updated_time: Time.now)
         end
         # Tobe cut
-        cut_image_urls = params[:cut_image_urls][2..-1].split('|')
-        binding.pry
-        cut_image_urls.each do |url|
-          QiniuUploadHelper::QiNiu.update(url, @product.image_cut_position, @product.image_cut_x, @product.image_cut_y)
+        if params[:cut_image_urls]
+          cut_image_urls = params[:cut_image_urls][2..-1].split('|')
+          cut_image_urls.each do |url|
+            QiniuUploadHelper::QiNiu.update(url, @product.image_cut_position, @product.image_cut_x, @product.image_cut_y)
+          end
         end
 
         Variable.update_product_variable(params["variable"], @product)
