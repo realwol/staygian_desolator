@@ -231,7 +231,7 @@ class ProductsController < ApplicationController
           @product.update_attributes(update_status:true, user_id: current_user.id, first_updated_time: Time.now)
         end
         # Tobe cut
-        if params[:cut_image_urls]
+        if params[:cut_image_urls][2..-1]
           cut_image_urls = params[:cut_image_urls][2..-1].split('|')
           cut_image_urls.each do |url|
             QiniuUploadHelper::QiNiu.update(url, @product.image_cut_position, @product.image_cut_x, @product.image_cut_y)

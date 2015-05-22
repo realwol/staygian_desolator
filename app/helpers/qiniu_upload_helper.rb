@@ -11,6 +11,7 @@ module QiniuUploadHelper
 				  c.gravity position
 				  c.draw "rectangle 0,0 #{get_x_end x_pos},#{get_y_end y_pos}"
 				  c.fill 'white'
+				  c.resize '1001x1001'
 			  else
 				  c.resize '1001x1001'
 				end
@@ -32,14 +33,13 @@ module QiniuUploadHelper
 		end
 
 		def self.update(uri, position, x_pos, y_pos)
-			image = MiniMagick::Image.open uri
-			path = Rails.root.join('public', "#{name}.jpg")
-			image.combine_options do |c|
-				# Do not cut in the first time
-				  c.gravity position
-				  c.draw "rectangle 0,0 #{get_x_end(x_pos)},#{get_y_end(y_pos)}"
-				  c.fill 'white'
-				  c.resize '1001x1001'
+      image = MiniMagick::Image.open uri
+      path = Rails.root.join('public', "#{name}.jpg")
+      image.combine_options do |c|
+        c.gravity position
+        c.draw "rectangle 0,0 #{get_x_end(x_pos)},#{get_y_end(y_pos)}"
+        c.fill 'white'
+        c.resize '1001x1001'
 			end
 			image.write path
 
