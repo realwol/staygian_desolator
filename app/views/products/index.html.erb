@@ -2,7 +2,7 @@
 
 <%= render 'search_div' %>
 
-<h1>Listing Products：<%= @products.total_count %></h1>
+<h3>上架产品数目：<%= @products.total_count %></h3>
 
 <table class='table table-striped'>
   <thead>
@@ -29,10 +29,12 @@
           <%= text_field_tag 'product_price', product.price, class:'product_price', size:6 %>
           <%= button_tag 'Save', class:'change_price', "data-link"=> update_price_products_path, 'data-product_id'=>product.id %>
         </td>
-        <td><%= link_to t('Edit'), edit_product_path(product) %></td>
-        <td><%= link_to '屏蔽', shield_product_product_path(product) %></td>
-        <td><%= link_to '下架', offsale_product_product_path(product) %></td>
-        <td><%= link_to '临时下架', temp_offsale_product_product_path(product) %></td>
+        <td>
+          <%= link_to '编辑', edit_product_path(product) %>
+          <%= link_to '屏蔽', shield_product_product_path(product) %>
+          <%= link_to '下架', offsale_product_product_path(product) %>
+          <%= link_to '临时下架', temp_offsale_product_product_path(product) %>
+        </td>
       </tr>
     <% end %>
   </tbody>

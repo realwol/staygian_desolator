@@ -230,6 +230,13 @@ class ProductsController < ApplicationController
         else
           @product.update_attributes(update_status:true, user_id: current_user.id, first_updated_time: Time.now)
         end
+        # Tobe cut
+        cut_image_urls = params[:cut_image_urls][2..-1].split('|')
+        binding.pry
+        cut_image_urls.each do |url|
+          QiniuUploadHelper::QiNiu.update(url, @product.image_cut_position, @product.image_cut_x, @product.image_cut_y)
+        end
+
         Variable.update_product_variable(params["variable"], @product)
         TranslateToken.create(t_id:@product.id, t_type:'product', t_status: true, t_method:'update')
         format.html { redirect_to un_updated_page_products_url, notice: 'Product was successfully updated.' }
@@ -271,7 +278,7 @@ class ProductsController < ApplicationController
                                       :outer_material_type, :update_status, :seasons, :images1, :images2, :images3, :images4, :images5,
                                       :images6, :images7, :images8, :images9, :images10, :images11, :images12, :images13, :images14, :images15,
                                       :images16, :images17, :images18, :images19, :images20, :images21, :images22, :images23, :images24, :images25,
-                                      :images26, :images27, :images28, :images29, :images30,
+                                      :images26, :images27, :images28, :images29, :images30, :image_cut_x, :image_cut_y, :image_cut_position,
                                       :shield_type, :shop_id, :shield_untill, :presale_date)
     end
 

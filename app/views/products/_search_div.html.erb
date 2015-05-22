@@ -1,5 +1,4 @@
 <% @result = @result || {} %>
-<h3>搜索</h3>
 <%= form_tag(search_products_path, method:'get') do %>
   <label>分类：</label>
   <%= select_tag "search_type", options_from_collection_for_select(ProductType.all, "id", "name", @result[:type]), :prompt => "请选择分类" %>

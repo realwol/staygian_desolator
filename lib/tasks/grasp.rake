@@ -153,7 +153,7 @@ def grasp tmall_link
   test_start = Time.now
 
   @variable_images.each_with_index do |image, index|
-    v_image = QiniuUploadHelper::QiNiu.upload(image,'')
+    v_image = QiniuUploadHelper::QiNiu.upload(image, '')
     @variable_images[index] = v_image
     @product_images[index] = v_image
   end

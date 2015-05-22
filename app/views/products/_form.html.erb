@@ -77,13 +77,14 @@
         <%= hidden_field_tag "product[images#{index+1}]", nil, class:'product_hidden_field_value', value:img %>
       </div>
     <% end %><br/>
+    <%= hidden_field_tag 'cut_image_urls' %>
     <%= f.label '图片裁剪方式' %>
-    <select name='cut_type' id='cut_type'>
-      <option>不裁剪</option>
-      <option value=1 >左上</option>
-      <option value=2 >右上</option>
-      <option value=3 >右下</option>
-      <option value=4 >左下</option>
+    <select name='product[image_cut_position]' id='cut_type'>
+      <option></option>
+      <option value='NorthWest' >左上</option>
+      <option value='NorthEast' >右上</option>
+      <option value='SouthEast' >右下</option>
+      <option value='SouthWest' >左下</option>
     </select>
   </div>
   <div class="field">
@@ -97,9 +98,17 @@
 
   <div class="field">
     <%= f.label :details %><br>
-    <%= f.text_area :details, size:'60x20' %>
+    <%= f.text_area :details, size:'50x20' %>
   </div>
-  
+
+  <div class="field" style='float:right; margin-top: -390px; margin-right:80px;' >
+    <%= image_tag @product.valid_images[0], style:'width:450px; height:350px; margin-bottom:10px;', id:'cut_review_image' %><br>
+    实时：X:<%= text_field_tag 'x_pos_hidden', nil,  id:'x_pos_hidden' %>
+    Y:<%= text_field_tag 'y_pos_hidden', nil,  id:'y_pos_hidden' %><br/>
+    保存：X:<%= text_field_tag 'product[image_cut_x]', nil,  id:'x_pos' %>
+    Y:<%= text_field_tag 'product[image_cut_y]', nil,  id:'y_pos' %>
+  </div>
+
   <hr/>
   <h3>Editing Variables</h3>
     <table class="table">
@@ -176,6 +185,12 @@
 
   $('.product_image').click(function(){
       $(this).toggleClass('click_select');
+      $('#cut_review_image').attr('src', $(this).attr('src'));
+      var cut_images = '|';
+      $('.click_select').each( function(){
+        cut_images = cut_images + '|' + $(this).attr('src');
+      });
+      $('#cut_image_urls').attr('value', cut_images);
   });
 
   $('.variable_image').dblclick(function(){
@@ -196,6 +211,22 @@
       })
     }
   });
+
+  $('#cut_review_image').mousemove(function(e){
+    var xx = e.pageX;
+    var yy = e.pageY;
+    var div_x = this.offsetLeft;
+    var div_y = this.offsetTop;
+    $('#x_pos_hidden').attr('value', (xx - div_x));
+    $('#y_pos_hidden').attr('value', (yy - div_y));
+  });
+
+  $('#cut_review_image').click(function(e){
+    var x = $('#x_pos_hidden').attr('value');
+    $('#x_pos').attr('value', x);
+    var y = $('#y_pos_hidden').attr('value');
+    $('#y_pos').attr('value', y);
+  })
 
 <% end %>
 

@@ -20,9 +20,9 @@
         <td><%= product.title %></td>
         <td><%= product.sku %></td>
         <td><%= product.product_number %></td>
-        <td><%= link_to t('Show'), product %></td>
-        <td><%= link_to t('Edit'), edit_product_path(product) %></td>
-        <td><%= link_to t('Destroy'), product, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to '详情', product %></td>
+        <td><%= link_to '编辑', edit_product_path(product) %></td>
+        <td><%= link_to '删除', product, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
