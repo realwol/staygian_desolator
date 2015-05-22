@@ -150,7 +150,7 @@ class ProductsController < ApplicationController
 
   def shield_product
     @product.update_attributes(shield_type:'1', on_sale:false)
-    redirect_to shield_product_product_path
+    redirect_to shield_products_products_path
   end
 
   def presaled_products
