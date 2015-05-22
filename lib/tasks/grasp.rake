@@ -25,7 +25,6 @@ def grasp tmall_link
     #   flash[:alert] = '不能重复抓取了哟！'
     #   render 'grasp_product'
     # end
-  binding.pry
   agent = UserAgents.rand()
   html = Nokogiri::HTML(open(tmall_link.address, 'User-Agent' => agent, :allow_redirections => :all ))
 
@@ -48,10 +47,6 @@ def grasp tmall_link
   html.css('ul#J_UlThumb li a img').each do |img|
     @main_images << ('http:' + img["src"][0..img["src"].index('.jpg')+3])
   end
-
-  binding.pry
-
-
 
   @details = []
   @details_string = html.css('div#attributes div#J_AttrList ul#J_AttrUL li')
@@ -154,7 +149,6 @@ def grasp tmall_link
 
   test_start = Time.now
 
-  binding.pry
   @variable_images.each_with_index do |image, index|
     v_image = QiniuUploadHelper::QiNiu.upload(image, '')
     @variable_images[index] = v_image
