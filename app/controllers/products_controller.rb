@@ -43,7 +43,6 @@ class ProductsController < ApplicationController
       search_query << "sku like '%#{sku_value}%'"
     end
 
-    
     case @action_from
     when 'index'
       @search_value = @products.updated.un_shield.onsale.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
@@ -59,7 +58,7 @@ class ProductsController < ApplicationController
     when 'un_updated_page'
       @result_type = '未更新产品'
       @search_value = @products.un_updated.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
-    when 'temp_offsale_products'
+    when 'temp_off_sale_products'
       @result_type = '临时下线产品'
       @search_value = @products.temp_offsale.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
     end
@@ -123,6 +122,7 @@ class ProductsController < ApplicationController
   end
 
   def temp_off_sale_products
+    @action_from = params[:action]
     @products = Product.temp_offsale.page(params[:page])
   end
 
