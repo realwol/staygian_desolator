@@ -1,0 +1,47 @@
+<h3>搜索结果：</h3>
+<%= form_tag(search_shops_url) do%>
+  <%= text_field_tag 'shop_name' %>
+  <%= submit_tag '搜索' %>
+<% end %>
+
+<table class='table'>
+  <tr>
+      <th>商铺名称</th>
+      <th>状态</th>
+      <th>操作</th>
+      <th>备注</th>
+  </tr>
+  <% @search_shops.each do |shop|%>
+        <tr>
+          <td><%= shop.name %></td>
+          <td><%= 
+            if shop.check_status
+              '正常'
+            else
+              '屏蔽'
+            end
+          %></td>
+          <td>
+          <%= link_to '编辑', edit_shop_path(shop) %>
+          <%=
+            if shop.check_status
+              link_to '屏蔽', shield_shop_path(shop)
+            else
+              link_to '恢复', recover_shop_path(shop)
+            end
+          %>
+
+          </td>
+          <td>
+            <%= form_tag(add_back_up_shop_path(shop)) do %>
+              <%= text_field_tag 'back_ups', nil, value: shop.back_up %>
+              <%= submit_tag '备注'%>
+            <%end%>
+          </td>
+        </tr>
+  <% end %>
+</table>
+<%= paginate @search_shops %>
+
+
+<%= link_to '返回', get_tmall_links_products_url %>

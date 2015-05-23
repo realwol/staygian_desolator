@@ -8,6 +8,9 @@ Rails.application.routes.draw do
       get 'recover'
       post 'add_back_up'
     end
+    collection do
+      post 'search'
+    end
   end
 
   resources :products do

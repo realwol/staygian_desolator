@@ -1,4 +1,8 @@
 <h3>当前用户商铺列表：</h3>
+<%= form_tag(search_shops_url) do%>
+  <%= text_field_tag 'shop_name' %>
+  <%= submit_tag '搜索' %>
+<% end %>
 
 <table class='table'>
 	<tr>

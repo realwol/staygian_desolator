@@ -190,8 +190,8 @@ def grasp tmall_link
   end
 
   html.css('div.tb-key div.tb-skin div.tb-sku dl dd ul.tm-clear.J_TSaleProp li').each do |li|
-    @sizes << li.children.children.text.strip
     unless li.attributes["data-value"].try(:value).index('-1')
+      @sizes << li.children.children.text.strip
       @sizes_value << li.attributes["data-value"].try(:value)
     end
   end

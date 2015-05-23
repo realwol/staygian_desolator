@@ -1,6 +1,11 @@
 class ShopsController < ApplicationController
 	before_action :set_shop, only: [:edit, :update, :destroy, :shield, :recover, :add_back_up]
 
+  def search
+  	shop_name = params[:shop_name]
+  	@search_shops = Shop.where("name like '%#{shop_name}%' ").page(params[:page])
+  end
+
 	def edit
 	end
 
