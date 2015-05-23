@@ -1,11 +1,7 @@
 namespace :grasp do
 	desc "Grasp from tmall"
 	task :start => :environment do
-    # sleep (0..9).to_a.sample
     start
-    # sleep 20
-    # sleep (0..9).to_a.sample
-    # start
 	end
 end
 
