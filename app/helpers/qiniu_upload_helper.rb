@@ -8,8 +8,8 @@ module QiniuUploadHelper
 			image.combine_options do |c|
 				# Do not cut in the first time
 				unless position
-				  c.gravity position
-				  c.draw "rectangle 0,0 #{get_x_end x_pos},#{get_y_end y_pos}"
+				  # c.gravity position
+				  c.draw "rectangle #{x_start},#{y_start} #{get_x_end x_pos},#{get_y_end y_pos}"
 				  c.fill 'white'
 				  c.resize '1001x1001'
 			  else
@@ -35,10 +35,11 @@ module QiniuUploadHelper
 		def self.update(uri, position, x_pos, y_pos)
       image = MiniMagick::Image.open uri
       path = Rails.root.join('public', "#{name}.jpg")
+			x_start, y_start = get_start position
       unless position.blank? || x_pos.blank? || y_pos.blank?
 	      image.combine_options do |c|
-	        c.gravity position
-	        c.draw "rectangle 0,0 #{get_x_end(x_pos)},#{get_y_end(y_pos)}"
+	        # c.gravity position
+				  c.draw "rectangle #{x_start},#{y_start} #{get_x_end x_pos},#{get_y_end y_pos}"
 	        c.fill 'white'
 	        c.resize '1001x1001'
 				end
@@ -60,11 +61,34 @@ module QiniuUploadHelper
 		end
 
 		def self.get_x_end x
-			x.to_i * (1001.0/450)
+			(x.to_i + 5) * (1001.0/450)
 		end
 
 		def self.get_y_end y
-			y.to_i * (1001.0/350)
+			(y.to_i + 5) * (1001.0/350)
+		end
+
+		def self.get_start position
+			if position.blank?
+				x = 0
+				y = 0
+			else
+				case position
+				when 'NorthWest'
+					x = 0
+					y = 0
+				when 'NorthEast'
+					x = 1002
+					y = 0
+				when 'SouthEast'
+					x = 1002
+					y = 1002
+				when 'SouthWest'
+					x = 0
+					y = 1002
+				end
+			end
+			return x, y
 		end
 	end
 end
