@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150522051403) do
+ActiveRecord::Schema.define(version: 20150526153907) do
 
   create_table "cash_rates", force: :cascade do |t|
     t.float    "england",    limit: 24
@@ -160,6 +160,7 @@ ActiveRecord::Schema.define(version: 20150522051403) do
     t.string   "image_cut_position",          limit: 255
     t.string   "image_cut_x",                 limit: 255
     t.string   "image_cut_y",                 limit: 255
+    t.string   "product_link_id",             limit: 255
   end
 
   add_index "products", ["product_type_id"], name: "index_products_on_product_type_id", using: :btree
@@ -312,6 +313,7 @@ ActiveRecord::Schema.define(version: 20150522051403) do
     t.boolean  "translate_status", limit: 1,     default: false
     t.string   "color_dup",        limit: 255
     t.string   "size_dup",         limit: 255
+    t.string   "variable_id",      limit: 255
   end
 
   add_index "variables", ["product_id"], name: "index_variables_on_product_id", using: :btree

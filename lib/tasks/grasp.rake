@@ -30,6 +30,7 @@ def grasp tmall_link
   @product.title = html.css('div.tb-detail-hd h1').text.strip
   @product.brand = html.css('li#J_attrBrandName').text.slice(4..-1)
   @product.shop_id = tmall_link.shop_id
+  @product.product_link_id = tmall_link.product_link_id
 
   html.css('ul#J_AttrUL li').each do |li|
     if (li.text.include?('货号:') || li.text.include?('款号:'))
@@ -198,9 +199,9 @@ def grasp tmall_link
 
   @sizes = @sizes - @colors
   @sizes_value = @sizes_value - @colors_value
-  @stock = []
   variable_array = []
   variable_hash = {}
+  @stock = []
   js = html.css('script').to_s
   start = js.index('skuMap').to_i
   if start
@@ -208,11 +209,13 @@ def grasp tmall_link
     stock_count = 0
     @colors.each_with_index do |color,c_index|
       @sizes.each_with_index do |size,s_index|
-        start = js.index("#{@sizes_value[s_index]};#{@colors_value[c_index]}")
+        variable_id = "#{@sizes_value[s_index]};#{@colors_value[c_index]}"
+        start = js.index(variable_id)
         if (start && @stock[stock_count] != 0)
           startt = js[start..-1].index('stock')
           endd = js[start..-1].index('}')
           @stock << js[start..-1][startt..endd].match(/\d+/)[0]
+          variable_hash[:variable_id] = variable_id
           variable_hash[:color] = color
           variable_hash[:size] = size
           variable_hash[:stock] = @stock[stock_count]
