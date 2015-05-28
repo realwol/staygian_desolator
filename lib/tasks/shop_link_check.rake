@@ -40,6 +40,7 @@ def grasp_link shop_link
 
         product_link_id = link_hash[:address][product_link_start..product_link_end]
         unless TmallLink.where(product_link_id: product_link_id).first
+          link_hash[:address] = "http://detail.tmall.com/item.htm?id=" + product_link_id.to_s
           link_hash[:product_link_id] = product_link_id
           link_hash[:user_id] = shop_link.user_id
           link_hash[:status]  = false
