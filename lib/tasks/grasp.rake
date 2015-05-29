@@ -10,6 +10,11 @@ def start
 	# tmall_links.each do |link|
   unless tmall_link.blank?
 		tmall_link.update_attributes(status:true)
+    Product.uncached do
+      if Product.where(product_link_id: tmall_link.product_link_id).first
+        return
+      end
+    end
     grasp tmall_link
   else
     puts 'sleeping'
