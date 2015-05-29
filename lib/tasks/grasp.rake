@@ -166,6 +166,7 @@ def grasp tmall_link
     @product["images#{index+1}".to_sym] = img
   end
   @product.save
+  @product.reload
 
   # variable_image_hash = {}
   # @product_images.each_with_index do |img,index|
