@@ -30,7 +30,7 @@ def grasp tmall_link
   html = Nokogiri::HTML(open(tmall_link.address, 'User-Agent' => agent, :allow_redirections => :all ))
 
   # Create Product
-  @product = Product.new(translate_status:false, update_status:false, on_sale:true)
+  @product = Product.new(translate_status:false, update_status:false, on_sale:true, user_id: tmall_link.user_id)
   @product.origin_address = tmall_link.address
   @product.title = html.css('div.tb-detail-hd h1').text.strip
   @product.brand = html.css('li#J_attrBrandName').text.slice(4..-1)
