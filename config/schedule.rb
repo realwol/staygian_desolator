@@ -30,6 +30,6 @@ every 1.day do
 	rake 'product_check:pre_sale'
 end
 
-# every 1.minute do
-# 	rake 'shop_link:check'
-# end
+every 1.minute do
+	rake 'shop_link:check'
+end
