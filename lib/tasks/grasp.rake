@@ -62,7 +62,7 @@ def grasp tmall_link
     @details << d_text + "<br/>\n"
 
     if flag1 && d.text.index('帮面材质') 
-      outer_material_type = d.text.gsub!('帮面材质:', '').lstrip[1..-1]
+      outer_material_type = d.text.gsub!('帮面材质', '').lstrip[1..-1]
       @product.outer_material_type = outer_material_type
       attribute_value = ShoesAttributesValue.where(name:outer_material_type).last
       if attribute_value
@@ -76,7 +76,7 @@ def grasp tmall_link
     end
 
     if flag2 && d.text.index('内里材质') 
-      inner_material_type = d.text.gsub!('内里材质:', '').lstrip[1..-1]
+      inner_material_type = d.text.gsub!('内里材质', '').lstrip[1..-1]
       @product.inner_material_type = inner_material_type
       attribute_value = ShoesAttributesValue.where(name:inner_material_type).last
       if attribute_value
@@ -104,7 +104,7 @@ def grasp tmall_link
     end
 
     if flag4 && d.text.index('跟底款式') 
-      heel_type = d.text.gsub!('跟底款式:', '').lstrip[1..-1]
+      heel_type = d.text.gsub!('跟底款式', '').lstrip[1..-1]
       @product.heel_type = heel_type
       attribute_value = ShoesAttributesValue.where(name:heel_type).last
       if attribute_value
@@ -118,7 +118,7 @@ def grasp tmall_link
     end
 
     if flag5 && d.text.index('闭合方式') 
-      closure_type = d.text.gsub!('闭合方式:', '').lstrip[1..-1]
+      closure_type = d.text.gsub!('闭合方式', '').lstrip[1..-1]
       @product.closure_type = closure_type
       attribute_value = ShoesAttributesValue.where(name:closure_type).last
       if attribute_value
@@ -143,7 +143,7 @@ def grasp tmall_link
     @details << d + "<br/>\n"
 
     if flag1 && d.index('帮面材质') 
-      outer_material_type = d.gsub!('帮面材质:', '').lstrip[1..-1]
+      outer_material_type = d.gsub!('帮面材质', '').lstrip[1..-1]
       @product.outer_material_type = outer_material_type
       attribute_value = ShoesAttributesValue.where(name:outer_material_type).last
       if attribute_value
@@ -171,7 +171,7 @@ def grasp tmall_link
     # end
 
     if flag3 && d.index('鞋底材质') 
-      sole_material = d.gsub!('鞋底材质:', '').lstrip[1..-1]
+      sole_material = d.gsub!('鞋底材质', '').lstrip[1..-1]
       @product.sole_material = sole_material
       attribute_value = ShoesAttributesValue.where(name:sole_material).last
       if attribute_value
@@ -185,7 +185,7 @@ def grasp tmall_link
     end
 
     if flag4 && d.index('跟底款式') 
-      heel_type = d.gsub!('跟底款式:', '').lstrip[1..-1]
+      heel_type = d.gsub!('跟底款式', '').lstrip[1..-1]
       @product.heel_type = heel_type
       attribute_value = ShoesAttributesValue.where(name:heel_type).last
       if attribute_value
@@ -199,7 +199,7 @@ def grasp tmall_link
     end
 
     if flag5 && d.index('闭合方式') 
-      closure_type = d.gsub!('闭合方式:', '').lstrip[1..-1]
+      closure_type = d.gsub!('闭合方式', '').lstrip[1..-1]
       @product.closure_type = closure_type
       attribute_value = ShoesAttributesValue.where(name:closure_type).last
       if attribute_value
