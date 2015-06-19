@@ -12,10 +12,10 @@ def start
 		tmall_link.update_attributes(status:true)
     Product.uncached do
       if Product.where(product_link_id: tmall_link.product_link_id).first
+        logger.ifnfo('existing')
         return
       end
     end
-    logger.info('grasping')
     grasp tmall_link
   else
     puts 'sleeping'
