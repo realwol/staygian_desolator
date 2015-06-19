@@ -12,7 +12,7 @@ def start
 		tmall_link.update_attributes(status:true)
     Product.uncached do
       if Product.where(product_link_id: tmall_link.product_link_id).first
-        logger.ifnfo('existing')
+        logger.info('existing')
         return
       end
     end
