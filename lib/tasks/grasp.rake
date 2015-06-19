@@ -15,6 +15,7 @@ def start
         return
       end
     end
+    logger.info('grasping')
     grasp tmall_link
   else
     puts 'sleeping'
