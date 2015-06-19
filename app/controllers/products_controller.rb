@@ -105,7 +105,7 @@ class ProductsController < ApplicationController
   end
 
   def onsale_product
-    @product.update_attributes(on_sale:true, shield_type:0)
+    @product.update_attributes(on_sale:true, shield_type:0, update_status:true)
     redirect_to root_path
   end
 
@@ -116,7 +116,7 @@ class ProductsController < ApplicationController
 
   def off_sale_all
     unless params[:all_offsale_products].blank?
-      Product.where(id:params[:all_offsale_products].split(' ')).update_all(shield_type:0, on_sale:false)
+      Product.where(id:params[:all_offsale_products].split(' ')).update_all(shield_type:0, on_sale:false, update_status:true)
     end
     redirect_to root_path
   end
@@ -128,13 +128,13 @@ class ProductsController < ApplicationController
 
   def temp_off_sale_all
     unless params[:all_products].blank?
-      Product.where(id:params[:all_products].split(' ')).update_all(shield_type:3, on_sale:false)
+      Product.where(id:params[:all_products].split(' ')).update_all(shield_type:3, on_sale:false, update_status:true)
     end
     redirect_to root_path
   end
 
   def offsale_product
-    @product.update_attributes(on_sale:false, shield_type: 0)
+    @product.update_attributes(on_sale:false, shield_type: 0, update_status:true)
     redirect_to off_sale_products_products_url
   end
 
@@ -149,7 +149,7 @@ class ProductsController < ApplicationController
   end
 
   def shield_product
-    @product.update_attributes(shield_type:'1', on_sale:false)
+    @product.update_attributes(shield_type:'1', on_sale:false, update_status:true)
     redirect_to shield_products_products_path
   end
 
@@ -159,7 +159,7 @@ class ProductsController < ApplicationController
   end
 
   def presale_product
-    @product.update_attributes(shield_type:'2', presale_date: params[:presale_date], on_sale:false)
+    @product.update_attributes(shield_type:'2', presale_date: params[:presale_date], on_sale:false, update_status:true)
     redirect_to presaled_products_products_url
   end
 
@@ -227,6 +227,7 @@ class ProductsController < ApplicationController
       if @product.update(product_params)
         if @product.first_updated_time
           @product.update_attributes(update_status:true, user_id: current_user.id)
+          @product.save_attributes
         else
           @product.update_attributes(update_status:true, user_id: current_user.id, first_updated_time: Time.now)
         end
@@ -280,7 +281,8 @@ class ProductsController < ApplicationController
                                       :images6, :images7, :images8, :images9, :images10, :images11, :images12, :images13, :images14, :images15,
                                       :images16, :images17, :images18, :images19, :images20, :images21, :images22, :images23, :images24, :images25,
                                       :images26, :images27, :images28, :images29, :images30, :image_cut_x, :image_cut_y, :image_cut_position,
-                                      :shield_type, :shop_id, :shield_untill, :presale_date)
+                                      :shield_type, :shop_id, :shield_untill, :presale_date, :strap_type, :lining_description, :shoe_width,
+                                      :platform_height, :shaft_diameter, :shaft_height, :leather_type, :style_name, :department_name)
     end
 
     def avaliable? link

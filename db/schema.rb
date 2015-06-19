@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150526153907) do
+ActiveRecord::Schema.define(version: 20150619015924) do
 
   create_table "cash_rates", force: :cascade do |t|
     t.float    "england",    limit: 24
@@ -161,6 +161,15 @@ ActiveRecord::Schema.define(version: 20150526153907) do
     t.string   "image_cut_x",                 limit: 255
     t.string   "image_cut_y",                 limit: 255
     t.string   "product_link_id",             limit: 255
+    t.string   "department_name",             limit: 255
+    t.string   "style_name",                  limit: 255
+    t.string   "leather_type",                limit: 255
+    t.string   "shaft_height",                limit: 255
+    t.string   "shaft_diameter",              limit: 255
+    t.string   "platform_height",             limit: 255
+    t.string   "shoe_width",                  limit: 255
+    t.string   "lining_description",          limit: 255
+    t.string   "strap_type",                  limit: 255
   end
 
   add_index "products", ["product_type_id"], name: "index_products_on_product_type_id", using: :btree

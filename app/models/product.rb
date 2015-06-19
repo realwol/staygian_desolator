@@ -165,10 +165,19 @@ class Product < ActiveRecord::Base
         xls_column_values << "" # size
         xls_column_values << product.read_attribute("#{language}_detail")
         xls_column_values << product.read_attribute("outer_material_type_#{language}")
-        xls_column_values << product.read_attribute("inner_material_type_#{language}")
+        # xls_column_values << product.read_attribute("inner_material_type_#{language}")
         xls_column_values << product.read_attribute("sole_material_#{language}")
         xls_column_values << product.read_attribute("heel_type_#{language}")
         xls_column_values << product.read_attribute("closure_type_#{language}")
+        xls_column_values << ShoesAttributesValue.find(product.department_name).read_attribute("#{language}")
+        xls_column_values << ShoesAttributesValue.find(product.style_name).read_attribute("#{language}")
+        xls_column_values << ShoesAttributesValue.find(product.leather_type).read_attribute("#{language}")
+        xls_column_values << ShoesAttributesValue.find(product.shaft_height).read_attribute("#{language}")
+        xls_column_values << ShoesAttributesValue.find(product.shaft_diameter).read_attribute("#{language}")
+        xls_column_values << ShoesAttributesValue.find(product.platform_height).read_attribute("#{language}")
+        xls_column_values << ShoesAttributesValue.find(product.shoe_width).read_attribute("#{language}")
+        xls_column_values << ShoesAttributesValue.find(product.lining_description).read_attribute("#{language}")
+        xls_column_values << ShoesAttributesValue.find(product.strap_type).read_attribute("#{language}")
         
         csv << xls_column_values
         # 子产品
@@ -245,15 +254,38 @@ class Product < ActiveRecord::Base
           xls_column_values << "#{v_size}"
           xls_column_values << product.read_attribute("#{language}_detail")
           xls_column_values << product.read_attribute("outer_material_type_#{language}")
-          xls_column_values << product.read_attribute("inner_material_type_#{language}")
+          # xls_column_values << product.read_attribute("inner_material_type_#{language}")
           xls_column_values << product.read_attribute("sole_material_#{language}")
           xls_column_values << product.read_attribute("heel_type_#{language}")
           xls_column_values << product.read_attribute("closure_type_#{language}")
+          xls_column_values << ShoesAttributesValue.find(product.department_name).read_attribute("#{language}")
+          xls_column_values << ShoesAttributesValue.find(product.style_name).read_attribute("#{language}")
+          xls_column_values << ShoesAttributesValue.find(product.leather_type).read_attribute("#{language}")
+          xls_column_values << ShoesAttributesValue.find(product.shaft_height).read_attribute("#{language}")
+          xls_column_values << ShoesAttributesValue.find(product.shaft_diameter).read_attribute("#{language}")
+          xls_column_values << ShoesAttributesValue.find(product.platform_height).read_attribute("#{language}")
+          xls_column_values << ShoesAttributesValue.find(product.shoe_width).read_attribute("#{language}")
+          xls_column_values << ShoesAttributesValue.find(product.lining_description).read_attribute("#{language}")
+          xls_column_values << ShoesAttributesValue.find(product.strap_type).read_attribute("#{language}")
 
           csv << xls_column_values
         end
       end
     end
+  end
+
+  def save_attributes
+    binding.pry
+    self.strap_type = ShoesAttributesValue.where(name:self.strap_type).first.try(:id)
+    self.lining_description = ShoesAttributesValue.where(name:self.lining_description).first.try(:id)
+    self.shoe_width = ShoesAttributesValue.where(name:self.shoe_width).first.try(:id)
+    self.platform_height = ShoesAttributesValue.where(name:self.platform_height).first.try(:id)
+    self.shaft_diameter = ShoesAttributesValue.where(name:self.shaft_diameter).first.try(:id)
+    self.shaft_height = ShoesAttributesValue.where(name:self.shaft_height).first.try(:id)
+    self.leather_type = ShoesAttributesValue.where(name:self.leather_type).first.try(:id)
+    self.style_name = ShoesAttributesValue.where(name:self.style_name).first.try(:id)
+    self.department_name = ShoesAttributesValue.where(name:self.department_name).first.try(:id)
+    save
   end
 
   private
@@ -269,4 +301,5 @@ class Product < ActiveRecord::Base
 
     self.sku = self.sku_number.to_s.prepend(("T" + "0" * (7- self.sku_number.to_s.length)) )
   end
+
 end

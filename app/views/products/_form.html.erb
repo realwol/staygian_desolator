@@ -26,22 +26,16 @@
   <table>
     <tr>
       <td>
-        <%= f.label :product_number %>
+        <%= f.label "产品号:" %>
         <%= f.text_field :product_number, size:30 %>
       </td>
       <td>
-        <%= f.label :brand %>
+        <%= f.label "品牌:" %>
         <%= f.text_field :brand, size:30 %>
       </td>
-    </tr>
-    <tr>
       <td>
         <%= f.label "帮面材质:" %>
         <%= f.text_field :outer_material_type %>
-      </td>
-      <td>
-        <%= f.label "内里材质:" %>
-        <%= f.text_field :inner_material_type %>
       </td>
       <td>
         <%= f.label "生产商家:" %>
@@ -60,6 +54,69 @@
       <td>
         <%= f.label "闭合方式:" %>
         <%= f.text_field :closure_type %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <%= f.label '适用人群' %>
+        <% value_id = @product.department_name ? ShoesAttributesValue.find(@product.department_name).try(:name) : 0 %>
+        <%= select_tag 'product[department_name]', options_for_select(['男孩','女孩','男人','女人'], value_id) %>
+      </td>
+      <td>
+        <%= f.label '鞋筒高' %>
+        <% value_id = @product.shaft_height ? ShoesAttributesValue.find(@product.shaft_height).try(:name) : 0 %>
+        <%= select_tag 'product[shaft_height]', options_for_select(['脚踝','小腿','膝盖高','过膝'], value_id) %>
+      </td>
+      <td>
+        <%= f.label '鞋宽' %>
+        <% value_id = @product.shoe_width ? ShoesAttributesValue.find(@product.shoe_width).try(:name) : 0 %>
+        <%= select_tag 'product[shoe_width]', options_for_select(['正常','窄','宽','超宽'], value_id) %>
+      </td>
+      <td>
+        <%= f.label '单暖' %>
+        <% value_id = @product.lining_description ? ShoesAttributesValue.find(@product.lining_description).try(:name) : 0 %>
+        <%= select_tag 'product[lining_description]', options_for_select(['单鞋','暖鞋'], value_id), include_blank: true %>
+      </td>
+    <tr/>
+    <tr>
+      <td>
+        <%= f.label '靴筒宽' %>
+        <% value_id = @product.shaft_diameter ? ShoesAttributesValue.find(@product.shaft_diameter).try(:name) : 0 %>
+        <%= select_tag 'product[shaft_diameter]', options_for_select(['正常','窄','宽','超宽'], value_id), include_blank: true %>
+      </td>
+      <td>
+        <%= f.label '带类型' %>
+        <% value_id = @product.strap_type ? ShoesAttributesValue.find(@product.strap_type).try(:name) : 0 %>
+        <%= select_tag 'product[strap_type]', options_for_select(['脚踝绑带','脚踝包裹','后跟带','T型带','人字'], value_id), include_blank: true %>
+      </td>
+      <td>
+        <%= f.label '风格' %>
+        <% value_id = @product.style_name ? ShoesAttributesValue.find(@product.style_name).try(:name) : 0 %>
+        <%= select_tag 'product[style_name]', options_for_select(['舞蹈鞋','爵士&现代舞','封闭脚趾','鱼嘴','防水台','雪地靴','军靴','高帮','低帮','脚斗士-镂空','松糕底','布鞋','磨砂靴','休闲靴','皮鞋','自行车靴'], value_id), include_blank: true %>
+      </td>
+      <td>
+        <%= f.label '鞋面材质' %>
+        <% value_id = @product.leather_type ? ShoesAttributesValue.find(@product.leather_type).try(:name) : 0 %>
+        <%= select_tag 'product[leather_type]', options_for_select(['绒面革','漆革','光滑的皮','麂皮绒'], value_id), include_blank: true %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <%= f.label :price %>
+        <%= f.text_field :price %>
+      </td>
+      <td>
+        <%= f.label :heel_height %>
+        <%= f.text_field :heel_height %>
+      </td>
+      <td>
+        <%= f.label :seasons %>
+        <%= select_tag 'product[seasons]', options_for_select(['春夏','秋冬'], @product.seasons) %>
+      </td>
+      <td>
+        <%= f.label '平台高度' %>
+        <% value_id = @product.platform_height ? ShoesAttributesValue.find(@product.platform_height).try(:name) : 0 %>
+        <%= select_tag 'product[platform_height]', options_for_select(['0.5','1','1.5','2','2.5','3','3.5','4','4.5','5','5.5','6','6.5','7','7.5','8','8.5','9','9.5','10','10.5','11','11.5','12','12.5','13','13.5','14','14.5','15'], value_id), include_blank: true %>
       </td>
     </tr>
   </table>
