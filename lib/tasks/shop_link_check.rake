@@ -6,7 +6,7 @@ namespace :shop_link do
   	shop_link = get_first_shop_link
   	if shop_link
       grasp_link shop_link
-      shop_link.update_attributes(status:true)
+      shop_link.update_attributes(status:'true')
     else
       puts 'no shop'
   	end
@@ -43,7 +43,7 @@ def grasp_link shop_link
           link_hash[:address] = "http://detail.tmall.com/item.htm?id=" + product_link_id.to_s
           link_hash[:product_link_id] = product_link_id
           link_hash[:user_id] = shop_link.user_id
-          link_hash[:status]  = false
+          link_hash[:status]  = 'false'
           link_hash[:shop_id]  = (shop_link.shop_id || params[:product][:shop_id])
           links_array << link_hash.dup
         end
@@ -57,7 +57,7 @@ def grasp_link shop_link
     unless next_uri.blank?
       unless next_uri == ''
         uri = uri[0..(uri.index('?')-1)] + next_uri
-        ShopLink.create(shop_id_string: shop_link.shop_id_string, link: uri, user: shop_link.user, status: 0, shop_id: shop_link.shop_id)
+        ShopLink.create(shop_id_string: shop_link.shop_id_string, link: uri, user: shop_link.user, status: 'false', shop_id: shop_link.shop_id)
       end
     end
     TmallLink.create(links_array)
