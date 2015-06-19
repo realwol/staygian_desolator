@@ -275,7 +275,6 @@ class Product < ActiveRecord::Base
   end
 
   def save_attributes
-    binding.pry
     self.strap_type = ShoesAttributesValue.where(name:self.strap_type).first.try(:id)
     self.lining_description = ShoesAttributesValue.where(name:self.lining_description).first.try(:id)
     self.shoe_width = ShoesAttributesValue.where(name:self.shoe_width).first.try(:id)
