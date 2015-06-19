@@ -227,10 +227,11 @@ class ProductsController < ApplicationController
       if @product.update(product_params)
         if @product.first_updated_time
           @product.update_attributes(update_status:true, user_id: current_user.id)
-          @product.save_attributes
         else
           @product.update_attributes(update_status:true, user_id: current_user.id, first_updated_time: Time.now)
         end
+        @product.save_attributes
+
         # Tobe cut
         if params[:cut_image_urls][2..-1]
           cut_image_urls = params[:cut_image_urls][2..-1].split('|')
