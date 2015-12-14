@@ -1,4 +1,4 @@
-source 'http://ruby.taobao.org'
+source 'https://ruby.taobao.org'
 
 gem 'rails', '4.2.0'
 gem 'mysql2'
@@ -14,7 +14,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 group :development, :test do
   gem 'byebug'
   gem 'web-console', '~> 2.0'
-  gem 'spring'
+  gem 'spring', '~> 1.5.0'
   gem 'pry'
   gem 'pry-nav'
   gem 'rspec-rails', '~> 3.0.0'
@@ -31,6 +31,6 @@ gem "lazy_high_charts"
 gem 'open_uri_redirections'
 gem 'useragents'
 gem 'mechanize'
-gem 'execjs'
-gem 'therubyracer'
+# gem 'execjs'
+# gem 'therubyracer'
 gem 'qiniu'

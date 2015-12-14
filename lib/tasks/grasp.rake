@@ -1,3 +1,5 @@
+require 'openssl'
+
 namespace :grasp do
 	desc "Grasp from tmall"
 	task :start => :environment do
@@ -29,6 +31,14 @@ def grasp tmall_link
     # end
   agent = UserAgents.rand()
   html = Nokogiri::HTML(open(tmall_link.address, 'User-Agent' => agent, :allow_redirections => :all ))
+  # url = URI.parse( tmall_link.address)
+  # http = Net::HTTP.new( url.host, url.port )
+  # http.use_ssl = true if url.port == 443
+  # http.verify_mode = OpenSSL::SSL::VERIFY_NONE if url.port == 443
+  # html = Nokogiri::HTML(open(http.to_s))
+
+  
+  # html = Nokogiri::HTML(open(tmall_link.address))
 
   # Create Product
   @product = Product.new(translate_status:false, update_status:false, on_sale:true, user_id: tmall_link.user_id)
@@ -48,7 +58,7 @@ def grasp tmall_link
 
   @main_images = []
   html.css('ul#J_UlThumb li a img').each do |img|
-    @main_images << ('http:' + img["src"][0..img["src"].index('.jpg')+3])
+    @main_images << ('https:' + img["src"][0..img["src"].index('.jpg')+3])
   end
 
   @details = []

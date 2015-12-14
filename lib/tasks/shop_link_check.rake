@@ -6,7 +6,7 @@ namespace :shop_link do
   	shop_link = get_first_shop_link
   	if shop_link
       grasp_link shop_link
-      shop_link.update_attributes(status:true)
+      shop_link.update_attributes(status: true)
     else
       puts 'no shop'
   	end
@@ -34,7 +34,7 @@ def grasp_link shop_link
       end
 
       1.step(a.count - 2,2) do |i|
-        link_hash[:address] = "http://" + a[i].at('a.productImg').attributes["href"].value[2..-1]
+        link_hash[:address] = "https://" + a[i].at('a.productImg').attributes["href"].value[2..-1]
         product_link_start = link_hash[:address].index('id') + 3
         product_link_end = link_hash[:address][product_link_start..-1].index('&') - 1 + product_link_start
 
