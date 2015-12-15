@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150619015924) do
+ActiveRecord::Schema.define(version: 20151215073318) do
 
   create_table "cash_rates", force: :cascade do |t|
     t.float    "england",    limit: 24
@@ -193,7 +193,7 @@ ActiveRecord::Schema.define(version: 20150619015924) do
     t.integer  "user_id",        limit: 4
     t.datetime "created_at",                                  null: false
     t.datetime "updated_at",                                  null: false
-    t.string   "status",         limit: 255
+    t.boolean  "status",         limit: 1
     t.string   "shop_id",        limit: 255
     t.boolean  "check_status",   limit: 1,     default: true
   end
