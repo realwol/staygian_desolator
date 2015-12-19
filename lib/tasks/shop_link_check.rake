@@ -21,14 +21,14 @@ def grasp_link shop_link
     links_array = []
     link_hash = {}
     next_uri = ''
-    # agent = Mechanize.new
+    agent = Mechanize.new
     uri = shop_link.link
     redirect_to root_path if uri.blank?
 
-    agent = UserAgents.rand()
-    html = Nokogiri::HTML(open(uri, 'User-Agent' => agent, :allow_redirections => :all ))
+    # agent = UserAgents.rand()
+    # page = Nokogiri::HTML(open(uri, 'User-Agent' => agent, :allow_redirections => :all ))
 
-      # page = agent.get(uri)
+      page = agent.get(uri)
       if page.at('#J_ItemList')
         a = page.at('#J_ItemList').children
       else
