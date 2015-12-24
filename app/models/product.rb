@@ -13,6 +13,7 @@ class Product < ActiveRecord::Base
   scope :updated, -> {where(update_status:true)}
   scope :un_shield, -> {where(shield_type: 0)}
   scope :shield, -> {where(shield_type: 1)}
+  scope :edited, -> {where(shield_type: 4)}
   scope :onsale, -> {where(on_sale: true)}
   scope :offsale, -> {where(on_sale: false).un_shield}
   scope :temp_offsale, -> {where(shield_type: 3).where(on_sale:false)}

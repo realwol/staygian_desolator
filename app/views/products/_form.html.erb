@@ -12,18 +12,25 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :title %><br>
-    <%= f.text_area :title, size:'60x3' %>
+    <label>源地址：</label>
+    <%= link_to "#{@product.origin_address}", "#{@product.origin_address}", :target => 'blank' %>
+    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+    <label>购买地址：</label>
+    <%= f.text_area :purchase_link, size:'60x2' %>
   </div>
   <div class="field">
-    <label>源地址：</label>
-    <%= link_to "#{@product.origin_address}", "#{@product.origin_address}", :target => 'blank' %><br>
+    <%= f.label :title %><br>
+    <%= f.text_area :title, size:'60x2' %>
   </div>
   <div class="field">
     <label>备注：</label>
     <%= @product.try(:shop).try(:back_up) %><br>
   </div>
-  <table>
+  <h5>
+    自定义属性：
+    <hr/>
+  </h5>
+  <table style="">
     <tr>
       <td>
         <%= f.label "产品号:" %>
@@ -102,15 +109,15 @@
     </tr>
     <tr>
       <td>
-        <%= f.label :price %>
+        <label>价格</label>
         <%= f.text_field :price %>
       </td>
       <td>
-        <%= f.label :heel_height %>
+        <label>鞋跟高度</label>
         <%= f.text_field :heel_height %>
       </td>
       <td>
-        <%= f.label :seasons %>
+        <label>季节</label>
         <%= select_tag 'product[seasons]', options_for_select(['春夏','秋冬'], @product.seasons) %>
       </td>
       <td>
@@ -119,8 +126,18 @@
         <%= select_tag 'product[platform_height]', options_for_select(['0.5','1','1.5','2','2.5','3','3.5','4','4.5','5','5.5','6','6.5','7','7.5','8','8.5','9','9.5','10','10.5','11','11.5','12','12.5','13','13.5','14','14.5','15'], value_id), include_blank: true %>
       </td>
     </tr>
+    <tr>
+      <td>
+        <label>重量</label>
+        <%= f.text_field :product_weight %>
+      </td>
+    </tr>
   </table>
 
+  <div class="field">
+    <label>简介</label>
+    <%= f.text_area :back_up, size:'100x5' %>
+  </div>
   <hr/>
   <div class="field">
     <%= f.label :ProductType %><br>
@@ -151,6 +168,7 @@
     <%= f.label :seasons %>
     <%= select_tag 'product[seasons]', options_for_select(['春夏','秋冬'], @product.seasons) %>
   </div>
+
 
   <div class="field">
     <%= f.label :details %><br>
@@ -221,6 +239,10 @@
       <%= form_tag(presale_product_product_path(@product), method:'get') do %>
         <input type="text" id="datetimepicker" name='presale_date' data-date-format="yyyy-mm-dd">
         <%= button_tag '设产品为预售并选择日期' %>
+      <%end%>
+      <%= form_tag(edited_product_product_path(@product), method:'get') do %>
+        <textarea cols="30" rows="5" name="editing_backup" placeholder="设置待修改备注" ></textarea>
+        <%= button_tag '待修改' %>
       <%end%>
       <%= link_to '屏蔽产品', shield_product_product_path(@product) %>
     </div>

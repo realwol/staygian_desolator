@@ -1,7 +1,7 @@
 class ProductsController < ApplicationController
-  before_action :set_product, only: [:show, :edit, :update, :destroy, :shield_product, :presale_product, :offsale_product, :temp_offsale_product, :onsale_product]
+  before_action :set_product, only: [:show, :edit, :update, :destroy, :shield_product, :presale_product, :offsale_product, :temp_offsale_product, :onsale_product, :edited_product]
   before_action :authenticate_user!
-
+                               
   def update_price
     product = Product.find(params["product_id"])
     price = params["price"]
@@ -153,6 +153,16 @@ class ProductsController < ApplicationController
     redirect_to shield_products_products_path
   end
 
+  def edited_product
+    @product.update_attributes(shield_type:'4', on_sale:false, update_status:true, editing_backup: params[:editing_backup])
+    redirect_to edited_products_products_path
+  end
+
+  def edited_products
+    @action_from = params[:action]
+    @products = Product.edited.page(params[:page])
+  end
+
   def presaled_products
     @action_from = params[:action]
     @products = Product.pre_saled.page(params[:page])
@@ -283,7 +293,8 @@ class ProductsController < ApplicationController
                                       :images16, :images17, :images18, :images19, :images20, :images21, :images22, :images23, :images24, :images25,
                                       :images26, :images27, :images28, :images29, :images30, :image_cut_x, :image_cut_y, :image_cut_position,
                                       :shield_type, :shop_id, :shield_untill, :presale_date, :strap_type, :lining_description, :shoe_width,
-                                      :platform_height, :shaft_diameter, :shaft_height, :leather_type, :style_name, :department_name)
+                                      :platform_height, :shaft_diameter, :shaft_height, :leather_type, :style_name, :department_name, :purchase_link,
+                                      :product_weight, :editing_backup)
     end
 
     def avaliable? link

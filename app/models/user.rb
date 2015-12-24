@@ -7,4 +7,5 @@ class User < ActiveRecord::Base
   has_many :shops
   has_many :products
   has_many :shop_links
+  has_many :tmall_links
 end

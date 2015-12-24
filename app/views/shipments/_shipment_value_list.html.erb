@@ -1,0 +1,60 @@
+<table class="table shipments_table">
+  <th>重量</th>
+  <th>美国</th>
+  <th>加拿大</th>
+  <th>英国</th>
+  <th>德国</th>
+  <th>意大利</th>
+  <th>西班牙</th>
+  <th>法国</th>
+  <th>操作</th>
+  <tbody>
+    <% ShipmentMethodValue.all.each do |shipment| %>
+    <tr>
+      <th><input class='inputValue' type="text" style="width:50px;" value="<%= shipment.weight %>" /></th>
+      <td><input class='inputValue' type="text" style="width:50px;" value="<%= shipment.america_price %>" /></td>
+      <td><input class='inputValue' type="text" style="width:50px;" value="<%= shipment.canada_price %>" /></td>
+      <td><input class='inputValue' type="text" style="width:50px;" value="<%= shipment.british_price %>" /></td>
+      <td><input class='inputValue' type="text" style="width:50px;" value="<%= shipment.germany_price %>" /></td>
+      <td><input class='inputValue' type="text" style="width:50px;" value="<%= shipment.italy_price %>" /></td>
+      <td><input class='inputValue' type="text" style="width:50px;" value="<%= shipment.spain_price %>" /></td>
+      <td><input class='inputValue' type="text" style="width:50px;" value="<%= shipment.france_price %>" /></td>
+      <td><button class="saveChange" value="<%= shipment.id %>">保存</button><button class="deleteValue" value="<%= shipment.id %>">删除</button></td>
+    <% end %>
+    </tr>
+  </tbody>
+</table>
+
+<script type="text/javascript">
+    $('.saveChange').click(function(){
+      var shipmentMethodValues = '';
+      $(this).parents('tr').find('.inputValue').each(function(){
+        shipmentMethodValues = shipmentMethodValues + $(this).val() + ',';
+      });
+      var id = $(this).val();
+
+      $.ajax({
+        url: '/shipments/save_shipment_value',
+        type: 'POST',
+        data: {shipment_method_value: shipmentMethodValues, id: id},
+        success: function(){
+
+        }
+      })
+    });
+
+    $('.deleteValue').click(function(){
+        if(window.confirm('确定要删除吗？')){
+          var id = $(this).val();
+          $.ajax({
+            url: "/shipments/delete_shipment_method_value",
+            type: 'post',
+            data: {id: id},
+            success: function(){
+
+            }
+          })
+        }
+      return false;
+    });
+</script>

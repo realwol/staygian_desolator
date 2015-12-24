@@ -14,11 +14,14 @@ default: &default
   encoding: utf8
   pool: 5
   username: root
-  password:
+  password: 
   socket: /tmp/mysql.sock
 
 development:
   <<: *default
+  # host: 120.25.74.164
+  # username: leo
+  # password: realwol
   database: amazon_tmall_development
 
 # Warning: The database defined as "test" will be erased and

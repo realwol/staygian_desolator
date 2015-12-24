@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151215073318) do
+ActiveRecord::Schema.define(version: 20151224160425) do
 
   create_table "cash_rates", force: :cascade do |t|
     t.float    "england",    limit: 24
@@ -170,10 +170,35 @@ ActiveRecord::Schema.define(version: 20151215073318) do
     t.string   "shoe_width",                  limit: 255
     t.string   "lining_description",          limit: 255
     t.string   "strap_type",                  limit: 255
+    t.text     "purchase_link",               limit: 65535
+    t.string   "product_weight",              limit: 255
+    t.text     "editing_backup",              limit: 65535
+    t.text     "back_up",                     limit: 65535
   end
 
   add_index "products", ["product_type_id"], name: "index_products_on_product_type_id", using: :btree
   add_index "products", ["user_id"], name: "index_products_on_user_id", using: :btree
+
+  create_table "shipment_method_values", force: :cascade do |t|
+    t.string   "region",        limit: 255
+    t.string   "weight",        limit: 255
+    t.float    "price",         limit: 24
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.string   "america_price", limit: 255
+    t.string   "canada_price",  limit: 255
+    t.string   "british_price", limit: 255
+    t.string   "germany_price", limit: 255
+    t.string   "italy_price",   limit: 255
+    t.string   "spain_price",   limit: 255
+    t.string   "france_price",  limit: 255
+  end
+
+  create_table "shipment_methods", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
 
   create_table "shoes_attributes_values", force: :cascade do |t|
     t.string   "name",       limit: 255

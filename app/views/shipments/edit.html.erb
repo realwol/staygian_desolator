@@ -1,0 +1,34 @@
+<h4> 运输方式编辑： <%= @shipment_method.name %> </h4>
+<div id="shipentValueList">
+  <%= render 'shipment_value_list' %>
+</div>
+<hr/>
+<button class="addLine" >添加行</button>
+<%= link_to '返回', shipments_path %>
+
+<script type="text/javascript">
+
+
+  $('.addLine').click(function(){
+    var newLine = "<tr><th><input class='inputValue' style='width:50px;' type='text' /></th><td><input class='inputValue' style='width:50px;' type='text' /></td><td><input class='inputValue' style='width:50px;' type='text' /></td><td><input class='inputValue' style='width:50px;' type='text' /></td><td><input class='inputValue' style='width:50px;' type='text' /></td><td><input class='inputValue' style='width:50px;' type='text' /></td><td><input class='inputValue' style='width:50px;' type='text' /></td><td><input class='inputValue' style='width:50px;' type='text' /></td><td><button class='saveChange'>保存</button></td></tr>"
+    $('.shipments_table tr:last').after(newLine);
+    $('.saveChange').click(function(){
+      var shipmentMethodValues = '';
+      $(this).parents('tr').find('.inputValue').each(function(){
+        shipmentMethodValues = shipmentMethodValues + $(this).val() + ',';
+      });
+      var id = $(this).val();
+
+      $.ajax({
+        url: '/shipments/save_shipment_value',
+        type: 'POST',
+        data: {shipment_method_value: shipmentMethodValues, id: id},
+        success: function(){
+
+        }
+      })
+    });
+
+    return false;
+  });
+</script>

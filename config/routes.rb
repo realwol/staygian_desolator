@@ -21,6 +21,7 @@ Rails.application.routes.draw do
       get 'export_page'
       get 'export_products'
       get 'shield_products'
+      get 'edited_products'
       get 'presaled_products'
       get 'off_sale_products'
       get 'temp_off_sale_products'
@@ -33,6 +34,7 @@ Rails.application.routes.draw do
 
     member do
       get 'shield_product'
+      get 'edited_product'
       get 'presale_product'
       get 'offsale_product'
       get 'onsale_product'
@@ -44,6 +46,12 @@ Rails.application.routes.draw do
 
   devise_for :users
   resources :users
+  resources :shipments do 
+    collection do
+      post 'save_shipment_value'
+      post 'delete_shipment_method_value'
+    end
+  end
 
   root 'products#index'
   # The priority is based upon order of creation: first created -> highest priority.

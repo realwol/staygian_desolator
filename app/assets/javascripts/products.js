@@ -1,6 +1,4 @@
 $(function(){
-
-
   $('#product_price').change(function(){
     $('.variable_price').val($(this).val());
   });

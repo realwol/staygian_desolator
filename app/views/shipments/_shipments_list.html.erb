@@ -1,0 +1,106 @@
+<p id="notice"><%= notice %></p>
+
+<h2>运输方式列表：<%= @shipment_methods.count %></h2>
+
+<table class='table'>
+  <thead>
+    <tr>
+      <th>名称</th>
+      <th colspan="2">操作</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @shipment_methods.each do |shipment| %>
+      <tr>
+        <td><%= shipment.name %></td>
+        <td><%= link_to '编辑', edit_shipment_path(shipment) %></td>
+        <td><input type='button' class='remove_shipment' value='删除' data-shipment-id=<%= shipment.id %> /></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= paginate @shipment_methods %>
+
+<div id="modalCreateShipmentMehod" style="display:none; background-color:#EEF5F2, padding: 10px; position: fixed; left:50%; top:20%; border: 1px black solid;" >
+  <label>请输入运输方式名称：</label>
+  <input type="text" id="newShipmentName"><br/>
+  <button class="cancelCreateShipment">取消</button>
+  <button class="createShipment" >确定 </button>
+</div>
+<!-- 
+<div id="modalEditShipmentMehod" style="display:none; background-color:#EEF5F2, padding: 10px; position: fixed; left:40%; top:20%; border: 1px black solid;" >
+  <label>运输方式名称：</label>
+  <input type="text" id="shipmentId"><br/>
+  <button class="cancelEditShipment">取消</button>
+  <button class="updateShipment" >确定 </button>
+</div> -->
+
+<br>
+
+<%= link_to '新增', nil, class:'new_shipment_method' %>
+<%= link_to '返回', root_url %>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+    //   $('.edit_shipment').click(function(){
+    //     $('#modalEditShipmentMehod').fadeIn();
+    //     return false;
+    //   });
+
+      $('.remove_shipment').click(function(){
+        if(window.confirm('确定要删除吗？')){
+          var shipment_id = $(this).data('shipment-id');
+          $.ajax({
+            url: "/shipments/" + shipment_id,
+            type: 'DELETE',
+            success: function(){
+
+            }
+          })
+        }
+        return false;
+      });
+
+    $('.new_shipment_method').click(function(){
+      $('#modalCreateShipmentMehod').fadeIn();
+      return false;
+    });
+
+    $('.cancelCreateShipment').click(function(){
+      $('#modalCreateShipmentMehod').fadeOut();
+      return false;
+    });
+
+    $('.cancelEditShipment').click(function(){
+      $('#modalEditShipmentMehod').fadeOut();
+      return false;
+    });
+
+    $('.createShipment').click(function(){
+      var name = $('#newShipmentName').val();
+      $.ajax({
+        url: "/shipments",
+        type: "POST",
+        data: {name: name},
+        success: function(data){
+          $('#modalCreateShipmentMehod').fadeOut();
+          return false;
+        }
+      });
+    });
+
+    // $('.updateShipment').click(function(){
+    //   var id = $('#shipmentName').val();
+    //   $.ajax({
+    //     url: "/shipments/" + id,
+    //     type: "POST",
+    //     success: function(data){
+    //       $('#modalEditShipmentMehod').fadeOut();
+    //       return false;
+    //     }
+    //   });
+    // });
+  });
+
+</script>
