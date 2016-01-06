@@ -13,24 +13,26 @@
       <th>意大利</th>
       <th colspan="3" >操作</th>
     </tr>
-    <% @product_type_attributes.each do |attribute| %>
-      <% attribute_translation = attribute.attributes_translation_history %>
-      <tr>
-        <td><%= text_field_tag 'attr_text_name', attribute.attribute_name, style:'width:80px;', class: 'attribute_value' %></td>
-        <td><%= text_field_tag 'attr_is_locked', attribute.attribute_name, style:'width:80px;', class: 'attribute_value' %></td>
-        <td><%= text_field_tag 'attr_text_table_name', attribute.table_name, style:'width:80px;', class: 'attribute_value' %></td>
-        <td><%= text_field_tag 'attr_text_china', attribute_translation.try(:china), style:'width:80px;', class: 'attribute_value' %></td>
-        <td><%= text_field_tag 'attr_text_america', attribute_translation.try(:america), style:'width:80px;', class: 'attribute_value' %></td>
-        <td><%= text_field_tag 'attr_text_canada', attribute_translation.try(:canada), style:'width:80px;', class: 'attribute_value' %></td>
-        <td><%= text_field_tag 'attr_text_british', attribute_translation.try(:british), style:'width:80px;', class: 'attribute_value' %></td>
-        <td><%= text_field_tag 'attr_text_germay', attribute_translation.try(:germay), style:'width:80px;', class: 'attribute_value' %></td>
-        <td><%= text_field_tag 'attr_text_france', attribute_translation.try(:france), style:'width:80px;', class: 'attribute_value' %></td>
-        <td><%= text_field_tag 'attr_text_spain', attribute_translation.try(:spain), style:'width:80px;', class: 'attribute_value' %></td>
-        <td><%= text_field_tag 'attr_text_italy', attribute_translation.try(:italy), style:'width:80px;', class: 'attribute_value' %></td>
-        <td><a class='editAttribues' value=<%= attribute.id %>  >保存</a></td>
-        <td><a class='newAttributeValue' value=<%= attribute.id %>  >新增</a></td>
-        <td><a class='removeAttribues' value=<%= attribute.id %>  >删除</a></td>
-      </tr>
+    <% if @product_type_attributes.present? %>
+      <% @product_type_attributes.each do |attribute| %>
+        <% attribute_translation = attribute.attributes_translation_histories %>
+        <tr>
+          <td><%= text_field_tag 'attr_text_name', attribute.attribute_name, style:'width:80px;', class: 'attribute_value' %></td>
+          <td><%= text_field_tag 'attr_is_locked', attribute.attribute_name, style:'width:80px;', class: 'attribute_value' %></td>
+          <td><%= text_field_tag 'attr_text_table_name', attribute.table_name, style:'width:80px;', class: 'attribute_value' %></td>
+          <td><%= text_field_tag 'attr_text_china', attribute_translation.try(:china), style:'width:80px;', class: 'attribute_value' %></td>
+          <td><%= text_field_tag 'attr_text_america', attribute_translation.try(:america), style:'width:80px;', class: 'attribute_value' %></td>
+          <td><%= text_field_tag 'attr_text_canada', attribute_translation.try(:canada), style:'width:80px;', class: 'attribute_value' %></td>
+          <td><%= text_field_tag 'attr_text_british', attribute_translation.try(:british), style:'width:80px;', class: 'attribute_value' %></td>
+          <td><%= text_field_tag 'attr_text_germay', attribute_translation.try(:germay), style:'width:80px;', class: 'attribute_value' %></td>
+          <td><%= text_field_tag 'attr_text_france', attribute_translation.try(:france), style:'width:80px;', class: 'attribute_value' %></td>
+          <td><%= text_field_tag 'attr_text_spain', attribute_translation.try(:spain), style:'width:80px;', class: 'attribute_value' %></td>
+          <td><%= text_field_tag 'attr_text_italy', attribute_translation.try(:italy), style:'width:80px;', class: 'attribute_value' %></td>
+          <td><a class='editAttribues' value=<%= attribute.id %>  >保存</a></td>
+          <td><a class='newAttributeValue' value=<%= attribute.id %>  >新增</a></td>
+          <td><a class='removeAttribues' value=<%= attribute.id %>  >删除</a></td>
+        </tr>
+      <% end %>
     <% end %>
   </table>
 

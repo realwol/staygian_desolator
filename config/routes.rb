@@ -60,6 +60,13 @@ Rails.application.routes.draw do
     end
 
     collection do
+      get 'update_price_setting'
+      post 'update_shipment_method'
+      post 'update_product_type_attribute'
+      post 'update_description'
+      post 'update_type_setting'
+      post 'update_type_introduction'
+      delete 'remove_product_type_attribute'
     end
   end
 

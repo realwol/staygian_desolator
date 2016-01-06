@@ -99,6 +99,7 @@ class ProductTypesController < ApplicationController
   end
 
   def update_shipment_method
+    
     shipment_method_china = ShipmentMethod.find(params[:shipment_method_china])
     shipment_method_america = ShipmentMethod.find(params[:shipment_method_america])
     shipment_method_canada = ShipmentMethod.find(params[:shipment_method_canada])
