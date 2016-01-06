@@ -1,28 +1,33 @@
 class VariablesController < ApplicationController
   before_action :set_variable, only: [:show, :edit, :update, :destroy]
+  def save_translate_variable
+    variable_translation_value_array = params[:variableTranslationValue].split(',')
+    variable_name = params[:variableName]
+    VariableTranslateHistory.create(word: variable_name, en: variable_translation_value_array[0], de: variable_translation_value_array[3], fr: variable_translation_value_array[4], es: variable_translation_value_array[5], it: variable_translation_value_array[6])
+    unless params[:oldVariableName] == variable_name
+      Variable.where(color: params[:oldVariableName]).update_all(color: variable_name, translate_status: true)
+    end
+    @untranslated_variables = Variable.untranslated.select(:color).uniq
+  end
 
-  # GET /variables
-  # GET /variables.json
+  def translate_variables
+    @untranslated_variables = Variable.untranslated.select(:color).uniq
+  end
+
   def index
     @variables = Variable.all
   end
 
-  # GET /variables/1
-  # GET /variables/1.json
   def show
   end
 
-  # GET /variables/new
   def new
     @variable = Variable.new
   end
 
-  # GET /variables/1/edit
   def edit
   end
 
-  # POST /variables
-  # POST /variables.json
   def create
     @variable = Variable.new(variable_params)
 

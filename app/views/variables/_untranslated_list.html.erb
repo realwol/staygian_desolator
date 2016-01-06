@@ -1,0 +1,25 @@
+  <table class="table">
+    <tr>
+      <% %w(中国 美国 加拿大 英国 德国 法国 西班牙 意大利).each do |country| %>
+        <td><%= country %></td>
+      <% end %>
+      <td>操作</td>
+    </tr>
+    <% if @untranslated_variables.count > 0 %>
+    <% @untranslated_variables.each do |variable| %>
+      <tr>
+        <td><input type="text" class="variable_translation_name" style="width:80px;" value=<%= variable.color %> ></td>
+        <td><input type="text" class="variable_translation_value" style="width:80px;" /></td>
+        <td><input type="text" class="variable_translation_value" style="width:80px;" /></td>
+        <td><input type="text" class="variable_translation_value" style="width:80px;" /></td>
+        <td><input type="text" class="variable_translation_value" style="width:80px;" /></td>
+        <td><input type="text" class="variable_translation_value" style="width:80px;" /></td>
+        <td><input type="text" class="variable_translation_value" style="width:80px;" /></td>
+        <td><input type="text" class="variable_translation_value" style="width:80px;" /></td>
+        <td><a class="update_translation" value=<%= variable.color %>>更新</a> </td>
+      </tr>
+    <% end %>
+    <% else %>
+      无未翻译变体
+    <% end %>
+  </table>

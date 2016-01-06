@@ -1,0 +1,12 @@
+<% if @product_type_attributes %>
+  <% @product_type_attributes.each do |attribute| %>
+    <%= label_tag 'attribute_label', attribute.attribute_name %>
+    <% if attribute.is_locked %>
+      <%= select_tag 'attribte_options', options_from_collection_for_select(attribute.attributes_translation_histories, "id", "china") %>
+    <% else %>
+      <%= text_field_tag 'attribute_field' %>
+    <% end %>
+    <br/>
+  <% end %>
+<% else %>
+<% end %>

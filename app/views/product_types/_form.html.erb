@@ -1,4 +1,5 @@
-<%= form_for(@product_type) do |f| %>
+<%= hidden_field_tag 'product_type_id_hidden', nil, value: @product_type.id %>
+<%= form_for(@product_type, remote: true) do |f| %>
   <% if @product_type.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@product_type.errors.count, "error") %> prohibited this product_type from being saved:</h2>
@@ -11,6 +12,8 @@
     </div>
   <% end %>
 
+  <hr/>
+  <h5>产品分类信息：</h5>
   <div class="field">
     <%= f.label :name %><br>
     <%= f.text_field :name %>
@@ -19,11 +22,230 @@
     <%= f.label :father_node %><br>
     <%= f.text_field :father_node %>
   </div>
-  <div class="field">
-    <%= f.label :deleted_at %><br>
-    <%= f.datetime_select :deleted_at %>
-  </div>
+
   <div class="actions">
     <%= f.submit %>
   </div>
 <% end %>
+
+<hr/>
+<h5>配送方式：</h5>
+  <%= form_tag(update_shipment_method_product_type_path(@product_type), method: :post, remote: true) do %>
+    <table class="table">
+      <tr>
+        <th>中国</th>
+        <th>美国</th>
+        <th>加拿大</th>
+        <th>英国</th>
+        <th>德国</th>
+        <th>法国</th>
+        <th>西班牙</th>
+        <th>意大利</th>
+      </tr>
+
+      <tr>
+        <td><%= select_tag 'shipment_method_china', options_from_collection_for_select(@shipment_methods, 'id', 'name') %></td>
+        <td><%= select_tag 'shipment_method_america', options_from_collection_for_select(@shipment_methods, 'id', 'name') %></td>
+        <td><%= select_tag 'shipment_method_canada', options_from_collection_for_select(@shipment_methods, 'id', 'name') %></td>
+        <td><%= select_tag 'shipment_method_british', options_from_collection_for_select(@shipment_methods, 'id', 'name') %></td>
+        <td><%= select_tag 'shipment_method_germany', options_from_collection_for_select(@shipment_methods, 'id', 'name') %></td>
+        <td><%= select_tag 'shipment_method_france', options_from_collection_for_select(@shipment_methods, 'id', 'name') %></td>
+        <td><%= select_tag 'shipment_method_spain', options_from_collection_for_select(@shipment_methods, 'id', 'name') %></td>
+        <td><%= select_tag 'shipment_method_italy', options_from_collection_for_select(@shipment_methods, 'id', 'name') %></td>
+      </tr>
+    </table>
+    <hr/>
+    <%= submit_tag '更新' %>
+  <% end%>
+<hr/>
+<h5>销售价设置</h5>
+    <table class="table">
+      <tr>
+        <% %w(国家 中国 美国 加拿大 英国 德国 法国 西班牙 意大利).each do |country| %>
+          <th><%= country%></th>
+        <% end %>
+      </tr>
+      <tr>
+        <td>价格</td>
+        <% %w(中国 美国 加拿大 英国 德国 法国 西班牙 意大利).each do |country| %>
+          <td><input type="text" style="width:100px;" class="salePrice"></td>
+        <% end %>
+      </tr>
+    </table>
+    <button id="savePrice" >保存价格</button>
+<hr/>
+
+<h5>产品说明设置</h5>
+  <%= form_tag( update_description_product_type_path(@product_type), method: :post, remote: true) do -%>
+    <table class="table">
+      <% %w(中国 美国 加拿大 英国 德国 法国 西班牙 意大利).each_with_index do |country, index| %>
+        <tr>
+          <th><%= country%></th>
+          <td><textarea cols="100" rows="5" name="descriptionTextArea<%= index %>" ></textarea></td>
+        </tr>
+      <% end %>
+    </table>
+    <%= submit_tag '保存' %>
+  <% end%>
+<hr/>
+
+<h5>分类设置：</h5>
+  <table class="table">
+    <tr>
+      <% %w(国家 中国 美国 加拿大 英国 德国 法国 西班牙 意大利).each do |country| %>
+        <th><%= country%></th>
+      <% end %>
+    </tr>
+    <% %w(FEED 分类1 分类2).each do |type| %>
+      <tr>
+        <th><%= type %></th>
+        <td><input type="text" style="width:100px;" class="typeSetting" /></td>
+        <td><input type="text" style="width:100px;" class="typeSetting" /></td>
+        <td><input type="text" style="width:100px;" class="typeSetting" /></td>
+        <td><input type="text" style="width:100px;" class="typeSetting" /></td>
+        <td><input type="text" style="width:100px;" class="typeSetting" /></td>
+        <td><input type="text" style="width:100px;" class="typeSetting" /></td>
+        <td><input type="text" style="width:100px;" class="typeSetting" /></td>
+        <td><input type="text" style="width:100px;" class="typeSetting" /></td>
+      </tr>
+    <% end %>
+  </table>
+  <button id="saveTypeSetting" >保存</button>
+<hr/>
+
+<h5>产品简介设置：</h5>
+  <%= form_tag( '', method: :post, remote: true) do -%>
+    <table class="table">
+      <% %w(中国 美国 加拿大 英国 德国 法国 西班牙 意大利).each do |country| %>
+        <tr>
+          <th rowspan="2"><%= country%></th>
+          <td><textarea cols="100" rows="3" class="introduction1TextArea" ></textarea></td>
+        </tr>
+        <tr>
+          <td><textarea cols="100" rows="3" class="introduction2TextArea" ></textarea></td>
+        </tr>
+      <% end %>
+    </table>
+    <button id="saveIntroduction" >保存</button>
+  <% end%>
+<hr/>
+
+<h5>属性设置： <a class="addAttribute" >添加</a> </h5>
+<div id="addAttributesTable" >
+  <%= render 'product_attributes_type' %>
+</div>
+<hr/>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    var product_type_id = $('#product_type_id_hidden').val();
+
+    $('#saveIntroduction').click(function(){
+      var typeIntroduction1Values = '';
+      var typeIntroduction2Values = '';
+      $('.introduction1TextArea').each(function(){
+        typeIntroduction1Values = typeIntroduction1Values + $(this).val() + ',';
+      });
+      $('.introduction2TextArea').each(function(){
+        typeIntroduction2Values = typeIntroduction2Values + $(this).val() + ',';
+      });
+
+      $.ajax({
+        url: '/product_types/'+ product_type_id +'/update_type_introduction',
+        type: 'POST',
+        data: {introduction_1: typeIntroduction1Values, introduction_2: typeIntroduction2Values},
+        success: function(){
+          
+        }
+      })
+    });
+
+    $('#saveTypeSetting').click(function(){
+      var typeSettingValue = '';
+      $('.typeSetting').each(function(){
+        typeSettingValue = typeSettingValue + $(this).val() + ',';
+      });
+      $.ajax({
+        url: '/product_types/'+ product_type_id +'/update_type_setting',
+        type: 'POST',
+        data: { type_values: typeSettingValue},
+        success: function(){
+
+        }
+      })
+    });
+
+    $('#savePrice').click(function(){
+      var priceValues = '';
+      $('.salePrice').each(function(){
+        priceValues = priceValues + $(this).val() + ',';
+      });
+      $.ajax({
+        url: '/product_types/'+ product_type_id + '/update_price_setting',
+        type: 'GET',
+        data: {price_value: priceValues},
+        success: function(){
+
+        }
+      });
+    });
+
+    $('.addAttribute').click(function(){
+      var trContent = "<tr><td><input type='text' name='attr_text_name' style='width:80px;' class='attribute_value' ></td><td><input type='text' name='attr_is_locked' style='width:80px;' class='attribute_value' ></td><td><input type='text' name='attr_text_table_name' style='width:80px;' class='attribute_value' ></td><td><input type='text' name='attr_text_china' style='width:80px;' class='attribute_value' ></td><td><input type='text' name='attr_text_america' style='width:80px;' class='attribute_value' ></td><td><input type='text' name='attr_text_canada' style='width:80px;' class='attribute_value' ></td><td><input type='text' name='attr_text_british' style='width:80px;' class='attribute_value' ></td><td><input type='text' name='attr_text_germay' style='width:80px;' class='attribute_value' ></td><td><input type='text' name='attr_text_france' style='width:80px;' class='attribute_value' ></td><td><input type='text' name='attr_text_spain' style='width:80px;' class='attribute_value' ></td><td><input type='text' name='attr_text_italy' style='width:80px;' class='attribute_value' ></td><td><a class='editAttribues' >保存</a></td><td><a class='newAttributeValue'>新增</a></td><td>删除</td></tr>";
+
+      $('table.attributes_setting').find('tr:first').after(trContent);
+        $('.editAttribues').click(function(){
+          var attributes_value = '';
+          $(this).parents('tr').find('.attribute_value').each(function(){
+            attributes_value = attributes_value + $(this).val() + ',';
+          });
+          var attribute_id = $(this).attr('value');
+
+          $.ajax({
+            url: '/product_types/'+ product_type_id +'/update_product_type_attribute',
+            type: 'POST',
+            data: { attributes_value: attributes_value, attribute_id: attribute_id},
+            success: function(){
+            }
+          });
+          return false;
+        });
+
+      $('.removeAttribues').click(function(){
+        var attribute_id = $(this).attr('value');
+        $.ajax({
+          url: '/product_types/' + attribute_id + '/remove_product_type_attribute',
+          type: 'DELETE',
+          success: function(){
+            return false;
+          }
+        });
+      });
+      $('.newAttributeValue').click(function(){
+        var attributeName = $(this).parents('tr').find('input[name="attr_text_name"]').val();
+        var attributeIsLocked = $(this).parents('tr').find('input[name="attr_is_locked"]').val();
+        var attributeTableName = $(this).parents('tr').find('input[name="attr_text_table_name"]').val();
+        var trContent = "<tr><td><input type='text' name='attr_text_name' style='width:80px; display:none;' class='attribute_value' value=" + attributeName + " ></td><td><input type='text' name='attr_is_locked' style='width:80px; display:none;' class='attribute_value' value=" + attributeIsLocked + " ></td><td><input type='text' name='attr_text_table_name' style='width:80px; display:none;' class='attribute_value' value=" + attributeTableName +" ></td><td><input type='text' name='attr_text_china' style='width:80px;' class='attribute_value' ></td><td><input type='text' name='attr_text_america' style='width:80px;' class='attribute_value' ></td><td><input type='text' name='attr_text_canada' style='width:80px;' class='attribute_value' ></td><td><input type='text' name='attr_text_british' style='width:80px;' class='attribute_value' ></td><td><input type='text' name='attr_text_germay' style='width:80px;' class='attribute_value' ></td><td><input type='text' name='attr_text_france' style='width:80px;' class='attribute_value' ></td><td><input type='text' name='attr_text_spain' style='width:80px;' class='attribute_value' ></td><td><input type='text' name='attr_text_italy' style='width:80px;' class='attribute_value' ></td><td><a class='editAttribues' >更新</a></td><td>删除</td></tr>";
+        $(this).parents('tr').after(trContent);
+
+        $('.editAttribues').click(function(){
+          var attributes_value = '';
+          $(this).parents('tr').find('.attribute_value').each(function(){
+            attributes_value = attributes_value + $(this).val() + ',';
+          });
+          var attribute_id = $(this).attr('value');
+          var product_type_id = $('#product_type_id_hidden').val();
+
+          $.ajax({
+            url: '/product_types/'+ product_type_id +'/update_product_type_attribute',
+            type: 'POST',
+            data: { attributes_value: attributes_value, attribute_id: attribute_id},
+            success: function(){
+            }
+          });
+          return false;
+        });
+    });
+    });
+  });
+</script>

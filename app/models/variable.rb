@@ -3,6 +3,7 @@ class Variable < ActiveRecord::Base
   belongs_to :product
 
   default_scope {where(update_status:false)}
+  scope :untranslated, ->{unscope(where: :update_status).where(translate_status: false)}
 
   before_save :save_dup
 

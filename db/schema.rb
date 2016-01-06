@@ -11,7 +11,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151224160425) do
+ActiveRecord::Schema.define(version: 20160104025011) do
+
+  create_table "attributes_translation_histories", force: :cascade do |t|
+    t.string   "attribute_name",       limit: 255
+    t.string   "china",                limit: 255
+    t.string   "america",              limit: 255
+    t.string   "canada",               limit: 255
+    t.string   "british",              limit: 255
+    t.string   "germay",               limit: 255
+    t.string   "spain",                limit: 255
+    t.string   "italy",                limit: 255
+    t.string   "france",               limit: 255
+    t.integer  "attribute_id",         limit: 4
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+    t.integer  "product_attribute_id", limit: 4
+  end
 
   create_table "cash_rates", force: :cascade do |t|
     t.float    "england",    limit: 24
@@ -24,6 +40,15 @@ ActiveRecord::Schema.define(version: 20151224160425) do
     t.datetime "created_at",            null: false
     t.datetime "updated_at",            null: false
     t.datetime "deleted_at"
+  end
+
+  create_table "product_attributes", force: :cascade do |t|
+    t.string   "attribute_name",  limit: 255
+    t.integer  "product_type_id", limit: 4
+    t.string   "table_name",      limit: 255
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.boolean  "is_locked",       limit: 1
   end
 
   create_table "product_info_translations", force: :cascade do |t|
@@ -56,11 +81,19 @@ ActiveRecord::Schema.define(version: 20151224160425) do
   add_index "product_info_translations", ["product_id"], name: "index_product_info_translations_on_product_id", using: :btree
 
   create_table "product_types", force: :cascade do |t|
-    t.string   "name",        limit: 255
-    t.string   "father_node", limit: 255
+    t.string   "name",                        limit: 255
+    t.string   "father_node",                 limit: 255
     t.datetime "deleted_at"
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+    t.integer  "shipment_translation",        limit: 4
+    t.integer  "price_translation",           limit: 4
+    t.integer  "product_type_description",    limit: 4
+    t.integer  "product_type_feed",           limit: 4
+    t.integer  "product_type_1",              limit: 4
+    t.integer  "product_type_2",              limit: 4
+    t.integer  "product_type_introduction_1", limit: 4
+    t.integer  "product_type_introduction_2", limit: 4
   end
 
   create_table "products", force: :cascade do |t|
@@ -180,18 +213,19 @@ ActiveRecord::Schema.define(version: 20151224160425) do
   add_index "products", ["user_id"], name: "index_products_on_user_id", using: :btree
 
   create_table "shipment_method_values", force: :cascade do |t|
-    t.string   "region",        limit: 255
-    t.string   "weight",        limit: 255
-    t.float    "price",         limit: 24
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
-    t.string   "america_price", limit: 255
-    t.string   "canada_price",  limit: 255
-    t.string   "british_price", limit: 255
-    t.string   "germany_price", limit: 255
-    t.string   "italy_price",   limit: 255
-    t.string   "spain_price",   limit: 255
-    t.string   "france_price",  limit: 255
+    t.string   "region",             limit: 255
+    t.string   "weight",             limit: 255
+    t.float    "price",              limit: 24
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+    t.string   "america_price",      limit: 255
+    t.string   "canada_price",       limit: 255
+    t.string   "british_price",      limit: 255
+    t.string   "germany_price",      limit: 255
+    t.string   "italy_price",        limit: 255
+    t.string   "spain_price",        limit: 255
+    t.string   "france_price",       limit: 255
+    t.integer  "shipment_method_id", limit: 4
   end
 
   create_table "shipment_methods", force: :cascade do |t|

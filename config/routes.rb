@@ -1,7 +1,12 @@
 Rails.application.routes.draw do
   resources :cash_rates, only:[:index, :create]
 
-  resources :variables
+  resources :variables, only: [:index] do
+    collection do
+      get 'translate_variables'
+      post 'save_translate_variable'
+    end
+  end
   resources :shops do
     member do
       get 'shield'
@@ -30,6 +35,7 @@ Rails.application.routes.draw do
       get 'check_shop_id'
       get 'search'
       get 'update_price'
+      post 'update_attributes_div'
     end
 
     member do
@@ -42,7 +48,20 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :product_types
+  resources :product_types do
+    member do
+      get 'update_price_setting'
+      post 'update_shipment_method'
+      post 'update_product_type_attribute'
+      post 'update_description'
+      post 'update_type_setting'
+      post 'update_type_introduction'
+      delete 'remove_product_type_attribute'
+    end
+
+    collection do
+    end
+  end
 
   devise_for :users
   resources :users

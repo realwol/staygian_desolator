@@ -1,0 +1,94 @@
+  <table class="table attributes_setting">
+    <tr>
+      <th>属性名称</th>
+      <th>锁定</th>
+      <th>表头名</th>
+      <th>中国</th>
+      <th>美国</th>
+      <th>加拿大</th>
+      <th>英国</th>
+      <th>德国</th>
+      <th>法国</th>
+      <th>西班牙</th>
+      <th>意大利</th>
+      <th colspan="3" >操作</th>
+    </tr>
+    <% @product_type_attributes.each do |attribute| %>
+      <% attribute_translation = attribute.attributes_translation_history %>
+      <tr>
+        <td><%= text_field_tag 'attr_text_name', attribute.attribute_name, style:'width:80px;', class: 'attribute_value' %></td>
+        <td><%= text_field_tag 'attr_is_locked', attribute.attribute_name, style:'width:80px;', class: 'attribute_value' %></td>
+        <td><%= text_field_tag 'attr_text_table_name', attribute.table_name, style:'width:80px;', class: 'attribute_value' %></td>
+        <td><%= text_field_tag 'attr_text_china', attribute_translation.try(:china), style:'width:80px;', class: 'attribute_value' %></td>
+        <td><%= text_field_tag 'attr_text_america', attribute_translation.try(:america), style:'width:80px;', class: 'attribute_value' %></td>
+        <td><%= text_field_tag 'attr_text_canada', attribute_translation.try(:canada), style:'width:80px;', class: 'attribute_value' %></td>
+        <td><%= text_field_tag 'attr_text_british', attribute_translation.try(:british), style:'width:80px;', class: 'attribute_value' %></td>
+        <td><%= text_field_tag 'attr_text_germay', attribute_translation.try(:germay), style:'width:80px;', class: 'attribute_value' %></td>
+        <td><%= text_field_tag 'attr_text_france', attribute_translation.try(:france), style:'width:80px;', class: 'attribute_value' %></td>
+        <td><%= text_field_tag 'attr_text_spain', attribute_translation.try(:spain), style:'width:80px;', class: 'attribute_value' %></td>
+        <td><%= text_field_tag 'attr_text_italy', attribute_translation.try(:italy), style:'width:80px;', class: 'attribute_value' %></td>
+        <td><a class='editAttribues' value=<%= attribute.id %>  >保存</a></td>
+        <td><a class='newAttributeValue' value=<%= attribute.id %>  >新增</a></td>
+        <td><a class='removeAttribues' value=<%= attribute.id %>  >删除</a></td>
+      </tr>
+    <% end %>
+  </table>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('.newAttributeValue').click(function(){
+        var attributeName = $(this).parents('tr').find('input[name="attr_text_name"]').val();
+        var attributeIsLocked = $(this).parents('tr').find('input[name="attr_is_locked"]').val();
+        var attributeTableName = $(this).parents('tr').find('input[name="attr_text_table_name"]').val();
+        var trContent = "<tr><td><input type='text' name='attr_text_name' style='width:80px; display:none;' class='attribute_value' value=" + attributeName + " ></td><td><input type='text' name='attr_is_locked' style='width:80px; display:none;' class='attribute_value' value=" + attributeIsLocked + " ></td><td><input type='text' name='attr_text_table_name' style='width:80px; display:none;' class='attribute_value' value=" + attributeTableName +" ></td><td><input type='text' name='attr_text_china' style='width:80px;' class='attribute_value' ></td><td><input type='text' name='attr_text_america' style='width:80px;' class='attribute_value' ></td><td><input type='text' name='attr_text_canada' style='width:80px;' class='attribute_value' ></td><td><input type='text' name='attr_text_british' style='width:80px;' class='attribute_value' ></td><td><input type='text' name='attr_text_germay' style='width:80px;' class='attribute_value' ></td><td><input type='text' name='attr_text_france' style='width:80px;' class='attribute_value' ></td><td><input type='text' name='attr_text_spain' style='width:80px;' class='attribute_value' ></td><td><input type='text' name='attr_text_italy' style='width:80px;' class='attribute_value' ></td><td><a class='editAttribues' >更新</a></td><td>删除</td></tr>";
+      $(this).parents('tr').after(trContent);
+        $('.editAttribues').click(function(){
+          var attributes_value = '';
+          $(this).parents('tr').find('.attribute_value').each(function(){
+            attributes_value = attributes_value + $(this).val() + ',';
+          });
+          var attribute_id = $(this).attr('value');
+          var product_type_id = $('#product_type_id_hidden').val();
+
+          $.ajax({
+            url: '/product_types/'+ product_type_id +'/update_product_type_attribute',
+            type: 'POST',
+            data: { attributes_value: attributes_value, attribute_id: attribute_id},
+            success: function(){
+            }
+          });
+          return false;
+        });
+    });
+
+    $('.removeAttribues').click(function(){
+      var attribute_id = $(this).attr('value');
+      $.ajax({
+        url: '/product_types/' + attribute_id + '/remove_product_type_attribute',
+        type: 'DELETE',
+        success: function(){
+        }
+      });
+      return false;
+    });
+
+    $('.editAttribues').click(function(){
+      var attributes_value = '';
+      $(this).parents('tr').find('.attribute_value').each(function(){
+        attributes_value = attributes_value + $(this).val() + ',';
+      });
+      var attribute_id = $(this).attr('value');
+      var product_type_id = $('#product_type_id_hidden').val();
+
+      $.ajax({
+        url: '/product_types/'+ product_type_id +'/update_product_type_attribute',
+        type: 'POST',
+        data: { attributes_value: attributes_value, attribute_id: attribute_id},
+        success: function(){
+        }
+      });
+      return false;
+    });
+
+  });
+</script>

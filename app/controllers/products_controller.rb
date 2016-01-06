@@ -1,6 +1,10 @@
 class ProductsController < ApplicationController
   before_action :set_product, only: [:show, :edit, :update, :destroy, :shield_product, :presale_product, :offsale_product, :temp_offsale_product, :onsale_product, :edited_product]
   before_action :authenticate_user!
+
+  def update_attributes_div
+    @product_type_attributes = ProductAttribute.where(product_type_id: params[:product_type_id])
+  end
                                
   def update_price
     product = Product.find(params["product_id"])

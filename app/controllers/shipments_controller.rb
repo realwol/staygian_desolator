@@ -20,9 +20,9 @@ class ShipmentsController < ApplicationController
   def save_shipment_value
     shipment_value_array = params[:shipment_method_value].split(',')
     if params[:id].present?
-      ShipmentMethodValue.find(params[:id]).update_attributes(weight: shipment_value_array[0], america_price: shipment_value_array[1], canada_price: shipment_value_array[2], british_price: shipment_value_array[3], germany_price: shipment_value_array[4],italy_price: shipment_value_array[5], spain_price: shipment_value_array[6], france_price: shipment_value_array[7])
+      ShipmentMethodValue.find(params[:id]).update_attributes(weight: shipment_value_array[0], america_price: shipment_value_array[1], canada_price: shipment_value_array[2], british_price: shipment_value_array[3], germany_price: shipment_value_array[4],italy_price: shipment_value_array[5], spain_price: shipment_value_array[6], france_price: shipment_value_array[7], shipment_method_id: params[:shipment_method_id])
     else
-      ShipmentMethodValue.create(weight: shipment_value_array[0], america_price: shipment_value_array[1], canada_price: shipment_value_array[2], british_price: shipment_value_array[3], germany_price: shipment_value_array[4],italy_price: shipment_value_array[5], spain_price: shipment_value_array[6], france_price: shipment_value_array[7])
+      ShipmentMethodValue.create(weight: shipment_value_array[0], america_price: shipment_value_array[1], canada_price: shipment_value_array[2], british_price: shipment_value_array[3], germany_price: shipment_value_array[4],italy_price: shipment_value_array[5], spain_price: shipment_value_array[6], france_price: shipment_value_array[7], shipment_method_id: params[:shipment_method_id])
     end
   end
 
