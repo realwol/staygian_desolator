@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   resources :variables, only: [:index] do
     collection do
       get 'translate_variables'
+      get 'variable_translate_list'
+      post 'update_translate_variable'
       post 'save_translate_variable'
     end
   end
@@ -50,6 +52,7 @@ Rails.application.routes.draw do
 
   resources :product_types do
     member do
+      get 'next_product_types_list'
       get 'update_price_setting'
       post 'update_shipment_method'
       post 'update_product_type_attribute'

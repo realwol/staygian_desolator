@@ -1,6 +1,12 @@
 class ProductTypesController < ApplicationController
   before_action :set_product_type, only: [:show, :edit, :update, :destroy]
 
+  def next_product_types_list
+    product_type = ProductType.find(params[:id])
+    @product_type_father_node = params[:id]
+    @product_types = product_type.childer_product_types
+  end
+
   def update_type_introduction
     introduction_1_array = params[:introduction_1].split(',')
     introduction_2_array = params[:introduction_2].split(',')
@@ -122,7 +128,8 @@ class ProductTypesController < ApplicationController
   end
 
   def index
-    @product_types = ProductType.all
+    @product_type_father_node = params[:father_node] || '0'
+    @product_types = ProductType.where(father_node: @product_type_father_node)
   end
 
   def show
@@ -138,17 +145,9 @@ class ProductTypesController < ApplicationController
   end
 
   def create
-    @product_type = ProductType.new(product_type_params)
-
-    respond_to do |format|
-      if @product_type.save
-        format.html { redirect_to @product_type, notice: 'Product type was successfully created.' }
-        format.json { render :show, status: :created, location: @product_type }
-      else
-        format.html { render :new }
-        format.json { render json: @product_type.errors, status: :unprocessable_entity }
-      end
-    end
+    ProductType.create(name: params[:product_type_name], father_node: params[:father_node])
+    @product_types = ProductType.where(father_node: params[:father_node])
+    @product_type_father_node = params[:father_node] || '0'
   end
 
   def update

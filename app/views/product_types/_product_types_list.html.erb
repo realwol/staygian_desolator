@@ -1,0 +1,42 @@
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>名称</th>
+      <th>父节点编号</th>
+      <th colspan="2">操作</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @product_types.each do |product_type| %>
+      <tr>
+        <td><button class="next_product_type" value=<%= product_type.id %> ><%= product_type.name %></button></td>
+        <td><%= product_type.father_node %></td>
+        <td><%= link_to '编辑', edit_product_type_path(product_type) %></td>
+        <td><%= link_to '删除', product_type, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<input type="hidden" value=<%= @product_type_father_node %> >
+<%= form_tag(product_types_path(father_node: @product_type_father_node), method: :post, remote: true) do %>
+  <%= label_tag '类型名称' %>
+  <%= text_field_tag 'product_type_name' %>
+  <%= submit_tag '新建' %>
+<% end %>
+
+<% previouse_father_node = ProductType.find(@product_type_father_node).father_node unless @product_type_father_node == '0' %>
+<%= link_to '返回', product_types_path(father_node: previouse_father_node) %>
+
+<script type="text/javascript">
+  
+  $('.next_product_type').click(function(){
+    var father_node = $(this).attr('value');
+    $.ajax({
+      url: '/product_types/' + father_node + '/next_product_types_list',
+      type: 'get',
+      success: function(){
+      }
+    });
+  });
+</script>

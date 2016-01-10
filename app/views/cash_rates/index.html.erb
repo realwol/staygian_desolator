@@ -1,64 +1,44 @@
-<h2>当前汇率（1外币可兑换人民币价格）</h2>
-  <div class="field">
-    <%= label_tag '英国' %>
-    <%= @current_rate.try(:england) %>
-  </div>
-  <div class="field">
-    <%= label_tag '德国' %>
-    <%= @current_rate.try(:germany) %>
-  </div>
-  <div class="field">
-    <%= label_tag '法国' %>
-    <%= @current_rate.try(:france) %>
-  </div>
-  <div class="field">
-    <%= label_tag '西班牙' %>
-    <%= @current_rate.try(:spain) %>
-  </div>
-  <div class="field">
-    <%= label_tag '意大利' %>
-    <%= @current_rate.try(:italy) %>
-  </div>
-  <div class="field">
-    <%= label_tag '美国' %>
-    <%= @current_rate.try(:amercia) %>
-  </div>
-  <div class="field">
-    <%= label_tag '加拿大' %>
-    <%= @current_rate.try(:canada) %>
-  </div>
+<h5>当前汇率(1外币可兑换人民币价格)</h5>
+<table class="table table-bordered" style="width:90%;" >
+  <tr>
+    <th>英国</th>
+    <th>德国</th>
+    <th>法国</th>
+    <th>西班牙</th>
+    <th>意大利</th>
+    <th>美国</th>
+    <th>加拿大</th>
+  </tr>
+  <tr>
+    <td><%= @current_rate.try(:england) %></td>
+    <td><%= @current_rate.try(:germany) %></td>
+    <td><%= @current_rate.try(:france) %></td>
+    <td><%= @current_rate.try(:spain) %></td>
+    <td><%= @current_rate.try(:italy) %></td>
+    <td><%= @current_rate.try(:amercia) %></td>
+    <td><%= @current_rate.try(:canada) %></td>
+  </tr>
+</table>
 
 <hr/>
-<h2>汇率设定</h2>
+<h5>汇率设定</h5>
 <%= form_for(@rate) do |f| %>
-  <div class="field">
-    <%= f.label :england %><br>
-    <%= f.text_field :england, value: @current_rate.try(:england) %>
-  </div>
-  <div class="field">
-    <%= f.label :germany %><br>
-    <%= f.text_field :germany, value: @current_rate.try(:germany) %>
-  </div>
-  <div class="field">
-    <%= f.label :france %><br>
-    <%= f.text_field :france, value: @current_rate.try(:france) %>
-  </div>
-  <div class="field">
-    <%= f.label :spain %><br>
-    <%= f.text_field :spain, value: @current_rate.try(:spain) %>
-  </div>
-  <div class="field">
-    <%= f.label :italy %><br>
-    <%= f.text_field :italy, value: @current_rate.try(:italy) %>
-  </div>
-  <div class="field">
-    <%= f.label :amercia %><br>
-    <%= f.text_field :amercia, value: @current_rate.try(:amercia) %>
-  </div>
-  <div class="field">
-    <%= f.label :canada %><br>
-    <%= f.text_field :canada, value: @current_rate.try(:canada) %>
-  </div>
+<table class="table table-bordered" style="width:90%;">
+  <tr>
+    <% %w(英国 德国 法国 西班牙 意大利 美国 加拿大).each do |country| %>
+      <td><%= country %></td>
+    <% end %>
+  </tr>
+  <tr>
+    <td><%= f.text_field :england, value: @current_rate.try(:england), style:'width:100px;' %></td>
+    <td><%= f.text_field :germany, value: @current_rate.try(:germany), style:'width:100px;' %></td>
+    <td><%= f.text_field :france, value: @current_rate.try(:france), style:'width:100px;' %></td>
+    <td><%= f.text_field :spain, value: @current_rate.try(:spain), style:'width:100px;' %></td>
+    <td><%= f.text_field :italy, value: @current_rate.try(:italy), style:'width:100px;' %></td>
+    <td><%= f.text_field :amercia, value: @current_rate.try(:amercia), style:'width:100px;' %></td>
+    <td><%= f.text_field :canada, value: @current_rate.try(:canada), style:'width:100px;' %></td>
+  </tr>
+</table>
   <div class="actions">
     <%= f.submit '确定' %>
   </div>

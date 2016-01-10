@@ -276,7 +276,6 @@ def grasp tmall_link
   @sizes_value = []
   @var_title = []
 
-binding.pry
   variables = html.css('div.tb-key div.tb-skin div.tb-sku dl dd ul')
   variables.each do |variable|
     if variable.attributes["data-property"]

@@ -1,0 +1,28 @@
+<h5>未翻译变体列表</h5>
+<div id="TranslatedVariableList">
+  <%= render 'untranslated_list' %>
+</div>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('.update_translation').click(function(){
+      var variableTranslationValue = '';
+      $(this).parents('tr').find('.variable_translation_value').each(function(){
+        variableTranslationValue =  variableTranslationValue + $(this).val() + ',' ;
+      });
+      var variableNewName = $(this).parents('tr').find('.variable_translation_name').val();
+      var variableName = $(this).parents('tr').find('.variable_translation_name').val();
+      var oldVariableName = $(this).attr('value');
+
+      $.ajax({
+        url: '/variables/update_translate_variable',
+        type: 'post',
+        data: {variableTranslationValue: variableTranslationValue, variableName: variableName, oldVariableName: oldVariableName},
+        success: function(){
+        }
+      });
+
+      return false;
+    });
+  })
+</script>

@@ -1,8 +1,8 @@
 class Variable < ActiveRecord::Base
 	acts_as_paranoid
   belongs_to :product
+  belongs_to :variable_translate_history
 
-  default_scope {where(update_status:false)}
   scope :untranslated, ->{unscope(where: :update_status).where(translate_status: false)}
 
   before_save :save_dup

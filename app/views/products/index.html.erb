@@ -1,10 +1,6 @@
-<p id="notice"><%= notice %></p>
+<h5>上架产品数目：<%= @products.total_count %></h5>
 
-<%= render 'search_div' %>
-
-<h3>上架产品数目：<%= @products.total_count %></h3>
-
-<table class='table table-striped'>
+<table class='table table-bordered'>
   <thead>
     <tr>
       <th><%= '类型' %></th>
@@ -42,19 +38,19 @@
 <%= paginate @products %>
 
 <hr/>
-<%= link_to '待修改产品列表', un_updated_page_products_path %>
-<%= link_to '屏蔽产品列表', shield_products_products_path %>
-<%= link_to '预售产品列表', presaled_products_products_path %>
-<%= link_to '下架产品列表', off_sale_products_products_path %>
-<%= link_to '临时下架产品列表', temp_off_sale_products_products_path %>
+<% link_to '待修改产品列表', un_updated_page_products_path %>
+<% link_to '屏蔽产品列表', shield_products_products_path %>
+<% link_to '预售产品列表', presaled_products_products_path %>
+<% link_to '下架产品列表', off_sale_products_products_path %>
+<% link_to '临时下架产品列表', temp_off_sale_products_products_path %>
+<b/>
 <br/>
-<br/>
-<%= link_to '插入抓取链接', get_tmall_links_products_path %>
-<%= link_to '导出', export_page_products_path %>
-<%= link_to '设定汇率', cash_rates_path %>
-<%= link_to '编辑运输方式', shipments_path %>
-<%= link_to '产品分类管理', product_types_path %>
-<%= link_to '未翻译变体管理', translate_variables_variables_path %>
+<% link_to '插入抓取链接', get_tmall_links_products_path %>
+<% link_to '导出', export_page_products_path %>
+<% link_to '设定汇率', cash_rates_path %>
+<% link_to '编辑运输方式', shipments_path %>
+<% link_to '产品分类管理', product_types_path %>
+<% link_to '未翻译变体管理', translate_variables_variables_path %>
 
 <%= javascript_tag do %>
   $('.change_price').click(function(){

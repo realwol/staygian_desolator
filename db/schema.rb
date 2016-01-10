@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160104025011) do
+ActiveRecord::Schema.define(version: 20160110061139) do
 
   create_table "attributes_translation_histories", force: :cascade do |t|
     t.string   "attribute_name",       limit: 255
@@ -329,59 +329,60 @@ ActiveRecord::Schema.define(version: 20160104025011) do
   end
 
   create_table "variables", force: :cascade do |t|
-    t.string   "color",            limit: 255
-    t.string   "size",             limit: 255
-    t.string   "price",            limit: 255
-    t.integer  "product_id",       limit: 4
+    t.string   "color",                         limit: 255
+    t.string   "size",                          limit: 255
+    t.string   "price",                         limit: 255
+    t.integer  "product_id",                    limit: 4
     t.datetime "deleted_at"
-    t.text     "image_url1",       limit: 65535
-    t.text     "image_url2",       limit: 65535
-    t.text     "image_url3",       limit: 65535
-    t.text     "image_url4",       limit: 65535
-    t.text     "image_url5",       limit: 65535
-    t.text     "image_url6",       limit: 65535
-    t.text     "image_url7",       limit: 65535
-    t.text     "image_url8",       limit: 65535
-    t.text     "image_url9",       limit: 65535
-    t.text     "image_url10",      limit: 65535
-    t.string   "stock",            limit: 255
-    t.datetime "created_at",                                     null: false
-    t.datetime "updated_at",                                     null: false
-    t.string   "england_color",    limit: 255
-    t.string   "england_size",     limit: 255
-    t.string   "germany_color",    limit: 255
-    t.string   "germany_size",     limit: 255
-    t.string   "france_color",     limit: 255
-    t.string   "france_size",      limit: 255
-    t.string   "spain_color",      limit: 255
-    t.string   "spain_size",       limit: 255
-    t.string   "italy_color",      limit: 255
-    t.string   "italy_size",       limit: 255
-    t.text     "image_url11",      limit: 65535
-    t.text     "image_url12",      limit: 65535
-    t.text     "image_url13",      limit: 65535
-    t.text     "image_url14",      limit: 65535
-    t.text     "image_url15",      limit: 65535
-    t.text     "image_url16",      limit: 65535
-    t.text     "image_url17",      limit: 65535
-    t.text     "image_url18",      limit: 65535
-    t.text     "image_url19",      limit: 65535
-    t.text     "image_url20",      limit: 65535
-    t.text     "image_url21",      limit: 65535
-    t.text     "image_url22",      limit: 65535
-    t.text     "image_url23",      limit: 65535
-    t.text     "image_url24",      limit: 65535
-    t.text     "image_url25",      limit: 65535
-    t.text     "image_url26",      limit: 65535
-    t.text     "image_url27",      limit: 65535
-    t.text     "image_url28",      limit: 65535
-    t.text     "image_url29",      limit: 65535
-    t.text     "image_url30",      limit: 65535
-    t.boolean  "update_status",    limit: 1,     default: true
-    t.boolean  "translate_status", limit: 1,     default: false
-    t.string   "color_dup",        limit: 255
-    t.string   "size_dup",         limit: 255
-    t.string   "variable_id",      limit: 255
+    t.text     "image_url1",                    limit: 65535
+    t.text     "image_url2",                    limit: 65535
+    t.text     "image_url3",                    limit: 65535
+    t.text     "image_url4",                    limit: 65535
+    t.text     "image_url5",                    limit: 65535
+    t.text     "image_url6",                    limit: 65535
+    t.text     "image_url7",                    limit: 65535
+    t.text     "image_url8",                    limit: 65535
+    t.text     "image_url9",                    limit: 65535
+    t.text     "image_url10",                   limit: 65535
+    t.string   "stock",                         limit: 255
+    t.datetime "created_at",                                                  null: false
+    t.datetime "updated_at",                                                  null: false
+    t.string   "england_color",                 limit: 255
+    t.string   "england_size",                  limit: 255
+    t.string   "germany_color",                 limit: 255
+    t.string   "germany_size",                  limit: 255
+    t.string   "france_color",                  limit: 255
+    t.string   "france_size",                   limit: 255
+    t.string   "spain_color",                   limit: 255
+    t.string   "spain_size",                    limit: 255
+    t.string   "italy_color",                   limit: 255
+    t.string   "italy_size",                    limit: 255
+    t.text     "image_url11",                   limit: 65535
+    t.text     "image_url12",                   limit: 65535
+    t.text     "image_url13",                   limit: 65535
+    t.text     "image_url14",                   limit: 65535
+    t.text     "image_url15",                   limit: 65535
+    t.text     "image_url16",                   limit: 65535
+    t.text     "image_url17",                   limit: 65535
+    t.text     "image_url18",                   limit: 65535
+    t.text     "image_url19",                   limit: 65535
+    t.text     "image_url20",                   limit: 65535
+    t.text     "image_url21",                   limit: 65535
+    t.text     "image_url22",                   limit: 65535
+    t.text     "image_url23",                   limit: 65535
+    t.text     "image_url24",                   limit: 65535
+    t.text     "image_url25",                   limit: 65535
+    t.text     "image_url26",                   limit: 65535
+    t.text     "image_url27",                   limit: 65535
+    t.text     "image_url28",                   limit: 65535
+    t.text     "image_url29",                   limit: 65535
+    t.text     "image_url30",                   limit: 65535
+    t.boolean  "update_status",                 limit: 1,     default: true
+    t.boolean  "translate_status",              limit: 1,     default: false
+    t.string   "color_dup",                     limit: 255
+    t.string   "size_dup",                      limit: 255
+    t.string   "variable_id",                   limit: 255
+    t.string   "variable_translate_history_id", limit: 255
   end
 
   add_index "variables", ["product_id"], name: "index_variables_on_product_id", using: :btree

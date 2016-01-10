@@ -1,0 +1,14 @@
+<% @result = @result || {} %>
+<%= form_tag(search_products_path, method:'get') do %>
+  <label>分类：</label>
+  <%= select_tag "search_type", options_from_collection_for_select(ProductType.all, "id", "name", @result[:type]), :prompt => "请选择分类" %>
+  <label>制造商：</label>
+  <%= text_field_tag 'product_shop', nil, value: @result[:shop] %>
+  <label>品牌：</label>
+  <%= text_field_tag 'product_brand', nil, value: @result[:brand] %>
+  <label>SKU：</label>
+  <%= text_field_tag 'sku_value', nil, value: @result[:sku] %>
+  <%= hidden_field_tag 'action_from', value= @action_from %>
+  <%= button_tag '搜索' %>
+<% end %>
+<hr/>

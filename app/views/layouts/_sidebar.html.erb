@@ -1,0 +1,30 @@
+<div class="sidebar-left" id="sidebarLeft">
+  <h4>产品列表</h4>
+      <%= link_to '上架产品列表', root_path %><br/>
+      <%= link_to '待修改产品列表', un_updated_page_products_path %><br/>
+      <%= link_to '屏蔽产品列表', shield_products_products_path %><br/>
+      <%= link_to '预售产品列表', presaled_products_products_path %><br/>
+      <%= link_to '下架产品列表', off_sale_products_products_path %><br/>
+      <%= link_to '临时下架产品列表', temp_off_sale_products_products_path %><br/>
+  <h4>功能</h4>
+      <%= link_to '插入抓取链接', get_tmall_links_products_path %><br/>
+      <%= link_to '导出', export_page_products_path %><br/>
+  <h4>设置</h4>
+      <%= link_to '设定汇率', cash_rates_path %><br/>
+      <%= link_to '编辑运输方式', shipments_path %><br/>
+      <%= link_to '产品分类管理', product_types_path %><br/>
+      <%= link_to '变体', variable_translate_list_variables_path %><br/>
+      <% link_to '未翻译变体管理', translate_variables_variables_path %><br/>
+</div>
+
+<style type="text/css">
+  .sidebar-left {
+    width: 11%;
+    height: 500px;
+    position: fixed;
+    margin-left: 13px;
+  }
+</style>
+
+<script type="text/javascript">
+</script>

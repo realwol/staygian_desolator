@@ -5,17 +5,18 @@
       <% end %>
       <td>操作</td>
     </tr>
-    <% if @untranslated_variables.count > 0 %>
-    <% @untranslated_variables.each do |variable| %>
+    <% if @variables.count > 0 %>
+    <% @variables.each do |variable| %>
+      <% variable_translation = VariableTranslateHistory.where(word: variable.color).first %>
       <tr>
         <td><input type="text" class="variable_translation_name" style="width:80px;" value=<%= variable.color %> ></td>
-        <td><input type="text" class="variable_translation_value" style="width:80px;" /></td>
-        <td><input type="text" class="variable_translation_value" style="width:80px;" /></td>
-        <td><input type="text" class="variable_translation_value" style="width:80px;" /></td>
-        <td><input type="text" class="variable_translation_value" style="width:80px;" /></td>
-        <td><input type="text" class="variable_translation_value" style="width:80px;" /></td>
-        <td><input type="text" class="variable_translation_value" style="width:80px;" /></td>
-        <td><input type="text" class="variable_translation_value" style="width:80px;" /></td>
+        <td><input type="text" class="variable_translation_value" style="width:80px;" value=<%= variable_translation.try(:en) %> ></td>
+        <td><input type="text" class="variable_translation_value" style="width:80px;" value=<%= variable_translation.try(:en) %> ></td>
+        <td><input type="text" class="variable_translation_value" style="width:80px;" value=<%= variable_translation.try(:en) %> ></td>
+        <td><input type="text" class="variable_translation_value" style="width:80px;" value=<%= variable_translation.try(:de) %> ></td>
+        <td><input type="text" class="variable_translation_value" style="width:80px;" value=<%= variable_translation.try(:fr) %> ></td>
+        <td><input type="text" class="variable_translation_value" style="width:80px;" value=<%= variable_translation.try(:es) %> ></td>
+        <td><input type="text" class="variable_translation_value" style="width:80px;" value=<%= variable_translation.try(:it) %> ></td>
         <td><a class="update_translation" value=<%= variable.color %>>更新</a> </td>
       </tr>
     <% end %>
