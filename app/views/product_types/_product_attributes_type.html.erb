@@ -15,7 +15,7 @@
     </tr>
     <% if @product_type_attributes.present? %>
       <% @product_type_attributes.each do |attribute| %>
-        <% attribute_translation = attribute.attributes_translation_histories %>
+        <% attribute_translation = attribute.attributes_translation_histories.first %>
         <tr>
           <td><%= text_field_tag 'attr_text_name', attribute.attribute_name, style:'width:80px;', class: 'attribute_value' %></td>
           <td><%= text_field_tag 'attr_is_locked', attribute.attribute_name, style:'width:80px;', class: 'attribute_value' %></td>

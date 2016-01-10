@@ -1,0 +1,76 @@
+<h5>产品简介设置：</h5>
+<%= form_tag( '', method: :post, remote: true) do -%>
+  <table class="table">
+    <%
+      product_introductions = []
+      if @product_type.product_type_introduction_1.present?
+        product_introductions[0] = AttributesTranslationHistory.find(@product_type.product_type_introduction_1.to_i)
+      else
+        product_introductions[0] = AttributesTranslationHistory.new
+      end
+
+      if @product_type.product_type_introduction_2.present?
+        product_introductions[1] = AttributesTranslationHistory.find(@product_type.product_type_introduction_2.to_i)
+      else
+        product_introductions[1] = AttributesTranslationHistory.new
+      end
+    %>
+      <tr>
+        <th rowspan="2">中国</th>
+        <td><textarea cols="100" rows="3" class="introduction1TextArea"> <%= product_introductions[0].china %> </textarea></td>
+      </tr>
+      <tr>
+        <td><textarea cols="100" rows="3" class="introduction2TextArea" > <%= product_introductions[1].china %> </textarea></td>
+      </tr>
+      <tr>
+        <th rowspan="2">美国</th>
+        <td><textarea cols="100" rows="3" class="introduction1TextArea"> <%= product_introductions[0].america %> </textarea></td>
+      </tr>
+      <tr>
+        <td><textarea cols="100" rows="3" class="introduction2TextArea" > <%= product_introductions[1].america %> </textarea></td>
+      </tr>
+      <tr>
+        <th rowspan="2">加拿大</th>
+        <td><textarea cols="100" rows="3" class="introduction1TextArea"> <%= product_introductions[0].canada %> </textarea></td>
+      </tr>
+      <tr>
+        <td><textarea cols="100" rows="3" class="introduction2TextArea" > <%= product_introductions[1].canada %> </textarea></td>
+      </tr>
+      <tr>
+        <th rowspan="2">英国</th>
+        <td><textarea cols="100" rows="3" class="introduction1TextArea"> <%= product_introductions[0].british %> </textarea></td>
+      </tr>
+      <tr>
+        <td><textarea cols="100" rows="3" class="introduction2TextArea" > <%= product_introductions[1].british %> </textarea></td>
+      </tr>
+      <tr>
+        <th rowspan="2">德国</th>
+        <td><textarea cols="100" rows="3" class="introduction1TextArea"> <%= product_introductions[0].germay %> </textarea></td>
+      </tr>
+      <tr>
+        <td><textarea cols="100" rows="3" class="introduction2TextArea" > <%= product_introductions[1].germay %> </textarea></td>
+      </tr>
+      <tr>
+        <th rowspan="2">法国</th>
+        <td><textarea cols="100" rows="3" class="introduction1TextArea"> <%= product_introductions[0].france %> </textarea></td>
+      </tr>
+      <tr>
+        <td><textarea cols="100" rows="3" class="introduction2TextArea" > <%= product_introductions[1].france %> </textarea></td>
+      </tr>
+      <tr>
+        <th rowspan="2">西班牙</th>
+        <td><textarea cols="100" rows="3" class="introduction1TextArea"> <%= product_introductions[0].spain %> </textarea></td>
+      </tr>
+      <tr>
+        <td><textarea cols="100" rows="3" class="introduction2TextArea" > <%= product_introductions[1].spain %> </textarea></td>
+      </tr>
+      <tr>
+        <th rowspan="2">意大利</th>
+        <td><textarea cols="100" rows="3" class="introduction1TextArea"> <%= product_introductions[0].italy %> </textarea></td>
+      </tr>
+      <tr>
+        <td><textarea cols="100" rows="3" class="introduction2TextArea" > <%= product_introductions[1].italy %> </textarea></td>
+      </tr>
+  </table>
+  <button id="saveIntroduction" >保存</button>
+<% end%>

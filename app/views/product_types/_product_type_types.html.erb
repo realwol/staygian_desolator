@@ -1,0 +1,32 @@
+<h5>分类设置：</h5>
+<table class="table">
+  <tr>
+    <% %w(国家 中国 美国 加拿大 英国 德国 法国 西班牙 意大利).each do |country| %>
+      <th><%= country%></th>
+    <% end %>
+  </tr>
+  <%
+    type_translations = []
+    %w(product_type_feed product_type_1 product_type_2).each do |attr|
+      if @product_type.read_attribute(attr).present?
+        type_translations << AttributesTranslationHistory.find(@product_type.read_attribute(attr))
+      else
+        type_translations << AttributesTranslationHistory.new
+      end
+    end
+  %>
+  <% %w(FEED 分类1 分类2).each_with_index do |type,index| %>
+    <tr>
+      <th><%= type %></th>
+      <td><input type="text" style="width:100px;" class="typeSetting" value=<%= type_translations[index].china %> ></td>
+      <td><input type="text" style="width:100px;" class="typeSetting" value=<%= type_translations[index].america %> ></td>
+      <td><input type="text" style="width:100px;" class="typeSetting" value=<%= type_translations[index].canada %> ></td>
+      <td><input type="text" style="width:100px;" class="typeSetting" value=<%= type_translations[index].british %> ></td>
+      <td><input type="text" style="width:100px;" class="typeSetting" value=<%= type_translations[index].germay %> ></td>
+      <td><input type="text" style="width:100px;" class="typeSetting" value=<%= type_translations[index].france %> ></td>
+      <td><input type="text" style="width:100px;" class="typeSetting" value=<%= type_translations[index].spain %> ></td>
+      <td><input type="text" style="width:100px;" class="typeSetting" value=<%= type_translations[index].italy %> ></td>
+    </tr>
+  <% end %>
+</table>
+<button id="saveTypeSetting" >保存</button>

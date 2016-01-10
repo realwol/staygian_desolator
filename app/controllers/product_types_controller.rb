@@ -1,5 +1,5 @@
 class ProductTypesController < ApplicationController
-  before_action :set_product_type, only: [:show, :edit, :update, :destroy]
+  before_action :set_product_type, only: [:show, :edit, :update, :destroy, :update_product_type_attribute]
 
   def next_product_types_list
     product_type = ProductType.find(params[:id])
@@ -95,13 +95,13 @@ class ProductTypesController < ApplicationController
     if params[:attribute_id].present?
       product_attribute = ProductAttribute.find(params[:attribute_id])
       product_attribute.update_attributes(attribute_name: attributes_value_array[0], is_locked: product_attribute_is_locked, table_name: attributes_value_array[2], product_type_id: params[:id])
-      product_attribute.attributes_translation_history.update_attributes(attribute_name: attributes_value_array[0], china: attributes_value_array[3], america: attributes_value_array[4], canada: attributes_value_array[5], british: attributes_value_array[6], germay: attributes_value_array[7], spain: attributes_value_array[9], italy: attributes_value_array[10], france: attributes_value_array[8])
+      product_attribute.attributes_translation_histories.first.update_attributes(attribute_name: attributes_value_array[0], china: attributes_value_array[3], america: attributes_value_array[4], canada: attributes_value_array[5], british: attributes_value_array[6], germay: attributes_value_array[7], spain: attributes_value_array[9], italy: attributes_value_array[10], france: attributes_value_array[8])
     else
       product_attribute = ProductAttribute.where(attribute_name: attributes_value_array[0]).first
       product_attribute = ProductAttribute.create(attribute_name: attributes_value_array[0], is_locked: product_attribute_is_locked, table_name: attributes_value_array[2], product_type_id: params[:id]) unless product_attribute.present?
       AttributesTranslationHistory.create(attribute_name: attributes_value_array[0], china: attributes_value_array[3], america: attributes_value_array[4], canada: attributes_value_array[5], british: attributes_value_array[6], germay: attributes_value_array[7], spain: attributes_value_array[9], italy: attributes_value_array[10], france: attributes_value_array[8], product_attribute_id: product_attribute.id)
     end
-    @product_type_attributes = ProductAttribute.all
+    @product_type_attributes = @product_type.product_attributes
   end
 
   def update_shipment_method
@@ -141,7 +141,7 @@ class ProductTypesController < ApplicationController
 
   def edit
     @shipment_methods = ShipmentMethod.all
-    @product_type_attributes = ProductAttribute.all
+    @product_type_attributes = @product_type.product_attributes
   end
 
   def create

@@ -16,15 +16,19 @@
     <%= link_to "#{@product.origin_address}", "#{@product.origin_address}", :target => 'blank' %>
     &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
     <label>购买地址：</label>
-    <%= f.text_area :purchase_link, size:'60x2' %>
+    <%= f.text_area :purchase_link, size:'60x1' %>
   </div>
   <div class="field">
-    <%= f.label :title %><br>
-    <%= f.text_area :title, size:'60x2' %>
+    <%= f.label "产品号:" %>
+    <%= f.text_field :product_number, size:20 %>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+    <%= f.label "品牌:" %>
+    <%= f.text_field :brand, size:30 %>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+    <%= f.label "生产商家:" %>
+    <%= f.text_field :producer %>  
   </div>
   <div class="field">
-    <label>备注：</label>
-    <%= @product.try(:shop).try(:back_up) %><br>
+    <%= f.label '产品类型选择:' %>
+    <%= f.collection_select :product_type_id, ProductType.all, "id", "name" %>
   </div>
   <h5>
     自定义属性：
@@ -35,16 +39,18 @@
   </div>
   <hr/>
   <div class="field">
+    <%= f.label '标题:' %>
+    <%= f.text_area :title, size:'60x1' %>
+  </div>
+  <hr/>
+  <div class="field">
     <label>简介</label>
     <%= f.text_area :desc1, size:'40x5' %>
     <%= f.text_area :desc2, size:'40x5' %>
     <%= f.text_area :desc3, size:'40x5' %>
   </div>
   <hr/>
-  <div class="field">
-    <%= f.label :ProductType %><br>
-    <%= f.collection_select :product_type_id, ProductType.all, "id", "name" %>
-  </div>
+
   <div class="field">
     <%= f.label 'Images' %><br>
     <% @product.valid_images.each_with_index do |img,index| %>

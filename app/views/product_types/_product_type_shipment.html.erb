@@ -1,0 +1,29 @@
+<h5>配送方式：</h5>
+  <%= form_tag(update_shipment_method_product_type_path(@product_type), method: :post, remote: true) do %>
+    <table class="table">
+      <tr>
+        <% %w(中国 美国 加拿大 英国 德国 法国 西班牙 意大利).each do |country| %>
+          <th><%= country %></th>
+        <% end %>
+      </tr>
+      <tr>
+        <%
+          if @product_type.shipment_translation.present?
+            shipment_translation_value = AttributesTranslationHistory.find(@product_type.shipment_translation)
+          else
+            shipment_translation_value = AttributesTranslationHistory.new
+          end
+        %>
+        <td><%= select_tag 'shipment_method_china', options_from_collection_for_select(@shipment_methods, 'id', 'name', selected: shipment_translation_value.china) %></td>
+        <td><%= select_tag 'shipment_method_america', options_from_collection_for_select(@shipment_methods, 'id', 'name', selected: shipment_translation_value.america) %></td>
+        <td><%= select_tag 'shipment_method_canada', options_from_collection_for_select(@shipment_methods, 'id', 'name', selected: shipment_translation_value.canada) %></td>
+        <td><%= select_tag 'shipment_method_british', options_from_collection_for_select(@shipment_methods, 'id', 'name', selected: shipment_translation_value.british) %></td>
+        <td><%= select_tag 'shipment_method_germany', options_from_collection_for_select(@shipment_methods, 'id', 'name', selected: shipment_translation_value.germay) %></td>
+        <td><%= select_tag 'shipment_method_france', options_from_collection_for_select(@shipment_methods, 'id', 'name', selected: shipment_translation_value.spain) %></td>
+        <td><%= select_tag 'shipment_method_spain', options_from_collection_for_select(@shipment_methods, 'id', 'name', selected: shipment_translation_value.italy) %></td>
+        <td><%= select_tag 'shipment_method_italy', options_from_collection_for_select(@shipment_methods, 'id', 'name', selected: shipment_translation_value.france) %></td>
+      </tr>
+    </table>
+    <hr/>
+    <%= submit_tag '更新' %>
+  <% end%>

@@ -1,0 +1,44 @@
+<%= form_tag( update_description_product_type_path(@product_type), method: :post, remote: true) do -%>
+  <table class="table">
+    <%
+      if @product_type.product_type_description.present?
+        product_type_description_translation_value = AttributesTranslationHistory.find(@product_type.product_type_description)
+      else
+        product_type_description_translation_value = AttributesTranslationHistory.new
+      end
+    %>
+    <tr>
+      <th>中国</th>
+      <td><textarea cols="100" rows="5" name="descriptionTextArea0"> <%= product_type_description_translation_value.china %>  </textarea></td>
+    </tr>
+    <tr>
+      <th>美国</th>
+      <td><textarea cols="100" rows="5" name="descriptionTextArea1"> <%= product_type_description_translation_value.america %> </textarea></td>
+    </tr>
+    <tr>
+      <th>加拿大</th>
+      <td><textarea cols="100" rows="5" name="descriptionTextArea2"> <%= product_type_description_translation_value.canada %> </textarea></td>
+    </tr>
+    <tr>
+      <th>英国</th>
+      <td><textarea cols="100" rows="5" name="descriptionTextArea3"> <%= product_type_description_translation_value.british %> </textarea></td>
+    </tr>
+    <tr>
+      <th>德国</th>
+      <td><textarea cols="100" rows="5" name="descriptionTextArea4"> <%= product_type_description_translation_value.germay %> </textarea></td>
+    </tr>
+    <tr>
+      <th>法国</th>
+      <td><textarea cols="100" rows="5" name="descriptionTextArea5"> <%= product_type_description_translation_value.france %> </textarea></td>
+    </tr>
+    <tr>
+      <th>西班牙</th>
+      <td><textarea cols="100" rows="5" name="descriptionTextArea6"> <%= product_type_description_translation_value.spain %> </textarea></td>
+    </tr>
+    <tr>
+      <th>意大利</th>
+      <td><textarea cols="100" rows="5" name="descriptionTextArea7"> <%= product_type_description_translation_value.italy %> </textarea></td>
+    </tr>
+  </table>
+  <%= submit_tag '保存' %>
+<% end%>

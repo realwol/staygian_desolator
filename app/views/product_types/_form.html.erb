@@ -18,116 +18,24 @@
     <%= f.label :name %><br>
     <%= f.text_field :name %>
   </div>
-  <div class="field">
-    <%= f.label :father_node %><br>
-    <%= f.text_field :father_node %>
-  </div>
 
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit '保存分类名' %>
   </div>
 <% end %>
 
 <hr/>
-<h5>配送方式：</h5>
-  <%= form_tag(update_shipment_method_product_type_path(@product_type), method: :post, remote: true) do %>
-    <table class="table">
-      <tr>
-        <th>中国</th>
-        <th>美国</th>
-        <th>加拿大</th>
-        <th>英国</th>
-        <th>德国</th>
-        <th>法国</th>
-        <th>西班牙</th>
-        <th>意大利</th>
-      </tr>
-
-      <tr>
-        <td><%= select_tag 'shipment_method_china', options_from_collection_for_select(@shipment_methods, 'id', 'name') %></td>
-        <td><%= select_tag 'shipment_method_america', options_from_collection_for_select(@shipment_methods, 'id', 'name') %></td>
-        <td><%= select_tag 'shipment_method_canada', options_from_collection_for_select(@shipment_methods, 'id', 'name') %></td>
-        <td><%= select_tag 'shipment_method_british', options_from_collection_for_select(@shipment_methods, 'id', 'name') %></td>
-        <td><%= select_tag 'shipment_method_germany', options_from_collection_for_select(@shipment_methods, 'id', 'name') %></td>
-        <td><%= select_tag 'shipment_method_france', options_from_collection_for_select(@shipment_methods, 'id', 'name') %></td>
-        <td><%= select_tag 'shipment_method_spain', options_from_collection_for_select(@shipment_methods, 'id', 'name') %></td>
-        <td><%= select_tag 'shipment_method_italy', options_from_collection_for_select(@shipment_methods, 'id', 'name') %></td>
-      </tr>
-    </table>
-    <hr/>
-    <%= submit_tag '更新' %>
-  <% end%>
+  <%= render 'product_type_shipment' %>
 <hr/>
-<h5>销售价设置</h5>
-    <table class="table">
-      <tr>
-        <% %w(国家 中国 美国 加拿大 英国 德国 法国 西班牙 意大利).each do |country| %>
-          <th><%= country%></th>
-        <% end %>
-      </tr>
-      <tr>
-        <td>价格</td>
-        <% %w(中国 美国 加拿大 英国 德国 法国 西班牙 意大利).each do |country| %>
-          <td><input type="text" style="width:100px;" class="salePrice"></td>
-        <% end %>
-      </tr>
-    </table>
-    <button id="savePrice" >保存价格</button>
+  <%= render 'product_type_price' %>
 <hr/>
 
 <h5>产品说明设置</h5>
-  <%= form_tag( update_description_product_type_path(@product_type), method: :post, remote: true) do -%>
-    <table class="table">
-      <% %w(中国 美国 加拿大 英国 德国 法国 西班牙 意大利).each_with_index do |country, index| %>
-        <tr>
-          <th><%= country%></th>
-          <td><textarea cols="100" rows="5" name="descriptionTextArea<%= index %>" ></textarea></td>
-        </tr>
-      <% end %>
-    </table>
-    <%= submit_tag '保存' %>
-  <% end%>
+  <%= render 'product_type_description' %>
 <hr/>
-
-<h5>分类设置：</h5>
-  <table class="table">
-    <tr>
-      <% %w(国家 中国 美国 加拿大 英国 德国 法国 西班牙 意大利).each do |country| %>
-        <th><%= country%></th>
-      <% end %>
-    </tr>
-    <% %w(FEED 分类1 分类2).each do |type| %>
-      <tr>
-        <th><%= type %></th>
-        <td><input type="text" style="width:100px;" class="typeSetting" /></td>
-        <td><input type="text" style="width:100px;" class="typeSetting" /></td>
-        <td><input type="text" style="width:100px;" class="typeSetting" /></td>
-        <td><input type="text" style="width:100px;" class="typeSetting" /></td>
-        <td><input type="text" style="width:100px;" class="typeSetting" /></td>
-        <td><input type="text" style="width:100px;" class="typeSetting" /></td>
-        <td><input type="text" style="width:100px;" class="typeSetting" /></td>
-        <td><input type="text" style="width:100px;" class="typeSetting" /></td>
-      </tr>
-    <% end %>
-  </table>
-  <button id="saveTypeSetting" >保存</button>
+  <%= render 'product_type_types' %>
 <hr/>
-
-<h5>产品简介设置：</h5>
-  <%= form_tag( '', method: :post, remote: true) do -%>
-    <table class="table">
-      <% %w(中国 美国 加拿大 英国 德国 法国 西班牙 意大利).each do |country| %>
-        <tr>
-          <th rowspan="2"><%= country%></th>
-          <td><textarea cols="100" rows="3" class="introduction1TextArea" ></textarea></td>
-        </tr>
-        <tr>
-          <td><textarea cols="100" rows="3" class="introduction2TextArea" ></textarea></td>
-        </tr>
-      <% end %>
-    </table>
-    <button id="saveIntroduction" >保存</button>
-  <% end%>
+  <%= render 'product_type_introduction' %>
 <hr/>
 
 <h5>属性设置： <a class="addAttribute" >添加</a> </h5>
