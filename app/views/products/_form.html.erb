@@ -67,16 +67,16 @@
       <option value='SouthEast' >右下</option>
       <option value='SouthWest' >左下</option>
     </select>
+      <%= f.label '上传自定义图片' %>
+      <%= file_field_tag 'upload_custome_image' %>
+      <%= link_to '上传', 'upload_customer_image_submit' %>
   </div>
   <div class="field">
-    <%= f.label :price %>
+    <%= f.label '价格' %>
     <%= f.text_field :price %>
-    <%= f.label :heel_height %>
-    <%= f.text_field :heel_height %>
-    <%= f.label :seasons %>
-    <%= select_tag 'product[seasons]', options_for_select(['春夏','秋冬'], @product.seasons) %>
+    <%= f.label '重量' %>
+    <%= f.text_field :product_weight %>
   </div>
-
 
   <div class="field">
     <%= f.label :details %><br>
@@ -156,6 +156,10 @@
     </div>
 
 <%= javascript_tag do %>
+
+  $('#upload_customer_image_submit').click(function(){
+    alert($('#upload_custome_image').val());
+  });
 
   $('#product_product_type_id').change(function(){
     var product_type_id = $(this).val();
