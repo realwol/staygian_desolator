@@ -18,11 +18,12 @@
         shipmentMethodValues = shipmentMethodValues + $(this).val() + ',';
       });
       var id = $(this).val();
+      var shipment_method_id = $('#shipmentIdField').val();
 
       $.ajax({
         url: '/shipments/save_shipment_value',
         type: 'POST',
-        data: {shipment_method_value: shipmentMethodValues, id: id},
+        data: {shipment_method_value: shipmentMethodValues, id: id, shipment_method_id: shipment_method_id},
         success: function(){
 
         }

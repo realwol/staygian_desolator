@@ -22,8 +22,8 @@ Rails.application.routes.draw do
 
   resources :products do
     collection do
+      get 'wait_designer'
       get 'get_tmall_links'
-      post 'save_tmall_links'
       get 'un_updated_page'
       get 'export_page'
       get 'export_products'
@@ -32,11 +32,14 @@ Rails.application.routes.draw do
       get 'presaled_products'
       get 'off_sale_products'
       get 'temp_off_sale_products'
-      post 'temp_off_sale_all'
-      post 'off_sale_all'
       get 'check_shop_id'
       get 'search'
       get 'update_price'
+      get 'change_product_type'
+      post 'update_product_type'
+      post 'save_tmall_links'
+      post 'temp_off_sale_all'
+      post 'off_sale_all'
       post 'update_attributes_div'
     end
 
@@ -54,6 +57,7 @@ Rails.application.routes.draw do
     member do
       get 'next_product_types_list'
       get 'update_price_setting'
+      post 'update_final_type'
       post 'update_shipment_method'
       post 'update_product_type_attribute'
       post 'update_description'
@@ -74,7 +78,11 @@ Rails.application.routes.draw do
   end
 
   devise_for :users
-  resources :users
+  resources :users do
+    collection do
+      post 'create_new_user'
+    end
+  end
   resources :shipments do 
     collection do
       post 'save_shipment_value'

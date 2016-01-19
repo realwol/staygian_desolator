@@ -8,4 +8,20 @@ class User < ActiveRecord::Base
   has_many :products
   has_many :shop_links
   has_many :tmall_links
+
+  has_many :little_brothers, class_name: 'User', foreign_key: 'manager'
+
+  belongs_to :big_brother, class_name: 'User', foreign_key: 'manager'
+
+  def is_dd?
+    self.role == 1
+  end
+
+  def is_manager?
+    self.role == 2
+  end
+
+  def is_little_brother?
+    self.role == 3
+  end
 end

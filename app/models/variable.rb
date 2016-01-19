@@ -17,7 +17,6 @@ class Variable < ActiveRecord::Base
   	image_names.each do |attr|
   		@valid_images << self.read_attribute("#{attr}") unless self.read_attribute("#{attr}").blank?
   	end
-
   	@valid_images
   end
 

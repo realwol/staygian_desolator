@@ -2,6 +2,15 @@ class ProductsController < ApplicationController
   before_action :set_product, only: [:show, :edit, :update, :destroy, :shield_product, :presale_product, :offsale_product, :temp_offsale_product, :onsale_product, :edited_product]
   before_action :authenticate_user!
 
+  def update_product_type
+    Product.where({id: params[:product_id]}).update_all(product_type_id: params[:search_type])
+    redirect_to root_path
+  end
+
+  def change_product_type
+    @products = Product.find(params[:product_id])
+  end
+
   def update_attributes_div
     @product_type_attributes = ProductAttribute.where(product_type_id: params[:product_type_id])
   end
@@ -175,6 +184,10 @@ class ProductsController < ApplicationController
   def presale_product
     @product.update_attributes(shield_type:'2', presale_date: params[:presale_date], on_sale:false, update_status:true)
     redirect_to presaled_products_products_url
+  end
+
+  def wait_designer
+    @products = Product.edited.page(params[:page])
   end
 
   def un_updated_page

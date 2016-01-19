@@ -9,21 +9,23 @@
   <th>法国</th>
   <th>操作</th>
   <tbody>
-    <% ShipmentMethodValue.all.each do |shipment| %>
+    <% @shipment_method.shipment_method_values.all.each do |shipment_value| %>
     <tr>
-      <th><input class='inputValue' type="text" style="width:50px;" value="<%= shipment.weight %>" /></th>
-      <td><input class='inputValue' type="text" style="width:50px;" value="<%= shipment.america_price %>" /></td>
-      <td><input class='inputValue' type="text" style="width:50px;" value="<%= shipment.canada_price %>" /></td>
-      <td><input class='inputValue' type="text" style="width:50px;" value="<%= shipment.british_price %>" /></td>
-      <td><input class='inputValue' type="text" style="width:50px;" value="<%= shipment.germany_price %>" /></td>
-      <td><input class='inputValue' type="text" style="width:50px;" value="<%= shipment.italy_price %>" /></td>
-      <td><input class='inputValue' type="text" style="width:50px;" value="<%= shipment.spain_price %>" /></td>
-      <td><input class='inputValue' type="text" style="width:50px;" value="<%= shipment.france_price %>" /></td>
-      <td><button class="saveChange" value="<%= shipment.id %>">保存</button><button class="deleteValue" value="<%= shipment.id %>">删除</button></td>
+      <th><input class='inputValue' type="text" style="width:50px;" value="<%= shipment_value.weight %>" /></th>
+      <td><input class='inputValue' type="text" style="width:50px;" value="<%= shipment_value.america_price %>" /></td>
+      <td><input class='inputValue' type="text" style="width:50px;" value="<%= shipment_value.canada_price %>" /></td>
+      <td><input class='inputValue' type="text" style="width:50px;" value="<%= shipment_value.british_price %>" /></td>
+      <td><input class='inputValue' type="text" style="width:50px;" value="<%= shipment_value.germany_price %>" /></td>
+      <td><input class='inputValue' type="text" style="width:50px;" value="<%= shipment_value.italy_price %>" /></td>
+      <td><input class='inputValue' type="text" style="width:50px;" value="<%= shipment_value.spain_price %>" /></td>
+      <td><input class='inputValue' type="text" style="width:50px;" value="<%= shipment_value.france_price %>" /></td>
+      <td><button class="saveChange" value="<%= shipment_value.id %>">保存</button><button class="deleteValue" value="<%= shipment_value.id %>">删除</button></td>
     <% end %>
     </tr>
   </tbody>
 </table>
+
+<%= hidden_field_tag 'shipmentIdField', @shipment_id %>
 
 <script type="text/javascript">
     $('.saveChange').click(function(){
@@ -32,16 +34,16 @@
         shipmentMethodValues = shipmentMethodValues + $(this).val() + ',';
       });
       var id = $(this).val();
-      var shipment_method_id = "<%= params[:id] %>";
+      var shipment_method_id = $('#shipmentIdField').val();
 
       $.ajax({
         url: '/shipments/save_shipment_value',
         type: 'POST',
         data: {shipment_method_value: shipmentMethodValues, id: id, shipment_method_id: shipment_method_id},
         success: function(){
-
         }
       })
+      return false;
     });
 
     $('.deleteValue').click(function(){

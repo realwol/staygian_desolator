@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160110061139) do
+ActiveRecord::Schema.define(version: 20160119121809) do
 
   create_table "attributes_translation_histories", force: :cascade do |t|
     t.string   "attribute_name",       limit: 255
@@ -84,8 +84,8 @@ ActiveRecord::Schema.define(version: 20160110061139) do
     t.string   "name",                        limit: 255
     t.string   "father_node",                 limit: 255
     t.datetime "deleted_at"
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
+    t.datetime "created_at",                                              null: false
+    t.datetime "updated_at",                                              null: false
     t.integer  "shipment_translation",        limit: 4
     t.integer  "price_translation",           limit: 4
     t.integer  "product_type_description",    limit: 4
@@ -94,6 +94,7 @@ ActiveRecord::Schema.define(version: 20160110061139) do
     t.integer  "product_type_2",              limit: 4
     t.integer  "product_type_introduction_1", limit: 4
     t.integer  "product_type_introduction_2", limit: 4
+    t.boolean  "is_final_type",               limit: 1,   default: false
   end
 
   create_table "products", force: :cascade do |t|
@@ -301,6 +302,8 @@ ActiveRecord::Schema.define(version: 20160110061139) do
     t.datetime "created_at",                                      null: false
     t.datetime "updated_at",                                      null: false
     t.string   "email",                  limit: 255, default: "", null: false
+    t.integer  "manager",                limit: 4,   default: 1
+    t.integer  "role",                   limit: 4
     t.string   "encrypted_password",     limit: 255, default: "", null: false
     t.string   "reset_password_token",   limit: 255
     t.datetime "reset_password_sent_at"
@@ -317,15 +320,16 @@ ActiveRecord::Schema.define(version: 20160110061139) do
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
   create_table "variable_translate_histories", force: :cascade do |t|
-    t.string   "word",       limit: 255
-    t.string   "en",         limit: 255
-    t.string   "de",         limit: 255
-    t.string   "fr",         limit: 255
-    t.string   "es",         limit: 255
-    t.string   "it",         limit: 255
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.string   "word",          limit: 255
+    t.string   "en",            limit: 255
+    t.string   "de",            limit: 255
+    t.string   "fr",            limit: 255
+    t.string   "es",            limit: 255
+    t.string   "it",            limit: 255
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
     t.datetime "deleted_at"
+    t.string   "variable_from", limit: 255
   end
 
   create_table "variables", force: :cascade do |t|

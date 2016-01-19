@@ -2,7 +2,7 @@
   <thead>
     <tr>
       <th>名称</th>
-      <th>父节点编号</th>
+      <th>是否是终极分类(选中为是)</th>
       <th colspan="2">操作</th>
     </tr>
   </thead>
@@ -11,8 +11,8 @@
     <% @product_types.each do |product_type| %>
       <tr>
         <td><button class="next_product_type" value=<%= product_type.id %> ><%= product_type.name %></button></td>
-        <td><%= product_type.father_node %></td>
-        <td><%= link_to '编辑', edit_product_type_path(product_type) %></td>
+        <td><%= check_box_tag 'is_final_type', "#{product_type.id}", product_type.is_final_type, class:'product-type-checkbox' %></td>
+        <td><%= link_to_if(product_type.is_final_type, '编辑', edit_product_type_path(product_type)) %></td>
         <td><%= link_to '删除', product_type, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
@@ -29,6 +29,31 @@
 <%= link_to '返回', product_types_path(father_node: previouse_father_node) %>
 
 <script type="text/javascript">
+
+  $('.product-type-checkbox').click(function(){
+    var clickedCheckBox = $(this);
+    if ($(this).is(':checked')) {
+      var checkedOrNot = 'checked'
+    } else {
+      var checkedOrNot = 'unchecked'
+    }
+    var productTypeId = $(this).val();
+    $.ajax({
+      url: '/product_types/' + productTypeId + '/update_final_type',
+      type: 'post',
+      data: { checked_or_not: checkedOrNot},
+      success: function(data){
+        if (data == '1') {
+          clickedCheckBox.prop('checked','checked');
+          alert('该分类下有产品，不可以修改分类类型！');
+        } else if( data == '2') {
+          clickedCheckBox.prop('checked',false);
+          alert('该分类下有其他分类，不可以修改其分类类型！');
+        }
+      }
+    })
+
+  });
   
   $('.next_product_type').click(function(){
     var father_node = $(this).attr('value');

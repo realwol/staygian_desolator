@@ -1,8 +1,22 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!
+
+  def create_new_user
+    User.create(email: params[:new_user_email], password: params[:new_user_password], manager: current_user.id, role: current_user.role + 1)
+    if current_user.is_dd?
+      @users = User.where.not(id: 1)
+    else
+      @users = current_user.little_brothers
+    end
+  end
+
   def index
-    @users = User.all
+    if current_user.is_dd?
+      @users = User.where.not(id: 1)
+    else
+      @users = current_user.little_brothers
+    end
   end
 
   def show

@@ -1,4 +1,4 @@
-  <table class="table">
+  <table class="table variableTable">
     <tr>
       <% %w(中国 美国 加拿大 英国 德国 法国 西班牙 意大利).each do |country| %>
         <td><%= country %></td>
@@ -7,9 +7,9 @@
     </tr>
     <% if @variables.count > 0 %>
     <% @variables.each do |variable| %>
-      <% variable_translation = VariableTranslateHistory.where(word: variable.color).first %>
+      <% variable_translation = variable %>
       <tr>
-        <td><input type="text" class="variable_translation_name" style="width:80px;" value=<%= variable.color %> ></td>
+        <td><input type="text" class="variable_translation_name" style="width:80px;" value=<%= variable_translation.word %> ></td>
         <td><input type="text" class="variable_translation_value" style="width:80px;" value=<%= variable_translation.try(:en) %> ></td>
         <td><input type="text" class="variable_translation_value" style="width:80px;" value=<%= variable_translation.try(:en) %> ></td>
         <td><input type="text" class="variable_translation_value" style="width:80px;" value=<%= variable_translation.try(:en) %> ></td>
@@ -17,10 +17,12 @@
         <td><input type="text" class="variable_translation_value" style="width:80px;" value=<%= variable_translation.try(:fr) %> ></td>
         <td><input type="text" class="variable_translation_value" style="width:80px;" value=<%= variable_translation.try(:es) %> ></td>
         <td><input type="text" class="variable_translation_value" style="width:80px;" value=<%= variable_translation.try(:it) %> ></td>
-        <td><a class="update_translation" value=<%= variable.color %>>更新</a> </td>
+        <td><a class="update_translation" data-variable-type='color' value=<%= variable.word %>>更新</a> </td>
       </tr>
     <% end %>
     <% else %>
       无未翻译变体
     <% end %>
   </table>
+
+  <button class="newVariableLine" data-variable-type='color'>新增</button>

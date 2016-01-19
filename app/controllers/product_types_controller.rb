@@ -1,5 +1,23 @@
 class ProductTypesController < ApplicationController
-  before_action :set_product_type, only: [:show, :edit, :update, :destroy, :update_product_type_attribute]
+  before_action :set_product_type, only: [:show, :edit, :update, :destroy, :update_product_type_attribute, :update_final_type]
+
+  def update_final_type
+    if params[:checked_or_not] == 'checked'
+      if @product_type.childer_product_types.count < 1
+        @product_type.update_attributes(is_final_type: true)
+      else
+        render json: 2
+      end
+    else
+      if @product_type.products.count < 1
+        @product_type.update_attributes(is_final_type: false)
+      else
+        render json: 1
+      end
+    end
+    @product_type_father_node = params[:father_node] || '0'
+    @product_types = ProductType.where(father_node: @product_type_father_node)
+  end
 
   def next_product_types_list
     product_type = ProductType.find(params[:id])

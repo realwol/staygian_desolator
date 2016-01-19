@@ -1,0 +1,26 @@
+  <table class="table sizeTable">
+    <tr>
+      <% %w(中国 美国 加拿大 英国 德国 法国 西班牙 意大利).each do |country| %>
+        <td><%= country %></td>
+      <% end %>
+      <td>操作</td>
+    </tr>
+    <% if @colors.count > 0 %>
+    <% @colors.each do |variable| %>
+      <tr>
+        <td><input type="text" class="variable_translation_name" style="width:80px;" value=<%= variable.word %> ></td>
+        <td><input type="text" class="variable_translation_value" style="width:80px;" value=<%= variable.try(:en) %> ></td>
+        <td><input type="text" class="variable_translation_value" style="width:80px;" value=<%= variable.try(:en) %> ></td>
+        <td><input type="text" class="variable_translation_value" style="width:80px;" value=<%= variable.try(:en) %> ></td>
+        <td><input type="text" class="variable_translation_value" style="width:80px;" value=<%= variable.try(:de) %> ></td>
+        <td><input type="text" class="variable_translation_value" style="width:80px;" value=<%= variable.try(:fr) %> ></td>
+        <td><input type="text" class="variable_translation_value" style="width:80px;" value=<%= variable.try(:es) %> ></td>
+        <td><input type="text" class="variable_translation_value" style="width:80px;" value=<%= variable.try(:it) %> ></td>
+        <td><a class="update_translation" data-variable-type='size' value=<%= variable.word %>>更新</a> </td>
+      </tr>
+    <% end %>
+    <% else %>
+      无变体
+    <% end %>
+  </table>
+<button class="newVariableLine" data-variable-type='size'>新增</button>

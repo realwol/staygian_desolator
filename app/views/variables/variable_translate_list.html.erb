@@ -1,10 +1,54 @@
-<h5>未翻译变体列表</h5>
-<div id="TranslatedVariableList">
-  <%= render 'untranslated_list' %>
+<h5>变体列表</h5>
+<div id="listTabs" >
+  <ul>
+    <li><a href="#listTab-1">变体</a></li>
+    <li><a href="#listTab-2">尺寸</a></li>
+  </ul>
+  <div id="listTab-1">
+    <div id="TranslatedVariableList">
+      <%= render 'untranslated_list' %>
+    </div>
+  </div>
+  <div id="listTab-2">
+    <div id="TranslatedSizeList">
+      <%= render 'variable_color_list' %>
+    </div>
+  </div>
 </div>
 
 <script type="text/javascript">
   $(document).ready(function(){
+    $("#listTabs").tabs();
+
+    $('.newVariableLine').click(function(){
+      var newVariableType = $(this).data('variable-type');
+      var addTrLine = "<tr><td><input type='text' class='variable_translation_name' style='width:80px;'></td><td><input type='text' class='variable_translation_value' style='width:80px;' ></td><td><input type='text' class='variable_translation_value' style='width:80px;' ></td><td><input type='text' class='variable_translation_value' style='width:80px;' ></td><td><input type='text' class='variable_translation_value' style='width:80px;' ></td><td><input type='text' class='variable_translation_value' style='width:80px;' ></td><td><input type='text' class='variable_translation_value' style='width:80px;' ></td><td><input type='text' class='variable_translation_value' style='width:80px;' ></td><td><a class='update_translation' data-variable-type='"+ newVariableType +"' >更新</a> </td></tr>";
+      if (newVariableType == 'color') {
+        $('.variableTable').find('tr:last').after(addTrLine);
+      } else {
+        $('.sizeTable').find('tr:last').after(addTrLine);
+      }
+      $('.update_translation').click(function(){
+        var variableTranslationValue = '';
+        $(this).parents('tr').find('.variable_translation_value').each(function(){
+          variableTranslationValue =  variableTranslationValue + $(this).val() + ',' ;
+        });
+        var variableNewName = $(this).parents('tr').find('.variable_translation_name').val();
+        var variableName = $(this).parents('tr').find('.variable_translation_name').val();
+        var oldVariableName = $(this).attr('value');
+        var variableType = $(this).data('variable-type');
+
+        $.ajax({
+          url: '/variables/update_translate_variable',
+          type: 'post',
+          data: {variableTranslationValue: variableTranslationValue, variableName: variableName, oldVariableName: oldVariableName, variableType: variableType},
+          success: function(){
+          }
+        });
+        return false;
+      });
+    });
+
     $('.update_translation').click(function(){
       var variableTranslationValue = '';
       $(this).parents('tr').find('.variable_translation_value').each(function(){
@@ -13,15 +57,15 @@
       var variableNewName = $(this).parents('tr').find('.variable_translation_name').val();
       var variableName = $(this).parents('tr').find('.variable_translation_name').val();
       var oldVariableName = $(this).attr('value');
+      var variableType = $(this).data('variable-type');
 
       $.ajax({
         url: '/variables/update_translate_variable',
         type: 'post',
-        data: {variableTranslationValue: variableTranslationValue, variableName: variableName, oldVariableName: oldVariableName},
+        data: {variableTranslationValue: variableTranslationValue, variableName: variableName, oldVariableName: oldVariableName, variableType: variableType},
         success: function(){
         }
       });
-
       return false;
     });
   })

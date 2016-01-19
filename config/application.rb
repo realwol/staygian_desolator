@@ -27,5 +27,10 @@ module AmazonTmall
     config.active_record.raise_in_transactional_callbacks = true
     I_KNOW_THAT_OPENSSL_VERIFY_PEER_EQUALS_VERIFY_NONE_IS_WRONG = nil
     OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
+
+    config.to_prepare do
+      Devise::SessionsController.layout 'login'
+    end
+
   end
 end
