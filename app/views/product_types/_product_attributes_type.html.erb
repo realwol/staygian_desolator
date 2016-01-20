@@ -18,7 +18,17 @@
         <% attribute_translation = attribute.attributes_translation_histories.first %>
         <tr>
           <td><%= text_field_tag 'attr_text_name', attribute.attribute_name, style:'width:80px;', class: 'attribute_value' %></td>
-          <td><%= text_field_tag 'attr_is_locked', attribute.attribute_name, style:'width:80px;', class: 'attribute_value' %></td>
+          <% if attribute.is_locked %>
+            <td>
+              <%= check_box_tag 'attr_is_locked', attribute.is_locked, true, style:'width:80px;', class: 'locaked_checkbox' %>
+              <%= hidden_field_tag 'checkbox_hidden_attr', nil, class:'attribute_value' %>
+            </td>
+          <% else %>
+            <td>
+              <%= check_box_tag 'attr_is_locked', nil, false, style:'width:80px;', class: 'locaked_checkbox' %>
+              <%= hidden_field_tag 'checkbox_hidden_attr', nil, class:'attribute_value' %>
+            </td>
+          <% end %>
           <td><%= text_field_tag 'attr_text_table_name', attribute.table_name, style:'width:80px;', class: 'attribute_value' %></td>
           <td><%= text_field_tag 'attr_text_china', attribute_translation.try(:china), style:'width:80px;', class: 'attribute_value' %></td>
           <td><%= text_field_tag 'attr_text_america', attribute_translation.try(:america), style:'width:80px;', class: 'attribute_value' %></td>
@@ -40,12 +50,13 @@
   $(document).ready(function(){
     $('.newAttributeValue').click(function(){
         var attributeName = $(this).parents('tr').find('input[name="attr_text_name"]').val();
-        var attributeIsLocked = $(this).parents('tr').find('input[name="attr_is_locked"]').val();
         var attributeTableName = $(this).parents('tr').find('input[name="attr_text_table_name"]').val();
-        var trContent = "<tr><td><input type='text' name='attr_text_name' style='width:80px; display:none;' class='attribute_value' value=" + attributeName + " ></td><td><input type='text' name='attr_is_locked' style='width:80px; display:none;' class='attribute_value' value=" + attributeIsLocked + " ></td><td><input type='text' name='attr_text_table_name' style='width:80px; display:none;' class='attribute_value' value=" + attributeTableName +" ></td><td><input type='text' name='attr_text_china' style='width:80px;' class='attribute_value' ></td><td><input type='text' name='attr_text_america' style='width:80px;' class='attribute_value' ></td><td><input type='text' name='attr_text_canada' style='width:80px;' class='attribute_value' ></td><td><input type='text' name='attr_text_british' style='width:80px;' class='attribute_value' ></td><td><input type='text' name='attr_text_germay' style='width:80px;' class='attribute_value' ></td><td><input type='text' name='attr_text_france' style='width:80px;' class='attribute_value' ></td><td><input type='text' name='attr_text_spain' style='width:80px;' class='attribute_value' ></td><td><input type='text' name='attr_text_italy' style='width:80px;' class='attribute_value' ></td><td><a class='editAttribues' >更新</a></td><td>删除</td></tr>";
+        var trContent = "<tr><td><input type='text' name='attr_text_name' style='width:80px; display:none;' class='attribute_value' value=" + attributeName + " ></td><td><input type='checkbox' name='attr_is_locked' style='width:80px; display:none;' class='locaked_checkbox'  ></td><td><input type='text' name='attr_text_table_name' style='width:80px; display:none;' class='attribute_value' value=" + attributeTableName +" ></td><td><input type='text' name='attr_text_china' style='width:80px;' class='attribute_value' ></td><td><input type='text' name='attr_text_america' style='width:80px;' class='attribute_value' ></td><td><input type='text' name='attr_text_canada' style='width:80px;' class='attribute_value' ></td><td><input type='text' name='attr_text_british' style='width:80px;' class='attribute_value' ></td><td><input type='text' name='attr_text_germay' style='width:80px;' class='attribute_value' ></td><td><input type='text' name='attr_text_france' style='width:80px;' class='attribute_value' ></td><td><input type='text' name='attr_text_spain' style='width:80px;' class='attribute_value' ></td><td><input type='text' name='attr_text_italy' style='width:80px;' class='attribute_value' ></td><td><a class='editAttribues' >更新</a></td><td>删除</td></tr>";
       $(this).parents('tr').after(trContent);
         $('.editAttribues').click(function(){
           var attributes_value = '';
+          var attributeIsLocked = $(this).parents('tr').find('.locaked_checkbox').prop('checked');
+          $(this).parents('tr').find('.locaked_checkbox').next('.attribute_value').val(attributeIsLocked);
           $(this).parents('tr').find('.attribute_value').each(function(){
             attributes_value = attributes_value + $(this).val() + ',';
           });
@@ -57,6 +68,7 @@
             type: 'POST',
             data: { attributes_value: attributes_value, attribute_id: attribute_id},
             success: function(){
+              alert('操作成功！');
             }
           });
           return false;
@@ -69,6 +81,7 @@
         url: '/product_types/' + attribute_id + '/remove_product_type_attribute',
         type: 'DELETE',
         success: function(){
+          alert('操作成功！');
         }
       });
       return false;
@@ -76,6 +89,8 @@
 
     $('.editAttribues').click(function(){
       var attributes_value = '';
+      var attributeIsLocked = $(this).parents('tr').find('.locaked_checkbox').prop('checked');
+      $(this).parents('tr').find('.locaked_checkbox').next('.attribute_value').val(attributeIsLocked);
       $(this).parents('tr').find('.attribute_value').each(function(){
         attributes_value = attributes_value + $(this).val() + ',';
       });
@@ -87,6 +102,7 @@
         type: 'POST',
         data: { attributes_value: attributes_value, attribute_id: attribute_id},
         success: function(){
+          alert('操作成功！');
         }
       });
       return false;

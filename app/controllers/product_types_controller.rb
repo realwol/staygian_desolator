@@ -1,5 +1,17 @@
 class ProductTypesController < ApplicationController
-  before_action :set_product_type, only: [:show, :edit, :update, :destroy, :update_product_type_attribute, :update_final_type]
+  before_action :set_product_type, only: [:show, :edit, :update, :destroy, :update_product_type_attribute, :update_final_type, :update_key_words]
+
+  def update_key_words
+    update_hash = {}
+    [params["0"], params["1"], params["2"], params["3"], params["4"]].each_with_index do |params, index|
+      translation_history = AttributesTranslationHistory.create(america: params[:key_word_america], canada: params[:key_word_canada], british: params[:key_word_british], germay: params[:key_word_germay], spain: params[:key_word_spain], italy: params[:key_word_italy], france: params[:key_word_france])
+      update_hash["#{index}"] = translation_history.id
+    end
+
+    @product_type.update_attributes(key_word1_translation: update_hash["0"], key_word2_translation: update_hash["1"], key_word3_translation: update_hash["2"], key_word4_translation: update_hash["3"], key_word5_translation: update_hash["4"])
+
+    render json: true
+  end
 
   def update_final_type
     if params[:checked_or_not] == 'checked'
@@ -109,7 +121,7 @@ class ProductTypesController < ApplicationController
   
   def update_product_type_attribute
     attributes_value_array = params[:attributes_value].split(',')
-    product_attribute_is_locked = attributes_value_array[1].present?
+    product_attribute_is_locked = attributes_value_array[1] == 'true' ? true : false
     if params[:attribute_id].present?
       product_attribute = ProductAttribute.find(params[:attribute_id])
       product_attribute.update_attributes(attribute_name: attributes_value_array[0], is_locked: product_attribute_is_locked, table_name: attributes_value_array[2], product_type_id: params[:id])

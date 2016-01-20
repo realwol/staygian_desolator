@@ -1,0 +1,29 @@
+<h5>关键词：</h5>
+  <%= form_tag(update_key_words_product_type_path(@product_type), method: :post, remote: true) do %>
+    <table class="table">
+      <tr>
+        <% %w(美国 加拿大 英国 德国 法国 西班牙 意大利).each do |country| %>
+          <th><%= country %></th>
+        <% end %>
+      </tr>
+      <% 5.times do |count| %>
+        <tr>
+          <%
+            if @product_type.read_attribute("key_word#{count+1}_translation").present?
+              key_word_translation = AttributesTranslationHistory.find(@product_type.read_attribute("key_word#{count+1}_translation"))
+            else
+              key_word_translation = AttributesTranslationHistory.new
+            end
+          %>
+          <td><%= text_field_tag "[#{count}][key_word_america]", key_word_translation.america, style:'width:80px;' %></td>
+          <td><%= text_field_tag "[#{count}][key_word_canada]", key_word_translation.canada, style:'width:80px;' %></td>
+          <td><%= text_field_tag "[#{count}][key_word_british]", key_word_translation.british, style:'width:80px;' %></td>
+          <td><%= text_field_tag "[#{count}][key_word_germay]", key_word_translation.germay, style:'width:80px;' %></td>
+          <td><%= text_field_tag "[#{count}][key_word_france]", key_word_translation.france, style:'width:80px;' %></td>
+          <td><%= text_field_tag "[#{count}][key_word_spain]", key_word_translation.spain, style:'width:80px;' %></td>
+          <td><%= text_field_tag "[#{count}][key_word_italy]", key_word_translation.italy, style:'width:80px;' %></td>
+        </tr>
+      <% end %>
+    </table>
+    <%= submit_tag '更新' %>
+  <% end%>

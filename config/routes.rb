@@ -63,6 +63,7 @@ Rails.application.routes.draw do
       post 'update_description'
       post 'update_type_setting'
       post 'update_type_introduction'
+      post 'update_key_words'
       delete 'remove_product_type_attribute'
     end
 

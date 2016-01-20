@@ -1,51 +1,67 @@
-<%= hidden_field_tag 'product_type_id_hidden', nil, value: @product_type.id %>
-<%= form_for(@product_type, remote: true) do |f| %>
-  <% if @product_type.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@product_type.errors.count, "error") %> prohibited this product_type from being saved:</h2>
+  <%= hidden_field_tag 'product_type_id_hidden', nil, value: @product_type.id %>
+  <%= form_for(@product_type, remote: true) do |f| %>
+    <% if @product_type.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(@product_type.errors.count, "error") %> prohibited this product_type from being saved:</h2>
 
-      <ul>
-      <% @product_type.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+        <ul>
+        <% @product_type.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <hr/>
+    <h5>产品分类信息：</h5>
+    <div class="field">
+      <%= f.label :name %><br>
+      <%= f.text_field :name %>
+    </div>
+
+    <div class="actions">
+      <%= f.submit '保存分类名' %>
     </div>
   <% end %>
 
-  <hr/>
-  <h5>产品分类信息：</h5>
-  <div class="field">
-    <%= f.label :name %><br>
-    <%= f.text_field :name %>
+<div id="productTypeTabs">
+  <ul>
+    <li><a href="#tab1"> 属性设置 </a></li>
+    <li><a href="#tab2"> 价格设置 </a></li>
+    <li><a href="#tab3"> 文本设置 </a></li>
+  </ul>
+
+  <div id="tab1" >
+    <hr/>
+    <%= render 'product_type_types' %>
+    <hr/>
+
+    <h5>属性设置： <a class="addAttribute" >添加</a> </h5>
+    <div id="addAttributesTable" >
+      <%= render 'product_attributes_type' %>
+    </div>
   </div>
-
-  <div class="actions">
-    <%= f.submit '保存分类名' %>
+  <div id="tab2">
+    <hr/>
+      <%= render 'product_type_shipment' %>
+    <hr/>
+      <%= render 'product_type_price' %>
   </div>
-<% end %>
+  <div id="tab3" >
+    <hr/>
+      <%= render 'product_type_key_word' %>
+    <hr/>
 
-<hr/>
-  <%= render 'product_type_shipment' %>
-<hr/>
-  <%= render 'product_type_price' %>
-<hr/>
-
-<h5>产品说明设置</h5>
-  <%= render 'product_type_description' %>
-<hr/>
-  <%= render 'product_type_types' %>
-<hr/>
-  <%= render 'product_type_introduction' %>
-<hr/>
-
-<h5>属性设置： <a class="addAttribute" >添加</a> </h5>
-<div id="addAttributesTable" >
-  <%= render 'product_attributes_type' %>
+    <h5>产品说明设置</h5>
+      <%= render 'product_type_description' %>
+    <hr/>
+      <%= render 'product_type_introduction' %>
+    <hr/>
+  </div>
 </div>
-<hr/>
-
 <script type="text/javascript">
   $(document).ready(function(){
+    $('#productTypeTabs').tabs();
     var product_type_id = $('#product_type_id_hidden').val();
 
     $('#saveIntroduction').click(function(){

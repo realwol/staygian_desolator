@@ -3,7 +3,7 @@ class ProductsController < ApplicationController
   before_action :authenticate_user!
 
   def update_product_type
-    Product.where({id: params[:product_id]}).update_all(product_type_id: params[:search_type])
+    Product.where({id: params[:products_id]}).update_all(product_type_id: params[:search_type])
     redirect_to root_path
   end
 
