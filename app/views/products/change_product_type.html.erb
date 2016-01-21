@@ -1,5 +1,5 @@
 <%= form_tag(update_product_type_products_path, method:'post') do %>
-  <%= select_tag "search_type", options_from_collection_for_select(ProductType.all, "id", "name"), :prompt => "请选择分类" %>
+  <%= select_tag "search_type", options_from_collection_for_select(ProductType.get_final_type, "id", "name"), :prompt => "请选择分类" %>
   <%= hidden_field_tag 'products_id', params[:product_id] %>
   <%= button_tag '确定' %>
 <% end %>

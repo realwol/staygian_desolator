@@ -29,6 +29,8 @@ class ShipmentsController < ApplicationController
   end
 
   def delete_shipment_method_value
+    @shipment_method = ShipmentMethodValue.find(params[:id]).shipment_method
+    @shipment_id = @shipment_method.id
     ShipmentMethodValue.delete(params[:id])
   end
 end

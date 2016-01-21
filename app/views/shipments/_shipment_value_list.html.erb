@@ -10,7 +10,7 @@
   <th>操作</th>
   <tbody>
     <% @shipment_method.shipment_method_values.all.each do |shipment_value| %>
-    <tr>
+    <tr class="shipment_value_tr">
       <th><input class='inputValue' type="text" style="width:50px;" value="<%= shipment_value.weight %>" /></th>
       <td><input class='inputValue' type="text" style="width:50px;" value="<%= shipment_value.america_price %>" /></td>
       <td><input class='inputValue' type="text" style="width:50px;" value="<%= shipment_value.canada_price %>" /></td>
@@ -25,7 +25,6 @@
   </tbody>
 </table>
 
-<%= hidden_field_tag 'shipmentIdField', @shipment_id %>
 
 <script type="text/javascript">
     $('.saveChange').click(function(){

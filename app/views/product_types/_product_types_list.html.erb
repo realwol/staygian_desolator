@@ -19,7 +19,7 @@
         </td>
         <td><%= check_box_tag 'is_final_type', "#{product_type.id}", product_type.is_final_type, class:'product-type-checkbox' %></td>
         <td><%= link_to_if(product_type.is_final_type, '编辑', edit_product_type_path(product_type)) %></td>
-        <td><%= link_to '删除', product_type, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to_if(product_type.is_final_type && product_type.has_product?, '删除', product_type, method: :delete, data: { confirm: 'Are you sure?' }) %></td>
       </tr>
     <% end %>
   </tbody>

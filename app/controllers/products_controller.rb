@@ -3,12 +3,12 @@ class ProductsController < ApplicationController
   before_action :authenticate_user!
 
   def update_product_type
-    Product.where({id: params[:products_id]}).update_all(product_type_id: params[:search_type])
+    Product.where({id: params[:products_id].split()}).update_all(product_type_id: params[:search_type])
     redirect_to root_path
   end
 
   def change_product_type
-    @products = Product.find(params[:product_id])
+    @products = Product.find(params[:product_id].split())
   end
 
   def update_attributes_div

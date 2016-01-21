@@ -193,7 +193,11 @@ class ProductTypesController < ApplicationController
   end
 
   def destroy
-    @product_type.destroy
+    if @product_type.is_final_type
+      @product_type.destroy
+    else
+      render json: 1
+    end
     respond_to do |format|
       format.html { redirect_to product_types_url, notice: 'Product type was successfully destroyed.' }
       format.json { head :no_content }

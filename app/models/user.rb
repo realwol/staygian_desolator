@@ -24,4 +24,12 @@ class User < ActiveRecord::Base
   def is_little_brother?
     self.role == 3
   end
+
+  def self.get_all_manager
+    self.where(role:2)
+  end
+
+  def self.get_all_little_brother
+    self.where(role:3)
+  end
 end
