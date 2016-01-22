@@ -1,5 +1,15 @@
 class ProductTypesController < ApplicationController
-  before_action :set_product_type, only: [:show, :edit, :update, :destroy, :update_product_type_attribute, :update_final_type, :update_key_words]
+  before_action :set_product_type, only: [:show, :edit, :update, :destroy, :update_product_type_attribute, :update_final_type, :update_key_words, :update_product_type_translation]
+  
+  def update_product_type_translation
+    if @product_type.product_type_name_translation.present?
+      translation_history = AttributesTranslationHistory.find(@product_type.product_type_name_translation)
+      translation_history.update_attributes(china: @product_type.name, america: params[:name_america], canada: params[:name_canada], british: params[:name_british], germay: params[:name_germay], spain: params[:name_spain], italy: params[:name_italy], france: params[:name_france])
+    else
+      translation_history = AttributesTranslationHistory.create(china: @product_type.name, america: params[:name_america], canada: params[:name_canada], british: params[:name_british], germay: params[:name_germay], spain: params[:name_spain], italy: params[:name_italy], france: params[:name_france])
+      @product_type.update_attributes(product_type_name_translation: translation_history.id)
+    end
+  end
 
   def update_key_words
     update_hash = {}
@@ -10,19 +20,20 @@ class ProductTypesController < ApplicationController
 
     @product_type.update_attributes(key_word1_translation: update_hash["0"], key_word2_translation: update_hash["1"], key_word3_translation: update_hash["2"], key_word4_translation: update_hash["3"], key_word5_translation: update_hash["4"])
 
-    render json: true
   end
 
   def update_final_type
     if params[:checked_or_not] == 'checked'
       if @product_type.childer_product_types.count < 1
         @product_type.update_attributes(is_final_type: true)
+        render json: 3
       else
         render json: 2
       end
     else
       if @product_type.products.count < 1
         @product_type.update_attributes(is_final_type: false)
+        render json: 4
       else
         render json: 1
       end
@@ -57,7 +68,6 @@ class ProductTypesController < ApplicationController
                                                           spain: introduction_2_array[6],
                                                           italy: introduction_2_array[7])
     ProductType.find(params[:id]).update_attributes(product_type_introduction_1: introduction_1.id, product_type_introduction_2: introduction_2.id)
-    render json: true
   end
 
   def update_type_setting
@@ -89,7 +99,6 @@ class ProductTypesController < ApplicationController
                                                           spain: type2_attribute_values[6],
                                                           italy: type2_attribute_values[7])
     ProductType.find(params[:id]).update_attributes(product_type_feed: attribute_feed.id, product_type_1: attribute_type1.id, product_type_2: attribute_type2.id)
-    render json: true
   end
 
   def update_description
@@ -102,7 +111,6 @@ class ProductTypesController < ApplicationController
                                                           spain: params[:descriptionTextArea6],
                                                           italy: params[:descriptionTextArea7])
     ProductType.find(params[:id]).update_attributes(product_type_description: attribute_translation.id)
-    render json: true
   end
 
   def update_price_setting
@@ -116,7 +124,6 @@ class ProductTypesController < ApplicationController
                                                           spain: price_values_array[6],
                                                           italy: price_values_array[7])
     ProductType.find(params[:id]).update_attributes(price_translation: attribute_translation.id)
-    render json: true
   end
   
   def update_product_type_attribute
@@ -135,7 +142,6 @@ class ProductTypesController < ApplicationController
   end
 
   def update_shipment_method
-    
     shipment_method_china = ShipmentMethod.find(params[:shipment_method_china])
     shipment_method_america = ShipmentMethod.find(params[:shipment_method_america])
     shipment_method_canada = ShipmentMethod.find(params[:shipment_method_canada])
@@ -154,7 +160,6 @@ class ProductTypesController < ApplicationController
                                         spain: shipment_method_spain.id,
                                         italy: shipment_method_italy.id)
     ProductType.find(params[:id]).update_attributes(shipment_translation: attribute_translation.id)
-    render json: true
   end
 
   def index
@@ -175,9 +180,14 @@ class ProductTypesController < ApplicationController
   end
 
   def create
-    ProductType.create(name: params[:product_type_name], father_node: params[:father_node])
-    @product_types = ProductType.where(father_node: params[:father_node])
-    @product_type_father_node = params[:father_node] || '0'
+    if ProductType.where(name: params[:product_type_name], father_node: params[:father_node]).count > 0
+      @flag = false
+    else
+      @flag = true
+      ProductType.create(name: params[:product_type_name], father_node: params[:father_node])
+      @product_types = ProductType.where(father_node: params[:father_node])
+      @product_type_father_node = params[:father_node] || '0'
+    end
   end
 
   def update

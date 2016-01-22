@@ -1,10 +1,10 @@
 <div >
   <h4><%= link_to "Amazon Platform", root_path %></h4>
   <div style="margin-left:70%; margin-top:-35px;" >
-    <%= select_tag 'manager_select', options_from_collection_for_select(User.get_all_manager, "id", "email") %>
-    <%= select_tag 'little_brother_select', options_from_collection_for_select(User.get_all_little_brother, "id", "email") %>
 
     <%if current_user%>
+      <%= select_tag 'manager_select', options_from_collection_for_select(User.get_all_manager, "id", "email") %>
+      <%= select_tag 'little_brother_select', options_from_collection_for_select(User.get_all_little_brother, "id", "email") %>
       <%= link_to current_user.email, user_path(current_user) %>&nbsp&nbsp
       <%= link_to t('Sign out'), destroy_user_session_path, method:'delete' %>
     <%else%>

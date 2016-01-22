@@ -57,6 +57,7 @@ Rails.application.routes.draw do
     member do
       get 'next_product_types_list'
       get 'update_price_setting'
+      post 'update_product_type_translation'
       post 'update_final_type'
       post 'update_shipment_method'
       post 'update_product_type_attribute'

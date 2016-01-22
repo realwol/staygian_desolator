@@ -2,6 +2,7 @@
 <%= form_tag(search_products_path, method:'get') do %>
   <label>分类：</label>
   <%= select_tag "search_type", options_from_collection_for_select(ProductType.get_final_type, "id", "name", @result[:type]), :prompt => "请选择分类" %>
+
   <label>制造商：</label>
   <%= text_field_tag 'product_shop', nil, value: @result[:shop] %>
   <label>品牌：</label>
@@ -12,3 +13,7 @@
   <%= button_tag '搜索' %>
 <% end %>
 <hr/>
+
+<script type="text/javascript">
+  
+</script>

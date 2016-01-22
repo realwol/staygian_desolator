@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160120051901) do
+ActiveRecord::Schema.define(version: 20160122091647) do
 
   create_table "attributes_translation_histories", force: :cascade do |t|
     t.string   "attribute_name",       limit: 255
@@ -81,25 +81,26 @@ ActiveRecord::Schema.define(version: 20160120051901) do
   add_index "product_info_translations", ["product_id"], name: "index_product_info_translations_on_product_id", using: :btree
 
   create_table "product_types", force: :cascade do |t|
-    t.string   "name",                        limit: 255
-    t.string   "father_node",                 limit: 255
+    t.string   "name",                          limit: 255
+    t.string   "father_node",                   limit: 255
     t.datetime "deleted_at"
-    t.datetime "created_at",                                              null: false
-    t.datetime "updated_at",                                              null: false
-    t.integer  "shipment_translation",        limit: 4
-    t.integer  "price_translation",           limit: 4
-    t.integer  "product_type_description",    limit: 4
-    t.integer  "product_type_feed",           limit: 4
-    t.integer  "product_type_1",              limit: 4
-    t.integer  "product_type_2",              limit: 4
-    t.integer  "product_type_introduction_1", limit: 4
-    t.integer  "product_type_introduction_2", limit: 4
-    t.boolean  "is_final_type",               limit: 1,   default: false
-    t.integer  "key_word1_translation",       limit: 4
-    t.integer  "key_word2_translation",       limit: 4
-    t.integer  "key_word3_translation",       limit: 4
-    t.integer  "key_word4_translation",       limit: 4
-    t.integer  "key_word5_translation",       limit: 4
+    t.datetime "created_at",                                                null: false
+    t.datetime "updated_at",                                                null: false
+    t.integer  "product_type_name_translation", limit: 4
+    t.integer  "shipment_translation",          limit: 4
+    t.integer  "price_translation",             limit: 4
+    t.integer  "product_type_description",      limit: 4
+    t.integer  "product_type_feed",             limit: 4
+    t.integer  "product_type_1",                limit: 4
+    t.integer  "product_type_2",                limit: 4
+    t.integer  "product_type_introduction_1",   limit: 4
+    t.integer  "product_type_introduction_2",   limit: 4
+    t.boolean  "is_final_type",                 limit: 1,   default: false
+    t.integer  "key_word1_translation",         limit: 4
+    t.integer  "key_word2_translation",         limit: 4
+    t.integer  "key_word3_translation",         limit: 4
+    t.integer  "key_word4_translation",         limit: 4
+    t.integer  "key_word5_translation",         limit: 4
   end
 
   create_table "products", force: :cascade do |t|

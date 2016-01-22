@@ -1,0 +1,28 @@
+<%= form_tag(update_product_type_translation_product_type_path(@product_type), remote:true) do %>
+<h5>分类名称翻译：</h5>
+<table class="table">
+  <tr>
+    <% %w(中国 美国 加拿大 英国 德国 法国 西班牙 意大利).each do |country| %>
+      <th><%= country%></th>
+    <% end %>
+  </tr>
+    <%
+      if @product_type.product_type_name_translation.present?
+        name_translation = AttributesTranslationHistory.find(@product_type.product_type_name_translation)
+      else
+        name_translation = AttributesTranslationHistory.new
+      end
+    %>
+    <tr>
+      <td> <%= text_field_tag 'name_china', name_translation.china, style:'width:80px;', disabled: 'disabled' %> </td>
+      <td> <%= text_field_tag 'name_america', name_translation.america, style:'width:80px;' %> </td>
+      <td> <%= text_field_tag 'name_canada', name_translation.canada, style:'width:80px;' %> </td>
+      <td> <%= text_field_tag 'name_british', name_translation.british, style:'width:80px;' %> </td>
+      <td> <%= text_field_tag 'name_germay', name_translation.germay, style:'width:80px;' %> </td>
+      <td> <%= text_field_tag 'name_france', name_translation.france, style:'width:80px;' %> </td>
+      <td> <%= text_field_tag 'name_spain', name_translation.spain, style:'width:80px;' %> </td>
+      <td> <%= text_field_tag 'name_italy', name_translation.italy, style:'width:80px;' %> </td>
+    </tr>
+</table>
+  <%= button_tag '保存' %>
+<% end %>

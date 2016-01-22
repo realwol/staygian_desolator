@@ -1,1 +1,5 @@
-$('#productTypeList').html("<%= raw j (render 'product_types_list', locals:{product_types: @product_types})%> ");
+<% if @flag %>
+  $('#productTypeList').html("<%= raw j (render 'product_types_list', locals:{product_types: @product_types})%> ");
+<%else%>
+  alert('同级分类名字不可重复！');
+<%end%>

@@ -18,8 +18,18 @@
           <% end %>
         </td>
         <td><%= check_box_tag 'is_final_type', "#{product_type.id}", product_type.is_final_type, class:'product-type-checkbox' %></td>
-        <td><%= link_to_if(product_type.is_final_type, '编辑', edit_product_type_path(product_type)) %></td>
-        <td><%= link_to_if(product_type.is_final_type && product_type.has_product?, '删除', product_type, method: :delete, data: { confirm: 'Are you sure?' }) %></td>
+        <td><%= if product_type.is_final_type
+                  link_to('编辑', edit_product_type_path(product_type))
+                else
+                  link_to('编辑', edit_product_type_path(product_type), onclick:'return false;')
+                end
+            %></td>
+        <td><%= if product_type.is_final_type && !product_type.has_product?
+                  link_to('删除', product_type, method: :delete, data: { confirm: 'Are you sure?' })
+                else
+                  link_to('删除', product_type, onclick:'return false;')
+                end
+            %></td>
       </tr>
     <% end %>
   </tbody>
@@ -55,6 +65,18 @@
         } else if( data == '2') {
           clickedCheckBox.prop('checked',false);
           alert('该分类下有其他分类，不可以修改其分类类型！');
+        } else if(data == '3') {
+          clickedCheckBox.parents('tr').find('.next_product_type').attr('disabled','disabled');
+          clickedCheckBox.parents('tr').find('a:first').removeAttr('onclick');
+          clickedCheckBox.parents('tr').find('a:last').removeAttr('onclick');
+          clickedCheckBox.parents('tr').find('a:last').attr('data-confirm','Are you sure?');
+          clickedCheckBox.parents('tr').find('a:last').attr('data-method','delete');
+        } else if(data == '4') {
+          clickedCheckBox.parents('tr').find('button.next_product_type').removeAttr('disabled');
+          clickedCheckBox.parents('tr').find('a:first').attr('onclick','return false;');
+          clickedCheckBox.parents('tr').find('a:last').attr('onclick','return false');
+          clickedCheckBox.parents('tr').find('a:last').removeAttr('data-confirm');
+          clickedCheckBox.parents('tr').find('a:last').removeAttr('data-method');
         }
       }
     })
