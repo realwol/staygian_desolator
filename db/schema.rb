@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160122091647) do
+ActiveRecord::Schema.define(version: 20160124170507) do
 
   create_table "attributes_translation_histories", force: :cascade do |t|
     t.string   "attribute_name",       limit: 255
@@ -214,6 +214,12 @@ ActiveRecord::Schema.define(version: 20160122091647) do
     t.string   "product_weight",              limit: 255
     t.text     "editing_backup",              limit: 65535
     t.text     "back_up",                     limit: 65535
+    t.text     "avatar",                      limit: 65535
+    t.text     "avatar1",                     limit: 65535
+    t.text     "avatar2",                     limit: 65535
+    t.text     "avatar_img_url",              limit: 65535
+    t.text     "avatar_img_url1",             limit: 65535
+    t.text     "avatar_img_url2",             limit: 65535
   end
 
   add_index "products", ["product_type_id"], name: "index_products_on_product_type_id", using: :btree

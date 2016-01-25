@@ -1,6 +1,22 @@
 module QiniuUploadHelper
 	require 'mini_magick'
 	class QiNiu
+
+    def self.upload_from_client(path)
+			key = Time.now.to_i
+			put_policy = Qiniu::Auth::PutPolicy.new('amazon', key, '31536000', '')
+
+			uptoken = Qiniu::Auth.generate_uptoken put_policy
+			code, result, response_headers = Qiniu::Storage.upload_with_put_policy(put_policy, path, key,'')
+			File.delete path
+
+			if code == 200
+			  "http://7xj377.com1.z0.glb.clouddn.com/#{result["key"]}"
+			else
+				false
+			end
+    end
+
 		def self.upload(uri, position=nil, x_pos=nil, y_pos=nil)
 			name = Time.now.to_i
 			image = MiniMagick::Image.open uri

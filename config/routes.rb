@@ -36,6 +36,8 @@ Rails.application.routes.draw do
       get 'search'
       get 'update_price'
       get 'change_product_type'
+      get 'change_product_type'
+      post 'custome_upload_image'
       post 'update_product_type'
       post 'save_tmall_links'
       post 'temp_off_sale_all'
@@ -70,6 +72,7 @@ Rails.application.routes.draw do
 
     collection do
       get 'update_price_setting'
+      post 'get_children_product_types'
       post 'update_shipment_method'
       post 'update_product_type_attribute'
       post 'update_description'

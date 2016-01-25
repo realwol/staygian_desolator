@@ -2,6 +2,17 @@ class ProductsController < ApplicationController
   before_action :set_product, only: [:show, :edit, :update, :destroy, :shield_product, :presale_product, :offsale_product, :temp_offsale_product, :onsale_product, :edited_product]
   before_action :authenticate_user!
 
+  def custome_upload_image
+    uploaded_io = params[:upload_path]
+    # uploaded_io = params[:upload_path][12..-1]
+    File.open(Rails.root.join('public', 'uploads', uploaded_io.original_filename), 'wb') do |file|
+      file.write(uploaded_io)
+    end
+
+    # v_image = QiniuUploadHelper::QiNiu.upload(params[:upload_path],'')
+    render json: v_image.to_json
+  end
+
   def update_product_type
     Product.where({id: params[:products_id].split()}).update_all(product_type_id: params[:search_type])
     redirect_to root_path
@@ -31,7 +42,7 @@ class ProductsController < ApplicationController
 
   def search
     @result = {}
-    @result[:type] = product_type = params[:search_type]
+    @result[:type] = product_type = params[:product_select_value]
     @result[:shop] = product_shop = params[:product_shop]
     @result[:brand] = product_brand = params[:product_brand]
     @result[:sku] = sku_value = params[:sku_value]
@@ -40,7 +51,12 @@ class ProductsController < ApplicationController
     @products = Product.all
     search_query = []
     unless product_type.empty?
-      search_query << "product_type_id = '#{product_type}'"
+      ids_string = "(#{product_type},"
+      ProductType.find(product_type).all_children.map(&:id).each do |id|
+        ids_string = ids_string + id.to_s + ','
+      end
+      ids_string = ids_string[0, ids_string.size-1] + ')'
+      search_query << "product_type_id in #{ids_string}"
     end
 
     unless product_shop.empty?
@@ -250,6 +266,10 @@ class ProductsController < ApplicationController
   # PATCH/PUT /products/1
   # PATCH/PUT /products/1.json
   def update
+    params[:product][:avatar1] = params[:product][:avatar].second
+    params[:product][:avatar2] = params[:product][:avatar][2]
+    params[:product][:avatar] = params[:product][:avatar].first
+
     respond_to do |format|
       if @product.update(product_params)
         if @product.first_updated_time
@@ -266,6 +286,17 @@ class ProductsController < ApplicationController
             QiniuUploadHelper::QiNiu.update(url, @product.image_cut_position, @product.image_cut_x, @product.image_cut_y)
           end
         end
+
+        avatar_urls = []
+        [@product.avatar.url, @product.avatar1.url, @product.avatar2.url].each do |img_url|
+          if img_url.present?
+            avatar_urls << QiniuUploadHelper::QiNiu.upload_from_client(Rails.root.join('public' "#{img_url}"))
+          end
+        end
+        @product.avatar_img_url = avatar_urls[0]
+        @product.avatar_img_url1 = avatar_urls[1]
+        @product.avatar_img_url2 = avatar_urls[2]
+        @product.save
 
         Variable.update_product_variable(params["variable"], @product)
         TranslateToken.create(t_id:@product.id, t_type:'product', t_status: true, t_method:'update')
@@ -311,7 +342,7 @@ class ProductsController < ApplicationController
                                       :images26, :images27, :images28, :images29, :images30, :image_cut_x, :image_cut_y, :image_cut_position,
                                       :shield_type, :shop_id, :shield_untill, :presale_date, :strap_type, :lining_description, :shoe_width,
                                       :platform_height, :shaft_diameter, :shaft_height, :leather_type, :style_name, :department_name, :purchase_link,
-                                      :product_weight, :editing_backup)
+                                      :product_weight, :editing_backup, :avatar, :avatar1, :avatar2)
     end
 
     def avaliable? link

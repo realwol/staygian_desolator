@@ -1,0 +1,63 @@
+  <% @children_product_types ||= ProductType.first_level_types %>
+  <% @children_product_types.each do |child| %>
+    <a href="#" class="level1Click" data-product-type-id=<%= child.id %> data-product-type-children=<%= child.has_children? %> ><%= child.name %></a>
+  <% end %>
+
+<script type="text/javascript">
+  $('.level1Click').click(function(){
+    var hasChildren = $(this).data('product-type-children');
+    var productTypeText = $('#productTypeText');
+    var productTypeSelectValue = $('#product_select_value');
+    var oldTextValue = productTypeText.val();
+    var selectedText = $(this).text();
+    var newTextValue = oldTextValue + selectedText + '/';
+    var product_type_id = $(this).data('product-type-id');
+    if( hasChildren.toString() == 'true'){
+      $.ajax({
+        url: '/product_types/get_children_product_types',
+        data: {product_type_id: product_type_id},
+        type: 'POST',
+        success: function(){
+          productTypeText.val(newTextValue);
+          productTypeSelectValue.attr('value', product_type_id);
+
+          var newLink = "<a href='#' class='level2Click selectedLevel2Value' data-product-type-id='"+ product_type_id +"' data-product-type-children='"+ hasChildren +"'>"+ selectedText +" </a>";
+          $('.level2Click:last').after(newLink);
+          $('.level2Click').unbind('click');
+          $('.level2Click').click(function(){
+              $(this).next('.level2Click').remove();
+              $(this).remove();
+                var hasChildren = $(this).data('product-type-children');
+                var productTypeText = $('#productTypeText');
+                var productTypeSelectValue = $('#product_select_value');
+                var oldTextValue = productTypeText.val();
+                var selectedText = $(this).text();
+                var newTextValue = oldTextValue + selectedText + '/';
+                var product_type_id = $(this).data('product-type-id');
+                if( hasChildren.toString() == 'true'){
+                  $.ajax({
+                    url: '/product_types/get_children_product_types',
+                    data: {product_type_id: product_type_id, ajax_action_from: 'level2Click'},
+                    type: 'POST',
+                    success: function(){
+                      var newTextValue = '';
+                      $('#productTypeHistory').find('.selectedLevel2Value').each(function(){
+                        newTextValue = newTextValue + $(this).text() + '/';
+                      })
+                      productTypeText.val(newTextValue);
+                      productTypeSelectValue.attr('value', product_type_id);
+                    }
+                  });
+                } else if (hasChildren.toString() == 'false') {
+                  productTypeText.val(newTextValue);
+                  productTypeSelectValue.attr('value', product_type_id);
+                }
+          });
+        }
+      });
+    } else if (hasChildren.toString() == 'false') {
+      productTypeText.val(newTextValue);
+      productTypeSelectValue.attr('value', product_type_id);
+    }
+  });
+</script>

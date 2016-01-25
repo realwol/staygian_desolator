@@ -21,6 +21,10 @@ class Product < ActiveRecord::Base
 
   before_create :save_sku
 
+  mount_uploader :avatar, AvatarUploader
+  mount_uploader :avatar1, AvatarUploader
+  mount_uploader :avatar2, AvatarUploader
+
   def valid_images
   	image_names = []
   	1.upto(10) do |t|

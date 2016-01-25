@@ -1,6 +1,21 @@
 class ProductTypesController < ApplicationController
   before_action :set_product_type, only: [:show, :edit, :update, :destroy, :update_product_type_attribute, :update_final_type, :update_key_words, :update_product_type_translation]
   
+  def get_children_product_types
+    if params[:product_type_id].present?
+      if params[:ajax_action_from].present? && params[:ajax_action_from] == 'level2Click'
+        product_type = ProductType.find(params[:product_type_id])
+        if product_type.father_node == '0'
+          @children_product_types = ProductType.where(father_node: '0')
+        else
+          @children_product_types = ProductType.find(product_type.father_node).children_product_types
+        end
+      else
+        @children_product_types = ProductType.find(params[:product_type_id]).children_product_types
+      end
+    end
+  end
+
   def update_product_type_translation
     if @product_type.product_type_name_translation.present?
       translation_history = AttributesTranslationHistory.find(@product_type.product_type_name_translation)

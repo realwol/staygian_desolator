@@ -58,7 +58,17 @@
         <%= image_tag(img, style:'width:50px;', class:"product_image", alt:'', "data-src"=>img) %>
         <%= hidden_field_tag "product[images#{index+1}]", nil, class:'product_hidden_field_value', value:img %>
       </div>
-    <% end %><br/>
+    <% end %>
+    <div id="avatarImgDiv" style=" display:none; float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px; background: grey;">
+      <%= image_tag('', style:'width:50px; display:none;', class:"product_image", id:'myImg1', alt:'', "data-src"=>'') %>
+    </div>
+    <div id="avatarImgDiv1" style=" display:none; float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px; background: grey;">
+      <%= image_tag('', style:'width:50px; display:none;', class:"product_image", id:'myImg2', alt:'', "data-src"=>'') %>
+    </div>
+    <div id="avatarImgDiv2" style=" display:none; float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px; background: grey;">
+      <%= image_tag('', style:'width:50px; display:none;', class:"product_image", id:'myImg3', alt:'', "data-src"=>'') %>
+    </div>
+    <br/>
     <%= hidden_field_tag 'cut_image_urls' %>
     <%= f.label '图片裁剪方式' %>
     <select name='product[image_cut_position]' id='cut_type'>
@@ -67,9 +77,8 @@
       <option value='SouthEast' >右下</option>
       <option value='SouthWest' >左下</option>
     </select>
-      <%= f.label '上传自定义图片' %>
-      <%= file_field_tag 'upload_custome_image' %>
-      <%= link_to '上传', 'upload_customer_image_submit' %>
+          <%= label_tag '上传自定义图片' %>
+          <%= f.file_field :avatar, multiple: true %>
   </div>
   <div class="field">
     <%= f.label '价格' %>
@@ -127,6 +136,17 @@
                   <%= hidden_field_tag "variable[][image_url#{vv_index+1}]", nil, class:'hidden_field_value', value: v.read_attribute("image_url#{vv_index+1}") %>
                 </li>
               <% end %>
+<!--               <% vv_index =  v.valid_images.size %>
+              <li class="ui-state-default avatarImgLi" style="float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px;">
+                <%= image_tag('', style:'width:50px;', class:"variable_image image_#{count}_#{vv_index} ", "data-src"=>'', alt:'' ) %>
+              </li>
+              <li class="ui-state-default avatarImgLi1" style="float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px;">
+                <%= image_tag('', style:'width:50px;', class:"variable_image image_#{count}_#{vv_index+1} ", "data-src"=>'', alt:'' ) %>
+              </li>
+              <li class="ui-state-default avatarImgLi2" style="float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px;">
+                <%= image_tag('', style:'width:50px;', class:"variable_image image_#{count}_#{vv_index+2} ", "data-src"=>'', alt:'' ) %>
+              </li> -->
+
               </ul>
             </td>
             <td><%= text_field_tag 'variable[][size]', nil, value:v.size, style:'width:90px' %></td>
@@ -155,14 +175,63 @@
       <%= link_to '屏蔽产品', shield_product_product_path(@product) %>
     </div>
 
-<%= javascript_tag do %>
-
-  $('#upload_customer_image_submit').click(function(){
-    alert($('#upload_custome_image').val());
+<script type="text/javascript">
+  $('#product_avatar').change(function(){
+    // $('upload_custome_image').form.submit.click();
+        if (this.files && this.files[0]) {
+            var reader0 = new FileReader();
+            reader0.onload = imageIsLoaded;
+            reader0.readAsDataURL(this.files[0]);
+        }
+        if (this.files && this.files[1]) {
+            var reader1 = new FileReader();
+            reader1.onload = imageIsLoaded1;
+            reader1.readAsDataURL(this.files[1]);
+        }
+        if (this.files && this.files[2]) {
+            var reader2 = new FileReader();
+            reader2.onload = imageIsLoaded2;
+            reader2.readAsDataURL(this.files[2]);
+        }
+    // alert($(this).val());
+    // alert(this.files[0]);
+    // var uploadPath = $(this).val();
+    // var uploadFile = this.files[0];
+    // $.ajax({
+    //   url: '/products/custome_upload_image',
+    //   data: {upload_path: uploadPath, upload_file: uploadFile},
+    //   type: 'post',
+    //   success: function(data){
+    //     alert(data);
+    //   }
+    // })
   });
+
+  function imageIsLoaded(e) {
+    $('#avatarImgDiv').css('display','inline');
+    $('#myImg1').attr('src', e.target.result);
+    $('#myImg1').css('display','inline');
+  };
+
+  function imageIsLoaded1(e) {
+    $('#avatarImgDiv1').css('display','inline');
+    $('#myImg2').attr('src', e.target.result);
+    $('#myImg2').css('display','inline');
+  };
+
+  function imageIsLoaded2(e) {
+    $('#avatarImgDiv2').css('display','inline');
+    $('#myImg3').attr('src', e.target.result);
+    $('#myImg3').css('display','inline');
+  };
+  // $('form#upload_custome_image').submit(function(){
+  //   var valuesToSubmit = $(this).serialize();
+  //   alert(valuesToSubmit);
+  // });
 
   $('#product_product_type_id').change(function(){
     var product_type_id = $(this).val();
+
     $.ajax({
       url: '/products/update_attributes_div',
       type: 'POST',
@@ -229,6 +298,5 @@
     var y = $('#y_pos_hidden').attr('value');
     $('#y_pos').attr('value', y);
   })
-
-<% end %>
+</script>
 
