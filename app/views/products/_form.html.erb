@@ -26,9 +26,9 @@
     <%= f.label "生产商家:" %>
     <%= f.text_field :producer %>  
   </div>
-  <div class="field">
-    <%= f.label '产品类型选择:' %>
-    <%= f.collection_select :product_type_id, ProductType.all, "id", "name" %>
+  <div class="field" id="product_page" >
+    <% @template_type = '1' %>
+    <%= render '/products/product_type_select_template', locals:{ template_type: @template_type} %>
   </div>
   <h5>
     自定义属性：
@@ -59,6 +59,14 @@
         <%= hidden_field_tag "product[images#{index+1}]", nil, class:'product_hidden_field_value', value:img %>
       </div>
     <% end %>
+
+    <% [@product.avatar_img_url, @product.avatar_img_url1, @product.avatar_img_url2].compact.each_with_index do |img,index| %>
+      <div style="float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px; background: grey;">
+        <%= image_tag(img, style:'width:50px;', class:"product_image", alt:'', "data-src"=>img) %>
+        <%= hidden_field_tag "product[images#{index+1}]", nil, class:'product_hidden_field_value', value:img %>
+      </div>
+    <% end %>
+
     <div id="avatarImgDiv" style=" display:none; float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px; background: grey;">
       <%= image_tag('', style:'width:50px; display:none;', class:"product_image", id:'myImg1', alt:'', "data-src"=>'') %>
     </div>
@@ -131,6 +139,12 @@
             <td>
               <ul id="ul-sortable" style="list-style-type: none; margin: 0; padding: 0; width: 450px;">
               <% v.valid_images.each_with_index do |img,vv_index| %>
+                <li class="ui-state-default" style="float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px;">
+                  <%= image_tag(img, style:'width:50px;', class:"variable_image image_#{count}_#{vv_index} ", "data-src"=>img, alt:'' ) %>
+                  <%= hidden_field_tag "variable[][image_url#{vv_index+1}]", nil, class:'hidden_field_value', value: v.read_attribute("image_url#{vv_index+1}") %>
+                </li>
+              <% end %>
+              <% [@product.avatar_img_url, @product.avatar_img_url1, @product.avatar_img_url2].compact.each_with_index do |img, vv_index| %>
                 <li class="ui-state-default" style="float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px;">
                   <%= image_tag(img, style:'width:50px;', class:"variable_image image_#{count}_#{vv_index} ", "data-src"=>img, alt:'' ) %>
                   <%= hidden_field_tag "variable[][image_url#{vv_index+1}]", nil, class:'hidden_field_value', value: v.read_attribute("image_url#{vv_index+1}") %>
@@ -300,3 +314,36 @@
   })
 </script>
 
+
+<script type="text/javascript">
+  $('#product_page .productTypeClose1').click(function(){
+    $('#product_page #productTypeDiv1').css('display','none');
+    $('#product_page #productTypeHistory1').find('.selectedLevel2Value1').remove();
+    $.ajax({
+      url: '/product_types/get_children_product_types',
+      type: 'POST',
+      data: {template_type:'1'},
+      success: function(){
+
+      }
+    });
+  });
+
+  $('#product_page .productTypeCancel1').click(function(){
+    $('#product_page #product_select_value1').attr('value','');
+    $('#product_page #productTypeText1').val('');
+  });
+
+  $('#product_page #productTypeText1').click(function(){
+    $(this).val('');
+    var left = $(this).offset().left;
+    var top = $(this).offset().top;
+    var height = $(this).css('height');
+    $('#product_page #productTypeDiv1').css('left', left);
+    $('#product_page #productTypeDiv1').css('top', top);
+    $('#product_page #productTypeDiv1').css('margin-top', height);
+    $('#product_page #productTypeDiv1').fadeIn();
+    $('#product_page #productTypeDivLevel11').css('display','inline');
+  });
+
+</script>

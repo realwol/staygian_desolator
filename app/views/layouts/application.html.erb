@@ -10,7 +10,9 @@
 </head>
 <body>
   <%= javascript_include_tag "#{params[:controller]}.js" %>
-  <%= render 'layouts/header' %>
+  <div id="application_layout_header" >
+    <%= render 'layouts/header' %>
+  </div>
   <%= render 'layouts/sidebar' %>
 	<div style="width:88%; margin: 13%; margin-top:10px;" >
     <%= render 'products/search_div' %>

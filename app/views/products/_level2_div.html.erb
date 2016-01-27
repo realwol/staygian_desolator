@@ -2,6 +2,7 @@
   <% @children_product_types.each do |child| %>
     <a href="#" class="level1Click" data-product-type-id=<%= child.id %> data-product-type-children=<%= child.has_children? %> ><%= child.name %></a>
   <% end %>
+  <%= hidden_field_tag 'final_clicked', '', "data-clicked-time": 'false' %>
 
 <script type="text/javascript">
   $('.level1Click').click(function(){
@@ -24,6 +25,10 @@
           var newLink = "<a href='#' class='level2Click selectedLevel2Value' data-product-type-id='"+ product_type_id +"' data-product-type-children='"+ hasChildren +"'>"+ selectedText +" </a>";
           $('.level2Click:last').after(newLink);
           $('.level2Click').unbind('click');
+          $('.selectedLevel2Value').unbind('click');
+          $('.selectedLevel2Value').click(function(){
+            $('#final_clicked').data('clicked-time','false');
+          });
           $('.level2Click').click(function(){
               $(this).next('.level2Click').remove();
               $(this).remove();
@@ -49,15 +54,27 @@
                     }
                   });
                 } else if (hasChildren.toString() == 'false') {
-                  productTypeText.val(newTextValue);
-                  productTypeSelectValue.attr('value', product_type_id);
+                  var final_clicked = $('#final_clicked').data('clicked-time');
+                  if (final_clicked.toString() == 'false'){
+                    productTypeText.val(newTextValue);
+                    productTypeSelectValue.attr('value', product_type_id);
+                    $('#final_clicked').data('clicked-time','true');
+                  } else if (final_clicked.toString() == 'true') {
+                    productTypeSelectValue.attr('value', product_type_id);
+                  }
                 }
           });
         }
       });
     } else if (hasChildren.toString() == 'false') {
-      productTypeText.val(newTextValue);
-      productTypeSelectValue.attr('value', product_type_id);
+      var final_clicked = $('#final_clicked').data('clicked-time');
+      if (final_clicked.toString() == 'false'){
+        productTypeText.val(newTextValue);
+        productTypeSelectValue.attr('value', product_type_id);
+        $('#final_clicked').data('clicked-time','true');
+      } else if (final_clicked.toString() == 'true') {
+        productTypeSelectValue.attr('value', product_type_id);
+      }
     }
   });
 </script>

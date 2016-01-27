@@ -1,4 +1,14 @@
 <p id="notice"><%= notice %></p>
 
-<%= link_to 'Edit', edit_user_path(@user) %> |
-<%= link_to 'Back', users_path %>
+<%= form_tag(change_user_password_user_path(@user), remote:true) do %>
+  <%= label_tag @user.email %><br/>
+  <%= label_tag '新用户名：' %>
+  <%= text_field_tag 'new_user_name' %>
+  <%= label_tag '新密码：' %>
+  <%= text_field_tag 'new_password' %>
+  <%= label_tag '新密码确认：' %>
+  <%= text_field_tag 'new_password_confirmation' %>
+  <%= submit_tag '确定' %>
+<% end %>
+
+<%= link_to '返回', users_path %>

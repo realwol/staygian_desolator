@@ -1,1 +1,1 @@
-$('#addAttributesTable').html("<%= raw j (render 'product_attributes_type') %>")
+$('#addAttributesTable').html("<%= raw j (render 'product_attributes_type', locals:{product_type_attributes: @product_type_attributes}) %>")

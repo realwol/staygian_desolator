@@ -140,7 +140,7 @@ class ProductsController < ApplicationController
 
   def off_sale_products
     @action_from = params[:action]
-    @products = Product.offsale.page(params[:page])
+    @products = selected_user.products.offsale.page(params[:page])
   end
 
   def off_sale_all
@@ -152,7 +152,7 @@ class ProductsController < ApplicationController
 
   def temp_off_sale_products
     @action_from = params[:action]
-    @products = Product.temp_offsale.page(params[:page])
+    @products = selected_user.products.temp_offsale.page(params[:page])
   end
 
   def temp_off_sale_all
@@ -174,7 +174,7 @@ class ProductsController < ApplicationController
 
   def shield_products
     @action_from = params[:action]
-    @products = Product.shield.page(params[:page])
+    @products = selected_user.products.shield.page(params[:page])
   end
 
   def shield_product
@@ -194,7 +194,7 @@ class ProductsController < ApplicationController
 
   def presaled_products
     @action_from = params[:action]
-    @products = Product.pre_saled.page(params[:page])
+    @products = selected_user.products.pre_saled.page(params[:page])
   end
 
   def presale_product
@@ -203,12 +203,12 @@ class ProductsController < ApplicationController
   end
 
   def wait_designer
-    @products = Product.edited.page(params[:page])
+    @products = selected_user.products.edited.page(params[:page])
   end
 
   def un_updated_page
     @action_from = params[:action]
-    @products = Product.all.un_updated.page(params[:page])
+    @products = selected_user.products.un_updated.page(params[:page])
   end
 
   def get_tmall_links 
@@ -230,7 +230,7 @@ class ProductsController < ApplicationController
 
   def index
     @action_from = params[:action]
-    @products = Product.all.updated.onsale.un_shield.order('first_updated_time desc').page(params[:page])
+    @products = selected_user.products.updated.onsale.un_shield.order('first_updated_time desc').page(params[:page])
   end
 
   # GET /products/1
@@ -266,9 +266,11 @@ class ProductsController < ApplicationController
   # PATCH/PUT /products/1
   # PATCH/PUT /products/1.json
   def update
-    params[:product][:avatar1] = params[:product][:avatar].second
-    params[:product][:avatar2] = params[:product][:avatar][2]
-    params[:product][:avatar] = params[:product][:avatar].first
+    if params[:product][:avatar].present?
+      params[:product][:avatar1] = params[:product][:avatar].second
+      params[:product][:avatar2] = params[:product][:avatar][2]
+      params[:product][:avatar] = params[:product][:avatar].first
+    end
 
     respond_to do |format|
       if @product.update(product_params)

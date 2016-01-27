@@ -1,1 +1,5 @@
-$('#productTypeDivLevel1').html("<%=raw j render('products/level2_div', locals:{ children_product_types: @children_product_types}) %>");
+<% if params[:template_type] == '1' %>
+  $('#productTypeDivLevel11').html("<%=raw j render('products/level2_div_1', locals:{ children_product_types: @children_product_types}) %>");
+<% else %>
+  $('#productTypeDivLevel1').html("<%=raw j render('products/level2_div', locals:{ children_product_types: @children_product_types}) %>");
+<% end %>

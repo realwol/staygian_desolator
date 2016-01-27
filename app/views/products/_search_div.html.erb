@@ -1,24 +1,8 @@
 <% @result = @result || {} %>
 <%= form_tag(search_products_path, method:'get') do %>
-  <label>分类：</label>
-  <% select_tag "search_type", options_from_collection_for_select(ProductType.get_final_type, "id", "name", @result[:type]), :prompt => "请选择分类" %>
-
-  <input type="text" id="productTypeText">
-  <div id="productTypeDiv" style="display:none; position:absolute; border: 1px solid black; background-color:white; padding:10px; width:200px;">
-    <div id="productTypeHistory" >
-        <a href="#" style="display:none;" class="level2Click" ></a>
-      
-    </div>
-    <hr>
-    <div id="productTypeDivLevel1" style="display:none;" >
-      <%= render 'products/level2_div' %>
-    </div>
-    <%= hidden_field_tag 'product_select_value' %>
-    <p style="text-align:right; margin-top:10px; margin-bottom: -8px;">
-      <a href="#" class="productTypeClose productTypeOK" >确定</a>
-      <a href="#" class="productTypeClose productTypeCancel" >取消</a>
-    </p>
-  </div>
+  
+  <% @template_type = '0' %>
+  <%= render 'products/product_type_select_template' %>
 
   <label>制造商：</label>
   <%= text_field_tag 'product_shop', nil, value: @result[:shop] %>
@@ -50,6 +34,7 @@
   });
 
   $('#productTypeText').click(function(){
+    $(this).val('');
     var left = $(this).offset().left;
     var top = $(this).offset().top;
     var height = $(this).css('height');

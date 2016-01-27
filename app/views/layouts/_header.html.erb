@@ -1,11 +1,11 @@
 <div >
   <h4><%= link_to "Amazon Platform", root_path %></h4>
-  <div style="margin-left:65%; margin-top:-35px;" >
-
+  <div style="margin-left:50%; margin-top:-35px;">
     <%if current_user%>
-      <%= select_tag 'manager_select', options_from_collection_for_select(User.get_all_manager, "id", "email") %>
-      <%= select_tag 'little_brother_select', options_from_collection_for_select(User.get_all_little_brother, "id", "email") %>
-      <%= link_to current_user.email, user_path(current_user) %>&nbsp&nbsp
+      <%= label_tag '当前用户：' %> <%= session[:selected_user_id].present? ? User.find(session[:selected_user_id]).email : current_user.email %>
+      <%= select_tag 'manager_select', options_from_collection_for_select(User.get_all_manager, "id", "email"), class:'user_select' %>
+      <%= select_tag 'little_brother_select', options_from_collection_for_select(User.get_all_little_brother, "id", "email"), class:'user_select' %>
+      <a href="#" value=<%= current_user.id%> class='current_user_select' ><%= current_user.email %></a>
       <%= link_to t('Sign out'), destroy_user_session_path, method:'delete' %>
     <%else%>
       <%= link_to t('Sign in'), user_session_path %>
@@ -13,3 +13,31 @@
   </div>
 </div>
 <hr/>
+
+<script type="text/javascript">
+  $('.user_select').change(function(){
+    var selected_user_id = $(this).val();
+    $.ajax({
+      url: '/users/set_selected_user',
+      data: {selected_user_id: selected_user_id},
+      type: 'post',
+      success: function(){
+
+      }
+    });
+    return false;
+  });
+  $('.current_user_select').click(function(){
+    var selected_user_id = $(this).attr('value');
+    $.ajax({
+      url: '/users/set_selected_user',
+      data: {selected_user_id: selected_user_id},
+      type: 'post',
+      success: function(){
+
+      }
+    });
+    return false;
+  });
+
+</script>

@@ -86,6 +86,11 @@ Rails.application.routes.draw do
   resources :users do
     collection do
       post 'create_new_user'
+      post 'set_selected_user'
+    end
+
+    member do
+      post 'change_user_password'
     end
   end
   resources :shipments do 

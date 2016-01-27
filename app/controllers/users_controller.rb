@@ -1,6 +1,22 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :change_user_password]
   before_action :authenticate_user!
+
+  def change_user_password
+    if params[:new_password] == params[:new_password_confirmation]
+      @user.update_attributes(email: params[:new_user_name], password: params[:new_password])
+      @flag = 1
+    else
+      @flag = 2
+    end
+  end
+
+  def set_selected_user
+    selected_user = User.find(params[:selected_user_id])
+    if selected_user.present?
+      session[:selected_user_id] = selected_user.id
+    end
+  end
 
   def create_new_user
     User.create(email: params[:new_user_email], password: params[:new_user_password], manager: current_user.id, role: current_user.role + 1)
