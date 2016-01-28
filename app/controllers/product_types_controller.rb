@@ -39,7 +39,7 @@ class ProductTypesController < ApplicationController
 
   def update_final_type
     if params[:checked_or_not] == 'checked'
-      if @product_type.childer_product_types.count < 1
+      if @product_type.children_product_types.count < 1
         @product_type.update_attributes(is_final_type: true)
         render json: 3
       else
@@ -60,7 +60,7 @@ class ProductTypesController < ApplicationController
   def next_product_types_list
     product_type = ProductType.find(params[:id])
     @product_type_father_node = params[:id]
-    @product_types = product_type.childer_product_types
+    @product_types = product_type.children_product_types
   end
 
   def update_type_introduction
