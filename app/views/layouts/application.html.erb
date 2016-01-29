@@ -11,7 +11,7 @@
 <body>
   <%= javascript_include_tag "#{params[:controller]}.js" %>
   <div id="application_layout_header" >
-    <%= render 'layouts/header' %>
+    <%= render 'layouts/header', locals:{selected_user: @selected_user} %>
   </div>
   <%= render 'layouts/sidebar' %>
 	<div style="width:88%; margin: 13%; margin-top:10px;" >

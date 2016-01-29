@@ -1,0 +1,7 @@
+<% if @selected_user.is_little_brother? %>
+  <%= select_tag 'little_brother_select', options_from_collection_for_select(@selected_user.little_brothers, "id", "email", selected: @selected_user.id) , include_blank:true, class:'little_brother_select' %>
+<% elsif @selected_user.is_dd? %>
+  <%= select_tag 'little_brother_select', options_from_collection_for_select(User.where("id<0"), "id", "email") , include_blank:true, class:'little_brother_select' %>
+<% else %>
+  <%= select_tag 'little_brother_select', options_from_collection_for_select(@selected_user.little_brothers, "id", "email") , include_blank:true, class:'little_brother_select' %>
+<% end %>

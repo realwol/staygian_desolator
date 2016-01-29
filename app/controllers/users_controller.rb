@@ -12,9 +12,16 @@ class UsersController < ApplicationController
   end
 
   def set_selected_user
-    selected_user = User.find(params[:selected_user_id])
-    if selected_user.present?
-      session[:selected_user_id] = selected_user.id
+    if params[:select_type] == '1'
+      params[:selected_user_id] = '1' if params[:selected_user_id].blank?
+    elsif params[:select_type] == '2'
+      params[:selected_user_id] = params[:manager_id] if params[:selected_user_id].blank?
+      params[:selected_user_id] = current_user.id if params[:selected_user_id].blank?
+    end
+
+    @selected_user = User.find(params[:selected_user_id])
+    if @selected_user.present?
+      session[:selected_user_id] = @selected_user.id
     end
   end
 

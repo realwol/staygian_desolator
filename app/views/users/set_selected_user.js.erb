@@ -1,1 +1,4 @@
-$('#application_layout_header').html("<%= raw j render 'layouts/header' %>");
+  // $('#application_layout_header').html("<%= raw j render 'layouts/header' %>");
+<% if params[:select_type] == '1' %>
+  $('#little_brother_select').html("<%= raw j render 'layouts/little_brother_select', locals:{selected_user: @selected_user} %>")
+<% end %>

@@ -32,4 +32,17 @@ class User < ActiveRecord::Base
   def self.get_all_little_brother
     self.where(role:3)
   end
+
+  def valid_products
+    current_user = self
+    count_children = current_user.little_brothers.to_a
+    all_valid_products = current_user.products.pluck(:id)
+
+    while count_children.count > 0
+      current_user = count_children.pop
+      all_valid_products = all_valid_products << current_user.products.pluck(:id)
+    end
+    all_valid_products.flatten!
+    Product.where(id: all_valid_products)
+  end
 end

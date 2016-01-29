@@ -2,7 +2,7 @@
   <% @children_product_types.each do |child| %>
     <a href="#" class="level1Click1" data-product-type-id=<%= child.id %> data-product-type-children=<%= child.has_children? %> ><%= child.name %></a>
   <% end %>
-  <%= hidden_field_tag 'final_clicked1', '', "data-clicked-time": 'false' %>
+  <%= hidden_field_tag 'final_clicked1', '', "data-clicked-time"=>'false' %>
 
 <script type="text/javascript">
   $('.level1Click1').click(function(){
@@ -43,7 +43,7 @@
                 if( hasChildren.toString() == 'true'){
                   $.ajax({
                     url: '/product_types/get_children_product_types',
-                    data: {product_type_id: product_type_id, ajax_action_from: 'level2Click1'},
+                    data: {product_type_id: product_type_id, ajax_action_from: 'level2Click1', template_type:template_type},
                     type: 'POST',
                     success: function(){
                       var newTextValue = '';
@@ -77,5 +77,6 @@
         productTypeSelectValue.attr('value', product_type_id);
       }
     }
+    return false;
   });
 </script>

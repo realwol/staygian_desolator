@@ -1,5 +1,8 @@
 <%= form_tag(update_product_type_products_path, method:'post') do %>
-  <%= select_tag "search_type", options_from_collection_for_select(ProductType.get_final_type, "id", "name"), :prompt => "请选择分类" %>
+  <div class="field" id="product_page" >
+    <% @template_type = '1' %>
+    <%= render '/products/product_type_select_template', locals:{ template_type: @template_type} %>
+  </div>
   <%= hidden_field_tag 'products_id', params[:product_id] %>
   <%= button_tag '确定' %>
 <% end %>
@@ -26,3 +29,36 @@
       <% end %>
     </tbody>
   </table>
+
+<script type="text/javascript">
+  $('#product_page .productTypeClose1').click(function(){
+    $('#product_page #productTypeDiv1').css('display','none');
+    $('#product_page #productTypeHistory1').find('.selectedLevel2Value1').remove();
+    $.ajax({
+      url: '/product_types/get_children_product_types',
+      type: 'POST',
+      data: {template_type:'1'},
+      success: function(){
+
+      }
+    });
+  });
+
+  $('#product_page .productTypeCancel1').click(function(){
+    $('#product_page #product_select_value1').attr('value','');
+    $('#product_page #productTypeText1').val('');
+  });
+
+  $('#product_page #productTypeText1').click(function(){
+    $(this).val('');
+    var left = $(this).offset().left;
+    var top = $(this).offset().top;
+    var height = $(this).css('height');
+    $('#product_page #productTypeDiv1').css('left', left);
+    $('#product_page #productTypeDiv1').css('top', top);
+    $('#product_page #productTypeDiv1').css('margin-top', height);
+    $('#product_page #productTypeDiv1').fadeIn();
+    $('#product_page #productTypeDivLevel11').css('display','inline');
+  });
+
+</script>

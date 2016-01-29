@@ -1,10 +1,33 @@
 <div >
   <h4><%= link_to "Amazon Platform", root_path %></h4>
-  <div style="margin-left:50%; margin-top:-35px;">
+  <div style="margin-left:60%; margin-top:-35px;">
     <%if current_user%>
-      <%= label_tag '当前用户：' %> <%= session[:selected_user_id].present? ? User.find(session[:selected_user_id]).email : current_user.email %>
-      <%= select_tag 'manager_select', options_from_collection_for_select(User.get_all_manager, "id", "email"), class:'user_select' %>
-      <%= select_tag 'little_brother_select', options_from_collection_for_select(User.get_all_little_brother, "id", "email"), class:'user_select' %>
+      <%
+        @selected_user = session[:selected_user_id].present? ? User.find(session[:selected_user_id]) : current_user
+        if @selected_user.is_manager?
+          selected_manager_id = @selected_user.id
+        elsif @selected_user.is_little_brother?
+          selected_little_brother_id = @selected_user.id
+          selected_manager_id = @selected_user.big_brother.id
+        else
+          selected_little_brother_id, selected_manager_id = nil, nil
+        end
+      %>
+      <% if current_user.is_dd? %>
+        <%= select_tag 'manager_select', options_from_collection_for_select(User.get_all_manager, "id", "email", selected: selected_manager_id), include_blank:true, class:'manager_select' %>
+        <% if @selected_user.is_manager? && @selected_user != current_user %>
+          <%= select_tag 'little_brother_select', options_from_collection_for_select(@selected_user.little_brothers, "id", "email", selected: selected_little_brother_id) , include_blank:true, class:'little_brother_select' %>
+        <% elsif @selected_user == current_user %>
+          <%= select_tag 'little_brother_select', options_from_collection_for_select(User.where("id<0"), "id", "email") , include_blank:true, class:'little_brother_select' %>
+        <% elsif @selected_user.is_little_brother? %>
+          <%= select_tag 'little_brother_select', options_from_collection_for_select(@selected_user.big_brother.little_brothers, "id", "email", selected: selected_little_brother_id) , include_blank:true, class:'little_brother_select' %>
+        <% end %>
+      <% end %>
+
+      <% if current_user.is_manager? %>
+        <%= select_tag 'little_brother_select', options_from_collection_for_select(current_user.little_brothers, "id", "email", selected: selected_little_brother_id) , include_blank:true, class:'little_brother_select' %>
+      <% end %>
+
       <a href="#" value=<%= current_user.id%> class='current_user_select' ><%= current_user.email %></a>
       <%= link_to t('Sign out'), destroy_user_session_path, method:'delete' %>
     <%else%>
@@ -15,11 +38,26 @@
 <hr/>
 
 <script type="text/javascript">
-  $('.user_select').change(function(){
+  $('.manager_select').change(function(){
     var selected_user_id = $(this).val();
     $.ajax({
       url: '/users/set_selected_user',
-      data: {selected_user_id: selected_user_id},
+      data: {selected_user_id: selected_user_id, select_type: 1},
+      type: 'post',
+      success: function(){
+
+      }
+    });
+    return false;
+  });
+
+  $('.little_brother_select').change(function(){
+    var selected_user_id = $(this).val();
+    var manager_id = $('.manager_select').val();
+
+    $.ajax({
+      url: '/users/set_selected_user',
+      data: {selected_user_id: selected_user_id, select_type: 2, manager_id: manager_id},
       type: 'post',
       success: function(){
 
