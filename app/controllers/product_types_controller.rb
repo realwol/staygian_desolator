@@ -223,10 +223,10 @@ class ProductTypesController < ApplicationController
     else
       render json: 1
     end
-    respond_to do |format|
-      format.html { redirect_to product_types_url, notice: 'Product type was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    # respond_to do |format|
+    #   format.html { redirect_to product_types_url, notice: 'Product type was successfully destroyed.' }
+    #   format.json { head :no_content }
+    # end
   end
 
   def remove_product_type_attribute

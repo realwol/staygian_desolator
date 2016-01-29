@@ -43,7 +43,7 @@
                 if( hasChildren.toString() == 'true'){
                   $.ajax({
                     url: '/product_types/get_children_product_types',
-                    data: {product_type_id: product_type_id, ajax_action_from: 'level2Click1', template_type:template_type},
+                    data: {product_type_id: product_type_id, ajax_action_from: 'level2Click', template_type:template_type},
                     type: 'POST',
                     success: function(){
                       var newTextValue = '';

@@ -1,7 +1,26 @@
 <%= form_tag(update_product_type_products_path, method:'post') do %>
   <div class="field" id="product_page" >
     <% @template_type = '1' %>
-    <%= render '/products/product_type_select_template', locals:{ template_type: @template_type} %>
+    <label>分类：</label>
+    <input type="text" id="productTypeText1">
+    <div id="productTypeDiv1" style="display:none; position:absolute; border: 1px solid black; background-color:white; padding:10px; width:200px; z-index:100;">
+      <div id="productTypeHistory1" >
+        <a href="#" style="display:none;" class="level2Click1" ></a>
+      </div>
+      <hr>
+      <div id="productTypeDivLevel11" style="display:none; margin-top:50px;" >
+        <% @children_product_types ||= ProductType.first_level_types %>
+        <% @children_product_types.each do |child| %>
+          <a href="#" class="level1Click1" data-product-type-id=<%= child.id %> data-product-type-children=<%= child.has_children? %> ><%= child.name %></a>
+        <% end %>
+        <%= hidden_field_tag 'final_clicked1', '', "data-clicked-time"=>'false' %>
+      </div>
+      <input type="hidden" id="product_select_value1", name="product[product_type_id]" >
+      <p style="text-align:right; margin-top:10px; margin-bottom: -8px;">
+        <a href="#" class="productTypeClose1 productTypeOK1" >确定</a>
+        <a href="#" class="productTypeClose1 productTypeCancel1" >取消</a>
+      </p>
+    </div>
   </div>
   <%= hidden_field_tag 'products_id', params[:product_id] %>
   <%= button_tag '确定' %>
@@ -60,5 +79,82 @@
     $('#product_page #productTypeDiv1').fadeIn();
     $('#product_page #productTypeDivLevel11').css('display','inline');
   });
+</script>
 
+<script type="text/javascript">
+  $('.level1Click1').click(function(){
+    var hasChildren = $(this).data('product-type-children');
+    var productTypeText1 = $('#productTypeText1');
+    var productTypeSelectValue = $('#product_select_value1');
+    var oldTextValue = productTypeText1.val();
+    var selectedText = $(this).text();
+    var newTextValue = oldTextValue + selectedText + '/';
+    var product_type_id = $(this).data('product-type-id');
+    var template_type = '1';
+    if( hasChildren.toString() == 'true'){
+      $.ajax({
+        url: '/product_types/get_children_product_types',
+        data: {product_type_id: product_type_id, template_type:template_type},
+        type: 'POST',
+        success: function(){
+          productTypeText1.val(newTextValue);
+          productTypeSelectValue.attr('value', product_type_id);
+
+          var newLink = "<a href='#' class='level2Click1 selectedLevel2Value1' data-product-type-id='"+ product_type_id +"' data-product-type-children='"+ hasChildren +"'>"+ selectedText +" </a>";
+          $('.level2Click1:last').after(newLink);
+          $('.level2Click1').unbind('click');
+          $('.selectedLevel2Value1').unbind('click');
+          $('.selectedLevel2Value1').click(function(){
+            $('#final_clicked1').data('clicked-time','false');
+          });
+
+          $('.level2Click1').click(function(){
+              $(this).next('.level2Click1').remove();
+              $(this).remove();
+                var hasChildren = $(this).data('product-type-children');
+                var productTypeText1 = $('#productTypeText1');
+                var productTypeSelectValue = $('#product_select_value1');
+                var oldTextValue = productTypeText1.val();
+                var selectedText = $(this).text();
+                var newTextValue = oldTextValue + selectedText + '/';
+                var product_type_id = $(this).data('product-type-id');
+                if( hasChildren.toString() == 'true'){
+                  $.ajax({
+                    url: '/product_types/get_children_product_types',
+                    data: {product_type_id: product_type_id, ajax_action_from: 'level2Click', template_type:template_type},
+                    type: 'POST',
+                    success: function(){
+                      var newTextValue = '';
+                      $('#productTypeHistory1').find('.selectedLevel2Value1').each(function(){
+                        newTextValue = newTextValue + $(this).text() + '/';
+                      })
+                      productTypeText1.val(newTextValue);
+                      productTypeSelectValue.attr('value', product_type_id);
+                    }
+                  });
+                } else if (hasChildren.toString() == 'false') {
+                  var final_clicked1 = $('#final_clicked1').data('clicked-time');
+                  if (final_clicked1.toString() == 'false'){
+                    productTypeText1.val(newTextValue);
+                    productTypeSelectValue.attr('value', product_type_id);
+                    $('#final_clicked1').data('clicked-time','true');
+                  } else if (final_clicked1.toString() == 'true') {
+                    productTypeSelectValue.attr('value', product_type_id);
+                  }
+                }
+          });
+        }
+      });
+    } else if (hasChildren.toString() == 'false') {
+      var final_clicked1 = $('#final_clicked1').data('clicked-time');
+      if (final_clicked1.toString() == 'false'){
+        productTypeText1.val(newTextValue);
+        productTypeSelectValue.attr('value', product_type_id);
+        $('#final_clicked1').data('clicked-time','true');
+      } else if (final_clicked1.toString() == 'true') {
+        productTypeSelectValue.attr('value', product_type_id);
+      }
+    }
+    return false;
+  });
 </script>

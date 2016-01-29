@@ -24,12 +24,13 @@
                   link_to('编辑', edit_product_type_path(product_type), onclick:'return false;')
                 end
             %></td>
-        <td><%= if product_type.is_final_type && !product_type.has_product?
-                  link_to('删除', product_type, method: :delete, data: { confirm: 'Are you sure?' })
-                else
-                  link_to('删除', product_type, onclick:'return false;')
-                end
-            %></td>
+        <td>
+          <% if product_type.is_final_type && !product_type.has_product? %>
+            <button class="product_type_delete" data-product-type-id="<%= product_type.id %>" >删除</button>
+          <% else %>
+            <%= link_to('删除', product_type, onclick:'return false;') %>
+          <% end %>
+        </td>
       </tr>
     <% end %>
   </tbody>
@@ -45,6 +46,18 @@
 <%= link_to '返回', product_types_path(father_node: previouse_father_node) %>
 
 <script type="text/javascript">
+  $('.product_type_delete').click(function(){
+    var deleted_button = $(this);
+    var product_type_id = $(this).data('product-type-id');
+    $.ajax({
+      url: '/product_types/'+ product_type_id ,
+      type: 'delete',
+      success: function(){
+        deleted_button.parents('tr').remove();
+      }
+    })
+    return false;
+  });
 
   $('.product-type-checkbox').click(function(){
     var clickedCheckBox = $(this);
@@ -98,7 +111,7 @@
         if (checkedOrNot == 'checked') {
           clickedCheckBox.parents('tr').find('.next_product_type').attribute('disabled','disabled');
         } else {
-          clickedCheckBox.parents('tr').find('.next_product_type').removeAttribute('disabled');
+          clickedCheckBox.parents('tr').find('.next_product_type').removeAttr('disabled');
         }
       }
     });
