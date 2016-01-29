@@ -28,7 +28,7 @@
           <% if product_type.is_final_type && !product_type.has_product? %>
             <button class="product_type_delete" data-product-type-id="<%= product_type.id %>" >删除</button>
           <% else %>
-            <%= link_to('删除', product_type, onclick:'return false;') %>
+            <button class="product_type_delete" data-product-type-id="<%= product_type.id %>" disabled >删除</button>
           <% end %>
         </td>
       </tr>
@@ -47,6 +47,11 @@
 
 <script type="text/javascript">
   $('.product_type_delete').click(function(){
+    var r = confirm("Are you sure?");
+    if (r == false) {
+      return false;
+    }
+
     var deleted_button = $(this);
     var product_type_id = $(this).data('product-type-id');
     $.ajax({
@@ -80,16 +85,15 @@
           alert('该分类下有其他分类，不可以修改其分类类型！');
         } else if(data == '3') {
           clickedCheckBox.parents('tr').find('.next_product_type').attr('disabled','disabled');
+          clickedCheckBox.parents('tr').find('.next_product_type').attr('disabled','disabled');
           clickedCheckBox.parents('tr').find('a:first').removeAttr('onclick');
           clickedCheckBox.parents('tr').find('a:last').removeAttr('onclick');
-          clickedCheckBox.parents('tr').find('a:last').attr('data-confirm','Are you sure?');
-          clickedCheckBox.parents('tr').find('a:last').attr('data-method','delete');
+          clickedCheckBox.parents('tr').find('button:last').removeAttr('disabled');
         } else if(data == '4') {
           clickedCheckBox.parents('tr').find('button.next_product_type').removeAttr('disabled');
           clickedCheckBox.parents('tr').find('a:first').attr('onclick','return false;');
           clickedCheckBox.parents('tr').find('a:last').attr('onclick','return false');
-          clickedCheckBox.parents('tr').find('a:last').removeAttr('data-confirm');
-          clickedCheckBox.parents('tr').find('a:last').removeAttr('data-method');
+          clickedCheckBox.parents('tr').find('button:last').attr('disabled','disabled');
         }
       }
     })
