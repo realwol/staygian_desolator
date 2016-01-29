@@ -38,4 +38,14 @@ class ProductType < ActiveRecord::Base
     all_children
   end
 
+  def get_chain_name
+    chain_names = [self.name]
+    current_product_type = self
+    while current_product_type.father_product_type.present?
+      chain_names << current_product_type.father_product_type.name
+      current_product_type = current_product_type.father_product_type
+    end
+    chain_names.reverse.join('/')
+  end
+
 end

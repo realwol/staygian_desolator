@@ -27,8 +27,11 @@
     <%= f.text_field :producer %>  
   </div>
   <div class="field" id="product_page" >
-    <% @template_type = '1' %>
-    <%= render '/products/product_type_select_template', locals:{ template_type: @template_type} %>
+    <%
+      @template_type = '1' 
+      @product_type = @product.product_type
+    %>
+    <%= render '/products/product_type_select_template', locals:{ template_type: @template_type, product_type: @product_type} %>
   </div>
   <h5>
     自定义属性：
@@ -243,8 +246,8 @@
   //   alert(valuesToSubmit);
   // });
 
-  $('#product_product_type_id').change(function(){
-    var product_type_id = $(this).val();
+  $('.productTypeOKClick').click(function(){
+    var product_type_id = $("#product_select_value1").val();
 
     $.ajax({
       url: '/products/update_attributes_div',
