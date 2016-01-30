@@ -232,8 +232,9 @@ class ProductTypesController < ApplicationController
   def remove_product_type_attribute
     product_attribute = ProductAttribute.find(params[:id])
     @product_type_attributes = product_attribute.product_type.product_attributes
-    if product_attribute
-      product_attribute.destroy
+    attribute_translation = AttributesTranslationHistory.find(params[:attribute_translation_id])
+    if attribute_translation
+      attribute_translation.destroy
     end
   end
 
