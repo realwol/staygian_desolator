@@ -1,0 +1,5 @@
+<% if @users.present? %>
+  $('#userManageList').html("<%= raw j render 'user_list', locals:{users: @users} %>");
+<% else %>
+  alert('该用户没有小弟');
+<% end %>

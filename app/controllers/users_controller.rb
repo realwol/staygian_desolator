@@ -2,6 +2,15 @@ class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy, :change_user_password]
   before_action :authenticate_user!
 
+  def show_little_brothers
+    @user = User.find(params[:id])
+    if @user
+      @users = @user.little_brothers
+    else
+      @users = nil
+    end
+  end
+
   def change_user_password
     if params[:new_password] == params[:new_password_confirmation]
       @user.update_attributes(email: params[:new_user_name], password: params[:new_password])
@@ -36,7 +45,7 @@ class UsersController < ApplicationController
 
   def index
     if current_user.is_dd?
-      @users = User.where.not(id: 1)
+      @users = current_user.little_brothers
     else
       @users = current_user.little_brothers
     end

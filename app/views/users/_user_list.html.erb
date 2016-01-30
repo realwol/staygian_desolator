@@ -9,7 +9,7 @@
     <tbody>
       <% @users.each do |user| %>
         <tr>
-          <td><%= link_to user.email %></td>
+          <td><%= button_tag user.email, class:'show_little_brother_btn', data:{"user-id": user.id} %></td>
           <td><%= link_to '修改密码', user %></td>
           <td><%= link_to 'Edit', edit_user_path(user) %></td>
           <td><%= link_to 'Destroy', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
@@ -17,3 +17,18 @@
       <% end %>
     </tbody>
   </table>
+
+  <%= button_tag '返回', class:'show_little_brother_btn', data:{"user-id": @users.first.big_brother.try(:big_brother).try(:id)} %>
+
+<script type="text/javascript">
+  $('.show_little_brother_btn').click(function(){
+    var userId = $(this).data('user-id');
+    $.ajax({
+      url: '/users/'+ userId + '/show_little_brothers',
+      type: 'get',
+      success: function(){
+      }
+    });
+    return false;
+  })
+</script>

@@ -10,14 +10,14 @@
   <h4>功能</h4>
       <%= link_to '插入抓取链接', get_tmall_links_products_path %><br/>
       <%= link_to '导出', export_page_products_path %><br/>
+  <h4>设置</h4>
+    <%= link_to '变体', variable_translate_list_variables_path %><br/>
     <% unless current_user.is_little_brother? %>
-      <h4>设置</h4>
       <% unless current_user.is_manager? %>
         <%= link_to '设定汇率', cash_rates_path %><br/>
-        <%= link_to '编辑运输方式', shipments_path %><br/>
-        <%= link_to '产品分类管理', product_types_path %><br/>
-        <%= link_to '变体', variable_translate_list_variables_path %><br/>
       <% end %>
+      <%= link_to '产品分类管理', product_types_path %><br/>
+      <%= link_to '编辑运输方式', shipments_path %><br/>
       <%= link_to '人员管理', users_path %><br/>
       <% link_to '未翻译变体管理', translate_variables_variables_path %><br/>
     <% end %>

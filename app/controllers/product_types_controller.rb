@@ -231,10 +231,10 @@ class ProductTypesController < ApplicationController
 
   def remove_product_type_attribute
     product_attribute = ProductAttribute.find(params[:id])
+    @product_type_attributes = product_attribute.product_type.product_attributes
     if product_attribute
       product_attribute.destroy
     end
-    @product_type_attributes = ProductAttribute.all
   end
 
   private

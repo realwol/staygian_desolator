@@ -245,6 +245,7 @@ class ProductsController < ApplicationController
 
   # GET /products/1/edit
   def edit
+    @product_type_attributes = ProductAttribute.where(product_type_id: @product.product_type_id)
   end
 
   # POST /products
