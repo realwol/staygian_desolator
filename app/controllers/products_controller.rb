@@ -1,6 +1,24 @@
 class ProductsController < ApplicationController
-  before_action :set_product, only: [:show, :edit, :update, :destroy, :shield_product, :presale_product, :offsale_product, :temp_offsale_product, :onsale_product, :edited_product]
+  before_action :set_product, only: [:show, :edit, :update, :destroy, :shield_product, :presale_product, :offsale_product, :temp_offsale_product, :onsale_product, :edited_product, :translate_preview]
   before_action :authenticate_user!
+
+  def create_product_forbidden_word
+    @flag = true
+    unless ProductDetailForbiddenList.where(word: params[:word]).first.present?
+      ProductDetailForbiddenList.create(word: params[:word])
+      @all_forbidden_words = ProductDetailForbiddenList.all
+    else
+      @flag = false
+    end
+  end
+
+  def product_detail_forbidden
+    @all_forbidden_words = ProductDetailForbiddenList.all
+  end
+
+  def translate_preview
+    @product_translation = @product.product_info_translation
+  end
 
   def custome_upload_image
     uploaded_io = params[:upload_path]

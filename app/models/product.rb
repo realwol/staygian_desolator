@@ -25,6 +25,10 @@ class Product < ActiveRecord::Base
   mount_uploader :avatar1, AvatarUploader
   mount_uploader :avatar2, AvatarUploader
 
+  def is_translated?
+    self.translate_status
+  end
+
   def valid_images
   	image_names = []
   	1.upto(10) do |t|

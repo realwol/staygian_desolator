@@ -227,7 +227,14 @@ def grasp tmall_link
 
   @product.producer = html.css('div#shopExtra strong').text
 
-  @product.details = @details.join
+  details_after_filter = []
+  filter_word_list = ProductDetailForbiddenList.all.map(&:word).uniq
+  @details.each do |detail|
+    end_count = detail.index(':') - 1
+    details_after_filter << detail unless filter_word_list.index(detail[0..end_count])
+  end
+
+  @product.details = details_after_filter.join
 
   # Create variables
   @product_images = []

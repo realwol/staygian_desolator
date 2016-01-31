@@ -22,6 +22,7 @@ Rails.application.routes.draw do
 
   resources :products do
     collection do
+      get 'product_detail_forbidden'
       get 'wait_designer'
       get 'get_tmall_links'
       get 'un_updated_page'
@@ -37,6 +38,7 @@ Rails.application.routes.draw do
       get 'update_price'
       get 'change_product_type'
       get 'change_product_type'
+      post 'create_product_forbidden_word'
       post 'custome_upload_image'
       post 'update_product_type'
       post 'save_tmall_links'
@@ -46,6 +48,7 @@ Rails.application.routes.draw do
     end
 
     member do
+      get 'translate_preview'
       get 'shield_product'
       get 'edited_product'
       get 'presale_product'

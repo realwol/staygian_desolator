@@ -36,19 +36,11 @@ class UsersController < ApplicationController
 
   def create_new_user
     User.create(email: params[:new_user_email], password: params[:new_user_password], manager: current_user.id, role: current_user.role + 1)
-    if current_user.is_dd?
-      @users = User.where.not(id: 1)
-    else
-      @users = current_user.little_brothers
-    end
+    @users = current_user.little_brothers
   end
 
   def index
-    if current_user.is_dd?
       @users = current_user.little_brothers
-    else
-      @users = current_user.little_brothers
-    end
   end
 
   def show

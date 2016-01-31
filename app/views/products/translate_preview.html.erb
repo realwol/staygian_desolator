@@ -1,0 +1,44 @@
+<h5><%= '(' + @product.sku + ') ' + @product.title %></h5>
+<hr/>
+
+<table class="table table-border">
+  <tr>
+    <th></th>
+    <th>英语</th>
+    <th>德国</th>
+    <th>法国</th>
+    <th>西班牙</th>
+    <th>意大利</th>
+  </tr>
+  <tr>
+    <td>标题</td>
+    <td><%= @product_translation.try(:e_t) %></td>
+    <td><%= @product_translation.try(:g_t) %></td>
+    <td><%= @product_translation.try(:f_t) %></td>
+    <td><%= @product_translation.try(:s_t) %></td>
+    <td><%= @product_translation.try(:i_t) %></td>
+  </tr>
+  <tr>
+    <td>详情</td>
+    <td><%= @product_translation.try(:e_detail) %></td>
+    <td><%= @product_translation.try(:g_detail) %></td>
+    <td><%= @product_translation.try(:f_detail) %></td>
+    <td><%= @product_translation.try(:s_detail) %></td>
+    <td><%= @product_translation.try(:i_detail) %></td>
+  </tr>
+
+  <% if @product_translation.present? %>
+    <% 3.times do |count| %>
+      <tr>
+        <td>简介<%= count+1 %></td>
+        <td><%= @product_translation.read_attribute("e_des#{count+1}") %></td>
+        <td><%= @product_translation.read_attribute("g_des#{count+1}") %></td>
+        <td><%= @product_translation.read_attribute("f_des#{count+1}") %></td>
+        <td><%= @product_translation.read_attribute("s_des#{count+1}") %></td>
+        <td><%= @product_translation.read_attribute("i_des#{count+1}") %></td>
+      </tr>
+    <% end %>
+  <% end %>
+</table>
+
+<%= link_to '返回', root_path %>

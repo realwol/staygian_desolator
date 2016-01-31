@@ -4,12 +4,12 @@
   <thead>
     <tr>
       <th><%= '类型' %></th>
-      <th><%= '题目' %></th>
+      <th><%= '题目(红色为未翻译完成)' %></th>
       <th><%= 'Sku' %></th>
       <th><%= '产品号' %></th>
       <th><%= '创建者' %></th>
       <th><%= '价格' %></th>
-      <th colspan="4"><%= '操作' %></th>
+      <th colspan="5"><%= '操作' %></th>
     </tr>
   </thead>
 
@@ -17,7 +17,11 @@
     <% @products.each do |product| %>
       <tr>
         <td><%= link_to product.product_type.name, product_type_path(product.product_type) if product.product_type%></td>
-        <td><%= product.title %></td>
+        <% if product.is_translated? %>
+          <td><%= product.title %></td>
+        <% else %>
+          <td style="color:red;"><%= product.title %></td>
+        <% end %>
         <td><%= product.sku %></td>
         <td><%= product.product_number %></td>
         <td><%= product.try(:user).try(:email) %></td>
@@ -26,6 +30,7 @@
           <%= button_tag 'Save', class:'change_price', "data-link"=> update_price_products_path, 'data-product_id'=>product.id %>
         </td>
         <td>
+          <%= link_to '翻译预览', translate_preview_product_path(product) %>
           <%= link_to '编辑', edit_product_path(product) %>
           <%= link_to '屏蔽', shield_product_product_path(product) %>
           <%= link_to '下架', offsale_product_product_path(product) %>

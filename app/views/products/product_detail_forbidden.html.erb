@@ -1,0 +1,12 @@
+<h5>屏蔽列表</h5>
+<hr/>
+<div id="productForbiddenWrodList" >
+  <%= render 'product_forbidden_list' %>
+</div>
+
+<%= form_tag(create_product_forbidden_word_products_path, remote:true) do %>
+  <%= label_tag '要屏蔽关键字:' %>
+  <%= text_field_tag :word %>
+
+  <%= submit_tag '新建' %>
+<% end %>

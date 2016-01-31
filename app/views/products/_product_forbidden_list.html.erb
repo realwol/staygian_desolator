@@ -1,0 +1,9 @@
+  <table class="table table-bordered">
+    <% @all_forbidden_words.each_slice(10).each do |key_words| %>
+      <tr>
+        <% key_words.each do |key_word| %>
+          <td><%= key_word.word %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </table>

@@ -1,0 +1,6 @@
+<% if @flag %>
+  $('#productForbiddenWrodList').html("<%= raw j render 'product_forbidden_list' %>");
+  $('#word').val('');
+<% else %>
+  alert('这个词已经被屏蔽！');
+<% end %>
