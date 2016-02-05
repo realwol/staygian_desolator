@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160131065314) do
+ActiveRecord::Schema.define(version: 20160205031240) do
 
   create_table "attributes_translation_histories", force: :cascade do |t|
     t.string   "attribute_name",       limit: 255
@@ -19,7 +19,7 @@ ActiveRecord::Schema.define(version: 20160131065314) do
     t.string   "america",              limit: 255
     t.string   "canada",               limit: 255
     t.string   "british",              limit: 255
-    t.string   "germay",               limit: 255
+    t.string   "germany",              limit: 255
     t.string   "spain",                limit: 255
     t.string   "italy",                limit: 255
     t.string   "france",               limit: 255
@@ -257,6 +257,15 @@ ActiveRecord::Schema.define(version: 20160131065314) do
     t.string   "name",       limit: 255
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
+  end
+
+  create_table "shipment_weight_relations", force: :cascade do |t|
+    t.integer  "min_weight",                        limit: 4
+    t.integer  "max_weight",                        limit: 4
+    t.integer  "attributes_translation_history_id", limit: 4
+    t.integer  "product_type_id",                   limit: 4
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
   end
 
   create_table "shoes_attributes_values", force: :cascade do |t|

@@ -48,41 +48,49 @@ class Product < ActiveRecord::Base
     case language
     when 'england'
       local_infos[:title] = product_translation.try(:e_t)
+      local_infos[:detail] = product_translation.try(:e_detail)
       local_infos[:des1] = product_translation.try(:e_des1)
       local_infos[:des2] = product_translation.try(:e_des2)
       local_infos[:des3] = product_translation.try(:e_des3)
     when 'germany'
       local_infos[:title] = product_translation.try(:g_t)
+      local_infos[:detail] = product_translation.try(:g_detail)
       local_infos[:des1] = product_translation.try(:g_des1)
       local_infos[:des2] = product_translation.try(:g_des2)
       local_infos[:des3] = product_translation.try(:g_des3)
     when 'france'
       local_infos[:title] = product_translation.try(:f_t)
+      local_infos[:detail] = product_translation.try(:f_detail)
       local_infos[:des1] = product_translation.try(:f_des1)
       local_infos[:des2] = product_translation.try(:f_des2)
       local_infos[:des3] = product_translation.try(:f_des3)
     when 'spain'
       local_infos[:title] = product_translation.try(:s_t)
+      local_infos[:detail] = product_translation.try(:s_detail)
       local_infos[:des1] = product_translation.try(:s_des1)
       local_infos[:des2] = product_translation.try(:s_des2)
       local_infos[:des3] = product_translation.try(:s_des3)
     when 'italy'
       local_infos[:title] = product_translation.try(:i_t)
+      local_infos[:detail] = product_translation.try(:i_detail)
       local_infos[:des1] = product_translation.try(:i_des1)
       local_infos[:des2] = product_translation.try(:i_des2)
       local_infos[:des3] = product_translation.try(:i_des3)
     when 'america'
       local_infos[:title] = product_translation.try(:e_t)
+      local_infos[:detail] = product_translation.try(:e_detail)
       local_infos[:des1] = product_translation.try(:e_des1)
       local_infos[:des2] = product_translation.try(:e_des2)
       local_infos[:des3] = product_translation.try(:e_des3)
     when 'canada'
       local_infos[:title] = product_translation.try(:e_t)
+      local_infos[:detail] = product_translation.try(:e_detail)
       local_infos[:des1] = product_translation.try(:e_des1)
       local_infos[:des2] = product_translation.try(:e_des2)
       local_infos[:des3] = product_translation.try(:e_des3)
     else
       local_infos[:title] = product.title
+      local_infos[:detail] = product.details
       local_infos[:des1] = product.product_intro_1
       local_infos[:des2] = product.product_intro_2
       local_infos[:des3] = product.product_intro_3
@@ -90,8 +98,280 @@ class Product < ActiveRecord::Base
     local_infos
   end
 
-
   def self.to_csv(language, options={})
+    cash_rate = CashRate.last.try(language.to_sym).to_f
+    # Custome the xls columns and languages
+    xls_column_names = %w(item_sku item_name external_product_id external_product_id_type feed_product_type brand_name mannfacturer
+                          part_number product_description update_delete standard_price currency condition_type condition_note quantity
+                          website_shipping_weight website_shipping_weight_unit_of_measure bullet_point1 bullet_point2 bullet_point3
+                          bullet_point4 bullet_point5 recommended_browse_nodes1 recommended_browse_nodes2 generic_keywords1 recommended_browse_nodes2
+                          recommended_browse_nodes3 recommended_browse_nodes4 recommended_browse_nodes5 main_image_url other_image_url1
+                          other_image_url2 other_image_url3 other_image_url4 other_image_url5 other_image_url6 other_image_url7
+                          other_image_url8 parent_child parent_sku relationship_type variation_theme color_name color_map size_name size_map)
+
+    country_currency = {england:'GBP', germany:'EUR', france: 'EUR', spain:'EUR', italy:'EUR', china:'人民币', america:'USD', canada:'CAD'}
+    country_sku = {england: 'UK', germany:'DE', france:'FR', spain:'ES', italy:'IT', america:'US', canada:'CA'}
+
+    CSV.generate(options) do |csv|
+      csv << xls_column_names
+      all.un_shield.updated.each do |product|
+        # Custome the xls values
+        # csv << ['product.attributes.values_at(*column_names)', 'hello', 'world']
+          # 父产品
+        xls_column_values = []
+        # item_sku
+        xls_column_values << country_sku[language.to_sym] + product.sku[0..35].lstrip
+        product_translation = Product.choose_language(language, product)
+        # item_name
+        xls_column_values << product_translation[:title]
+        # external_product_id
+        xls_column_values << ""
+        # external_product_id_type
+        if product.variables.count < 1
+          xls_column_values << "UPC"
+        else
+          xls_column_values << ""
+        end
+        # feed_product_type
+        product_type_translation = AttributesTranslationHistory.find(product.product_type.product_type_feed)
+        xls_column_values << product_type_translation.read_attribute(language)
+        # brand_name
+        product_brand_name = AttributesTranslationHistory.find(product.product_type.product_type_name_translation)
+        xls_column_values << product_brand_name.read_attribute(language)
+        # mannfacturer
+        xls_column_values << product_brand_name.read_attribute(language)
+        # part_number
+        xls_column_values << ('a'..'z').to_a.sample(5).join
+        # product_description
+        xls_column_values << product_translation[:detail]
+        # update_delete
+        xls_column_values << 'Update'
+        # standard_price
+        shipment_cost = AttributesTranslationHistory.find(product.product_type.shipment_translation)
+        xls_column_values << (shipment_cost.read_attribute(language).to_f + (product.try(:price).try(:to_f) / cash_rate))
+        # currency
+        xls_column_values << country_currency[language.to_sym]
+        # condition_type
+        xls_column_values << 'New'
+        # condition_note
+        product_type_introduction1 = AttributesTranslationHistory.find(product.product_type.product_type_introduction_1)
+        xls_column_values << product_type_introduction1.read_attribute(language)
+        # quantity
+        xls_column_values << ''
+        # website_shipping_weight
+        xls_column_values << product.product_weight
+        xls_column_values << 'KG'
+        # bullet_points
+        xls_column_values << product_translation[:des1]
+        xls_column_values << product_translation[:des2]
+        xls_column_values << product_translation[:des3]
+        xls_column_values << product_type_introduction1.read_attribute(language)
+        product_type_introduction2 = AttributesTranslationHistory.find(product.product_type.product_type_introduction_2)
+        xls_column_values << product_type_introduction2.read_attribute(language)
+        # recommended_browse_nodes
+        product_type1 = AttributesTranslationHistory.find(product.product_type.product_type_1)
+        xls_column_values << product_type1.read_attribute(language)
+        product_type2 = AttributesTranslationHistory.find(product.product_type.product_type_2)
+        xls_column_values << product_type2.read_attribute(language)
+        # generic_keywords
+        key_word = AttributesTranslationHistory.find(product.product_type.key_word1_translation)
+        xls_column_values << key_word.read_attribute(language)
+        key_word = AttributesTranslationHistory.find(product.product_type.key_word2_translation)
+        xls_column_values << key_word.read_attribute(language)
+        key_word = AttributesTranslationHistory.find(product.product_type.key_word3_translation)
+        xls_column_values << key_word.read_attribute(language)
+        key_word = AttributesTranslationHistory.find(product.product_type.key_word4_translation)
+        xls_column_values << key_word.read_attribute(language)
+        key_word = AttributesTranslationHistory.find(product.product_type.key_word5_translation)
+        xls_column_values << key_word.read_attribute(language)
+
+
+        # if product.image_url
+        images_url = [product.images1, product.images2, product.images3, product.images4, product.images5, product.images6,
+                     product.images7, product.images8, product.images9, product.images10, product.avatar_img_url,
+                     product.avatar_img_url1, product.avatar_img_url2]
+        images_url.each_with_index do |url,index|
+          i_index = 0
+          until images_url[i_index].blank?
+            i_index = i_index + 1
+          end
+          if i_index < index
+            images_url[i_index] = images_url[index]
+            images_url[index] = ''
+          end
+        end
+        xls_column_values << images_url[0]
+        # else
+          # xls_column_values << ""
+        # end
+        xls_column_values << images_url[1]
+        xls_column_values << images_url[2]
+        xls_column_values << images_url[3]
+        xls_column_values << images_url[4]
+        xls_column_values << images_url[5]
+        xls_column_values << images_url[6]
+        xls_column_values << images_url[7]
+        xls_column_values << images_url[8]
+
+        # parent_child
+        if product.variables.count < 1
+          xls_column_values << "Child"
+        else
+          xls_column_values << "Parent"
+        end
+        # parent_sku
+        xls_column_values << ""
+        # relationship_type
+        xls_column_values << ""
+        # variation_theme
+        variation_theme = ""
+        unless product.try(:variables).try(:first).try(:color).blank?
+          variation_theme << 'Color'
+        end
+        unless product.try(:variables).try(:first).try(:size).blank?
+          variation_theme << 'Size'
+        end      
+        xls_column_values << variation_theme
+        # color_name
+        xls_column_values << ""
+        # color_map
+        xls_column_values << ""
+        # size_name
+        xls_column_values << ""
+        # size_map
+        xls_column_values << ""
+
+        csv << xls_column_values
+
+        # 子产品
+        product.variables.each do |v|
+          xls_column_values = []
+          v_color = ''
+          v_size = ''
+          v_variable_info_translation = v
+          if v.color && v.size
+            xls_column_values << country_sku[language.to_sym] + "#{product.sku}-#{v_variable_info_translation.england_color}#{v_variable_info_translation.england_size}"[0..35].lstrip
+            v_color = v_variable_info_translation.england_color
+            v_size = v_variable_info_translation.england_size
+          elsif v.color
+            if v_variable_info_translation
+              v_color = v_variable_info_translation.england_color
+              v_size = ""
+              xls_column_values << country_sku[language.to_sym] + "#{product.sku}-#{v_color}"[0..35].lstrip
+            else
+              xls_column_values << "这个变体没有翻译，请重新翻译"  
+            end
+          elsif v.size
+            if v_variable_info_translation
+              v_size = v_variable_info_translation.england_size
+              xls_column_values << country_sku[language.to_sym] + "#{product.sku}-#{v_size}"[0..35].lstrip
+            else
+              xls_column_values << "这个变体没有翻译，请重新翻译"  
+            end
+          end
+          
+          if v.color && v.size
+            xls_column_values << "#{product_translation[:title]}-#{v_color} #{v_size}"
+          elsif v.color
+            xls_column_values << "#{product_translation[:title]}-#{v_color}"
+          elsif v.size
+            xls_column_values << "#{product_translation[:title]}-#{v_size}"
+          end
+          xls_column_values << "UPC"
+          # feed_product_type
+          xls_column_values << product_type_translation.read_attribute(language)
+          # brand_name
+          xls_column_values << product_brand_name.read_attribute(language)
+          xls_column_values << product_brand_name.read_attribute(language)
+          # part_number
+          xls_column_values << ('a'..'z').to_a.sample(5).join
+          # product_description
+          xls_column_values << product_translation[:detail]
+          xls_column_values << 'Update'
+          # standard_price
+          xls_column_values << (shipment_cost.read_attribute(language).to_f + (product.try(:price).try(:to_f) / cash_rate))
+          # currency
+          xls_column_values << country_currency[language.to_sym]
+          xls_column_values << 'New'
+          # condition_note
+          xls_column_values << product_type_introduction1.read_attribute(language)
+          # quantity
+          if v.stock.to_i > 100
+            xls_column_values << 100
+          elsif v.stock.to_i <= 2
+            xls_column_values << 0
+          else
+            xls_column_values << stock
+          end
+          # website_shipping_weight
+          xls_column_values << product.product_weight
+          xls_column_values << 'KG'
+          # bullet_points
+          xls_column_values << product_translation[:des1]
+          xls_column_values << product_translation[:des2]
+          xls_column_values << product_translation[:des3]
+          xls_column_values << product_type_introduction1.read_attribute(language)
+          product_type_introduction2 = AttributesTranslationHistory.find(product.product_type.product_type_introduction_2)
+          xls_column_values << product_type_introduction2.read_attribute(language)
+          # recommended_browse_nodes
+          product_type1 = AttributesTranslationHistory.find(product.product_type.product_type_1)
+          xls_column_values << product_type1.read_attribute(language)
+          product_type2 = AttributesTranslationHistory.find(product.product_type.product_type_2)
+          xls_column_values << product_type2.read_attribute(language)
+          # generic_keywords
+          key_word = AttributesTranslationHistory.find(product.product_type.key_word1_translation)
+          xls_column_values << key_word.read_attribute(language)
+          key_word = AttributesTranslationHistory.find(product.product_type.key_word2_translation)
+          xls_column_values << key_word.read_attribute(language)
+          key_word = AttributesTranslationHistory.find(product.product_type.key_word3_translation)
+          xls_column_values << key_word.read_attribute(language)
+          key_word = AttributesTranslationHistory.find(product.product_type.key_word4_translation)
+          xls_column_values << key_word.read_attribute(language)
+          key_word = AttributesTranslationHistory.find(product.product_type.key_word5_translation)
+          xls_column_values << key_word.read_attribute(language)
+
+          v_images_url = [v.image_url1,  v.image_url2,  v.image_url3,  v.image_url4,  v.image_url5,  v.image_url6,  v.image_url7,  v.image_url8,  v.image_url9,  v.image_url10,
+                          v.image_url11, v.image_url12, v.image_url13, v.image_url14, v.image_url15, v.image_url16, v.image_url17, v.image_url18, v.image_url19, v.image_url20,
+                          v.image_url21, v.image_url22, v.image_url23, v.image_url24, v.image_url25, v.image_url26, v.image_url27, v.image_url28, v.image_url29, v.image_url30,
+                          product.avatar_img_url, product.avatar_img_url1, product.avatar_img_url2]
+          v_images_url.each_with_index do |url,index|
+            i_index = 0
+            until v_images_url[i_index].blank?
+              i_index = i_index + 1
+            end
+            if i_index < index
+              v_images_url[i_index] = v_images_url[index]
+              v_images_url[index] = ''
+            end
+          end
+          xls_column_values << v_images_url[0]
+          xls_column_values << v_images_url[1]
+          xls_column_values << v_images_url[2]
+          xls_column_values << v_images_url[3]
+          xls_column_values << v_images_url[4]
+          xls_column_values << v_images_url[5]
+          xls_column_values << v_images_url[6]
+          xls_column_values << v_images_url[7]
+          xls_column_values << v_images_url[8]
+
+          xls_column_values << "Child"
+          xls_column_values << country_sku[language.to_sym] + product.sku
+          xls_column_values << "Variation"
+          xls_column_values << variation_theme
+
+          xls_column_values << "#{v_color}"
+          xls_column_values << "#{v_color}"
+          xls_column_values << "#{v_size}"
+          xls_column_values << "#{v_size}"
+
+          csv << xls_column_values
+        end
+      end
+    end
+  end
+
+
+  def self.defaul_to_csv(language, options={})
     cash_rate = CashRate.last.try(language.to_sym).to_f
     # Custome the xls columns and languages
     xls_column_names = ["item_sku","external_product_id", "external_product_type","item_name", "brand_name",

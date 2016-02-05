@@ -7,6 +7,7 @@ Rails.application.routes.draw do
       get 'variable_translate_list'
       post 'update_translate_variable'
       post 'save_translate_variable'
+      delete 'remove_translate_variable'
     end
   end
   resources :shops do

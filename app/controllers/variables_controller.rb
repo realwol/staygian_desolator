@@ -6,6 +6,16 @@ class VariablesController < ApplicationController
     @colors = VariableTranslateHistory.size_variable
   end
 
+  def remove_translate_variable
+    variable_name = params[:variableName]
+    variable_history = VariableTranslateHistory.where(word: variable_name).first
+    if variable_history.present?
+      variable_history.destroy
+    else
+    end
+    @variables = Variable.select(:color).uniq
+  end
+
   def update_translate_variable
     variable_translation_value_array = params[:variableTranslationValue].split(',')
     variable_name = params[:variableName]

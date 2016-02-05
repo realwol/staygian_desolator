@@ -1,29 +1,71 @@
-<h5>配送方式：</h5>
-  <%= form_tag(update_shipment_method_product_type_path(@product_type), method: :post, remote: true) do %>
-    <table class="table">
+<h5>配送方式：<button id="addNewShipment" >添加</button> </h5>
+    <table class="table product-shipment-table">
       <tr>
-        <% %w(中国 美国 加拿大 英国 德国 法国 西班牙 意大利).each do |country| %>
+        <% %w(重量 美国 加拿大 英国 德国 法国 西班牙 意大利 更新).each do |country| %>
           <th><%= country %></th>
         <% end %>
       </tr>
-      <tr>
-        <%
-          if @product_type.shipment_translation.present?
-            shipment_translation_value = AttributesTranslationHistory.find(@product_type.shipment_translation)
-          else
-            shipment_translation_value = AttributesTranslationHistory.new
-          end
-        %>
-        <td><%= select_tag 'shipment_method_china', options_from_collection_for_select(@shipment_methods, 'id', 'name', selected: shipment_translation_value.china) %></td>
-        <td><%= select_tag 'shipment_method_america', options_from_collection_for_select(@shipment_methods, 'id', 'name', selected: shipment_translation_value.america) %></td>
-        <td><%= select_tag 'shipment_method_canada', options_from_collection_for_select(@shipment_methods, 'id', 'name', selected: shipment_translation_value.canada) %></td>
-        <td><%= select_tag 'shipment_method_british', options_from_collection_for_select(@shipment_methods, 'id', 'name', selected: shipment_translation_value.british) %></td>
-        <td><%= select_tag 'shipment_method_germany', options_from_collection_for_select(@shipment_methods, 'id', 'name', selected: shipment_translation_value.germay) %></td>
-        <td><%= select_tag 'shipment_method_france', options_from_collection_for_select(@shipment_methods, 'id', 'name', selected: shipment_translation_value.spain) %></td>
-        <td><%= select_tag 'shipment_method_spain', options_from_collection_for_select(@shipment_methods, 'id', 'name', selected: shipment_translation_value.italy) %></td>
-        <td><%= select_tag 'shipment_method_italy', options_from_collection_for_select(@shipment_methods, 'id', 'name', selected: shipment_translation_value.france) %></td>
-      </tr>
+      <% @product_shipments.each do |product_shipment| %>
+        <tr>
+        <%= form_tag(update_shipment_method_product_type_path(@product_type), method: :post, remote: true) do %>
+          <%
+            if product_shipment.present?
+              shipment_translation_value = product_shipment.attributes_translation_history
+            else
+              shipment_translation_value = AttributesTranslationHistory.new
+            end
+          %>
+          <td style="width:120px;">
+            <%= text_field_tag :min_weight, product_shipment.min_weight, style:'width:40px;' %>
+            <%= text_field_tag :max_weight, product_shipment.max_weight, style:'width:40px;' %>
+            <%= hidden_field_tag :shipment_weight_relatioin_id, product_shipment.id %>
+            <%= hidden_field_tag :product_type_id, @product_type.id %>
+          </td>
+          <td><%= select_tag 'shipment_method_america', options_from_collection_for_select(@shipment_methods, 'id', 'name', selected: shipment_translation_value.america) %></td>
+          <td><%= select_tag 'shipment_method_canada', options_from_collection_for_select(@shipment_methods, 'id', 'name', selected: shipment_translation_value.canada) %></td>
+          <td><%= select_tag 'shipment_method_british', options_from_collection_for_select(@shipment_methods, 'id', 'name', selected: shipment_translation_value.british) %></td>
+          <td><%= select_tag 'shipment_method_germany', options_from_collection_for_select(@shipment_methods, 'id', 'name', selected: shipment_translation_value.germany) %></td>
+          <td><%= select_tag 'shipment_method_france', options_from_collection_for_select(@shipment_methods, 'id', 'name', selected: shipment_translation_value.france) %></td>
+          <td><%= select_tag 'shipment_method_spain', options_from_collection_for_select(@shipment_methods, 'id', 'name', selected: shipment_translation_value.spain) %></td>
+          <td><%= select_tag 'shipment_method_italy', options_from_collection_for_select(@shipment_methods, 'id', 'name', selected: shipment_translation_value.italy) %></td>
+          <td><%= submit_tag '更新', class:'tr-submit-tag' %></td>
+        </tr>
+      <% end %>
+      <% end %>
     </table>
-    <hr/>
-    <%= submit_tag '更新' %>
-  <% end%>
+
+<script type="text/javascript">
+  $('#addNewShipment').click(function(){
+    alert(1);
+    var old_relation_value = $('.product-shipment-table tr:last').find('#shipment_weight_relatioin_id').val();
+    $('.product-shipment-table tr:last').find('#shipment_weight_relatioin_id').val('');
+    var newTrLine = $('.product-shipment-table tr:last').html();
+    $('.product-shipment-table tr:last').find('#shipment_weight_relatioin_id').val(old_relation_value);
+    newTrLine = "<tr>" + newTrLine + "</tr>";
+    $('.product-shipment-table tr:last').after(newTrLine);
+    $('.tr-submit-tag').unbind('click');
+    $('.tr-submit-tag').click(function(){
+      var $tr = $(this).parents('tr');
+      var id = $tr.find('#product_type_id').val();
+      var shipment_weight_relatioin_id = $tr.find('#shipment_weight_relatioin_id').val();
+      var min_weight = $tr.find('#min_weight').val();
+      var max_weight = $tr.find('#max_weight').val();
+      var shipment_method_america = $tr.find('#shipment_method_america').val();
+      var shipment_method_canada = $tr.find('#shipment_method_canada').val();
+      var shipment_method_british = $tr.find('#shipment_method_british').val();
+      var shipment_method_germany = $tr.find('#shipment_method_germany').val();
+      var shipment_method_france = $tr.find('#shipment_method_france').val();
+      var shipment_method_spain = $tr.find('#shipment_method_spain').val();
+      var shipment_method_italy = $tr.find('#shipment_method_italy').val();
+
+      $.ajax({
+        url: '/product_types/'+ id +'/update_shipment_method',
+        type: 'post',
+        data: {shipment_weight_relatioin_id: shipment_weight_relatioin_id, min_weight: min_weight,max_weight:max_weight, shipment_method_america:shipment_method_america, shipment_method_canada:shipment_method_canada, shipment_method_british:shipment_method_british, shipment_method_germany:shipment_method_germany,shipment_method_france:shipment_method_france,shipment_method_spain:shipment_method_spain,shipment_method_italy:shipment_method_italy},
+        success: function(data){
+          $tr.find('#shipment_weight_relatioin_id').val(data);
+        }
+      })
+    })
+  });
+</script>
