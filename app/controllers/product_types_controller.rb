@@ -196,6 +196,11 @@ class ProductTypesController < ApplicationController
     @product_type = ProductType.new
   end
 
+  def remove_shipment_relation
+    ShipmentWeightRelation.delete(params[:shipment_relation_id])
+    render json: true
+  end
+
   def edit
     @shipment_methods = ShipmentMethod.all
     @product_type_attributes = @product_type.product_attributes

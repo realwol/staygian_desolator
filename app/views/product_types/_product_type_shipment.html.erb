@@ -15,9 +15,10 @@
           <td><%= select_tag 'shipment_method_spain', options_from_collection_for_select(@shipment_methods, 'id', 'name') %></td>
           <td><%= select_tag 'shipment_method_italy', options_from_collection_for_select(@shipment_methods, 'id', 'name') %></td>
           <td><%= submit_tag '更新', class:'tr-submit-tag' %></td>
+          <td><button class='new-remove-shipment-relation' >删除</button> </td>
       </tr>
       <tr>
-        <% %w(重量 美国 加拿大 英国 德国 法国 西班牙 意大利 更新).each do |country| %>
+        <% %w(重量 美国 加拿大 英国 德国 法国 西班牙 意大利 操作).each do |country| %>
           <th><%= country %></th>
         <% end %>
       </tr>
@@ -45,12 +46,29 @@
           <td><%= select_tag 'shipment_method_spain', options_from_collection_for_select(@shipment_methods, 'id', 'name', selected: shipment_translation_value.spain) %></td>
           <td><%= select_tag 'shipment_method_italy', options_from_collection_for_select(@shipment_methods, 'id', 'name', selected: shipment_translation_value.italy) %></td>
           <td><%= submit_tag '更新', class:'tr-submit-tag' %></td>
+          <td><button data-shipment-id="<%= product_shipment.try(:id) %>" class='remove-shipment-relation' >删除</button> </td>
         </tr>
       <% end %>
       <% end %>
     </table>
 
 <script type="text/javascript">
+
+
+  $('.remove-shipment-relation').click(function(){
+    var shipmentId = $(this).data('shipment-id');
+    var $thisObj = $(this);
+    $.ajax({
+      url: '/product_types/remove_shipment_relation',
+      type: 'delete',
+      data: {shipment_relation_id: shipmentId},
+      success: function(){
+        $thisObj.parents('tr').remove();
+        alert('操作成功！');
+      }
+    })
+  });
+
   $('#addNewShipment').click(function(){
     var old_relation_value = $('.product-shipment-table tr:last').find('#shipment_weight_relatioin_id').val();
     $('.product-shipment-table tr:last').find('#shipment_weight_relatioin_id').val('');
@@ -58,6 +76,9 @@
     $('.product-shipment-table tr:last').find('#shipment_weight_relatioin_id').val(old_relation_value);
     newTrLine = "<tr>" + newTrLine + "</tr>";
     $('.product-shipment-table tr:last').after(newTrLine);
+    $('.new-remove-shipment-relation').click(function(){
+      $(this).parents('tr').remove();
+    });
     $('.tr-submit-tag').unbind('click');
     $('.tr-submit-tag').click(function(){
       var $tr = $(this).parents('tr');
@@ -72,16 +93,19 @@
       var shipment_method_france = $tr.find('#shipment_method_france').val();
       var shipment_method_spain = $tr.find('#shipment_method_spain').val();
       var shipment_method_italy = $tr.find('#shipment_method_italy').val();
-
+  
       $.ajax({
         url: '/product_types/'+ id +'/update_shipment_method',
         type: 'post',
         data: {shipment_weight_relatioin_id: shipment_weight_relatioin_id, min_weight: min_weight,max_weight:max_weight, shipment_method_america:shipment_method_america, shipment_method_canada:shipment_method_canada, shipment_method_british:shipment_method_british, shipment_method_germany:shipment_method_germany,shipment_method_france:shipment_method_france,shipment_method_spain:shipment_method_spain,shipment_method_italy:shipment_method_italy},
         success: function(data){
           $tr.find('#shipment_weight_relatioin_id').val(data);
+          $tr.find('.new-remove-shipment-relation').data('shipment-id', data);
+          $tr.find('.new-remove-shipment-relation').addClass('remove-shipment-relation');
+          $tr.find('.new-remove-shipment-relation').removeClass('new-remove-shipment-relation');
           alert('操作成功！');
         }
       })
-    })
+    });
   });
 </script>

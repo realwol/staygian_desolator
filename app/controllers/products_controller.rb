@@ -309,15 +309,17 @@ class ProductsController < ApplicationController
         end
 
         avatar_urls = []
-        [@product.avatar.url, @product.avatar1.url, @product.avatar2.url].each do |img_url|
-          if img_url.present?
-            avatar_urls << QiniuUploadHelper::QiNiu.upload_from_client(Rails.root.join('public' "#{img_url}"))
+        if params[:product][:avatar].present?
+          [@product.avatar.url, @product.avatar1.url, @product.avatar2.url].each do |img_url|
+            if img_url.present?
+              avatar_urls << QiniuUploadHelper::QiNiu.upload_from_client(Rails.root.join('public' "#{img_url}"))
+            end
           end
+          @product.avatar_img_url = avatar_urls[0]
+          @product.avatar_img_url1 = avatar_urls[1]
+          @product.avatar_img_url2 = avatar_urls[2]
+          @product.avatar = @product.avatar1 = @product.avatar2 = nil
         end
-        @product.avatar_img_url = avatar_urls[0]
-        @product.avatar_img_url1 = avatar_urls[1]
-        @product.avatar_img_url2 = avatar_urls[2]
-        @product.avatar = @product.avatar1 = @product.avatar2 = nil
         @product.save
 
         Variable.update_product_variable(params["variable"], @product)
