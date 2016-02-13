@@ -1,5 +1,21 @@
 <h5>配送方式：<button id="addNewShipment" >添加</button> </h5>
     <table class="table product-shipment-table">
+      <tr style="display:none;">
+          <td style="width:120px;">
+            <%= text_field_tag :min_weight, nil, style:'width:40px;' %>
+            <%= text_field_tag :max_weight, nil, style:'width:40px;' %>
+            <%= hidden_field_tag :shipment_weight_relatioin_id %>
+            <%= hidden_field_tag :product_type_id, @product_type.id %>
+          </td>
+          <td><%= select_tag 'shipment_method_america', options_from_collection_for_select(@shipment_methods, 'id', 'name') %></td>
+          <td><%= select_tag 'shipment_method_canada', options_from_collection_for_select(@shipment_methods, 'id', 'name') %></td>
+          <td><%= select_tag 'shipment_method_british', options_from_collection_for_select(@shipment_methods, 'id', 'name') %></td>
+          <td><%= select_tag 'shipment_method_germany', options_from_collection_for_select(@shipment_methods, 'id', 'name') %></td>
+          <td><%= select_tag 'shipment_method_france', options_from_collection_for_select(@shipment_methods, 'id', 'name') %></td>
+          <td><%= select_tag 'shipment_method_spain', options_from_collection_for_select(@shipment_methods, 'id', 'name') %></td>
+          <td><%= select_tag 'shipment_method_italy', options_from_collection_for_select(@shipment_methods, 'id', 'name') %></td>
+          <td><%= submit_tag '更新', class:'tr-submit-tag' %></td>
+      </tr>
       <tr>
         <% %w(重量 美国 加拿大 英国 德国 法国 西班牙 意大利 更新).each do |country| %>
           <th><%= country %></th>
@@ -36,10 +52,9 @@
 
 <script type="text/javascript">
   $('#addNewShipment').click(function(){
-    alert(1);
     var old_relation_value = $('.product-shipment-table tr:last').find('#shipment_weight_relatioin_id').val();
     $('.product-shipment-table tr:last').find('#shipment_weight_relatioin_id').val('');
-    var newTrLine = $('.product-shipment-table tr:last').html();
+    var newTrLine = $('.product-shipment-table tr:first').html();
     $('.product-shipment-table tr:last').find('#shipment_weight_relatioin_id').val(old_relation_value);
     newTrLine = "<tr>" + newTrLine + "</tr>";
     $('.product-shipment-table tr:last').after(newTrLine);
@@ -64,6 +79,7 @@
         data: {shipment_weight_relatioin_id: shipment_weight_relatioin_id, min_weight: min_weight,max_weight:max_weight, shipment_method_america:shipment_method_america, shipment_method_canada:shipment_method_canada, shipment_method_british:shipment_method_british, shipment_method_germany:shipment_method_germany,shipment_method_france:shipment_method_france,shipment_method_spain:shipment_method_spain,shipment_method_italy:shipment_method_italy},
         success: function(data){
           $tr.find('#shipment_weight_relatioin_id').val(data);
+          alert('操作成功！');
         }
       })
     })

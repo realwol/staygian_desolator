@@ -321,6 +321,18 @@ class ProductsController < ApplicationController
         @product.save
 
         Variable.update_product_variable(params["variable"], @product)
+        params["variable"].each do |param_variable|
+          variable_size = param_variable["size"]
+          variable_color = param_variable["color"]
+
+          if VariableTranslateHistory.where(word: variable_size).count < 1
+            VariableTranslateHistory.create(word: variable_size, variable_from: 'size')
+          end
+
+          if VariableTranslateHistory.where(word: variable_color).count < 1
+            VariableTranslateHistory.create(word: variable_color, variable_from: 'color')
+          end
+        end
         TranslateToken.create(t_id:@product.id, t_type:'product', t_status: true, t_method:'update')
         format.html { redirect_to un_updated_page_products_url, notice: 'Product was successfully updated.' }
         format.json { render :show, status: :ok, location: @product }

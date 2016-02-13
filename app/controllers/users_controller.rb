@@ -4,6 +4,7 @@ class UsersController < ApplicationController
 
   def show_little_brothers
     @user = User.find(params[:id])
+    @user = @user.role > current_user.role ? @user : current_user
     if @user
       @users = @user.little_brothers
     else

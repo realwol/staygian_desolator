@@ -64,9 +64,20 @@ class VariablesController < ApplicationController
 
   def create
     @variable = Variable.new(variable_params)
+    variable_size = variable_params[:size]
+    variable_color = variable_params[:color]
+
+    if VariableTranslateHistory.where(word: variable_size).count < 1
+      VariableTranslateHistory.create(word: variable_size, variable_from: 'size')
+    end
+
+    if VariableTranslateHistory.where(word: variable_color).count < 1
+      VariableTranslateHistory.create(word: variable_color, variable_from: 'color')
+    end
 
     respond_to do |format|
       if @variable.save
+
         format.html { redirect_to @variable, notice: 'Variable was successfully created.' }
         format.json { render :show, status: :created, location: @variable }
       else
@@ -90,8 +101,6 @@ class VariablesController < ApplicationController
     end
   end
 
-  # DELETE /variables/1
-  # DELETE /variables/1.json
   def destroy
     @variable.destroy
     respond_to do |format|
@@ -101,12 +110,10 @@ class VariablesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_variable
       @variable = Variable.find(params[:id])
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
     def variable_params
       params.require(:variable).permit(:color, :size, :price, :product_id, :deleted_at, :stock, :update_status, :translate_status,
                                        :image_url1, :image_url2,:image_url3,:image_url4, :image_url5,:image_url6, :image_url7, :image_url8,:image_url9, :image_url10,

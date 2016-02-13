@@ -9,7 +9,7 @@
     <div id="productTypeDivLevel11" style="display:none;" >
       <%= render 'products/level2_div_1' %>
     </div>
-    <input type="hidden" id="product_select_value1", name="product[product_type_id]" >
+    <input type="hidden" id="product_select_value1", name="product[product_type_id]", value="<%= @product_type.try(:id) %>" >
     <p style="text-align:right; margin-top:10px; margin-bottom: -8px;">
       <a href="#" class="productTypeClose1 productTypeOK1 productTypeOKClick" >确定</a>
       <a href="#" class="productTypeClose1 productTypeCancel1" >取消</a>
