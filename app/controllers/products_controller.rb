@@ -146,7 +146,7 @@ class ProductsController < ApplicationController
     cookies[:export_type] = params[:export_type]
     request.format = 'xls'
     respond_to do |f|
-      f.xls {send_data @products.to_csv(params[:language], col_sep: "\t")}
+      f.xls {send_data @products.to_csv(params[:language], params[:max_number], col_sep: "\t")}
       # f.xls
     end
   end

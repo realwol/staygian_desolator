@@ -16,6 +16,8 @@
   <%= select_tag "export_type", options_from_collection_for_select(ProductType.all, "id", "name"), prompt:'请选择分类:'%><br/>
   <label>输入开始SKU：</label>
   <%= text_field_tag 'start_sku' %><br/>
+  <label>最大导出行数：</label>
+  <%= text_field_tag 'max_number' %><br/>
   <%= button_tag '导出', format:'xls' %>
 <% end %>
 <%= javascript_tag do%>
