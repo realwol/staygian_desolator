@@ -5,6 +5,8 @@ class Product < ActiveRecord::Base
   belongs_to :shop
 
   has_many :variables
+  has_many :product_customize_attributes_relations
+
   accepts_nested_attributes_for :variables
 
   has_one :product_info_translation
@@ -29,10 +31,14 @@ class Product < ActiveRecord::Base
     self.translate_status
   end
 
-  def get_shipment_cost
+  def get_shipment_cost language
     shipment_relations = self.product_type.shipment_weight_relations
-    shipment_relation = shipment_relations.where("min_weight < ? and max_weight > ? ", self.product_weight, self.product_weight)
-    shipment_relation.attributes_translation_history
+    shipment_relation = shipment_relations.where("min_weight < ? and max_weight > ? ", self.product_weight, self.product_weight).first
+    if shipment_relation.present?
+      shipment_relation.attributes_translation_history.read_attribute(language).to_f
+    else
+      0.0
+    end
   end
 
   def valid_images
@@ -104,6 +110,15 @@ class Product < ActiveRecord::Base
     local_infos
   end
 
+  def self.get_all_customize_columns products
+    all_product_types = products.map {|product| product.product_type }.compact.uniq
+    all_product_types.map do |product_type|
+      product_type.product_attributes.map do |attribute|
+        attribute.attribute_name
+      end
+    end.flatten
+  end
+
   def self.to_csv(language, max_limit, options={})
     cash_rate = CashRate.last.try(language.to_sym).to_f
     # Custome the xls columns and languages
@@ -114,15 +129,17 @@ class Product < ActiveRecord::Base
                           recommended_browse_nodes3 recommended_browse_nodes4 recommended_browse_nodes5 main_image_url other_image_url1
                           other_image_url2 other_image_url3 other_image_url4 other_image_url5 other_image_url6 other_image_url7
                           other_image_url8 parent_child parent_sku relationship_type variation_theme color_name color_map size_name size_map)
+    cusomize_column_names = Product.get_all_customize_columns self.all
+    xls_column_names = xls_column_names + cusomize_column_names
 
     country_currency = {england:'GBP', germany:'EUR', france: 'EUR', spain:'EUR', italy:'EUR', china:'人民币', america:'USD', canada:'CAD'}
     country_sku = {england: 'UK', germany:'DE', france:'FR', spain:'ES', italy:'IT', america:'US', canada:'CA'}
-    max_limit ||= 9999999
+    max_limit = 9999999 unless max_limit.present?
 
     CSV.generate(options) do |csv|
       csv << xls_column_names
       all.un_shield.updated.each do |product|
-        break if max_limit < (csv.size + product.variables.size)
+        break if max_limit.to_i < (csv.count + product.variables.count)
         # Customize the xls values
         # csv << ['product.attributes.values_at(*column_names)', 'hello', 'world']
         # 父产品
@@ -155,8 +172,8 @@ class Product < ActiveRecord::Base
         # update_delete
         xls_column_values << 'Update'
         # standard_price
-        shipment_cost = product.get_shipment_cost
-        xls_column_values << (shipment_cost.read_attribute(language).to_f + (product.try(:price).try(:to_f) / cash_rate))
+        shipment_cost = product.get_shipment_cost(language)
+        xls_column_values << (shipment_cost + (product.try(:price).try(:to_f) / cash_rate))
         # currency
         xls_column_values << country_currency[language.to_sym]
         # condition_type
@@ -249,6 +266,16 @@ class Product < ActiveRecord::Base
         # size_map
         xls_column_values << ""
 
+        # customize_columns
+        cusomize_column_names.each do |column_name|
+          customize_relation = product.product_customize_attributes_relations.where(attribute_name: column_name).first
+          if customize_relation && customize_relation.attributes_translation_history.present?
+            xls_column_values << customize_relation.attributes_translation_history.read_attribute(language)
+          else
+            xls_column_values << ''
+          end
+        end
+
         csv << xls_column_values
 
         # 子产品
@@ -297,8 +324,8 @@ class Product < ActiveRecord::Base
           xls_column_values << product_translation[:detail]
           xls_column_values << 'Update'
           # standard_price
-          shipment_cost ＝ product.get_shipment_cost
-          xls_column_values << (shipment_cost.read_attribute(language).to_f + (product.try(:price).try(:to_f) / cash_rate))
+          # shipment_cost ＝ product.get_shipment_cost(language)
+          xls_column_values << (shipment_cost + (product.try(:price).try(:to_f) / cash_rate))
           # currency
           xls_column_values << country_currency[language.to_sym]
           xls_column_values << 'New'
@@ -310,7 +337,7 @@ class Product < ActiveRecord::Base
           elsif v.stock.to_i <= 2
             xls_column_values << 0
           else
-            xls_column_values << stock
+            xls_column_values << v.stock
           end
           # website_shipping_weight
           xls_column_values << product.product_weight
@@ -372,10 +399,19 @@ class Product < ActiveRecord::Base
           xls_column_values << "#{v_color}"
           xls_column_values << "#{v_size}"
           xls_column_values << "#{v_size}"
-
+          # customize_columns
+          cusomize_column_names.each do |column_name|
+            customize_relation = product.product_customize_attributes_relations.where(attribute_name: column_name).first
+            if customize_relation && customize_relation.attributes_translation_history.present?
+              xls_column_values << customize_relation.attributes_translation_history.read_attribute(language)
+            else
+              xls_column_values << ''
+            end
+          end
           csv << xls_column_values
         end
       end
+
     end
   end
 

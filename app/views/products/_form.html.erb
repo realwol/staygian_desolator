@@ -249,11 +249,12 @@
 
   $('.productTypeOKClick').click(function(){
     var product_type_id = $("#product_select_value1").val();
+    var product_id = "<%= @product.id %>";
 
     $.ajax({
       url: '/products/update_attributes_div',
       type: 'POST',
-      data: {product_type_id: product_type_id},
+      data: {product_type_id: product_type_id, product_id: product_id},
       success: function(){
 
       }

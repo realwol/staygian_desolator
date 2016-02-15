@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160205031240) do
+ActiveRecord::Schema.define(version: 20160214155133) do
 
   create_table "attributes_translation_histories", force: :cascade do |t|
     t.string   "attribute_name",       limit: 255
@@ -49,6 +49,15 @@ ActiveRecord::Schema.define(version: 20160205031240) do
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
     t.boolean  "is_locked",       limit: 1
+  end
+
+  create_table "product_customize_attributes_relations", force: :cascade do |t|
+    t.integer  "product_type_id",                   limit: 4
+    t.integer  "product_id",                        limit: 4
+    t.string   "attribute_name",                    limit: 255
+    t.integer  "attributes_translation_history_id", limit: 4
+    t.datetime "created_at",                                    null: false
+    t.datetime "updated_at",                                    null: false
   end
 
   create_table "product_detail_forbidden_lists", force: :cascade do |t|

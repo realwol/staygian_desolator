@@ -42,6 +42,7 @@ class ProductsController < ApplicationController
 
   def update_attributes_div
     @product_type_attributes = ProductAttribute.where(product_type_id: params[:product_type_id])
+    @product = Product.find(params[:product_id])
   end
                                
   def update_price
@@ -124,6 +125,7 @@ class ProductsController < ApplicationController
   end
 
   def export_products
+    params[:export_type] = params[:product][:product_type_id]
     start_sku = params[:start_sku]
     if start_sku.blank?
       @products = current_user.valid_products.where("product_type_id = ?", params[:export_type]).order('id desc').limit(1000)
@@ -299,6 +301,23 @@ class ProductsController < ApplicationController
           @product.update_attributes(update_status:true, user_id: current_user.id, first_updated_time: Time.now)
         end
         @product.save_attributes
+
+        @product_type_attributes = ProductAttribute.where(product_type_id: @product.product_type_id)
+        customize_attributes_hash = {}
+        customize_attributes_array = []
+        @product_type_attributes.each_with_index do |attribute, index|
+          customize_attributes_hash[:product_type_id] = @product.product_type_id
+          customize_attributes_hash[:product_id] = @product.id
+          customize_attributes_hash[:attribute_name] = attribute.attribute_name
+          if attribute.is_locked
+            customize_attributes_hash[:attributes_translation_history_id] = params["attribte_options"].values[index]
+          else
+            customize_attributes_hash[:attributes_translation_history_id] = AttributesTranslationHistory.where(attribute_name: params["attribte_options"].values[index]).first.try(:id)
+          end
+          customize_attributes_array << customize_attributes_hash.dup
+        end
+        
+        ProductCustomizeAttributesRelation.create(customize_attributes_array)
 
         # Tobe cut
         if params[:cut_image_urls][2..-1]

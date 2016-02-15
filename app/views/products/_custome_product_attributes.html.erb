@@ -1,10 +1,10 @@
 <% if @product_type_attributes %>
-  <% @product_type_attributes.each do |attribute| %>
+  <% @product_type_attributes.each_with_index do |attribute,index| %>
     <%= label_tag 'attribute_label', attribute.attribute_name %>
     <% if attribute.is_locked %>
-      <%= select_tag 'attribte_options', options_from_collection_for_select(attribute.attributes_translation_histories, "id", "china") %>
+      <%= select_tag "attribte_options[attribute_field_#{index}]", options_from_collection_for_select(attribute.attributes_translation_histories, "id", "china"),  form:"edit_product_#{@product.id}" %>
     <% else %>
-      <%= text_field_tag 'attribute_field' %>
+      <%= text_field_tag "attribte_options[attribute_field_#{index}]", nil, form:"edit_product_#{@product.id}" %>
     <% end %>
     <br/>
   <% end %>
