@@ -119,27 +119,39 @@ class Product < ActiveRecord::Base
     end.flatten
   end
 
+  def self.get_all_customize_table_columns products
+    all_product_types = products.map {|product| product.product_type }.compact.uniq
+    all_product_types.map do |product_type|
+      product_type.product_attributes.map do |attribute|
+        attribute.table_name
+      end
+    end.flatten
+  end
+
   def self.to_csv(language, max_limit, options={})
     cash_rate = CashRate.last.try(language.to_sym).to_f
     # Custome the xls columns and languages
     xls_column_names = %w(item_sku item_name external_product_id external_product_id_type feed_product_type brand_name mannfacturer
                           part_number product_description update_delete standard_price currency condition_type condition_note quantity
                           website_shipping_weight website_shipping_weight_unit_of_measure bullet_point1 bullet_point2 bullet_point3
-                          bullet_point4 bullet_point5 recommended_browse_nodes1 recommended_browse_nodes2 generic_keywords1 recommended_browse_nodes2
-                          recommended_browse_nodes3 recommended_browse_nodes4 recommended_browse_nodes5 main_image_url other_image_url1
+                          bullet_point4 bullet_point5 recommended_browse_nodes1 recommended_browse_nodes2 generic_keywords1 generic_keywords12
+                          generic_keywords13 generic_keywords14 generic_keywords15 main_image_url other_image_url1
                           other_image_url2 other_image_url3 other_image_url4 other_image_url5 other_image_url6 other_image_url7
                           other_image_url8 parent_child parent_sku relationship_type variation_theme color_name color_map size_name size_map)
     cusomize_column_names = Product.get_all_customize_columns self.all
-    xls_column_names = xls_column_names + cusomize_column_names
+    cusomize_table_names = Product.get_all_customize_table_columns self.all
+    xls_column_names = xls_column_names + cusomize_table_names
 
     country_currency = {england:'GBP', germany:'EUR', france: 'EUR', spain:'EUR', italy:'EUR', china:'人民币', america:'USD', canada:'CAD'}
     country_sku = {england: 'UK', germany:'DE', france:'FR', spain:'ES', italy:'IT', america:'US', canada:'CA'}
+    variable_hash = {england: 'en', germany:'de', france:'fr', spain:'es', italy:'it', america:'en', canada:'en'}
     max_limit = 9999999 unless max_limit.present?
+    csv_line_count = 0
 
     CSV.generate(options) do |csv|
       csv << xls_column_names
       all.un_shield.updated.each do |product|
-        break if max_limit.to_i < (csv.count + product.variables.count)
+        break if max_limit.to_i < (csv_line_count + product.variables.count)
         # Customize the xls values
         # csv << ['product.attributes.values_at(*column_names)', 'hello', 'world']
         # 父产品
@@ -182,7 +194,7 @@ class Product < ActiveRecord::Base
         product_type_introduction1 = AttributesTranslationHistory.find(product.product_type.product_type_introduction_1)
         xls_column_values << product_type_introduction1.read_attribute(language)
         # quantity
-        xls_column_values << ''
+        xls_column_values << ' '
         # website_shipping_weight
         xls_column_values << product.product_weight
         xls_column_values << 'KG'
@@ -277,6 +289,7 @@ class Product < ActiveRecord::Base
         end
 
         csv << xls_column_values
+        csv_line_count = csv_line_count + 1
 
         # 子产品
         product.variables.each do |v|
@@ -284,34 +297,37 @@ class Product < ActiveRecord::Base
           v_color = ''
           v_size = ''
           v_variable_info_translation = v
-          if v.color && v.size
-            xls_column_values << country_sku[language.to_sym] + "#{product.sku}-#{v_variable_info_translation.england_color}#{v_variable_info_translation.england_size}"[0..35].lstrip
-            v_color = v_variable_info_translation.england_color
-            v_size = v_variable_info_translation.england_size
-          elsif v.color
+          if v.color.present? && v.size.present?
+            v_color = VariableTranslateHistory.where(word: v.color).first
+            v_size = VariableTranslateHistory.where(word: v.size).first
+            xls_column_values << country_sku[language.to_sym] + "#{product.sku}-#{v_color.en}#{v_size.en}"[0..35].lstrip
+          elsif v.color.present?
             if v_variable_info_translation
-              v_color = v_variable_info_translation.england_color
+              v_color = VariableTranslateHistory.where(word: v.color).first
               v_size = ""
-              xls_column_values << country_sku[language.to_sym] + "#{product.sku}-#{v_color}"[0..35].lstrip
+              xls_column_values << country_sku[language.to_sym] + "#{product.sku}-#{v_color.en}"[0..35].lstrip
             else
               xls_column_values << "这个变体没有翻译，请重新翻译"  
             end
-          elsif v.size
+          elsif v.size.present?
             if v_variable_info_translation
-              v_size = v_variable_info_translation.england_size
-              xls_column_values << country_sku[language.to_sym] + "#{product.sku}-#{v_size}"[0..35].lstrip
+              v_size = VariableTranslateHistory.where(word: v.size).first
+              xls_column_values << country_sku[language.to_sym] + "#{product.sku}-#{v_size.en}"[0..35].lstrip
             else
               xls_column_values << "这个变体没有翻译，请重新翻译"  
             end
           end
           
-          if v.color && v.size
+          if v.color.present? && v.size.present?
             xls_column_values << "#{product_translation[:title]}-#{v_color} #{v_size}"
-          elsif v.color
+          elsif v.color.present?
             xls_column_values << "#{product_translation[:title]}-#{v_color}"
-          elsif v.size
+          elsif v.size.present?
             xls_column_values << "#{product_translation[:title]}-#{v_size}"
           end
+
+          xls_column_values << ""
+
           xls_column_values << "UPC"
           # feed_product_type
           xls_column_values << product_type_translation.read_attribute(language)
@@ -395,10 +411,10 @@ class Product < ActiveRecord::Base
           xls_column_values << "Variation"
           xls_column_values << variation_theme
 
-          xls_column_values << "#{v_color}"
-          xls_column_values << "#{v_color}"
-          xls_column_values << "#{v_size}"
-          xls_column_values << "#{v_size}"
+          xls_column_values << v_color.read_attribute(variable_hash[language.to_sym])
+          xls_column_values << v_color.read_attribute(variable_hash[language.to_sym])
+          xls_column_values << v_size.read_attribute(variable_hash[language.to_sym])
+          xls_column_values << v_size.read_attribute(variable_hash[language.to_sym])
           # customize_columns
           cusomize_column_names.each do |column_name|
             customize_relation = product.product_customize_attributes_relations.where(attribute_name: column_name).first
@@ -409,6 +425,7 @@ class Product < ActiveRecord::Base
             end
           end
           csv << xls_column_values
+          csv_line_count = csv_line_count + 1
         end
       end
 
@@ -518,7 +535,7 @@ class Product < ActiveRecord::Base
           xls_column_values = []
           v_color = ''
           v_size = ''
-          v_variable_info_translation = v
+          v_variable_info_translation = v.variable_translate_history
           if v.color && v.size
             xls_column_values << "#{product.sku}-#{v_variable_info_translation.england_color}#{v_variable_info_translation.england_size}"[0..35].lstrip
             v_color = v_variable_info_translation.england_color
