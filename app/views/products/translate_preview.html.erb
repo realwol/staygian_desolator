@@ -4,6 +4,7 @@
 <table class="table table-border">
   <tr>
     <th></th>
+    <th>中文</th>
     <th>英语</th>
     <th>德国</th>
     <th>法国</th>
@@ -12,6 +13,7 @@
   </tr>
   <tr>
     <td>标题</td>
+    <td><%= @product.title %></td>
     <td><%= @product_translation.try(:e_t) %></td>
     <td><%= @product_translation.try(:g_t) %></td>
     <td><%= @product_translation.try(:f_t) %></td>
@@ -20,6 +22,7 @@
   </tr>
   <tr>
     <td>详情</td>
+    <td><%= @product.details %></td>
     <td><%= @product_translation.try(:e_detail) %></td>
     <td><%= @product_translation.try(:g_detail) %></td>
     <td><%= @product_translation.try(:f_detail) %></td>
@@ -31,6 +34,7 @@
     <% 3.times do |count| %>
       <tr>
         <td>简介<%= count+1 %></td>
+        <td><%= @product.read_attribute("desc#{count+1}") %></td>
         <td><%= @product_translation.read_attribute("e_des#{count+1}") %></td>
         <td><%= @product_translation.read_attribute("g_des#{count+1}") %></td>
         <td><%= @product_translation.read_attribute("f_des#{count+1}") %></td>
