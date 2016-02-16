@@ -35,9 +35,13 @@ class Product < ActiveRecord::Base
     shipment_relations = self.product_type.shipment_weight_relations
     shipment_relation = shipment_relations.where("(min_weight < ? or min_weight = ?) and (max_weight > ? or max_weight = ?) ", self.product_weight, self.product_weight, self.product_weight, self.product_weight).last
     if shipment_relation.present?
-      shipment_relation.attributes_translation_history.read_attribute(language).to_f
+      shipment_method_id = shipment_relation.attributes_translation_history.read_attribute(language)
+      if shipment_method_id
+        shipment_method = ShipmentMethod.find(shipment_method_id).shipment_method_values.where("(weight > ? or weight = ?) and (weight < ?) ", self.product_weight, self.product_weight, self.product_weight.to_f + 0.5).last
+        shipment_method.read_attribute("#{language}_price").to_f
+      end
     else
-      0.0
+      100.0
     end
   end
 
@@ -139,8 +143,8 @@ class Product < ActiveRecord::Base
         profit_rate = 2.0
       end
     end
-
     profit_rate = 1.5 if profit_rate < 1.5
+    profit_rate
   end
 
   def self.to_csv(language, max_limit, options={})
@@ -335,11 +339,11 @@ class Product < ActiveRecord::Base
           end
           
           if v.color.present? && v.size.present?
-            xls_column_values << "#{product_translation[:title]}-#{v_color.read_attribute(language)} #{v_size.read_attribute(language)}"
+            xls_column_values << "#{product_translation[:title]}-#{v_color.read_attribute(variable_hash[language.to_sym])} #{v_size.read_attribute(variable_hash[language.to_sym])}"
           elsif v.color.present?
-            xls_column_values << "#{product_translation[:title]}-#{v_color.read_attribute(language)}"
+            xls_column_values << "#{product_translation[:title]}-#{v_color.read_attribute(variable_hash[language.to_sym])}"
           elsif v.size.present?
-            xls_column_values << "#{product_translation[:title]}-#{v_size.read_attribute(language)}"
+            xls_column_values << "#{product_translation[:title]}-#{v_size.read_attribute(variable_hash[language.to_sym])}"
           end
 
           xls_column_values << ""
