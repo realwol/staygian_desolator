@@ -17,7 +17,7 @@ class ProductsController < ApplicationController
   end
 
   def translate_preview
-    @product_translation = @product.product_info_translation
+    @product_translation = @product.product_info_translations.last
   end
 
   def custome_upload_image

@@ -9,7 +9,7 @@ class Product < ActiveRecord::Base
 
   accepts_nested_attributes_for :variables
 
-  has_one :product_info_translation
+  has_many :product_info_translations
 
   scope :un_updated, -> {where(update_status:false)}
   scope :updated, -> {where(update_status:true)}
@@ -33,7 +33,7 @@ class Product < ActiveRecord::Base
 
   def get_shipment_cost language
     shipment_relations = self.product_type.shipment_weight_relations
-    shipment_relation = shipment_relations.where("min_weight < ? and max_weight > ? ", self.product_weight, self.product_weight).first
+    shipment_relation = shipment_relations.where("(min_weight < ? or min_weight = ?) and (max_weight > ? or max_weight = ?) ", self.product_weight, self.product_weight, self.product_weight, self.product_weight).last
     if shipment_relation.present?
       shipment_relation.attributes_translation_history.read_attribute(language).to_f
     else
@@ -56,7 +56,7 @@ class Product < ActiveRecord::Base
 
   def self.choose_language(language, product)
     local_infos = {}
-    product_translation = product.product_info_translation
+    product_translation = product.product_info_translations.last
     case language
     when 'england'
       local_infos[:title] = product_translation.try(:e_t)
@@ -128,6 +128,21 @@ class Product < ActiveRecord::Base
     end.flatten
   end
 
+  def get_profit_rate language
+    product_type = self.product_type
+    price_translation = product_type.price_translation
+    if price_translation.present?
+      profit_rate = AttributesTranslationHistory.find(price_translation).read_attribute(language).to_f
+      if profit_rate.present?
+        profit_rate = profit_rate
+      else
+        profit_rate = 2.0
+      end
+    end
+
+    profit_rate = 1.5 if profit_rate < 1.5
+  end
+
   def self.to_csv(language, max_limit, options={})
     cash_rate = CashRate.last.try(language.to_sym).to_f
     # Custome the xls columns and languages
@@ -185,7 +200,8 @@ class Product < ActiveRecord::Base
         xls_column_values << 'Update'
         # standard_price
         shipment_cost = product.get_shipment_cost(language)
-        xls_column_values << (shipment_cost + (product.try(:price).try(:to_f) / cash_rate))
+        profit_rate = product.get_profit_rate language
+        xls_column_values << (((shipment_cost + product.try(:price).try(:to_f)) * profit_rate / cash_rate) + 1).to_i
         # currency
         xls_column_values << country_currency[language.to_sym]
         # condition_type
@@ -281,7 +297,7 @@ class Product < ActiveRecord::Base
         # customize_columns
         cusomize_column_names.each do |column_name|
           customize_relation = product.product_customize_attributes_relations.where(attribute_name: column_name).first
-          if customize_relation && customize_relation.attributes_translation_history.present?
+          if customize_relation.present? && customize_relation.attributes_translation_history.present?
             xls_column_values << customize_relation.attributes_translation_history.read_attribute(language)
           else
             xls_column_values << ''
@@ -319,11 +335,11 @@ class Product < ActiveRecord::Base
           end
           
           if v.color.present? && v.size.present?
-            xls_column_values << "#{product_translation[:title]}-#{v_color} #{v_size}"
+            xls_column_values << "#{product_translation[:title]}-#{v_color.read_attribute(language)} #{v_size.read_attribute(language)}"
           elsif v.color.present?
-            xls_column_values << "#{product_translation[:title]}-#{v_color}"
+            xls_column_values << "#{product_translation[:title]}-#{v_color.read_attribute(language)}"
           elsif v.size.present?
-            xls_column_values << "#{product_translation[:title]}-#{v_size}"
+            xls_column_values << "#{product_translation[:title]}-#{v_size.read_attribute(language)}"
           end
 
           xls_column_values << ""
@@ -341,7 +357,7 @@ class Product < ActiveRecord::Base
           xls_column_values << 'Update'
           # standard_price
           # shipment_cost ＝ product.get_shipment_cost(language)
-          xls_column_values << (shipment_cost + (product.try(:price).try(:to_f) / cash_rate))
+          xls_column_values << (((shipment_cost + product.try(:price).try(:to_f))* profit_rate / cash_rate) + 1).to_i
           # currency
           xls_column_values << country_currency[language.to_sym]
           xls_column_values << 'New'
