@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160214155133) do
+ActiveRecord::Schema.define(version: 20160217155948) do
 
   create_table "attributes_translation_histories", force: :cascade do |t|
     t.string   "attribute_name",       limit: 255
@@ -30,12 +30,12 @@ ActiveRecord::Schema.define(version: 20160214155133) do
   end
 
   create_table "cash_rates", force: :cascade do |t|
-    t.float    "england",    limit: 24
+    t.float    "british",    limit: 24
     t.float    "germany",    limit: 24
     t.float    "france",     limit: 24
     t.float    "spain",      limit: 24
     t.float    "italy",      limit: 24
-    t.float    "amercia",    limit: 24
+    t.float    "america",    limit: 24
     t.float    "canada",     limit: 24
     t.datetime "created_at",            null: false
     t.datetime "updated_at",            null: false
