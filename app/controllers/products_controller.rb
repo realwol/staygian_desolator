@@ -305,6 +305,8 @@ class ProductsController < ApplicationController
       params[:product][:avatar1] = params[:product][:avatar].second
       params[:product][:avatar2] = params[:product][:avatar][2]
       params[:product][:avatar] = params[:product][:avatar].first
+    else
+      params[:product][:avatar], params[:product][:avatar1], params[:product][:avatar2] = '', '', ''
     end
 
     respond_to do |format|
@@ -354,6 +356,9 @@ class ProductsController < ApplicationController
           @product.avatar_img_url = avatar_urls[0]
           @product.avatar_img_url1 = avatar_urls[1]
           @product.avatar_img_url2 = avatar_urls[2]
+          @product.avatar = @product.avatar1 = @product.avatar2 = nil
+        else
+          @product.avatar_img_url, @product.avatar_img_url1, @product.avatar_img_url2 = '', '', ''
           @product.avatar = @product.avatar1 = @product.avatar2 = nil
         end
         @product.save

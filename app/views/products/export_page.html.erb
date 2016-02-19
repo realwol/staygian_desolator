@@ -13,9 +13,7 @@
     <option value='italy'>意大利</option>
   </select><br/>
   <div class="field" id="product_page" >
-    <%
-      @template_type = '1' 
-    %>
+    <% @template_type = '1' %>
     <%= render '/products/product_type_select_template', locals:{ template_type: @template_type, product_type: @product_type} %>
   </div>
   <label>输入开始SKU：</label>

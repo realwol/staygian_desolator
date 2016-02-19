@@ -31,7 +31,7 @@
             $('#final_clicked1').data('clicked-time','false');
           });
           $('.level2Click1').click(function(){
-              $('.productTypeOK1').css('display', 'none');
+              $('.productTypeClickOK1').css('display', 'none');
               $(this).next('.level2Click1').remove();
               $(this).remove();
                 var hasChildren = $(this).data('product-type-children');
@@ -69,7 +69,7 @@
         }
       });
     } else if (hasChildren.toString() == 'false') {
-      $('.productTypeOK1').css('display', 'inline');
+      $('.productTypeClickOK1').css('display', 'inline');
       var final_clicked1 = $('#final_clicked1').data('clicked-time');
       if (final_clicked1.toString() == 'false'){
         productTypeText1.val(newTextValue);

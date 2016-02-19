@@ -11,6 +11,6 @@ class CashRatesController < ApplicationController
 
   private
   def rates_params
-    params.require(:cash_rate).permit(:england, :germany, :france, :spain, :italy, :amercia, :canada)
+    params.require(:cash_rate).permit(:british, :germany, :france, :spain, :italy, :america, :canada)
   end
 end

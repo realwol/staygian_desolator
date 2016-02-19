@@ -30,7 +30,6 @@
             $('#final_clicked').data('clicked-time','false');
           });
           $('.level2Click').click(function(){
-              $('.productTypeOK').css('display', 'none');
               $(this).next('.level2Click').remove();
               $(this).remove();
                 var hasChildren = $(this).data('product-type-children');

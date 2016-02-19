@@ -1,6 +1,6 @@
 <%= form_tag(update_product_type_products_path, method:'post') do %>
   <div class="field" id="product_page" >
-    <% @template_type = '1' %>
+    <% @template_type = '2' %>
     <label>分类：</label>
     <input type="text" id="productTypeText1">
     <div id="productTypeDiv1" style="display:none; position:absolute; border: 1px solid black; background-color:white; padding:10px; width:200px; z-index:100;">
@@ -17,7 +17,7 @@
       </div>
       <input type="hidden" id="product_select_value1", name="product[product_type_id]" >
       <p style="text-align:right; margin-top:10px; margin-bottom: -8px;">
-        <a href="#" class="productTypeClose1 productTypeOK1" >确定</a>
+        <a href="#" class="productTypeClose1 productTypeOK1 productTypeClickOK1" style="display:none" >确定</a>
         <a href="#" class="productTypeClose1 productTypeCancel1" >取消</a>
       </p>
     </div>
@@ -52,6 +52,7 @@
 <script type="text/javascript">
   $('#product_page .productTypeClose1').click(function(){
     $('#product_page #productTypeDiv1').css('display','none');
+    $('.productTypeClickOK1').css('display','none');
     $('#product_page #productTypeHistory1').find('.selectedLevel2Value1').remove();
     $.ajax({
       url: '/product_types/get_children_product_types',

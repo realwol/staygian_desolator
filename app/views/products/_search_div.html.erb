@@ -19,7 +19,6 @@
   $('.productTypeClose').click(function(){
     $('#productTypeDiv').css('display','none');
     $('#productTypeHistory').find('.selectedLevel2Value').remove();
-    $('.productTypeOK').css('display', 'none');
     $.ajax({
       url: '/product_types/get_children_product_types',
       type: 'POST',

@@ -10,7 +10,7 @@
     <th>加拿大</th>
   </tr>
   <tr>
-    <td><%= @current_rate.try(:england) %></td>
+    <td><%= @current_rate.try(:british) %></td>
     <td><%= @current_rate.try(:germany) %></td>
     <td><%= @current_rate.try(:france) %></td>
     <td><%= @current_rate.try(:spain) %></td>
@@ -30,7 +30,7 @@
     <% end %>
   </tr>
   <tr>
-    <td><%= f.text_field :england, value: @current_rate.try(:england), style:'width:100px;' %></td>
+    <td><%= f.text_field :british, value: @current_rate.try(:british), style:'width:100px;' %></td>
     <td><%= f.text_field :germany, value: @current_rate.try(:germany), style:'width:100px;' %></td>
     <td><%= f.text_field :france, value: @current_rate.try(:france), style:'width:100px;' %></td>
     <td><%= f.text_field :spain, value: @current_rate.try(:spain), style:'width:100px;' %></td>
