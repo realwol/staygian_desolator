@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     collection do
       get 'translate_variables'
       get 'variable_translate_list'
+      get 'variable_search'
       post 'update_translate_variable'
       post 'save_translate_variable'
       delete 'remove_translate_variable'
@@ -45,6 +46,8 @@ Rails.application.routes.draw do
       post 'save_tmall_links'
       post 'temp_off_sale_all'
       post 'off_sale_all'
+      post 'shield_all'
+      post 'on_sale_all'
       post 'update_attributes_div'
     end
 

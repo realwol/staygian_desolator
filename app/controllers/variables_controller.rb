@@ -1,9 +1,13 @@
 class VariablesController < ApplicationController
   before_action :set_variable, only: [:show, :edit, :update, :destroy]
 
+  def variable_search
+    @search_result = VariableTranslateHistory.where(word: params[:variable_name])
+  end
+
   def variable_translate_list
-    @variables = VariableTranslateHistory.color_variable
-    @colors = VariableTranslateHistory.size_variable
+    @variables = VariableTranslateHistory.color_variable.order('updated_at desc')
+    @colors = VariableTranslateHistory.size_variable.order('updated_at desc')
   end
 
   def remove_translate_variable
@@ -64,19 +68,19 @@ class VariablesController < ApplicationController
 
   def create
     @variable = Variable.new(variable_params)
-    variable_size = variable_params[:size]
-    variable_color = variable_params[:color]
-
-    if VariableTranslateHistory.where(word: variable_size).count < 1
-      VariableTranslateHistory.create(word: variable_size, variable_from: 'size')
-    end
-
-    if VariableTranslateHistory.where(word: variable_color).count < 1
-      VariableTranslateHistory.create(word: variable_color, variable_from: 'color')
-    end
 
     respond_to do |format|
       if @variable.save
+        variable_size = variable_params[:size]
+        variable_color = variable_params[:color]
+
+        if VariableTranslateHistory.where(word: variable_size).count < 1
+          VariableTranslateHistory.create(word: variable_size, variable_from: 'size', user: @variable.product.user)
+        end
+
+        if VariableTranslateHistory.where(word: variable_color).count < 1
+          VariableTranslateHistory.create(word: variable_color, variable_from: 'color', user: @variable.product.user)
+        end
 
         format.html { redirect_to @variable, notice: 'Variable was successfully created.' }
         format.json { render :show, status: :created, location: @variable }

@@ -63,6 +63,8 @@ def grasp tmall_link
     @main_images << ('https:' + img["src"][0..img["src"].index('.jpg')+3])
   end
 
+  @main_images = @main_images[0..8]
+
   @details = []
   @details_string = html.css('div#attributes div#J_AttrList ul#J_AttrUL li')
 
@@ -249,6 +251,8 @@ def grasp tmall_link
       @variable_images << url unless @variable_images.include?(url)
     end
   end
+
+  @variable_images = @variable_images[0..8]
 
   test_start = Time.now
 

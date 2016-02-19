@@ -16,8 +16,13 @@
         <td><input type="text" class="variable_translation_value" style="width:80px;" value=<%= variable.try(:fr) %> ></td>
         <td><input type="text" class="variable_translation_value" style="width:80px;" value=<%= variable.try(:es) %> ></td>
         <td><input type="text" class="variable_translation_value" style="width:80px;" value=<%= variable.try(:it) %> ></td>
-        <td><a class="update_translation" data-variable-type='size' value=<%= variable.word %>>更新</a> </td>
-        <td><a class="remove_translation" data-variable-type='size' value=<%= variable.word %>>删除</a> </td>
+        <% if variable.user == current_user %>
+          <td><a class="update_translation" data-variable-type='size' value=<%= variable.word %>>更新</a> </td>
+          <td><a class="remove_translation" data-variable-type='size' value=<%= variable.word %>>删除</a> </td>
+        <% else %>
+          <td></td>
+          <td></td>
+        <% end %>
       </tr>
     <% end %>
     <% else %>

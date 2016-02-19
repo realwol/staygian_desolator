@@ -1,0 +1,45 @@
+<div id="variableSearch">
+  <%= form_tag(variable_search_variables_path, remote:true, method: 'get') do %>
+    <%= label_tag '要搜索的变体名称：' %>
+    <%= text_field_tag 'variable_name', params[:variable_name] %>
+    <%= submit_tag '确定' %>
+  <% end %>
+  <div id="variableSearchTable">
+    <% if @search_result.present? %>
+    <table class="table table-bordered">
+      <tr>
+        <% %w(中国 美国 加拿大 英国 德国 法国 西班牙 意大利).each do |country| %>
+          <td><%= country %></td>
+        <% end %>
+        <td colspan="2" >操作</td>
+      </tr>
+        <% @search_result.each do |variable| %>
+          <tr>
+            <td><input type="text" class="variable_translation_name" style="width:80px;" value=<%= variable.word %> ></td>
+            <td><input type="text" class="variable_translation_value" style="width:80px;" value=<%= variable.try(:en) %> ></td>
+            <td><input type="text" class="variable_translation_value" style="width:80px;" value=<%= variable.try(:en) %> ></td>
+            <td><input type="text" class="variable_translation_value" style="width:80px;" value=<%= variable.try(:en) %> ></td>
+            <td><input type="text" class="variable_translation_value" style="width:80px;" value=<%= variable.try(:de) %> ></td>
+            <td><input type="text" class="variable_translation_value" style="width:80px;" value=<%= variable.try(:fr) %> ></td>
+            <td><input type="text" class="variable_translation_value" style="width:80px;" value=<%= variable.try(:es) %> ></td>
+            <td><input type="text" class="variable_translation_value" style="width:80px;" value=<%= variable.try(:it) %> ></td>
+            <% if variable.user == current_user %>
+              <td><a class="update_translation" data-variable-type='size' value=<%= variable.word %>>更新</a> </td>
+              <td><a class="remove_translation" data-variable-type='size' value=<%= variable.word %>>删除</a> </td>
+            <% else %>
+              <td></td>
+              <td></td>
+            <% end %>
+          </tr>
+        <% end %>
+      </table>
+      <button id="closevariableSearch" >关闭</button>
+    <% else %>
+    <% end %>
+  </div>
+</div>
+<script type="text/javascript">
+  $('#closevariableSearch').click(function(){
+    $('#variableSearchTable').hide('blind', {}, 500);
+  })
+</script>

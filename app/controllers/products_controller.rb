@@ -170,6 +170,20 @@ class ProductsController < ApplicationController
     redirect_to root_path
   end
 
+  def on_sale_all
+    unless params[:all_onsale_products].blank?
+      selected_user.valid_products.where(id:params[:all_onsale_products].split(' ')).update_all(shield_type:0, on_sale:true, update_status:true)
+    end
+    redirect_to root_path
+  end
+
+  def shield_all
+    unless params[:all_shield_products].blank?
+      selected_user.valid_products.where(id:params[:all_shield_products].split(' ')).update_all(shield_type:1, on_sale:true, update_status:true)
+    end
+    redirect_to root_path
+  end
+
   def temp_off_sale_products
     @action_from = params[:action]
     @products = selected_user.valid_products.temp_offsale.page(params[:page])
@@ -294,6 +308,9 @@ class ProductsController < ApplicationController
     end
 
     respond_to do |format|
+      @product.shield_type = 0
+      @product.on_sale = true
+      @product.update_status = true
       if @product.update(product_params)
         if @product.first_updated_time
           @product.update_attributes(update_status:true, user_id: current_user.id)

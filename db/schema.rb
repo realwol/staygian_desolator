@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160217155948) do
+ActiveRecord::Schema.define(version: 20160218145242) do
 
   create_table "attributes_translation_histories", force: :cascade do |t|
     t.string   "attribute_name",       limit: 255
@@ -269,12 +269,12 @@ ActiveRecord::Schema.define(version: 20160217155948) do
   end
 
   create_table "shipment_weight_relations", force: :cascade do |t|
-    t.integer  "min_weight",                        limit: 4
-    t.integer  "max_weight",                        limit: 4
+    t.float    "min_weight",                        limit: 24
+    t.float    "max_weight",                        limit: 24
     t.integer  "attributes_translation_history_id", limit: 4
     t.integer  "product_type_id",                   limit: 4
-    t.datetime "created_at",                                  null: false
-    t.datetime "updated_at",                                  null: false
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
   end
 
   create_table "shoes_attributes_values", force: :cascade do |t|
@@ -372,6 +372,7 @@ ActiveRecord::Schema.define(version: 20160217155948) do
     t.datetime "updated_at",                null: false
     t.datetime "deleted_at"
     t.string   "variable_from", limit: 255
+    t.integer  "user_id",       limit: 4
   end
 
   create_table "variables", force: :cascade do |t|

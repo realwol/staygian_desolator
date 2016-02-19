@@ -7,7 +7,7 @@
       <th>产品标题</th>
       <th>SKU</th>
       <th>产品号码</th>
-      <th colspan="3">操作</th>
+      <th>操作</th>
     </tr>
   </thead>
 
@@ -18,9 +18,15 @@
         <td><%= product.title %></td>
         <td><%= product.sku %></td>
         <td><%= product.product_number %></td>
-        <td><%= link_to '详情', product %></td>
-        <td><%= link_to '编辑', edit_product_path(product) %></td>
-        <td><%= link_to '删除', product, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td>
+          <%= link_to '编辑', edit_product_path(product) %>
+          <%= link_to '上架', onsale_product_product_path(product) %>
+          <%= link_to '下架', offsale_product_product_path(product) %>
+          <%= link_to '预售', presale_product_product_path(product) %>
+          <%= link_to '屏蔽', shield_product_product_path(product) %>
+          <%= link_to '屏蔽', temp_offsale_product_product_path(product) %>
+          <%= link_to '删除', product, method: :delete, data: { confirm: 'Are you sure?' } %>
+        </td>
       </tr>
     <% end %>
   </tbody>

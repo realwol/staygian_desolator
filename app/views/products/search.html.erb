@@ -29,16 +29,23 @@
   </table>
   <%= paginate @search_value %>
 <% end %>
-<% if @action_from == 'index' %>
+
   <%= form_tag temp_off_sale_all_products_path do %>
     <%= hidden_field_tag 'all_products', nil, value: @search_value.map(&:id).join(' ') %>
-    <%= submit_tag '全部临时下线' %>
+    <%= submit_tag '全部临时下架' %>
   <% end %>
   <%= form_tag off_sale_all_products_path do %>
     <%= hidden_field_tag 'all_offsale_products', nil, value: @search_value.map(&:id).join(' ') %>
-    <%= submit_tag '全部下线' %>
+    <%= submit_tag '全部下架' %>
   <% end %>
-<% end %>
+  <%= form_tag on_sale_all_products_path do %>
+    <%= hidden_field_tag 'all_onsale_products', nil, value: @search_value.map(&:id).join(' ') %>
+    <%= submit_tag '全部上架' %>
+  <% end %>
+  <%= form_tag shield_all_products_path do %>
+    <%= hidden_field_tag 'all_shield_products', nil, value: @search_value.map(&:id).join(' ') %>
+    <%= submit_tag '全部屏蔽' %>
+  <% end %>
 
 <%= link_to '更改产品分类', change_product_type_products_path(product_id: @search_value.map(&:id)) %>
 <%= link_to '返回', root_path %>

@@ -30,6 +30,7 @@
             $('#final_clicked').data('clicked-time','false');
           });
           $('.level2Click').click(function(){
+              $('.productTypeOK').css('display', 'none');
               $(this).next('.level2Click').remove();
               $(this).remove();
                 var hasChildren = $(this).data('product-type-children');
@@ -67,6 +68,7 @@
         }
       });
     } else if (hasChildren.toString() == 'false') {
+      $('.productTypeOK').css('display', 'inline');
       var final_clicked = $('#final_clicked').data('clicked-time');
       if (final_clicked.toString() == 'false'){
         productTypeText.val(newTextValue);
