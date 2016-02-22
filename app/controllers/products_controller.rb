@@ -16,6 +16,29 @@ class ProductsController < ApplicationController
     @all_forbidden_words = ProductDetailForbiddenList.all
   end
 
+  def create_product_grasp_filter
+    @flag = true
+    unless Reference.where(key1:'grasp_filter_words', value: params[:word]).first.present?
+      Reference.create(value: params[:word], key1:'grasp_filter_words')
+      @all_forbidden_words = Reference.where(key1:'grasp_filter_words').using_now
+    else
+      @flag = false
+    end
+  end
+
+  def product_grasp_filter
+    @all_forbidden_words = Reference.where(key1:'grasp_filter_words')
+  end
+
+  def remove_key_word
+    if params[:remove_type] == '1'
+      Reference.destroy(params[:id])
+      @all_forbidden_words = Reference.where(key1:'grasp_filter_words').using_now
+    else
+    end
+    render json:true
+  end
+
   def translate_preview
     @product_translation = @product.product_info_translations.last
   end

@@ -1,0 +1,12 @@
+<h5>抓取关键字过滤列表</h5>
+<hr/>
+<div id="productForbiddenWrodList" >
+  <%= render 'product_forbidden_list' %>
+</div>
+
+<%= form_tag(create_product_grasp_filter_products_path, remote:true) do %>
+  <%= label_tag '要过滤关键字:' %>
+  <%= text_field_tag :word %>
+
+  <%= submit_tag '新建' %>
+<% end %>

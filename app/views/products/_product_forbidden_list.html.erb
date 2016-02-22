@@ -2,8 +2,28 @@
     <% @all_forbidden_words.each_slice(10).each do |key_words| %>
       <tr>
         <% key_words.each do |key_word| %>
-          <td><%= key_word.word %></td>
+          <% if key_word.try(:word).present? %>
+            <td><%= key_word.word %><button class="delSelectedValue" data-value-id= "<%= key_word.id %>" data-remove-type='2' >X</button></td>
+          <% elsif key_word.try(:value).present? %>
+            <td><%= key_word.value %><button class="delSelectedValue" data-value-id= "<%= key_word.id %>" data-remove-type='1' >X</button></td>
+          <% end %>
         <% end %>
       </tr>
     <% end %>
   </table>
+
+<script type="text/javascript">
+  $('.delSelectedValue').click(function(){
+    var $this = $(this);
+    var id = $(this).data('value-id');
+    var removeType = $(this).data('remove-type');
+    $.ajax({
+      url: '/products/remove_key_word',
+      type: 'delete',
+      data: {id: id, remove_type: removeType},
+      success: function(){
+        $this.parents('td').remove();
+      }
+    })
+  });
+</script>

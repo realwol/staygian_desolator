@@ -13,7 +13,7 @@ end
 def start
 	tmall_link = ungrasp_tmall_link
 	# tmall_links.each do |link|
-  unless tmall_link.blank?
+  while tmall_link.present?
 		tmall_link.update_attributes(status:true)
     # do not store the same product
     # Product.uncached do
@@ -21,9 +21,9 @@ def start
     #   end
     # end
     grasp tmall_link
-  else
-    puts 'sleeping'
-	end
+    sleep rand(5..10)
+    tmall_link = ungrasp_tmall_link
+  end
 end
 
 def grasp tmall_link
@@ -46,6 +46,14 @@ def grasp tmall_link
   @product = Product.new(translate_status:false, update_status:false, on_sale:true, user_id: tmall_link.user_id)
   @product.origin_address = tmall_link.address
   @product.title = html.css('div.tb-detail-hd h1').text.strip
+
+  grasp_filter_words = Reference.grasp_filter.map(&:value)
+  filter_flag = false
+  grasp_filter_words.each do |word|
+    filter_flag = true unless @product.title.index(word).nil?
+  end
+  return if filter_flag
+
   @product.brand = html.css('li#J_attrBrandName').text.slice(4..-1)
   @product.shop_id = tmall_link.shop_id
   @product.product_link_id = tmall_link.product_link_id

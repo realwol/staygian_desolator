@@ -5,57 +5,73 @@ namespace :shop_link do
   task :check	=> :environment do
   	# Check table shop_links
     # sleep (0..20).to_a.sample
-  	shop_link = get_first_shop_link
-  	if shop_link
-      a = Time.now
-      grasp_link shop_link
-      shop_link.update_attributes(status: true)
-      puts '========='
-      puts Time.now - a
-    else
-      puts 'no shop'
+    run = true
+    while run
+    	shop_links = get_first_shop_link
+    	if shop_links.present?
+        a = Time.now
+        grasp_link shop_links
+        puts '========='
+        puts Time.now - a
+        run = true
+      else
+        puts 'no shop'
+        run = false
+      end
   	end
   end
 end
 
 def get_first_shop_link
-	ShopLink.un_grasp.first
+	ShopLink.un_grasp
 end
 
-def grasp_link shop_link
+def grasp_link shop_links
   driver = Selenium::WebDriver.for :firefox
-  driver.get shop_link.link
+  driver.get shop_links.first.link
 
   # make the login
   binding.pry
-  links_array, link_hash = [], {}
 
-  loop do
-    images = driver.find_elements(class: 'productImg')
-    images.each do |link|
-          link_hash[:address] = link.attribute('href')
-          # link_hash[:product_link_id] = product_link_id
-          link_hash[:user_id] = shop_link.user_id
-          link_hash[:status]  = 'false'
-          link_hash[:shop_id]  = shop_link.shop_id
-          links_array << link_hash.dup
-    end
-    # binding.pry
-    begin
-      next_url =  driver.find_element(class: 'ui-page-next').attribute('href')
-    rescue
-      puts driver.current_url
-      return
-    end
+  shop_links.each do |shop_link|
+    driver.get shop_link.link
 
-    if next_url
-      driver.get next_url unless next_url.nil?
-      sleep 5
-    else
-      break if next_url.nil?
+    links_array, link_hash, page_number = [], {}, 0
+
+    loop do
+      tmp_page_number = driver.find_element(class: 'ui-page-cur').text().to_i
+      if page_number < tmp_page_number
+        page_number = tmp_page_number
+      else
+        break
+      end
+      images = driver.find_elements(class: 'productImg')
+      images.each do |link|
+            link_hash[:address] = link.attribute('href')
+            # link_hash[:product_link_id] = product_link_id
+            link_hash[:user_id] = shop_link.user_id
+            link_hash[:status]  = 'false'
+            link_hash[:shop_id]  = shop_link.shop_id
+            links_array << link_hash.dup
+      end
+      # binding.pry
+      begin
+        next_url =  driver.find_element(class: 'ui-page-next').attribute('href')
+      rescue
+        puts driver.current_url
+        return
+      end
+
+      if next_url
+        driver.get next_url unless next_url.nil?
+        sleep 3
+      else
+        break
+      end
     end
+    TmallLink.create(links_array)
+    shop_link.update_attributes(status: true)
   end
-  TmallLink.create(links_array)
 end
 
 # def grasp_link shop_link

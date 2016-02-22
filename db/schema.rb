@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160218145242) do
+ActiveRecord::Schema.define(version: 20160222072039) do
 
   create_table "attributes_translation_histories", force: :cascade do |t|
     t.string   "attribute_name",       limit: 255
@@ -245,6 +245,16 @@ ActiveRecord::Schema.define(version: 20160218145242) do
 
   add_index "products", ["product_type_id"], name: "index_products_on_product_type_id", using: :btree
   add_index "products", ["user_id"], name: "index_products_on_user_id", using: :btree
+
+  create_table "references", force: :cascade do |t|
+    t.string   "key1",       limit: 255
+    t.string   "key2",       limit: 255
+    t.string   "key3",       limit: 255
+    t.text     "value",      limit: 65535
+    t.boolean  "is_using",   limit: 1,     default: true
+    t.datetime "created_at",                              null: false
+    t.datetime "updated_at",                              null: false
+  end
 
   create_table "shipment_method_values", force: :cascade do |t|
     t.string   "region",             limit: 255
