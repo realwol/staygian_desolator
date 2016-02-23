@@ -12,18 +12,14 @@ end
 
 def start
 	tmall_link = ungrasp_tmall_link
-	# tmall_links.each do |link|
-  while tmall_link.present?
-		tmall_link.update_attributes(status:true)
+  # tmall_links.each do |link|
+  # while tmall_link.present?
     # do not store the same product
-    # Product.uncached do
-    #   if Product.where(product_link_id: tmall_link.product_link_id).first
-    #   end
-    # end
+    tmall_link.update_attributes(status:true)
     grasp tmall_link
     sleep rand(5..10)
-    tmall_link = ungrasp_tmall_link
-  end
+    # tmall_link = ungrasp_tmall_link
+  # end
 end
 
 def grasp tmall_link

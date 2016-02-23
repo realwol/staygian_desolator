@@ -22,14 +22,17 @@
 set :output, "/root/web/amazon_tmall/log/cron_log.log"
 set :environment, "development"
 
-every 2.minute do
+# grasp product every 30 seconds
+every 0.5.minute do
 	rake 'grasp:start'
 end
 
-every 1.day do
-	rake 'product_check:pre_sale'
-end
+# graps product link manually
 
-every 1.minute do
-	rake 'shop_link:check'
-end
+# every 1.day do
+# 	rake 'product_check:pre_sale'
+# end
+
+# every 1.minute do
+# 	rake 'shop_link:check'
+# end

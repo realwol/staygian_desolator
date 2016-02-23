@@ -1,5 +1,5 @@
 <%if @template_type == '1' %>
-  <label>分类：</label>
+  <label>产品分类：</label>
   <input type="text" id="productTypeText1" value="<%= @product_type.try(:get_chain_name) %>" >
   <div id="productTypeDiv1" style="display:none; position:absolute; border: 1px solid black; background-color:white; padding:10px; width:200px; z-index:100;">
     <div id="productTypeHistory1" >
@@ -11,12 +11,12 @@
     </div>
     <input type="hidden" id="product_select_value1", name="product[product_type_id]", value="<%= @product_type.try(:id) %>" >
     <p style="text-align:right; margin-top:10px; margin-bottom: -8px;">
-      <a href="#" class="productTypeClose1 productTypeOK1" >确定</a>
+      <a href="#" class="productTypeClose1 productTypeOK1 productTypeClickOK1 productTypeOKClick" style="display:none">确定</a>
       <a href="#" class="productTypeClose1 productTypeCancel1" >取消</a>
     </p>
   </div>
 <% elsif @template_type == '2' %>
-  <label>分类：</label>
+  <label>要修改分类：</label>
   <input type="text" id="productTypeText1" value="<%= @product_type.try(:get_chain_name) %>" >
   <div id="productTypeDiv1" style="display:none; position:absolute; border: 1px solid black; background-color:white; padding:10px; width:200px; z-index:100;">
     <div id="productTypeHistory1" >
