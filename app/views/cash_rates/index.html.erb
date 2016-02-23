@@ -15,7 +15,7 @@
     <td><%= @current_rate.try(:france) %></td>
     <td><%= @current_rate.try(:spain) %></td>
     <td><%= @current_rate.try(:italy) %></td>
-    <td><%= @current_rate.try(:amercia) %></td>
+    <td><%= @current_rate.try(:america) %></td>
     <td><%= @current_rate.try(:canada) %></td>
   </tr>
 </table>
@@ -35,7 +35,7 @@
     <td><%= f.text_field :france, value: @current_rate.try(:france), style:'width:100px;' %></td>
     <td><%= f.text_field :spain, value: @current_rate.try(:spain), style:'width:100px;' %></td>
     <td><%= f.text_field :italy, value: @current_rate.try(:italy), style:'width:100px;' %></td>
-    <td><%= f.text_field :amercia, value: @current_rate.try(:amercia), style:'width:100px;' %></td>
+    <td><%= f.text_field :america, value: @current_rate.try(:america), style:'width:100px;' %></td>
     <td><%= f.text_field :canada, value: @current_rate.try(:canada), style:'width:100px;' %></td>
   </tr>
 </table>

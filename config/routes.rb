@@ -28,6 +28,7 @@ Rails.application.routes.draw do
       get 'product_grasp_filter'
       get 'wait_designer'
       get 'get_tmall_links'
+      get 'get_tmall_link_from_link'
       get 'un_updated_page'
       get 'export_page'
       get 'export_products'

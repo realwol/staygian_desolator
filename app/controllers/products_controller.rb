@@ -272,16 +272,23 @@ class ProductsController < ApplicationController
     @shops = current_user.shops.page(params[:page])
   end
 
+  def get_tmall_link_from_link
+  end
+
   # Move grasp tmall_links to a rake task and keep one shop in 60-80 sec
   def save_tmall_links
-    unless Shop.shop_avaliable? params[:links]
-      redirect_to root_path and return 
+    if params[:direct_link].present?
+      ShopLink.create( link:params[:direct_link], user: current_user, status: false)
+    else
+      unless Shop.shop_avaliable? params[:links]
+        redirect_to root_path and return 
+      end
+      link = "http://list.tmall.com/search_shopitem.htm?user_id=" + params[:links]
+      unless params[:shop_name].blank?
+        shop = Shop.create(name:params[:shop_name], user_id: current_user.id, status:true, shop_from: 'tmall', shop_id: params[:links])
+      end
+      ShopLink.create(shop_id_string:params[:links], link:link, user: current_user, status: false, shop_id: shop.try(:id))
     end
-    link = "http://list.tmall.com/search_shopitem.htm?user_id=" + params[:links]
-    unless params[:shop_name].blank?
-      shop = Shop.create(name:params[:shop_name], user_id: current_user.id, status:true, shop_from: 'tmall', shop_id: params[:links])
-    end
-    ShopLink.create(shop_id_string:params[:links], link:link, user: current_user, status: false, shop_id: shop.try(:id))
     redirect_to root_path
   end
 

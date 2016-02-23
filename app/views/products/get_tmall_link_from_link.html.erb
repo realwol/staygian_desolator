@@ -1,0 +1,5 @@
+<%= form_tag(save_tmall_links_products_path) do %>
+  请输入要抓取的链接：<br/>
+  <%= text_area_tag 'direct_link', nil, size:"80x2" %><br/>
+  <%= button_tag '抓取' %>
+<% end %>
