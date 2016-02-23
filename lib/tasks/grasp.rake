@@ -15,9 +15,13 @@ def start
   # tmall_links.each do |link|
   # while tmall_link.present?
     # do not store the same product
-    tmall_link.update_attributes(status:true)
-    grasp tmall_link
-    sleep rand(5..10)
+    if tmall_link.present?
+      tmall_link.update_attributes(status:true)
+      grasp tmall_link
+      sleep rand(5..10)
+    else
+      puts "sleeping in #{Time.now}"
+    end
     # tmall_link = ungrasp_tmall_link
   # end
 end
