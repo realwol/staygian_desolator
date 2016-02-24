@@ -7,7 +7,7 @@ namespace :shop_link do
     # sleep (0..20).to_a.sample
     run = true
     while run
-    	shop_links = get_first_shop_link
+    	shop_links = get_shop_links
     	if shop_links.present?
         a = Time.now
         grasp_link shop_links
@@ -22,7 +22,7 @@ namespace :shop_link do
   end
 end
 
-def get_first_shop_link
+def get_shop_links
 	ShopLink.un_grasp
 end
 
@@ -47,12 +47,12 @@ def grasp_link shop_links
       end
       images = driver.find_elements(class: 'productImg')
       images.each do |link|
-            link_hash[:address] = link.attribute('href')
-            # link_hash[:product_link_id] = product_link_id
-            link_hash[:user_id] = shop_link.user_id
-            link_hash[:status]  = 'false'
-            link_hash[:shop_id]  = shop_link.shop_id
-            links_array << link_hash.dup
+        link_hash[:address] = link.attribute('href')
+        # link_hash[:product_link_id] = product_link_id
+        link_hash[:user_id] = shop_link.user_id
+        link_hash[:status]  = 'false'
+        link_hash[:shop_id]  = shop_link.shop_id
+        links_array << link_hash.dup
       end
       # binding.pry
       begin

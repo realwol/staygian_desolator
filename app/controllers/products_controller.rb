@@ -177,7 +177,7 @@ class ProductsController < ApplicationController
   end
 
   def onsale_product
-    @product.update_attributes(on_sale:true, shield_type:0, update_status:true)
+    @product.update_attributes(on_sale:true, shield_type:0, update_status:true, translate_status: false)
     redirect_to root_path
   end
 
@@ -278,7 +278,12 @@ class ProductsController < ApplicationController
   # Move grasp tmall_links to a rake task and keep one shop in 60-80 sec
   def save_tmall_links
     if params[:direct_link].present?
-      ShopLink.create( link:params[:direct_link], user: current_user, status: false)
+      if Shop.shop_avaliable? params[:shop_id]
+        shop = Shop.create(name:params[:shop_name], user_id: current_user.id, status:true, shop_from: 'tmall', shop_id: params[:shop_id])
+      else
+        redirect_to root_path and return 
+      end
+      ShopLink.create( link:params[:direct_link], user: current_user, status: false, shop_id: shop.id)
     else
       unless Shop.shop_avaliable? params[:links]
         redirect_to root_path and return 
@@ -391,6 +396,7 @@ class ProductsController < ApplicationController
           @product.avatar_img_url, @product.avatar_img_url1, @product.avatar_img_url2 = '', '', ''
           @product.avatar = @product.avatar1 = @product.avatar2 = nil
         end
+        @product.translate_status = false
         @product.save
 
         Variable.update_product_variable(params["variable"], @product)
