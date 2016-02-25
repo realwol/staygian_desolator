@@ -12,7 +12,7 @@ def filter_product product_html, shop_id
   end
 end
 
-def grasp link
+def grasp_shop link
   # OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
   # I_KNOW_THAT_OPENSSL_VERIFY_PEER_EQUALS_VERIFY_NONE_IS_WRONG = nil
   agent = UserAgents.rand()
@@ -77,7 +77,7 @@ namespace :shop_link_auto_check do
     2.times do
       shop_link = get_first_shop_link
       if shop_link.present?
-        grasp shop_link
+        grasp_shop shop_link
         shop_link.update_attributes(status: true)
       end
       sleep 10

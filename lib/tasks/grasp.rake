@@ -17,7 +17,7 @@ def start
     # do not store the same product
     if tmall_link.present?
       tmall_link.update_attributes(status:true)
-      grasp tmall_link
+      grasp_product tmall_link
       sleep rand(5..10)
     else
       puts "sleeping in #{Time.now}"
@@ -26,7 +26,7 @@ def start
   # end
 end
 
-def grasp tmall_link
+def grasp_product tmall_link
     # if Product.where(origin_address: tmall_link).count > 0
     #   flash[:alert] = '不能重复抓取了哟！'
     #   render 'grasp_product'
