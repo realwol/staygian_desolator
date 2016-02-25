@@ -18,17 +18,19 @@ def grasp_shop link
   agent = UserAgents.rand()
   # agent = Mechanize.new
   page = Nokogiri::HTML(open(link.link, 'User-Agent' => agent, :allow_redirections => :all ))
-  
-  if page.at('#J_ItemList')
-    a = page.at('#J_ItemList').children
-  else
+
+  if page.title == '上天猫，就够了'
     puts '***********************'
     puts '*                     *'
     puts '* behind the wall now *'
     puts '*                     *'
     puts '***********************'
     return
+  else
+    a = page.at('#J_ItemList').children
   end
+
+  puts page.title
 
   link_hash = {}
   links_array = []
