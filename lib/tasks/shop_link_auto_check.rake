@@ -75,12 +75,12 @@ namespace :shop_link_auto_check do
   desc 'check shop link automatically'
   task :check => :environment do
     2.times do
+      sleep rand(15..20)
       shop_link = get_first_shop_link
       if shop_link.present?
         grasp_shop shop_link
         shop_link.update_attributes(status: true)
       end
-      sleep 10
     end
   end
 end
