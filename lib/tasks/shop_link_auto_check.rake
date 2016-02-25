@@ -64,8 +64,8 @@ def grasp_shop link
   uri = link.link
   unless next_uri.blank?
     unless next_uri == ''
-      uri = uri[0..(uri.index('?')-1)] + next_uri
-      ShopLink.create(shop_id_string: link.shop_id_string, link: uri, user: link.user, status: 'false', shop_id: link.shop_id, link_from: link.link_from)
+      new_url = 'https://list.tmall.com/search_product.htm' + next_uri
+      ShopLink.create(shop_id_string: link.shop_id_string, link: new_url, user: link.user, status: 'false', shop_id: link.shop_id, link_from: link.link_from)
     end
   end
   TmallLink.create(links_array)
