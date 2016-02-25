@@ -71,7 +71,9 @@ def grasp_shop link
   unless next_uri.blank?
     unless next_uri == ''
       new_url = 'https://list.tmall.com/search_product.htm' + next_uri
-      ShopLink.create(shop_id_string: link.shop_id_string, link: new_url, user: link.user, status: 'false', shop_id: link.shop_id, link_from: link.link_from)
+      unless ShopLink.where(link: new_url).count > 0
+        ShopLink.create(shop_id_string: link.shop_id_string, link: new_url, user: link.user, status: 'false', shop_id: link.shop_id, link_from: link.link_from)
+      end
     end
   end
   TmallLink.create(links_array)
