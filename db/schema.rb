@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160222072039) do
+ActiveRecord::Schema.define(version: 20160225062920) do
 
   create_table "attributes_translation_histories", force: :cascade do |t|
     t.string   "attribute_name",       limit: 255
@@ -308,6 +308,7 @@ ActiveRecord::Schema.define(version: 20160222072039) do
     t.boolean  "status",         limit: 1
     t.string   "shop_id",        limit: 255
     t.boolean  "check_status",   limit: 1,     default: true
+    t.string   "link_from",      limit: 255
   end
 
   add_index "shop_links", ["user_id"], name: "index_shop_links_on_user_id", using: :btree

@@ -1,6 +1,6 @@
 
 def get_first_shop_link
-  ShopLink.un_grasp.first
+  ShopLink.un_grasp.from_search.first
 end
 
 def filter_product product_html, shop_id
@@ -65,7 +65,7 @@ def grasp link
   unless next_uri.blank?
     unless next_uri == ''
       uri = uri[0..(uri.index('?')-1)] + next_uri
-      ShopLink.create(shop_id_string: link.shop_id_string, link: uri, user: link.user, status: 'false', shop_id: link.shop_id)
+      ShopLink.create(shop_id_string: link.shop_id_string, link: uri, user: link.user, status: 'false', shop_id: link.shop_id, link_from: link.link_from)
     end
   end
   TmallLink.create(links_array)
@@ -74,12 +74,13 @@ end
 namespace :shop_link_auto_check do
   desc 'check shop link automatically'
   task :check => :environment do
-    shop_link = get_first_shop_link
-    if shop_link.present?
-      a = Time.now
-      grasp shop_link
-      shop_link.update_attributes(status: true)
-      puts Time.now - a
+    2.times do
+      shop_link = get_first_shop_link
+      if shop_link.present?
+        grasp shop_link
+        shop_link.update_attributes(status: true)
+      end
+      sleep 10
     end
   end
 end

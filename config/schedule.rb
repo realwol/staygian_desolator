@@ -27,6 +27,8 @@ every 0.5.minute do
 	rake 'grasp:start'
 end
 
+
+
 # graps product link manually
 
 # every 1.day do

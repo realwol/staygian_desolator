@@ -283,7 +283,7 @@ class ProductsController < ApplicationController
       else
         redirect_to root_path and return 
       end
-      ShopLink.create( link:params[:direct_link], user: current_user, status: false, shop_id: shop.id)
+      ShopLink.create( link:params[:direct_link], user: current_user, status: false, shop_id: shop.id, link_from: 'search')
     else
       unless Shop.shop_avaliable? params[:links]
         redirect_to root_path and return 
@@ -292,7 +292,7 @@ class ProductsController < ApplicationController
       unless params[:shop_name].blank?
         shop = Shop.create(name:params[:shop_name], user_id: current_user.id, status:true, shop_from: 'tmall', shop_id: params[:links])
       end
-      ShopLink.create(shop_id_string:params[:links], link:link, user: current_user, status: false, shop_id: shop.try(:id))
+      ShopLink.create(shop_id_string:params[:links], link:link, user: current_user, status: false, shop_id: shop.try(:id), link_from: 'shop')
     end
     redirect_to root_path
   end
