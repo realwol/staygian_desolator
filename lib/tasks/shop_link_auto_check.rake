@@ -22,7 +22,11 @@ def grasp_shop link
   if page.at('#J_ItemList')
     a = page.at('#J_ItemList').children
   else
-    puts 'behind the wall now'
+    puts '***********************'
+    puts '*                     *'
+    puts '* behind the wall now *'
+    puts '*                     *'
+    puts '***********************'
     return
   end
 
