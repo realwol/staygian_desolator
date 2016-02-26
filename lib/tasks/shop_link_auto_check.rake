@@ -4,7 +4,7 @@ def get_first_shop_link
 end
 
 def filter_product product_html, shop_id
-  if shop_id.present?
+  if shop_id.present? && product_html.present?
     shop = Shop.find(shop_id)
     product_html.at('a.productShop-name').attributes['href'].value.index(shop.shop_id).nil?
   else
@@ -39,7 +39,7 @@ def grasp_shop link
     if a[i].at('a.productImg').nil?
       puts "ad #{i}"
     else
-      if filter_product a[i], link.shop_id
+      if filter_product(a[i], link.shop_id)
         # todo
         puts "not in shop #{i}"
       else
