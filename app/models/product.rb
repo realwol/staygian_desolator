@@ -20,6 +20,7 @@ class Product < ActiveRecord::Base
   scope :offsale, -> {where(on_sale: false).un_shield}
   scope :temp_offsale, -> {where(shield_type: 3).where(on_sale:false)}
   scope :pre_saled, -> {where.not(presale_date: nil).where(shield_type:2).where(on_sale:false)}
+  scope :need_retry, -> {where(link_retry: true)}
 
   before_create :save_sku
 

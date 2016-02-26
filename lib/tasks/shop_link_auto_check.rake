@@ -1,6 +1,11 @@
 
 def get_first_shop_link
-  ShopLink.un_grasp.from_search.first
+  link = ShopLink.un_grasp.from_search.first
+  if link.present?
+    link
+  else
+    ShopLink.need_retry.from_search.first
+  end
 end
 
 def filter_product product_html, shop_id
@@ -27,7 +32,32 @@ def grasp_shop link
     puts '***********************'
     return
   else
-    a = page.at('#J_ItemList').children
+
+    a = page.at('#J_ItemList')
+    if a.nil?
+      # next uri
+      if (page.at('.ui-page-next') && page.at('.ui-page-next').attributes["href"])
+        next_uri = page.at('.ui-page-next').attributes["href"].value
+      else
+        next_uri = ''
+      end
+
+      uri = link.link
+      unless next_uri.blank?
+        unless next_uri == ''
+          new_url = 'https://list.tmall.com/search_product.htm' + next_uri
+          puts new_url
+          if ShopLink.where(link: new_url).count > 0
+            puts 'old next url'
+          else
+            ShopLink.create(shop_id_string: link.shop_id_string, link: new_url, user: link.user, status: 'false', shop_id: link.shop_id, link_from: link.link_from, link_retry: true)
+          end
+        end
+      end
+      return
+    else
+      a = a.children
+    end
   end
 
   puts page.title
