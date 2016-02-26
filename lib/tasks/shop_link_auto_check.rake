@@ -105,11 +105,11 @@ def grasp_shop link
       if ShopLink.where(link: new_url).count > 0
         puts 'old next url'
       else
-        link.update_attributes(status: true, link_retry: false)
         ShopLink.create(shop_id_string: link.shop_id_string, link: new_url, user: link.user, status: 'false', shop_id: link.shop_id, link_from: link.link_from)
       end
     end
   end
+  link.update_attributes(status: true, link_retry: false)
   TmallLink.create(links_array)
 end
 
