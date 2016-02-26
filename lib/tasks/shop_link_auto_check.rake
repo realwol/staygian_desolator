@@ -105,6 +105,7 @@ def grasp_shop link
       if ShopLink.where(link: new_url).count > 0
         puts 'old next url'
       else
+        link.update_attributes(status: true, link_retry: false)
         ShopLink.create(shop_id_string: link.shop_id_string, link: new_url, user: link.user, status: 'false', shop_id: link.shop_id, link_from: link.link_from)
       end
     end
@@ -120,7 +121,6 @@ namespace :shop_link_auto_check do
       shop_link = get_first_shop_link
       if shop_link.present?
         grasp_shop shop_link
-        shop_link.update_attributes(status: true)
       end
     end
   end
