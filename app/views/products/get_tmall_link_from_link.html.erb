@@ -1,4 +1,8 @@
 <%= form_tag(save_tmall_links_products_path) do %>
+  搜索词：
+  <%= text_field_tag 'search_word' %><br/>
+  屏蔽词：
+  <%= text_field_tag 'filter_word' %><br/>
   请输入所属门店id：
   <%= text_field_tag 'shop_id' %><br/>
   请输入所属门店名称：
@@ -6,4 +10,15 @@
   请输入要抓取的链接：<br/>
   <%= text_area_tag 'direct_link', nil, size:"80x2" %><br/>
   <%= button_tag '抓取' %>
+<% end %>
+
+<hr/>
+
+<div id="shop_list_table_div">
+  <%= render 'search_shop_list_div' %> 
+</div>
+<%= form_tag(search_shop_products_path, remote:true) do %>
+  <label>请输入店铺关键词：</label>
+  <input type="text" name="search_word">
+  <%= submit_tag '搜索' %>
 <% end %>

@@ -47,7 +47,7 @@ def grasp_product tmall_link
   @product.origin_address = tmall_link.address
   @product.title = html.css('div.tb-detail-hd h1').text.strip
 
-  grasp_filter_words = Reference.grasp_filter.map(&:value)
+  grasp_filter_words = tmall_link.shop.grasp_filter
   filter_flag = false
   grasp_filter_words.each do |word|
     filter_flag = true unless @product.title.index(word).nil?

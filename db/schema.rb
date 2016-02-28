@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160226022243) do
+ActiveRecord::Schema.define(version: 20160228014802) do
 
   create_table "attributes_translation_histories", force: :cascade do |t|
     t.string   "attribute_name",       limit: 255
@@ -325,6 +325,8 @@ ActiveRecord::Schema.define(version: 20160226022243) do
     t.datetime "deleted_at"
     t.boolean  "check_status", limit: 1,     default: true
     t.text     "back_up",      limit: 65535
+    t.string   "search_word",  limit: 255
+    t.string   "filter_word",  limit: 255
   end
 
   add_index "shops", ["user_id"], name: "index_shops_on_user_id", using: :btree

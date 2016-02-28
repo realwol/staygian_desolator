@@ -23,6 +23,8 @@ def grasp_shop link
   agent = UserAgents.rand()
   # agent = Mechanize.new
   page = Nokogiri::HTML(open(link.link, 'User-Agent' => agent, :allow_redirections => :all ))
+   
+  binding.pry
 
   if page.title == '上天猫，就够了'
     puts '***********************'
@@ -32,7 +34,6 @@ def grasp_shop link
     puts '***********************'
     return
   else
-
     a = page.at('#J_ItemList')
     if a.nil?
       # next uri

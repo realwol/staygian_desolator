@@ -36,3 +36,5 @@ gem 'mechanize'
 gem 'qiniu'
 gem 'selenium-webdriver'
 gem 'cancancan'
+
+gem 'thin'

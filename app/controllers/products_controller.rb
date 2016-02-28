@@ -2,6 +2,14 @@ class ProductsController < ApplicationController
   before_action :set_product, only: [:show, :edit, :update, :destroy, :shield_product, :presale_product, :offsale_product, :temp_offsale_product, :onsale_product, :edited_product, :translate_preview]
   before_action :authenticate_user!
 
+  def search_shop
+    if params[:search_word].present?
+      @shops = Shop.where("name like '%#{params[:search_word]}%'")
+    else
+      @shops = Shop.all
+    end
+  end
+
   def create_product_forbidden_word
     @flag = true
     unless ProductDetailForbiddenList.where(word: params[:word]).first.present?
@@ -273,13 +281,14 @@ class ProductsController < ApplicationController
   end
 
   def get_tmall_link_from_link
+    @shops = current_user.shops
   end
 
   # Move grasp tmall_links to a rake task and keep one shop in 60-80 sec
   def save_tmall_links
     if params[:direct_link].present?
       if Shop.shop_avaliable? params[:shop_id]
-        shop = Shop.create(name:params[:shop_name], user_id: current_user.id, status:true, shop_from: 'tmall', shop_id: params[:shop_id])
+        shop = Shop.create(name:params[:shop_name], user_id: current_user.id, status:true, shop_from: 'tmall', shop_id: params[:shop_id], search_word: params[:search_word], filter_word: params[:filter_word])
       else
         redirect_to root_path and return 
       end
@@ -315,6 +324,7 @@ class ProductsController < ApplicationController
   # GET /products/1/edit
   def edit
     @product_type_attributes = ProductAttribute.where(product_type_id: @product.product_type_id)
+    @product_attributes_value = @product.product_customize_attributes_relations
   end
 
   # POST /products
@@ -360,18 +370,28 @@ class ProductsController < ApplicationController
         customize_attributes_hash = {}
         customize_attributes_array = []
         @product_type_attributes.each_with_index do |attribute, index|
-          customize_attributes_hash[:product_type_id] = @product.product_type_id
-          customize_attributes_hash[:product_id] = @product.id
-          customize_attributes_hash[:attribute_name] = attribute.attribute_name
-          if attribute.is_locked
-            customize_attributes_hash[:attributes_translation_history_id] = params["attribte_options"].values[index]
+          product_attribute = @product.product_customize_attributes_relations.where(attribute_name: attribute.attribute_name).last
+          if product_attribute.present?
+            if attribute.is_locked
+              attributes_translation_history_id = params["attribte_options"].values[index]
+            else
+              attributes_translation_history_id = AttributesTranslationHistory.where(attribute_name: params["attribte_options"].values[index]).first.try(:id)
+            end
+            product_attribute.update_attributes(attributes_translation_history_id: attributes_translation_history_id)
           else
-            customize_attributes_hash[:attributes_translation_history_id] = AttributesTranslationHistory.where(attribute_name: params["attribte_options"].values[index]).first.try(:id)
+            customize_attributes_hash[:product_type_id] = @product.product_type_id
+            customize_attributes_hash[:product_id] = @product.id
+            customize_attributes_hash[:attribute_name] = attribute.attribute_name
+            if attribute.is_locked
+              customize_attributes_hash[:attributes_translation_history_id] = params["attribte_options"].values[index]
+            else
+              customize_attributes_hash[:attributes_translation_history_id] = AttributesTranslationHistory.where(attribute_name: params["attribte_options"].values[index]).first.try(:id)
+            end
+            customize_attributes_array << customize_attributes_hash.dup
           end
-          customize_attributes_array << customize_attributes_hash.dup
         end
-        
-        ProductCustomizeAttributesRelation.create(customize_attributes_array)
+
+        ProductCustomizeAttributesRelation.create(customize_attributes_array) if customize_attributes_array.present?
 
         # Tobe cut
         if params[:cut_image_urls][2..-1]

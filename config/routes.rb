@@ -42,6 +42,7 @@ Rails.application.routes.draw do
       get 'update_price'
       get 'change_product_type'
       get 'change_product_type'
+      post 'search_shop'
       post 'create_product_forbidden_word'
       post 'create_product_grasp_filter'
       post 'custome_upload_image'
