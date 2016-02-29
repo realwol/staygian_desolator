@@ -281,7 +281,8 @@ class ProductsController < ApplicationController
   end
 
   def get_tmall_link_from_link
-    @shops = current_user.shops
+    # @shops = current_user.shops
+    @shops = Shop.all
   end
 
   # Move grasp tmall_links to a rake task and keep one shop in 60-80 sec
