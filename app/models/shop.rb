@@ -10,6 +10,10 @@ class Shop < ActiveRecord::Base
   end
 
   def grasp_filter
-    self.filter_word.split(' ')
+    if self.filter_word.present?
+      self.filter_word.split(' ')
+    else
+      []
+    end
   end
 end

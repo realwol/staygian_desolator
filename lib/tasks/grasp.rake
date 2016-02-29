@@ -360,5 +360,12 @@ def grasp_product tmall_link
 end
 
 def ungrasp_tmall_link
-	TmallLink.where(status:false).first
+  last_grasp = TmallLink.where(status: true).last
+  if last_grasp.present?
+    next_grasp = TmallLink.where('id > ? and shop_id != ?', last_grasp.id, last_grasp.shop_id).first
+    if next_grasp.present?
+      return next_grasp
+    end
+  end
+  TmallLink.where(status:false).first
 end
