@@ -1,8 +1,25 @@
 
 def get_first_shop_link
-  link = ShopLink.un_grasp.from_search.first
-  if link.present?
-    link
+  # link = ShopLink.un_grasp.from_search.first
+  # if link.present?
+  #   link
+  # else
+  #   ShopLink.need_retry.from_search.first
+  # end
+  last_link = ShopLink.where(status: true).order('updated_at').last
+  if last_link.present?
+    next_link = ShopLink.where('id > ? and shop_id != ? and status = ?', last_link.id, last_link.shop_id, false).first
+    if next_link.present?
+      next_link
+    else
+      next_link = ShopLink.un_grasp.from_search.first
+    end
+  else
+    next_link = ShopLink.un_grasp.from_search.first
+  end
+
+  if next_link.present?
+    next_link
   else
     ShopLink.need_retry.from_search.first
   end
