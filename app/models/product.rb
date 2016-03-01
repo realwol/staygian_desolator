@@ -66,7 +66,7 @@ class Product < ActiveRecord::Base
     local_infos = {}
     product_translation = product.product_info_translations.last
     case language
-    when 'england'
+    when 'british'
       local_infos[:title] = product_translation.try(:e_t)
       local_infos[:detail] = product_translation.try(:e_detail)
       local_infos[:des1] = product_translation.try(:e_des1)
@@ -165,9 +165,9 @@ class Product < ActiveRecord::Base
     cusomize_table_names = Product.get_all_customize_table_columns self.all
     xls_column_names = xls_column_names + cusomize_table_names
 
-    country_currency = {england:'GBP', germany:'EUR', france: 'EUR', spain:'EUR', italy:'EUR', china:'人民币', america:'USD', canada:'CAD'}
-    country_sku = {england: 'UK', germany:'DE', france:'FR', spain:'ES', italy:'IT', america:'US', canada:'CA'}
-    variable_hash = {england: 'en', germany:'de', france:'fr', spain:'es', italy:'it', america:'en', canada:'en'}
+    country_currency = {british:'GBP', germany:'EUR', france: 'EUR', spain:'EUR', italy:'EUR', china:'人民币', america:'USD', canada:'CAD'}
+    country_sku = {british: 'UK', germany:'DE', france:'FR', spain:'ES', italy:'IT', america:'US', canada:'CA'}
+    variable_hash = {british: 'en', germany:'de', france:'fr', spain:'es', italy:'it', america:'en', canada:'en'}
     max_limit = 9999999 unless max_limit.present?
     csv_line_count = 0
 
@@ -468,7 +468,7 @@ class Product < ActiveRecord::Base
                         "variation_theme", "color_name", "color_map", "size_name", "size_map", "Details",
                         "Outer_material_type", "Inner_material_type", "Sole_material", "Closure_type", "Heel_type"]
 
-    country_currency = {england:'GBP', germany:'EUR', france: 'EUR', spain:'EUR', italy:'EUR', china:'人民币', america:'USD', canada:'CAD'}
+    country_currency = {british:'GBP', germany:'EUR', france: 'EUR', spain:'EUR', italy:'EUR', china:'人民币', america:'USD', canada:'CAD'}
 
     CSV.generate(options) do |csv|
       csv << xls_column_names
