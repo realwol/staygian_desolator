@@ -96,6 +96,7 @@ def grasp_shop link
         product_link_end = link_hash[:address][product_link_start..-1].index('&') - 1 + product_link_start
 
         product_link_id = link_hash[:address][product_link_start..product_link_end]
+        # stop dup product link
         unless TmallLink.where(product_link_id: product_link_id).first
           link_hash[:address] = "http://detail.tmall.com/item.htm?id=" + product_link_id.to_s
           link_hash[:product_link_id] = product_link_id

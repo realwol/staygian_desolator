@@ -38,3 +38,4 @@ gem 'selenium-webdriver'
 gem 'cancancan'
 
 gem 'thin'
+gem 'iconv'

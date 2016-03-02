@@ -4,8 +4,11 @@ namespace :grasp do
 	desc "Grasp from tmall"
 	task :start => :environment do
     # 10.times do
-      start
-      sleep rand(5..10)
+      if start
+        sleep rand(5..10)
+      else
+        puts 'duplicate product'
+      end
     # end
 	end
 end
@@ -16,9 +19,14 @@ def start
   # while tmall_link.present?
     # do not store the same product
     if tmall_link.present?
-      tmall_link.update_attributes(status:true)
-      grasp_product tmall_link
-      sleep rand(5..10)
+      if TmallLink.where(product_link_id: tmall_link.product_link_id).count > 1
+        tmall_link.update_attributes(status:true)
+        return false
+      else
+        tmall_link.update_attributes(status:true)
+        grasp_product tmall_link
+        sleep rand(5..10)
+      end
     else
       puts "sleeping in #{Time.now}"
     end
@@ -27,10 +35,7 @@ def start
 end
 
 def grasp_product tmall_link
-    # if Product.where(origin_address: tmall_link).count > 0
-    #   flash[:alert] = '不能重复抓取了哟！'
-    #   render 'grasp_product'
-    # end
+
   agent = UserAgents.rand()
   html = Nokogiri::HTML(open(tmall_link.address, 'User-Agent' => agent, :allow_redirections => :all ))
   # url = URI.parse( tmall_link.address)
@@ -236,6 +241,27 @@ def grasp_product tmall_link
   end
 
   @product.producer = html.css('div#shopExtra strong').text
+  js = html.css('script').to_s
+
+
+  unless @details.present?
+    aa = js.index('newProGroup')
+    bb = js.index(',"progressiveSupport"')
+    a = Iconv.iconv("utf-8","gbk", js[aa..bb]).join
+    b = a.split('groupName')
+    b.each do |bb|
+      if bb.index('name').present?
+        bb_start = bb.index('name') + 4
+        c = bb[bb_start..-1]
+        c.split('name').each do |cc|
+          ccc = cc.split('value')
+          key = ccc[0][3..-4]
+          value = ccc[1][3..-6]
+          @details << "#{key}:#{value}<br/>\n"
+        end
+      end
+    end
+  end
 
   details_after_filter = []
   filter_word_list = ProductDetailForbiddenList.all.map(&:word).uniq
@@ -287,6 +313,7 @@ def grasp_product tmall_link
   @product_images.each_with_index do |img, index|
     @product["images#{index+1}".to_sym] = img
   end
+
   @product.save
   @product.reload
 
@@ -326,7 +353,7 @@ def grasp_product tmall_link
   variable_array = []
   variable_hash = {}
   @stock = []
-  js = html.css('script').to_s
+  
   start = js.index('skuMap').to_i
   if start
     js = js[start..-1]
