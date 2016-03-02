@@ -154,7 +154,7 @@ class Product < ActiveRecord::Base
   def self.to_csv(language, max_limit, options={})
     cash_rate = CashRate.last.try(language.to_sym).to_f
     # Custome the xls columns and languages
-    xls_column_names = %w(item_sku item_name external_product_id external_product_id_type feed_product_type brand_name mannfacturer
+    xls_column_names = %w(item_sku item_name external_product_id external_product_id_type feed_product_type brand_name manufacture
                           part_number product_description update_delete standard_price currency condition_type condition_note quantity
                           website_shipping_weight website_shipping_weight_unit_of_measure bullet_point1 bullet_point2 bullet_point3
                           bullet_point4 bullet_point5 recommended_browse_nodes1 recommended_browse_nodes2 generic_keywords1 generic_keywords12
@@ -198,8 +198,8 @@ class Product < ActiveRecord::Base
         # brand_name
         product_brand_name = AttributesTranslationHistory.find(product.product_type.product_type_name_translation)
         xls_column_values << product_brand_name.read_attribute(language)
-        # mannfacturer
-        xls_column_values << product_brand_name.read_attribute(language)
+        # manufacture
+        xls_column_values << product.shop.manufacture
         # part_number
         xls_column_values << ('a'..'z').to_a.sample(5).join
         # product_description
@@ -357,7 +357,8 @@ class Product < ActiveRecord::Base
           xls_column_values << product_type_translation.read_attribute(language)
           # brand_name
           xls_column_values << product_brand_name.read_attribute(language)
-          xls_column_values << product_brand_name.read_attribute(language)
+          # manufacture
+          xls_column_values << product.shop.manufacture
           # part_number
           xls_column_values << ('a'..'z').to_a.sample(5).join
           # product_description

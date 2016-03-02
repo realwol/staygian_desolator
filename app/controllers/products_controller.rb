@@ -289,7 +289,7 @@ class ProductsController < ApplicationController
   # Move grasp tmall_links to a rake task and keep one shop in 60-80 sec
   def save_tmall_links
     if params[:direct_link].present?
-      shop = Shop.create(name:params[:shop_name], user_id: current_user.id, status:true, shop_from: 'tmall', shop_id: params[:shop_id], search_word: params[:search_word], filter_word: params[:filter_word])
+      shop = Shop.create(name:params[:shop_name], user_id: current_user.id, status:true, shop_from: 'tmall', shop_id: params[:shop_id], search_word: params[:search_word], filter_word: params[:filter_word], manufacture: params[:manufacture])
       ShopLink.create( link:params[:direct_link], user: current_user, status: false, shop_id: shop.id, link_from: 'search')
     else
       unless Shop.shop_avaliable? params[:links]

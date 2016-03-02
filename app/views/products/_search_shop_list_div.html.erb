@@ -3,12 +3,14 @@
       <th>店铺名称</th>
       <th>搜索词</th>
       <th>屏蔽词</th>
+      <th>添加人</th>
     </tr>
     <% @shops.each do |shop|%>
       <tr>
         <td><%= shop.name %></td>
         <td><%= shop.search_word %></td>
         <td><%= shop.filter_word %></td>
+        <td><%= shop.user.email %></td>
       </tr>
     <% end %>
   </table> 

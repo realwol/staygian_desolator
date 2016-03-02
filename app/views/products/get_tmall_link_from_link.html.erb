@@ -1,12 +1,9 @@
 <%= form_tag(save_tmall_links_products_path) do %>
-  搜索词：
-  <%= text_field_tag 'search_word' %><br/>
-  屏蔽词：
-  <%= text_field_tag 'filter_word' %><br/>
-  请输入所属门店id：
-  <%= text_field_tag 'shop_id' %><br/>
-  请输入所属门店名称：
-  <%= text_field_tag 'shop_name' %><br/>
+  搜索词：<%= text_field_tag 'search_word' %><br/>
+  屏蔽词：<%= text_field_tag 'filter_word' %><br/>
+  请输入所属门店id：<%= text_field_tag 'shop_id' %><br/>
+  请输入所属门店名称：<%= text_field_tag 'shop_name' %><br/>
+  请输入所厂商名称：<%= text_field_tag 'manufacture' %><br/>
   请输入要抓取的链接：<br/>
   <%= text_area_tag 'direct_link', nil, size:"80x2" %><br/>
   <%= button_tag '抓取' %>
