@@ -274,7 +274,7 @@ class ProductsController < ApplicationController
 
   def un_updated_page
     @action_from = params[:action]
-    @products = selected_user.valid_products.un_updated.page(params[:page])
+    @products = selected_user.valid_products.un_updated.page(params[:page]).order('id desc')
   end
 
   def get_tmall_links 

@@ -322,6 +322,7 @@ def grasp_product tmall_link
 
   @sizes = @sizes - @colors
   @sizes_value = @sizes_value - @colors_value
+
   variable_array = []
   variable_hash = {}
   @stock = []
@@ -330,33 +331,84 @@ def grasp_product tmall_link
   if start
     js = js[start..-1]
     stock_count = 0
-    @colors.each_with_index do |color,c_index|
-      @sizes.each_with_index do |size,s_index|
-        variable_id = "#{@sizes_value[s_index]};#{@colors_value[c_index]}"
-        start = js.index(variable_id)
-        if (start && @stock[stock_count] != 0)
-          startt = js[start..-1].index('stock')
-          endd = js[start..-1].index('}')
-          @stock << js[start..-1][startt..endd].match(/\d+/)[0]
-          variable_hash[:variable_id] = variable_id
-          variable_hash[:color] = color
-          variable_hash[:size] = size
-          variable_hash[:stock] = @stock[stock_count]
-          stock_count = stock_count + 1
-          variable_hash[:product_id] = @product.id
-          variable_hash["image_url1"] = @variable_images[c_index]
-    		  @main_images.each_with_index do |img,index|
-    			  variable_hash["image_url#{index+2}".to_sym] = img
-    		  end
-          variable_array << variable_hash.dup
-          variable_hash = {}
-          # todo: check variable images
+    if @colors.present? && @sizes.present?
+      @colors.each_with_index do |color,c_index|
+        @sizes.each_with_index do |size,s_index|
+          variable_id = "#{@sizes_value[s_index]};#{@colors_value[c_index]}"
+          variable_id_backup = "#{@colors_value[c_index]};#{@sizes_value[s_index]}"
+          start = js.index(variable_id)
+          start = js.index(variable_id_backup) if start.nil?
+          if (start && @stock[stock_count] != 0)
+            startt = js[start..-1].index('stock')
+            endd = js[start..-1].index('}')
+            @stock << js[start..-1][startt..endd].match(/\d+/)[0]
+            variable_hash[:variable_id] = variable_id
+            variable_hash[:color] = color
+            variable_hash[:size] = size
+            variable_hash[:stock] = @stock[stock_count]
+            stock_count = stock_count + 1
+            variable_hash[:product_id] = @product.id
+            variable_hash["image_url1"] = @variable_images[c_index]
+      		  @main_images.each_with_index do |img,index|
+      			  variable_hash["image_url#{index+2}".to_sym] = img
+      		  end
+            variable_array << variable_hash.dup
+            variable_hash = {}
+            # todo: check variable images
+          end
         end
       end
+    elsif @sizes.present?
+        @sizes.each_with_index do |size,s_index|
+          variable_id = "#{@sizes_value[s_index]};"
+          variable_id_backup = ";#{@sizes_value[s_index]}"
+          start = js.index(variable_id)
+          start = js.index(variable_id_backup) if start.nil?
+          if (start && @stock[stock_count] != 0)
+            startt = js[start..-1].index('stock')
+            endd = js[start..-1].index('}')
+            @stock << js[start..-1][startt..endd].match(/\d+/)[0]
+            variable_hash[:variable_id] = variable_id
+            variable_hash[:size] = size
+            variable_hash[:stock] = @stock[stock_count]
+            stock_count = stock_count + 1
+            variable_hash[:product_id] = @product.id
+            @main_images.each_with_index do |img,index|
+              variable_hash["image_url#{index+2}".to_sym] = img
+            end
+            variable_array << variable_hash.dup
+            variable_hash = {}
+            # todo: check variable images
+          end
+        end
+    elsif @colors.present?
+        @colors.each_with_index do |color,c_index|
+          variable_id = ";#{@colors_value[c_index]}"
+          variable_id_backup = "#{@colors_value[c_index]};"
+          start = js.index(variable_id)
+          start = js.index(variable_id_backup) if start.nil?
+          if (start && @stock[stock_count] != 0)
+            startt = js[start..-1].index('stock')
+            endd = js[start..-1].index('}')
+            @stock << js[start..-1][startt..endd].match(/\d+/)[0]
+            variable_hash[:variable_id] = variable_id
+            variable_hash[:color] = color
+            variable_hash[:stock] = @stock[stock_count]
+            stock_count = stock_count + 1
+            variable_hash[:product_id] = @product.id
+            variable_hash["image_url1"] = @variable_images[c_index]
+            @main_images.each_with_index do |img,index|
+              variable_hash["image_url#{index+2}".to_sym] = img
+            end
+            variable_array << variable_hash.dup
+            variable_hash = {}
+            # todo: check variable images
+          end
+        end
+    else
     end
     Variable.create(variable_array)
   end
-
 end
 
 def ungrasp_tmall_link
