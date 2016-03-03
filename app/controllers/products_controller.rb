@@ -353,6 +353,8 @@ class ProductsController < ApplicationController
       params[:product][:avatar], params[:product][:avatar1], params[:product][:avatar2] = '', '', ''
     end
 
+    @product.images1 = @product.images2 =@product.images3 = @product.images4 = @product.images5 = @product.images6 = @product.images7 = @product.images8 = @product.images9 = @product.images10 = nil
+
     respond_to do |format|
       @product.shield_type = 0
       @product.on_sale = true
@@ -363,7 +365,7 @@ class ProductsController < ApplicationController
         else
           @product.update_attributes(update_status:true, first_updated_time: Time.now)
         end
-        @product.save_attributes
+        # @product.save_attributes
 
         @product_type_attributes = ProductAttribute.where(product_type_id: @product.product_type_id)
         customize_attributes_hash = {}
@@ -402,7 +404,7 @@ class ProductsController < ApplicationController
 
         avatar_urls = []
         if params[:product][:avatar].present?
-          @product.avatar_img_url, @product.avatar_img_url1, @product.avatar_img_url2 = '', '', ''
+          @product.avatar_img_url, @product.avatar_img_url1, @product.avatar_img_url2 = nil
           [@product.avatar.url, @product.avatar1.url, @product.avatar2.url].each do |img_url|
             if img_url.present?
               avatar_urls << QiniuUploadHelper::QiNiu.upload_from_client(Rails.root.join('public' "#{img_url}"))
@@ -413,6 +415,7 @@ class ProductsController < ApplicationController
           @product.avatar_img_url2 = avatar_urls[2]
           @product.avatar = @product.avatar1 = @product.avatar2 = nil
         else
+          @product.avatar_img_url, @product.avatar_img_url1, @product.avatar_img_url2 = nil
           @product.avatar = @product.avatar1 = @product.avatar2 = nil
         end
         @product.translate_status = false
