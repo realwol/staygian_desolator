@@ -30,7 +30,7 @@ class VariablesController < ApplicationController
     else
       VariableTranslateHistory.create(variable_from: variable_from, word: variable_name, en: variable_translation_value_array[0], de: variable_translation_value_array[3], fr: variable_translation_value_array[4], es: variable_translation_value_array[5], it: variable_translation_value_array[6])
     end
-    
+
     unless params[:oldVariableName] == variable_name
       Variable.where(color: params[:oldVariableName]).update_all(color: variable_name, translate_status: true)
     end

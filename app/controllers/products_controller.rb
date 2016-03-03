@@ -359,9 +359,9 @@ class ProductsController < ApplicationController
       @product.update_status = true
       if @product.update(product_params)
         if @product.first_updated_time
-          @product.update_attributes(update_status:true, user_id: current_user.id)
+          @product.update_attributes(update_status:true)
         else
-          @product.update_attributes(update_status:true, user_id: current_user.id, first_updated_time: Time.now)
+          @product.update_attributes(update_status:true, first_updated_time: Time.now)
         end
         @product.save_attributes
 

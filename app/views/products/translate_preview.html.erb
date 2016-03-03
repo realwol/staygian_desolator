@@ -12,21 +12,21 @@
   </tr>
   <tr>
     <td>标题</td>
-    <td><%= @product.title.html_safe %></td>
-    <td><%= @product_translation.try(:e_t).html_safe %></td>
-    <td><%= @product_translation.try(:g_t).html_safe %></td>
-    <td><%= @product_translation.try(:f_t).html_safe %></td>
-    <td><%= @product_translation.try(:s_t).html_safe %></td>
-    <td><%= @product_translation.try(:i_t).html_safe %></td>
+    <td><%= @product.title.try(:html_safe) %></td>
+    <td><%= @product_translation.try(:e_t).try(:html_safe) %></td>
+    <td><%= @product_translation.try(:g_t).try(:html_safe) %></td>
+    <td><%= @product_translation.try(:f_t).try(:html_safe) %></td>
+    <td><%= @product_translation.try(:s_t).try(:html_safe) %></td>
+    <td><%= @product_translation.try(:i_t).try(:html_safe) %></td>
   </tr>
   <tr>
     <td>详情</td>
-    <td><%= @product.details.html_safe %></td>
-    <td><%= @product_translation.try(:e_detail).html_safe %></td>
-    <td><%= @product_translation.try(:g_detail).html_safe %></td>
-    <td><%= @product_translation.try(:f_detail).html_safe %></td>
-    <td><%= @product_translation.try(:s_detail).html_safe%></td>
-    <td><%= @product_translation.try(:i_detail).html_safe%></td>
+    <td><%= @product.details.try(:html_safe) %></td>
+    <td><%= @product_translation.try(:e_detail).try(:html_safe) %></td>
+    <td><%= @product_translation.try(:g_detail).try(:html_safe) %></td>
+    <td><%= @product_translation.try(:f_detail).try(:html_safe) %></td>
+    <td><%= @product_translation.try(:s_detail).try(:html_safe)%></td>
+    <td><%= @product_translation.try(:i_detail).try(:html_safe)%></td>
   </tr>
 
   <% if @product_translation.present? %>
