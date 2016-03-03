@@ -21,6 +21,7 @@ def start
     if tmall_link.present?
       if TmallLink.where(product_link_id: tmall_link.product_link_id).count > 1
         tmall_link.update_attributes(status:true)
+        puts tmall_link.address
         return false
       else
         tmall_link.update_attributes(status:true)
@@ -58,7 +59,11 @@ def grasp_product tmall_link
     filter_flag = true unless @product.title.index(word).nil?
   end
   return if filter_flag
-
+  js = html.css('script').to_s
+  stock_start = js.index('quantity":')
+  stock_end = js[stock_start..-1].index(',')
+  stock = js[stock_start+10..stock_end+stock_start-1]
+  @product.stock = stock
   @product.brand = html.css('li#J_attrBrandName').text.slice(4..-1)
   @product.shop_id = tmall_link.shop_id
   @product.product_link_id = tmall_link.product_link_id
@@ -241,7 +246,6 @@ def grasp_product tmall_link
   end
 
   @product.producer = html.css('div#shopExtra strong').text
-  js = html.css('script').to_s
 
 
   unless @details.present?
