@@ -41,6 +41,15 @@ $(function(){
 
   $('.remove_variable').click(function(){
     $(this).parents('tr').remove();
+    var variable_id = $(this).data('variable-id');
+    $.ajax({
+      url: '/variables/remove_variable',
+      data: {variable_id: variable_id},
+      type: 'delete',
+      success: function(){
+        alert('操作成功！');
+      }
+    })
   });
 
   // $('#ul-sortable').sortable({

@@ -67,7 +67,7 @@
     <%if img.present?%>
       <div style="float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px; background: grey;">
         <%= image_tag(img, style:'width:50px;', class:"product_image product_image_count", alt:'', "data-src"=>img) %>
-        <%= hidden_field_tag "product[images#{@product.valid_images.size+index+1}]", nil, class:'product_hidden_field_value', value:img %>
+        <%= hidden_field_tag "product[images#{@product.valid_images.size+index+1}]", nil, class:'avatar_url product_hidden_field_value', value:img %>
       </div>
     <% end %>
     <% end %>
@@ -178,7 +178,7 @@
             <td><%= text_field_tag 'variable[][size]', nil, value:v.size, style:'width:90px' %></td>
             <td><%= text_field_tag 'variable[][price]', nil, value:v.price, class:'variable_price', style:'width:60px' %></td>
             <td><%= text_field_tag 'variable[][stock]', nil, value:v.stock, style:'width:60px' %></td>
-            <td><input type='button' class='remove_variable' value='Remove' /></td>
+            <td><input type='button' class='remove_variable' value='Remove' data-variable-id="<%= v.id %>" /></td>
           </tr>
         <% end %>
       </tbody>

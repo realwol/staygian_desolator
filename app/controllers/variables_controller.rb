@@ -1,6 +1,11 @@
 class VariablesController < ApplicationController
   before_action :set_variable, only: [:show, :edit, :update, :destroy]
 
+  def remove_variable
+    Variable.delete(params[:variable_id])
+    render json:true
+  end
+
   def variable_search
     @search_result = VariableTranslateHistory.where(word: params[:variable_name])
   end

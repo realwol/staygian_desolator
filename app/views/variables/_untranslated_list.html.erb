@@ -9,14 +9,14 @@
     <% @variables.each do |variable| %>
       <% variable_translation = variable %>
       <tr>
-        <td><input type="text" class="variable_translation_name" style="width:80px;" value=<%= variable_translation.word %> ></td>
-        <td><input type="text" class="variable_translation_value" style="width:80px;" value=<%= variable_translation.try(:en) %> ></td>
-        <td><input type="text" class="variable_translation_value" style="width:80px;" value=<%= variable_translation.try(:en) %> ></td>
-        <td><input type="text" class="variable_translation_value" style="width:80px;" value=<%= variable_translation.try(:en) %> ></td>
-        <td><input type="text" class="variable_translation_value" style="width:80px;" value=<%= variable_translation.try(:de) %> ></td>
-        <td><input type="text" class="variable_translation_value" style="width:80px;" value=<%= variable_translation.try(:fr) %> ></td>
-        <td><input type="text" class="variable_translation_value" style="width:80px;" value=<%= variable_translation.try(:es) %> ></td>
-        <td><input type="text" class="variable_translation_value" style="width:80px;" value=<%= variable_translation.try(:it) %> ></td>
+        <td><input type="text" class="variable_translation_name" style="width:80px;" value="<%= variable_translation.word %>" ></td>
+        <td><input type="text" class="variable_translation_value" style="width:80px;" value="<%= variable_translation.try(:en) %>" ></td>
+        <td><input type="text" class="variable_translation_value" style="width:80px;" value="<%= variable_translation.try(:en) %>" ></td>
+        <td><input type="text" class="variable_translation_value" style="width:80px;" value="<%= variable_translation.try(:en) %>" ></td>
+        <td><input type="text" class="variable_translation_value" style="width:80px;" value="<%= variable_translation.try(:de) %>" ></td>
+        <td><input type="text" class="variable_translation_value" style="width:80px;" value="<%= variable_translation.try(:fr) %>" ></td>
+        <td><input type="text" class="variable_translation_value" style="width:80px;" value="<%= variable_translation.try(:es) %>" ></td>
+        <td><input type="text" class="variable_translation_value" style="width:80px;" value="<%= variable_translation.try(:it) %>" ></td>
         <% if variable.user == current_user %>
           <td><a class="update_translation" data-variable-type='color' value=<%= variable.word %>>更新</a> </td>
           <td><a class="remove_translation" data-variable-type='color' value=<%= variable.word %>>删除</a> </td>
