@@ -4,7 +4,7 @@ class ProductsController < ApplicationController
 
   def search_shop
     if params[:search_word].present?
-      @shops = Shop.where("name like '%#{params[:search_word]}%'")
+      @shops = Shop.where("name like '%#{params[:search_word]}%'").order('name')
     else
       @shops = Shop.all
     end
@@ -110,8 +110,9 @@ class ProductsController < ApplicationController
     end
 
     unless product_shop.empty?
-      shop = Shop.where(name:product_shop).first
-      @products = shop.products if shop
+      # shops = Shop.where(name: product_shop).map(&:id)
+      # @products = shop.products if shop
+      @products = Product.where(producer: product_shop)
     end
 
     unless product_brand.empty?
@@ -274,7 +275,7 @@ class ProductsController < ApplicationController
 
   def un_updated_page
     @action_from = params[:action]
-    @products = selected_user.valid_products.un_updated.page(params[:page]).order('id desc')
+    @products = selected_user.valid_products.un_updated.page(params[:page])
   end
 
   def get_tmall_links 
@@ -283,7 +284,7 @@ class ProductsController < ApplicationController
 
   def get_tmall_link_from_link
     # @shops = current_user.shops
-    @shops = Shop.all
+    @shops = Shop.order('name')
   end
 
   # Move grasp tmall_links to a rake task and keep one shop in 60-80 sec
@@ -417,17 +418,19 @@ class ProductsController < ApplicationController
         @product.translate_status = false
         @product.save
 
-        Variable.update_product_variable(params["variable"], @product)
-        params["variable"].each do |param_variable|
-          variable_size = param_variable["size"]
-          variable_color = param_variable["color"]
+        if params["variable"].present?
+          Variable.update_product_variable(params["variable"], @product)
+          params["variable"].each do |param_variable|
+            variable_size = param_variable["size"]
+            variable_color = param_variable["color"]
 
-          if VariableTranslateHistory.where(word: variable_size).count < 1
-            VariableTranslateHistory.create(word: variable_size, variable_from: 'size', user: current_user)
-          end
+            if VariableTranslateHistory.where(word: variable_size).count < 1
+              VariableTranslateHistory.create(word: variable_size, variable_from: 'size', user: current_user)
+            end
 
-          if VariableTranslateHistory.where(word: variable_color).count < 1
-            VariableTranslateHistory.create(word: variable_color, variable_from: 'color', user: current_user)
+            if VariableTranslateHistory.where(word: variable_color).count < 1
+              VariableTranslateHistory.create(word: variable_color, variable_from: 'color', user: current_user)
+            end
           end
         end
         TranslateToken.create(t_id:@product.id, t_type:'product', t_status: true, t_method:'update')
@@ -473,7 +476,7 @@ class ProductsController < ApplicationController
                                       :images26, :images27, :images28, :images29, :images30, :image_cut_x, :image_cut_y, :image_cut_position,
                                       :shield_type, :shop_id, :shield_untill, :presale_date, :strap_type, :lining_description, :shoe_width,
                                       :platform_height, :shaft_diameter, :shaft_height, :leather_type, :style_name, :department_name, :purchase_link,
-                                      :product_weight, :editing_backup, :avatar, :avatar1, :avatar2)
+                                      :product_weight, :editing_backup, :avatar, :avatar1, :avatar2, :stock)
     end
 
     def avaliable? link

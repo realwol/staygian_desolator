@@ -1,6 +1,7 @@
   <table class="table table-bordered">
     <tr>
       <th>店铺名称</th>
+      <th>所属厂商名称</th>
       <th>搜索词</th>
       <th>屏蔽词</th>
       <th>添加人</th>
@@ -8,6 +9,7 @@
     <% @shops.each do |shop|%>
       <tr>
         <td><%= shop.name %></td>
+        <td><%= shop.manufacture %></td>
         <td><%= shop.search_word %></td>
         <td><%= shop.filter_word %></td>
         <td><%= shop.user.email %></td>

@@ -218,7 +218,8 @@ class Product < ActiveRecord::Base
         product_type_introduction1 = AttributesTranslationHistory.find(product.product_type.product_type_introduction_1)
         xls_column_values << product_type_introduction1.read_attribute(language)
         # quantity
-        xls_column_values << ' '
+        quantity = product.variables.present? ? '' : product.stock
+        xls_column_values << quantity
         # website_shipping_weight
         xls_column_values << product.product_weight
         xls_column_values << 'KG'
