@@ -357,7 +357,6 @@ def grasp_product tmall_link
   variable_array = []
   variable_hash = {}
   @stock = []
-  
   start = js.index('skuMap').to_i
   if start
     js = js[start..-1]

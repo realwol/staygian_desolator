@@ -9,7 +9,7 @@ class Variable < ActiveRecord::Base
 
   def valid_images
   	image_names = []
-  	1.upto(30) do |t|
+  	1.upto(10) do |t|
   		image_names << "image_url#{t}"
   	end
 
@@ -42,7 +42,9 @@ class Variable < ActiveRecord::Base
         end
         urls = []
         image_urls.each do |i|
-          unless option[i].blank?
+          if option[i].blank?
+            option[i] = nil
+          else
             urls << option[i]
             option[i] = ''
           end

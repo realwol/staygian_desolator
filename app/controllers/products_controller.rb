@@ -402,6 +402,7 @@ class ProductsController < ApplicationController
 
         avatar_urls = []
         if params[:product][:avatar].present?
+          @product.avatar_img_url, @product.avatar_img_url1, @product.avatar_img_url2 = '', '', ''
           [@product.avatar.url, @product.avatar1.url, @product.avatar2.url].each do |img_url|
             if img_url.present?
               avatar_urls << QiniuUploadHelper::QiNiu.upload_from_client(Rails.root.join('public' "#{img_url}"))
@@ -412,7 +413,6 @@ class ProductsController < ApplicationController
           @product.avatar_img_url2 = avatar_urls[2]
           @product.avatar = @product.avatar1 = @product.avatar2 = nil
         else
-          @product.avatar_img_url, @product.avatar_img_url1, @product.avatar_img_url2 = '', '', ''
           @product.avatar = @product.avatar1 = @product.avatar2 = nil
         end
         @product.translate_status = false
