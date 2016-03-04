@@ -294,7 +294,7 @@ def grasp_product tmall_link
     end
   end
 
-  @variable_images = @variable_images[0..8]
+  # @variable_images = @variable_images[0..8]
 
   test_start = Time.now
 

@@ -29,7 +29,7 @@ class VariablesController < ApplicationController
     variable_translation_value_array = params[:variableTranslationValue].split(',')
     variable_name = params[:variableName]
     variable_from = params[:variableType]
-    variable_history = VariableTranslateHistory.where(word: variable_name).first
+    variable_history = VariableTranslateHistory.where(word: variable_name, variable_from: variable_from).first
     if variable_history.present?
       variable_history.update_attributes(en: variable_translation_value_array[0], de: variable_translation_value_array[3], fr: variable_translation_value_array[4], es: variable_translation_value_array[5], it: variable_translation_value_array[6])
     else

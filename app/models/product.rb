@@ -193,11 +193,19 @@ class Product < ActiveRecord::Base
           xls_column_values << ""
         end
         # feed_product_type
-        product_type_translation = AttributesTranslationHistory.find(product.product_type.product_type_feed)
-        xls_column_values << product_type_translation.read_attribute(language)
+        if product.product_type.present? && product.product_type.product_type_feed.present?
+          product_type_translation = AttributesTranslationHistory.find(product.product_type.product_type_feed)
+          xls_column_values << product_type_translation.read_attribute(language)
+        else
+          xls_column_values << ''
+        end
         # brand_name
-        product_brand_name = AttributesTranslationHistory.find(product.product_type.product_type_name_translation)
-        xls_column_values << product_brand_name.read_attribute(language)
+        if product.product_type.present? && product.product_type.product_type_name_translation.present?
+          product_brand_name = AttributesTranslationHistory.find(product.product_type.product_type_name_translation)
+          xls_column_values << product_brand_name.read_attribute(language)
+        else
+          xls_column_values << ''
+        end
         # manufacture
         xls_column_values << product.shop.manufacture
         # part_number
@@ -323,8 +331,8 @@ class Product < ActiveRecord::Base
           v_size = ''
           v_variable_info_translation = v
           if v.color.present? && v.size.present?
-            v_color = VariableTranslateHistory.where(word: v.color).first
-            v_size = VariableTranslateHistory.where(word: v.size).first
+            v_color = VariableTranslateHistory.where(word: v.color, variable_from:'color').first
+            v_size = VariableTranslateHistory.where(word: v.size, variable_from:'size').first
             xls_column_values << country_sku[language.to_sym] + "#{product.sku}-#{v_color.en}#{v_size.en}"[0..35].lstrip
           elsif v.color.present?
             if v_variable_info_translation
