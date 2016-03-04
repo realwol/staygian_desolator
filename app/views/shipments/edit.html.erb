@@ -13,9 +13,11 @@
 
   $('.addLine').click(function(){
     var oldLineValue = parseFloat($('.shipment_value_tr:last').find('.inputValue:first').val());
+    var newLineValue = 0;
     if (isNaN(oldLineValue)) {
       newLineValue = 0.5;
     } else {
+      newLineValue = oldLineValue;
       newLineValue = newLineValue + 0.5;
     }
     var newLine = "<tr class='shipment_value_tr'><th><input class='inputValue' style='width:50px;' type='text' value='"+ newLineValue +"' /></th><td><input class='inputValue' style='width:50px;' type='text' /></td><td><input class='inputValue' style='width:50px;' type='text' /></td><td><input class='inputValue' style='width:50px;' type='text' /></td><td><input class='inputValue' style='width:50px;' type='text' /></td><td><input class='inputValue' style='width:50px;' type='text' /></td><td><input class='inputValue' style='width:50px;' type='text' /></td><td><input class='inputValue' style='width:50px;' type='text' /></td><td><button class='saveChange'>保存</button></td></tr>"

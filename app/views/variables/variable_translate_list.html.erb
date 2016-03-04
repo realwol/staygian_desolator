@@ -81,9 +81,13 @@
         url: '/variables/remove_translate_variable',
         type: 'delete',
         data: { variableName: variableName, variableType: variableType },
-        success: function(){
-          $trLine.remove();
-          alert('操作成功！');
+        success: function(data){
+          if (data == 1) {
+            alert('该变体正在使用，不可删除！');
+          } else {
+            $trLine.remove();
+            alert('操作成功！');
+          }
         }
       });
       return false;

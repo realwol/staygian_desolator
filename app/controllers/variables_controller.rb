@@ -16,14 +16,27 @@ class VariablesController < ApplicationController
   end
 
   def remove_translate_variable
+    delete_flag = true
     variable_name = params[:variableName]
     variable_from = params[:variableType]
-    variable_history = VariableTranslateHistory.where(word: variable_name, variable_from: variable_from).first
-    if variable_history.present?
-      variable_history.destroy
-    else
+    if variable_from == 'size'
+      using_variable = Variable.where(size: variable_name).first
+    elsif variable_from == 'color'
+      using_variable = Variable.where(color: variable_name).first
     end
-    @variables = Variable.select(:color).uniq
+
+    delete_flag = false if using_variable.present?
+
+    if delete_flag
+      variable_history = VariableTranslateHistory.where(word: variable_name, variable_from: variable_from).first
+      if variable_history.present?
+        variable_history.destroy
+      else
+      end
+      @variables = Variable.select(:color).uniq
+    else
+      render json:1
+    end
   end
 
   def update_translate_variable
