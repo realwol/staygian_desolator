@@ -10,11 +10,11 @@ require: []
 environment: development
 max_persistent_conns: 512
 servers: 1
-port: 5001
+port: 3001
 # host: localhost
 # threaded: true
 # no-epoll: true
-# daemonize: true
+daemonize: true
 # socket: tmp/sockets/thin.sock
 # chdir: /path/to/your/apps/root
 tag: amazon_tmall
