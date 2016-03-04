@@ -75,11 +75,12 @@
     $('.remove_translation').click(function(){
       var $trLine = $(this).parents('tr');
       var variableName = $(this).parents('tr').find('.variable_translation_name').val();
+      var variableType = $(this).data('variable-type');
 
       $.ajax({
         url: '/variables/remove_translate_variable',
         type: 'delete',
-        data: { variableName: variableName },
+        data: { variableName: variableName, variableType: variableType },
         success: function(){
           $trLine.remove();
           alert('操作成功！');

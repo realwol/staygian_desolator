@@ -427,11 +427,11 @@ class ProductsController < ApplicationController
             variable_size = param_variable["size"]
             variable_color = param_variable["color"]
 
-            if VariableTranslateHistory.where(word: variable_size).count < 1
+            if VariableTranslateHistory.where(word: variable_size, variable_from: 'size').count < 1
               VariableTranslateHistory.create(word: variable_size, variable_from: 'size', user: current_user)
             end
 
-            if VariableTranslateHistory.where(word: variable_color).count < 1
+            if VariableTranslateHistory.where(word: variable_color, variable_from: 'color').count < 1
               VariableTranslateHistory.create(word: variable_color, variable_from: 'color', user: current_user)
             end
           end

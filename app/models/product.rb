@@ -147,7 +147,7 @@ class Product < ActiveRecord::Base
         profit_rate = 2.0
       end
     end
-    profit_rate = 1.5 if profit_rate < 1.5
+    profit_rate = 1.5 if profit_rate.nil? || profit_rate < 1.5
     profit_rate
   end
 
@@ -336,7 +336,7 @@ class Product < ActiveRecord::Base
             xls_column_values << country_sku[language.to_sym] + "#{product.sku}-#{v_color.en}#{v_size.en}"[0..35].lstrip
           elsif v.color.present?
             if v_variable_info_translation
-              v_color = VariableTranslateHistory.where(word: v.color).first
+              v_color = VariableTranslateHistory.where(word: v.color, variable_from:'color').first
               v_size = ""
               xls_column_values << country_sku[language.to_sym] + "#{product.sku}-#{v_color.en}"[0..35].lstrip
             else
@@ -344,7 +344,7 @@ class Product < ActiveRecord::Base
             end
           elsif v.size.present?
             if v_variable_info_translation
-              v_size = VariableTranslateHistory.where(word: v.size).first
+              v_size = VariableTranslateHistory.where(word: v.size, variable_from:'size').first
               xls_column_values << country_sku[language.to_sym] + "#{product.sku}-#{v_size.en}"[0..35].lstrip
             else
               xls_column_values << "这个变体没有翻译，请重新翻译"  

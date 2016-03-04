@@ -17,7 +17,8 @@ class VariablesController < ApplicationController
 
   def remove_translate_variable
     variable_name = params[:variableName]
-    variable_history = VariableTranslateHistory.where(word: variable_name).first
+    variable_from = params[:variableType]
+    variable_history = VariableTranslateHistory.where(word: variable_name, variable_from: variable_from).first
     if variable_history.present?
       variable_history.destroy
     else
@@ -79,11 +80,11 @@ class VariablesController < ApplicationController
         variable_size = variable_params[:size]
         variable_color = variable_params[:color]
 
-        if VariableTranslateHistory.where(word: variable_size).count < 1
+        if VariableTranslateHistory.where(word: variable_size, variable_from: 'size').count < 1
           VariableTranslateHistory.create(word: variable_size, variable_from: 'size', user: @variable.product.user)
         end
 
-        if VariableTranslateHistory.where(word: variable_color).count < 1
+        if VariableTranslateHistory.where(word: variable_color, variable_from: 'color').count < 1
           VariableTranslateHistory.create(word: variable_color, variable_from: 'color', user: @variable.product.user)
         end
 
