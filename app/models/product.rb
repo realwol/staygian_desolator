@@ -460,10 +460,21 @@ class Product < ActiveRecord::Base
           xls_column_values << "Variation"
           xls_column_values << variation_theme
 
-          xls_column_values << v_color.read_attribute(variable_hash[language.to_sym])
-          xls_column_values << v_color.read_attribute(variable_hash[language.to_sym])
-          xls_column_values << v_size.read_attribute(variable_hash[language.to_sym])
-          xls_column_values << v_size.read_attribute(variable_hash[language.to_sym])
+          if v_color.present?
+            xls_column_values << v_color.read_attribute(variable_hash[language.to_sym])
+            xls_column_values << v_color.read_attribute(variable_hash[language.to_sym])
+          else
+            xls_column_values << ""
+            xls_column_values << ""
+          end
+
+          if v_size.present?
+            xls_column_values << v_size.read_attribute(variable_hash[language.to_sym])
+            xls_column_values << v_size.read_attribute(variable_hash[language.to_sym])
+          else
+            xls_column_values << ""
+            xls_column_values << ""
+         end
           # customize_columns
           cusomize_column_names.each do |column_name|
             customize_relation = product.product_customize_attributes_relations.where(attribute_name: column_name).first
