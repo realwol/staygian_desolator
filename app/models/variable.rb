@@ -33,29 +33,31 @@ class Variable < ActiveRecord::Base
         end
       option.delete("index")
 
-      if option.blank?
-        variable.update_attributes(update_status:true)
-      else
-        image_urls = []
-        1.upto(30) do |n|
-          image_urls << "image_url#{n}".to_sym
-        end
-        urls = []
-        image_urls.each do |i|
-          if option[i].blank?
-            option[i] = nil
-          else
-            urls << option[i]
-            option[i] = ''
+      if variable.present?
+        if option.blank?
+          variable.update_attributes(update_status:true)
+        else
+          image_urls = []
+          1.upto(30) do |n|
+            image_urls << "image_url#{n}".to_sym
           end
-        end
-        urls.each_with_index do |url,index|
-          option[image_urls[index]] = url
-        end
+          urls = []
+          image_urls.each do |i|
+            if option[i].blank?
+              option[i] = nil
+            else
+              urls << option[i]
+              option[i] = ''
+            end
+          end
+          urls.each_with_index do |url,index|
+            option[image_urls[index]] = url
+          end
 
-        option["update_status"] = false
+          option["update_status"] = false
 
-        variable.update_attributes(variable_params(option))
+          variable.update_attributes(variable_params(option))
+        end
       end
     end
   end
