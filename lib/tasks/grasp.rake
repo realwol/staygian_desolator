@@ -81,7 +81,7 @@ def grasp_product tmall_link
     @main_images << ('https:' + img["src"][0..img["src"].index('.jpg')+3])
   end
 
-  @main_images = @main_images[0..8]
+  # @main_images = @main_images[0..8]
 
   @details = []
   @details_string = html.css('div#attributes div#J_AttrList ul#J_AttrUL li')
