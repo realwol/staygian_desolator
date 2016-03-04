@@ -213,12 +213,15 @@ class Product < ActiveRecord::Base
         # product_description
         if product.product_type.product_type_description.present?
           product_type_description_content = AttributesTranslationHistory.find(product.product_type.product_type_description).read_attribute(language)
+        else
+          product_type_description_content = ''
         end
+
         product_translation_detail = product_translation[:detail]
         if product_translation_detail.present?
-          product_translation_detail = product_translation_detail + product_type_description if product_type_description_content.present?
+          product_translation_detail = product_translation_detail + product_type_description_content if product_type_description_content.present?
         else
-          product_translation_detail = product_type_description if product_type_description_content.present?
+          product_translation_detail = product_type_description_content if product_type_description_content.present?
         end
 
         xls_column_values << product_translation_detail
