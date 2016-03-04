@@ -211,15 +211,15 @@ class Product < ActiveRecord::Base
         # part_number
         xls_column_values << ('a'..'z').to_a.sample(5).join
         # product_description
-        if product.product_type.product_type_introduction_1.present?
-          product_type_introduction_content_1 = AttributesTranslationHistory.find(product.product_type.product_type_introduction_1).read_attribute(language)
-        end
-        if product.product_type.product_type_introduction_2.present?
-          product_type_introduction_content_2 = AttributesTranslationHistory.find(product.product_type.product_type_introduction_2).read_attribute(language)
+        if product.product_type.product_type_description.present?
+          product_type_description_content = AttributesTranslationHistory.find(product.product_type.product_type_description).read_attribute(language)
         end
         product_translation_detail = product_translation[:detail]
-        product_translation_detail = product_type_introduction_content_1 + product_translation_detail if product_type_introduction_content_1.present?
-        product_translation_detail = product_type_introduction_content_2 + product_translation_detail if product_type_introduction_content_2.present?
+        if product_translation_detail.present?
+          product_translation_detail = product_translation_detail + product_type_description if product_type_description_content.present?
+        else
+          product_translation_detail = product_type_description if product_type_description_content.present?
+        end
 
         xls_column_values << product_translation_detail
         # update_delete
@@ -233,8 +233,13 @@ class Product < ActiveRecord::Base
         # condition_type
         xls_column_values << 'New'
         # condition_note
-        product_type_introduction1 = AttributesTranslationHistory.find(product.product_type.product_type_introduction_1)
-        xls_column_values << product_type_introduction1.read_attribute(language)
+        if product.product_type.product_type_introduction_1.present?
+          product_type_introduction1 = AttributesTranslationHistory.find(product.product_type.product_type_introduction_1)
+          xls_column_values << product_type_introduction1.read_attribute(language)
+        else
+          product_type_introduction1 = ''
+          xls_column_values << product_type_introduction1
+        end
         # quantity
         quantity = product.variables.present? ? '' : product.stock
         xls_column_values << quantity
@@ -245,26 +250,66 @@ class Product < ActiveRecord::Base
         xls_column_values << product_translation[:des1]
         xls_column_values << product_translation[:des2]
         xls_column_values << product_translation[:des3]
-        xls_column_values << product_type_introduction1.read_attribute(language)
-        product_type_introduction2 = AttributesTranslationHistory.find(product.product_type.product_type_introduction_2)
-        xls_column_values << product_type_introduction2.read_attribute(language)
+        if product_type_introduction1.present?
+          xls_column_values << product_type_introduction1.read_attribute(language)
+        else
+          xls_column_values << ''
+        end
+        if product.product_type.product_type_introduction_2.present? && AttributesTranslationHistory.find(product.product_type.product_type_introduction_2).present?
+          product_type_introduction2 = AttributesTranslationHistory.find(product.product_type.product_type_introduction_2)
+          xls_column_values << product_type_introduction2.read_attribute(language)
+        else
+          xls_column_values << ''
+        end
         # recommended_browse_nodes
-        product_type1 = AttributesTranslationHistory.find(product.product_type.product_type_1)
-        xls_column_values << product_type1.read_attribute(language)
-        product_type2 = AttributesTranslationHistory.find(product.product_type.product_type_2)
-        xls_column_values << product_type2.read_attribute(language)
-        # generic_keywords
-        key_word = AttributesTranslationHistory.find(product.product_type.key_word1_translation)
-        xls_column_values << key_word.read_attribute(language)
-        key_word = AttributesTranslationHistory.find(product.product_type.key_word2_translation)
-        xls_column_values << key_word.read_attribute(language)
-        key_word = AttributesTranslationHistory.find(product.product_type.key_word3_translation)
-        xls_column_values << key_word.read_attribute(language)
-        key_word = AttributesTranslationHistory.find(product.product_type.key_word4_translation)
-        xls_column_values << key_word.read_attribute(language)
-        key_word = AttributesTranslationHistory.find(product.product_type.key_word5_translation)
-        xls_column_values << key_word.read_attribute(language)
+        if product.product_type.product_type_1.present? && AttributesTranslationHistory.find(product.product_type.product_type_1).present?
+          product_type1 = AttributesTranslationHistory.find(product.product_type.product_type_1)
+          xls_column_values << product_type1.read_attribute(language)
+        else
+          xls_column_values << ''
+        end
 
+        if product.product_type.product_type_2.present? && AttributesTranslationHistory.find(product.product_type.product_type_2).present?
+          product_type2 = AttributesTranslationHistory.find(product.product_type.product_type_2)
+          xls_column_values << product_type2.read_attribute(language)
+        else
+          xls_column_values << ''
+        end
+        # generic_keywords
+        if product.product_type.key_word1_translation.present? && AttributesTranslationHistory.find(product.product_type.key_word1_translation).present?
+          key_word = AttributesTranslationHistory.find(product.product_type.key_word1_translation)
+          xls_column_values << key_word.read_attribute(language)
+        else
+          xls_column_values << ''
+        end
+
+        if product.product_type.key_word2_translation.present? && AttributesTranslationHistory.find(product.product_type.key_word2_translation).present?
+          key_word = AttributesTranslationHistory.find(product.product_type.key_word2_translation)
+          xls_column_values << key_word.read_attribute(language)
+        else
+          xls_column_values << ''
+        end
+
+        if product.product_type.key_word3_translation.present? && AttributesTranslationHistory.find(product.product_type.key_word3_translation).present?
+          key_word = AttributesTranslationHistory.find(product.product_type.key_word3_translation)
+          xls_column_values << key_word.read_attribute(language)
+        else
+          xls_column_values << ''
+        end
+
+        if product.product_type.key_word4_translation.present? && AttributesTranslationHistory.find(product.product_type.key_word4_translation).present?
+          key_word = AttributesTranslationHistory.find(product.product_type.key_word4_translation)
+          xls_column_values << key_word.read_attribute(language)
+        else
+          xls_column_values << ''
+        end
+
+        if product.product_type.key_word5_translation.present? && AttributesTranslationHistory.find(product.product_type.key_word5_translation).present?
+          key_word = AttributesTranslationHistory.find(product.product_type.key_word5_translation)
+          xls_column_values << key_word.read_attribute(language)
+        else
+          xls_column_values << ''
+        end
 
         # if product.image_url
         images_url = [product.images1, product.images2, product.images3, product.images4, product.images5, product.images6,
@@ -381,10 +426,6 @@ class Product < ActiveRecord::Base
           # part_number
           xls_column_values << ('a'..'z').to_a.sample(5).join
           # product_description
-          product_translation_detail = product_translation[:detail]
-          product_translation_detail = product_type_introduction_content_1 + product_translation_detail if product_type_introduction_content_1.present?
-          product_translation_detail = product_type_introduction_content_2 + product_translation_detail if product_type_introduction_content_2.present?
-
           xls_column_values << product_translation_detail
 
           xls_column_values << 'Update'
@@ -412,24 +453,61 @@ class Product < ActiveRecord::Base
           xls_column_values << product_translation[:des2]
           xls_column_values << product_translation[:des3]
           xls_column_values << product_type_introduction1.read_attribute(language)
-          product_type_introduction2 = AttributesTranslationHistory.find(product.product_type.product_type_introduction_2)
-          xls_column_values << product_type_introduction2.read_attribute(language)
+          if product.product_type.product_type_introduction_2.present? && AttributesTranslationHistory.find(product.product_type.product_type_introduction_2).present?
+            product_type_introduction2 = AttributesTranslationHistory.find(product.product_type.product_type_introduction_2)
+            xls_column_values << product_type_introduction2.read_attribute(language)
+          else
+            xls_column_values << ''
+          end
           # recommended_browse_nodes
+        if product.product_type.product_type_1.present? && AttributesTranslationHistory.find(product.product_type.product_type_1).present?
           product_type1 = AttributesTranslationHistory.find(product.product_type.product_type_1)
           xls_column_values << product_type1.read_attribute(language)
+        else
+          xls_column_values << ''
+        end
+
+        if product.product_type.product_type_2.present? && AttributesTranslationHistory.find(product.product_type.product_type_2).present?
           product_type2 = AttributesTranslationHistory.find(product.product_type.product_type_2)
           xls_column_values << product_type2.read_attribute(language)
+        else
+          xls_column_values << ''
+        end
           # generic_keywords
+        if product.product_type.key_word1_translation.present? && AttributesTranslationHistory.find(product.product_type.key_word1_translation).present?
           key_word = AttributesTranslationHistory.find(product.product_type.key_word1_translation)
           xls_column_values << key_word.read_attribute(language)
+        else
+          xls_column_values << ''
+        end
+
+        if product.product_type.key_word2_translation.present? && AttributesTranslationHistory.find(product.product_type.key_word2_translation).present?
           key_word = AttributesTranslationHistory.find(product.product_type.key_word2_translation)
           xls_column_values << key_word.read_attribute(language)
+        else
+          xls_column_values << ''
+        end
+
+        if product.product_type.key_word3_translation.present? && AttributesTranslationHistory.find(product.product_type.key_word3_translation).present?
           key_word = AttributesTranslationHistory.find(product.product_type.key_word3_translation)
           xls_column_values << key_word.read_attribute(language)
+        else
+          xls_column_values << ''
+        end
+
+        if product.product_type.key_word4_translation.present? && AttributesTranslationHistory.find(product.product_type.key_word4_translation).present?
           key_word = AttributesTranslationHistory.find(product.product_type.key_word4_translation)
           xls_column_values << key_word.read_attribute(language)
+        else
+          xls_column_values << ''
+        end
+
+        if product.product_type.key_word5_translation.present? && AttributesTranslationHistory.find(product.product_type.key_word5_translation).present?
           key_word = AttributesTranslationHistory.find(product.product_type.key_word5_translation)
           xls_column_values << key_word.read_attribute(language)
+        else
+          xls_column_values << ''
+        end
 
           v_images_url = [v.image_url1,  v.image_url2,  v.image_url3,  v.image_url4,  v.image_url5,  v.image_url6,  v.image_url7,  v.image_url8,  v.image_url9,  v.image_url10,
                           v.image_url11, v.image_url12, v.image_url13, v.image_url14, v.image_url15, v.image_url16, v.image_url17, v.image_url18, v.image_url19, v.image_url20,
