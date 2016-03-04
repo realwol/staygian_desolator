@@ -2,14 +2,15 @@
   <%= @result_type %>查询结果:<%= @search_value? @search_value.total_count : 0 %>件产品
 </h4>
 <% if @search_value %>
-  <table class='table'>
+  <table class='table table-bordered'>
     <thead>
       <tr>
-        <th><%= t :ProductType%></th>
-        <th><%= t :Title%></th>
-        <th><%= t :Sku%></th>
-        <th><%= t :Product_number%></th>
-        <th colspan="3"><%= t :Options%></th>
+        <th>产品类型</th>
+        <th>产品题目</th>
+        <th>SKU</th>
+        <th>产品号码</th>
+        <th>创建者</th>
+        <th>操作</th>
       </tr>
     </thead>
 
@@ -20,9 +21,15 @@
           <td><%= product.title %></td>
           <td><%= product.sku %></td>
           <td><%= product.product_number %></td>
-          <td><%= link_to t('Show'), product %></td>
-          <td><%= link_to t('Edit'), edit_product_path(product) %></td>
-          <td><%= link_to t('Destroy'), product, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          <td><%= product.user.email %></td>
+          <td>
+            <%= link_to '翻译预览', translate_preview_product_path(product) %>
+            <%= link_to '编辑', edit_product_path(product) %>
+            <%= link_to '屏蔽', shield_product_product_path(product) %>
+            <%= link_to '下架', offsale_product_product_path(product) %>
+            <%= link_to '临时下架', temp_offsale_product_product_path(product) %>
+            <a href="#" class="reGraspProduct" data-product-id="<%= product.id %>" >重新抓取</a>
+          </td>
         </tr>
       <% end %>
     </tbody>
@@ -49,3 +56,18 @@
 
 <%= link_to '更改产品分类', change_product_type_products_path(product_id: @search_value.map(&:id)) %>
 <%= link_to '返回', root_path %>
+
+<script type="text/javascript">
+  $('.reGraspProduct').click(function(){
+    var productId = $(this).data('product-id');
+    var $this = $(this);
+    $.ajax({
+      url: '/products/'+ productId +'/regrasp_product',
+      type: 'get',
+      success: function(){
+        $this.parents('tr').remove();
+        alert('操作成功！');
+      }
+    })
+  })
+</script>

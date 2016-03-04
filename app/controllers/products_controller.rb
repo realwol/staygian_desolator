@@ -2,6 +2,24 @@ class ProductsController < ApplicationController
   before_action :set_product, only: [:show, :edit, :update, :destroy, :shield_product, :presale_product, :offsale_product, :temp_offsale_product, :onsale_product, :edited_product, :translate_preview]
   before_action :authenticate_user!
 
+  def regrasp_product
+    product = Product.find(params[:id])
+    product.variables.destroy_all
+    product_address = product.origin_address
+    product_tmall_link = TmallLink.where(address: product_address).first
+    if product_tmall_link.present?
+      product_tmall_link.update_attributes(status: false)
+    else
+      product_link_start = product_address.index('id') + 3
+      product_link_end = product_address[product_link_start..-1].index('&') - 1 + product_link_start
+      product_link_id = product_address[product_link_start..product_link_end]
+
+      TmallLink.create(address: product_address, status:false, user: current_user, shop_id: product.shop_id, product_link_id: product_link_id)
+    end
+    product.destroy
+    render json:true
+  end
+
   def search_shop
     if params[:search_word].present?
       @shops = Shop.where("name like '%#{params[:search_word]}%'").order('name')

@@ -19,3 +19,18 @@
   <input type="text" name="search_word">
   <%= submit_tag '搜索' %>
 <% end %>
+
+<script type="text/javascript">
+  $('.stopAndDelete').click(function(){
+    var shopId = $(this).data('shop-id');
+    var $this = $(this);
+    $.ajax({
+      url: '/shops/' + shopId +'/stop_and_delete',
+      type: 'delete',
+      success: function(){
+        $this.parents('tr').remove();
+        alert('操作成功！');
+      }
+    })
+  });
+</script>

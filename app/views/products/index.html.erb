@@ -9,7 +9,7 @@
       <th><%= '产品号' %></th>
       <th><%= '创建者' %></th>
       <th><%= '价格' %></th>
-      <th colspan="5"><%= '操作' %></th>
+      <th><%= '操作' %></th>
     </tr>
   </thead>
 
@@ -35,6 +35,7 @@
           <%= link_to '屏蔽', shield_product_product_path(product) %>
           <%= link_to '下架', offsale_product_product_path(product) %>
           <%= link_to '临时下架', temp_offsale_product_product_path(product) %>
+          <a href="#" class="reGraspProduct" data-product-id="<%= product.id %>" >重新抓取</a>
         </td>
       </tr>
     <% end %>
@@ -74,3 +75,18 @@
     });
   })
 <% end -%>
+
+<script type="text/javascript">
+  $('.reGraspProduct').click(function(){
+    var productId = $(this).data('product-id');
+    var $this = $(this);
+    $.ajax({
+      url: '/products/'+ productId +'/regrasp_product',
+      type: 'get',
+      success: function(){
+        $this.parents('tr').remove();
+        alert('操作成功！');
+      }
+    })
+  })
+</script>

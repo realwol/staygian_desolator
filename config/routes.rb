@@ -17,6 +17,7 @@ Rails.application.routes.draw do
       get 'shield'
       get 'recover'
       post 'add_back_up'
+      delete 'stop_and_delete'
     end
     collection do
       post 'search'
@@ -58,6 +59,7 @@ Rails.application.routes.draw do
     end
 
     member do
+      get 'regrasp_product'
       get 'translate_preview'
       get 'shield_product'
       get 'edited_product'

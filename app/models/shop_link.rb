@@ -1,5 +1,6 @@
 class ShopLink < ActiveRecord::Base
   belongs_to :user
+  belongs_to :shop
 
   scope :un_grasp, -> {where(status: 'false')}
   scope :from_search, -> {where(link_from: 'search')}

@@ -1,8 +1,8 @@
 class Shop < ActiveRecord::Base
-	acts_as_paranoid
   belongs_to :user
   has_many :products
   has_many :tmall_links
+  has_many :shop_links
   paginates_per 10
 
   def self.shop_avaliable? shop_id

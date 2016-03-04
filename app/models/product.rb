@@ -1,5 +1,4 @@
 class Product < ActiveRecord::Base
-	acts_as_paranoid
   belongs_to :product_type
   belongs_to :user
   belongs_to :shop

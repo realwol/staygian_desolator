@@ -1,5 +1,4 @@
 class Variable < ActiveRecord::Base
-	acts_as_paranoid
   belongs_to :product
   belongs_to :variable_translate_history
 

@@ -5,6 +5,7 @@
       <th>搜索词</th>
       <th>屏蔽词</th>
       <th>添加人</th>
+      <th>操作<span style='color:red;'>(此操作将会删除商铺里所有所有产品，变体和链接，慎用！)</span></th>
     </tr>
     <% @shops.each do |shop|%>
       <tr>
@@ -13,6 +14,7 @@
         <td><%= shop.search_word %></td>
         <td><%= shop.filter_word %></td>
         <td><%= shop.user.email %></td>
+        <td><button data-shop-id="<%= shop.id %>" class="stopAndDelete" >停止并删除</button> </td>
       </tr>
     <% end %>
   </table> 

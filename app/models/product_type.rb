@@ -1,5 +1,4 @@
 class ProductType < ActiveRecord::Base
-	acts_as_paranoid
 	has_many :products
   has_many :product_attributes
   has_many :shipment_weight_relations
