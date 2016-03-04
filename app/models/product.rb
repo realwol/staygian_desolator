@@ -218,8 +218,8 @@ class Product < ActiveRecord::Base
           product_type_introduction_content_2 = AttributesTranslationHistory.find(product.product_type.product_type_introduction_2).read_attribute(language)
         end
         product_translation_detail = product_translation[:detail]
-        product_translation_detail = product_translation_detail + product_type_introduction_content_1 if product_type_introduction_content_1.present?
-        product_translation_detail = product_translation_detail + product_type_introduction_content_2 if product_type_introduction_content_2.present?
+        product_translation_detail = product_type_introduction_content_1 + product_translation_detail if product_type_introduction_content_1.present?
+        product_translation_detail = product_type_introduction_content_2 + product_translation_detail if product_type_introduction_content_2.present?
 
         xls_column_values << product_translation_detail
         # update_delete
@@ -382,8 +382,8 @@ class Product < ActiveRecord::Base
           xls_column_values << ('a'..'z').to_a.sample(5).join
           # product_description
           product_translation_detail = product_translation[:detail]
-          product_translation_detail = product_translation_detail + product_type_introduction_content_1 if product_type_introduction_content_1.present?
-          product_translation_detail = product_translation_detail + product_type_introduction_content_2 if product_type_introduction_content_2.present?
+          product_translation_detail = product_type_introduction_content_1 + product_translation_detail if product_type_introduction_content_1.present?
+          product_translation_detail = product_type_introduction_content_2 + product_translation_detail if product_type_introduction_content_2.present?
 
           xls_column_values << product_translation_detail
 
