@@ -211,11 +211,12 @@ class Product < ActiveRecord::Base
         # part_number
         xls_column_values << ('a'..'z').to_a.sample(5).join
         # product_description
+        binding.pry
         if product.product_type.product_type_introduction_1.present?
-          product_type_introduction_content_1 ＝ AttributesTranslationHistory.find(product.product_type.product_type_introduction_1).read_attribute(language)
+          product_type_introduction_content_1 = AttributesTranslationHistory.find(product.product_type.product_type_introduction_1).read_attribute(language)
         end
-        if product.product_type.product_type_introduction_content_2.present?
-          product_type_introduction_content_2 ＝ AttributesTranslationHistory.find(product.product_type.product_type_introduction_2).read_attribute(language)
+        if product.product_type.product_type_introduction_2.present?
+          product_type_introduction_content_2 = AttributesTranslationHistory.find(product.product_type.product_type_introduction_2).read_attribute(language)
         end
         product_translation_detail = product_translation[:detail]
         product_translation_detail = product_translation_detail + product_type_introduction_content_1 if product_type_introduction_content_1.present?
