@@ -39,11 +39,11 @@ class ProductsController < ApplicationController
   end
 
   def remove_key_word
-    if params[:remove_type] == '1'
-      Reference.destroy(params[:id])
-      @all_forbidden_words = Reference.where(key1:'grasp_filter_words').using_now
-    else
-    end
+    # if params[:remove_type] == '1'
+      ProductDetailForbiddenList.destroy(params[:id])
+      # @all_forbidden_words = Reference.where(key1:'grasp_filter_words').using_now
+    # else
+    # end
     render json:true
   end
 

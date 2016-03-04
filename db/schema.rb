@@ -11,21 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160303023113) do
+ActiveRecord::Schema.define(version: 20160304155358) do
 
   create_table "attributes_translation_histories", force: :cascade do |t|
     t.string   "attribute_name",       limit: 255
-    t.string   "china",                limit: 255
-    t.string   "america",              limit: 255
-    t.string   "canada",               limit: 255
-    t.string   "british",              limit: 255
-    t.string   "germany",              limit: 255
-    t.string   "spain",                limit: 255
-    t.string   "italy",                limit: 255
-    t.string   "france",               limit: 255
+    t.text     "china",                limit: 65535
+    t.text     "america",              limit: 65535
+    t.text     "canada",               limit: 65535
+    t.text     "british",              limit: 65535
+    t.text     "germany",              limit: 65535
+    t.text     "spain",                limit: 65535
+    t.text     "italy",                limit: 65535
+    t.text     "france",               limit: 65535
     t.integer  "attribute_id",         limit: 4
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
     t.integer  "product_attribute_id", limit: 4
   end
 

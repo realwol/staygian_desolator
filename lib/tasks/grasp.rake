@@ -283,7 +283,6 @@ def grasp_product tmall_link
   # Create variables
   @product_images = []
   @variable_images = []
-  # @product_images = @images.dup
   html.css('div.tb-sku dl.tb-prop.tm-sale-prop.tm-clear.tm-img-prop li').each do |img|
     image_url = img.children[1].attributes["style"].try(:value)
     if image_url
@@ -301,7 +300,7 @@ def grasp_product tmall_link
   @variable_images.each_with_index do |image, index|
     v_image = QiniuUploadHelper::QiNiu.upload(image, '')
     @variable_images[index] = v_image
-    @product_images[index] = v_image
+    @product_images << v_image
   end
 
   # Upload image and replace the link
@@ -310,6 +309,7 @@ def grasp_product tmall_link
     @main_images[index] = upload_image
     @product_images << upload_image
   end
+
 
   puts "===========upload cost"
   puts Time.now - test_start

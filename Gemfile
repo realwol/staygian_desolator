@@ -39,3 +39,4 @@ gem 'cancancan'
 
 gem 'thin'
 gem 'iconv'
+gem 'mina'

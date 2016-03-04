@@ -33,7 +33,6 @@ module QiniuUploadHelper
 				end
 			end
 			image.write path
-
 			key = Time.now.to_i
 			put_policy = Qiniu::Auth::PutPolicy.new('amazon', key, '31536000', '')
 
@@ -49,6 +48,7 @@ module QiniuUploadHelper
 		end
 
 		def self.update(uri, position, x_pos, y_pos)
+			name = Time.now.to_i + rand(1..9999)
       image = MiniMagick::Image.open uri
       path = Rails.root.join('public', "#{name}.jpg")
 			x_start, y_start = get_start position

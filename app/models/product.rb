@@ -52,7 +52,7 @@ class Product < ActiveRecord::Base
 
   def valid_images
   	image_names = []
-  	1.upto(10) do |t|
+  	1.upto(30) do |t|
   		image_names << "images#{t}"
   	end
 
