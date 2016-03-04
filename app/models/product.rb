@@ -211,7 +211,6 @@ class Product < ActiveRecord::Base
         # part_number
         xls_column_values << ('a'..'z').to_a.sample(5).join
         # product_description
-        binding.pry
         if product.product_type.product_type_introduction_1.present?
           product_type_introduction_content_1 = AttributesTranslationHistory.find(product.product_type.product_type_introduction_1).read_attribute(language)
         end
@@ -383,8 +382,9 @@ class Product < ActiveRecord::Base
           xls_column_values << ('a'..'z').to_a.sample(5).join
           # product_description
           product_translation_detail = product_translation[:detail]
-          product_translation_detail = product_translation_detail + product_type_introduction_1 if product_type_introduction_1.present?
-          product_translation_detail = product_translation_detail + product_type_introduction_2 if product_type_introduction_2.present?
+          product_translation_detail = product_translation_detail + product_type_introduction_content_1 if product_type_introduction_content_1.present?
+          product_translation_detail = product_translation_detail + product_type_introduction_content_2 if product_type_introduction_content_2.present?
+
           xls_column_values << product_translation_detail
 
           xls_column_values << 'Update'
