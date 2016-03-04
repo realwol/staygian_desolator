@@ -66,23 +66,24 @@ class ProductTypesController < ApplicationController
   def update_type_introduction
     introduction_1_array = params[:introduction_1].split('|')
     introduction_2_array = params[:introduction_2].split('|')
-    introduction_1 = AttributesTranslationHistory.create(china: introduction_1_array[0].strip,
-                                                          america: introduction_1_array[1].strip,
-                                                          canada: introduction_1_array[2].strip,
-                                                          british: introduction_1_array[3].strip,
-                                                          germany: introduction_1_array[4].strip,
-                                                          france: introduction_1_array[5].strip,
-                                                          spain: introduction_1_array[6].strip,
-                                                          italy: introduction_1_array[7].strip)
-    introduction_2 = AttributesTranslationHistory.create(china: introduction_2_array[0].strip,
-                                                          america: introduction_2_array[1].strip,
-                                                          canada: introduction_2_array[2].strip,
-                                                          british: introduction_2_array[3].strip,
-                                                          germany: introduction_2_array[4].strip,
-                                                          france: introduction_2_array[5].strip,
-                                                          spain: introduction_2_array[6].strip,
-                                                          italy: introduction_2_array[7].strip)
+    introduction_1 = AttributesTranslationHistory.create(china: introduction_1_array[0].try(:strip),
+                                                          america: introduction_1_array[1].try(:strip),
+                                                          canada: introduction_1_array[2].try(:strip),
+                                                          british: introduction_1_array[3].try(:strip),
+                                                          germany: introduction_1_array[4].try(:strip),
+                                                          france: introduction_1_array[5].try(:strip),
+                                                          spain: introduction_1_array[6].try(:strip),
+                                                          italy: introduction_1_array[7].try(:strip))
+    introduction_2 = AttributesTranslationHistory.create(china: introduction_2_array[0].try(:strip),
+                                                          america: introduction_2_array[1].try(:strip),
+                                                          canada: introduction_2_array[2].try(:strip),
+                                                          british: introduction_2_array[3].try(:strip),
+                                                          germany: introduction_2_array[4].try(:strip),
+                                                          france: introduction_2_array[5].try(:strip),
+                                                          spain: introduction_2_array[6].try(:strip),
+                                                          italy: introduction_2_array[7].try(:strip))
     ProductType.find(params[:id]).update_attributes(product_type_introduction_1: introduction_1.id, product_type_introduction_2: introduction_2.id)
+    render json:true
   end
 
   def update_type_setting

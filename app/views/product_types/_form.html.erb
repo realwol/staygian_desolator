@@ -70,10 +70,10 @@
       var typeIntroduction1Values = '';
       var typeIntroduction2Values = '';
       $('.introduction1TextArea').each(function(){
-        typeIntroduction1Values = typeIntroduction1Values + $(this).val() + '｜';
+        typeIntroduction1Values = typeIntroduction1Values + $(this).val() + '|';
       });
       $('.introduction2TextArea').each(function(){
-        typeIntroduction2Values = typeIntroduction2Values + $(this).val() + '｜';
+        typeIntroduction2Values = typeIntroduction2Values + $(this).val() + '|';
       });
 
       $.ajax({
@@ -81,6 +81,7 @@
         type: 'POST',
         data: {introduction_1: typeIntroduction1Values, introduction_2: typeIntroduction2Values},
         success: function(){
+          alert('操作成功！');
         }
       })
     });
