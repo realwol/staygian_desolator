@@ -29,9 +29,9 @@
       <% end %>
 
       <a href="#" value=<%= current_user.id%> class='current_user_select' ><%= current_user.email %></a>
-      <%= link_to t('Sign out'), destroy_user_session_path, method:'delete' %>
+      <%= link_to t('登出'), destroy_user_session_path, method:'delete' %>
     <%else%>
-      <%= link_to t('Sign in'), user_session_path %>
+      <%= link_to t('登录'), user_session_path %>
     <%end%>
   </div>
 </div>
