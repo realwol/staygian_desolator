@@ -409,12 +409,14 @@ class Product < ActiveRecord::Base
             end
           end
           
-          if v.color.present? && v.size.present?
+          if v.color.present? && v.size.present? && v_color.present? && v_size.present?
             xls_column_values << "#{product_translation[:title]}-#{v_color.read_attribute(variable_hash[language.to_sym])} #{v_size.read_attribute(variable_hash[language.to_sym])}"
-          elsif v.color.present?
+          elsif v.color.present? && v_color.present?
             xls_column_values << "#{product_translation[:title]}-#{v_color.read_attribute(variable_hash[language.to_sym])}"
-          elsif v.size.present?
+          elsif v.size.present? && v_size.present?
             xls_column_values << "#{product_translation[:title]}-#{v_size.read_attribute(variable_hash[language.to_sym])}"
+          else
+            xls_column_values << "#{product_translation[:title]}"
           end
 
           xls_column_values << ""
