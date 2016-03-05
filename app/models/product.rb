@@ -391,19 +391,19 @@ class Product < ActiveRecord::Base
           if v.color.present? && v.size.present?
             v_color = VariableTranslateHistory.where(word: v.color, variable_from:'color').first
             v_size = VariableTranslateHistory.where(word: v.size, variable_from:'size').first
-            xls_column_values << country_sku[language.to_sym] + "#{product.sku}-#{v_color.en}#{v_size.en}"[0..35].lstrip
+            xls_column_values << country_sku[language.to_sym] + "#{product.sku}-#{v_color.try(:en)}#{v_size.try(:en)}"[0..35].lstrip
           elsif v.color.present?
             if v_variable_info_translation
               v_color = VariableTranslateHistory.where(word: v.color, variable_from:'color').first
               v_size = ""
-              xls_column_values << country_sku[language.to_sym] + "#{product.sku}-#{v_color.en}"[0..35].lstrip
+              xls_column_values << country_sku[language.to_sym] + "#{product.sku}-#{v_color.try(:en)}"[0..35].lstrip
             else
               xls_column_values << "这个变体没有翻译，请重新翻译"  
             end
           elsif v.size.present?
             if v_variable_info_translation
               v_size = VariableTranslateHistory.where(word: v.size, variable_from:'size').first
-              xls_column_values << country_sku[language.to_sym] + "#{product.sku}-#{v_size.en}"[0..35].lstrip
+              xls_column_values << country_sku[language.to_sym] + "#{product.sku}-#{v_size.try(:en)}"[0..35].lstrip
             else
               xls_column_values << "这个变体没有翻译，请重新翻译"  
             end
