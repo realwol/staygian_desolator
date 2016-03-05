@@ -73,6 +73,7 @@ task :deploy => :environment do
   deploy do
     # Put things that will set up an empty directory into a fully set-up
     # instance of your project.
+    invoke :stop
     invoke :'git:clone'
     invoke :'deploy:link_shared_paths'
     invoke :'bundle:install'
@@ -83,10 +84,24 @@ task :deploy => :environment do
     to :launch do
       queue "mkdir -p #{deploy_to}/#{current_path}/tmp/"
       queue "touch #{deploy_to}/#{current_path}/tmp/restart.txt"
-      queue "thin start -C config/thin.yml"
+      # queue "thin start -C config/thin.yml"
       # queue "rails s -d -b 0.0.0.0 -p 3001"
     end
+
+    invoke :start
   end
+end
+
+desc 'Stop current version on the server.'
+task :stop => :environment do
+  queue "cd #{deploy_to}/#{current_path}"
+  queue "thin stop -C config/thin.yml"
+end
+
+desc 'Start current version on the server.'
+task :start => :environment do
+  queue "cd #{deploy_to}/#{current_path}"
+  queue "thin start -C config/thin.yml"
 end
 
 # For help in making your deploy script, see the Mina documentation:

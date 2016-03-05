@@ -18,7 +18,11 @@
       <% @search_value.each do |product| %>
         <tr>
           <td><%= link_to product.product_type.name, product_type_path(product.product_type) if product.product_type%></td>
-          <td><%= product.title %></td>
+          <% if product.is_translated? %>
+            <td><%= product.title %></td>
+          <% else %>
+            <td style="color:red;"><%= product.title %></td>
+          <% end %>
           <td><%= product.sku %></td>
           <td><%= product.product_number %></td>
           <td><%= product.try(:user).try(:email) %></td>
