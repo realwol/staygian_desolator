@@ -70,7 +70,6 @@ task :deploy => :environment do
   to :before_hook do
     # Put things to run locally before ssh
   end
-  queue 'pwd'
   invoke :stop
   deploy do
     # Put things that will set up an empty directory into a fully set-up
@@ -99,13 +98,12 @@ task :stop => :environment do
   queue "cd #{deploy_to}/#{current_path}"
   queue 'pwd'
   queue "thin stop -C config/thin.yml"
-  queue 'pwd'
 end
 
 desc 'Start current version on the server.'
 task :start => :environment do
   queue "cd #{deploy_to}/#{current_path}"
-
+  queue 'pwd'
   queue "thin start -C config/thin.yml"
 end
 
