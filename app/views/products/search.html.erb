@@ -1,5 +1,5 @@
 <h4>
-  <%= @result_type %>查询结果:<%= @search_value? @search_value.total_count : 0 %>件产品
+  <%= @result_type %>查询结果:<%= @search_value.present? ? @search_value.total_count : 0 %>件产品
 </h4>
 <% if @search_value %>
   <table class='table table-bordered'>
