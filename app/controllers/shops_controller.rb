@@ -5,6 +5,7 @@ class ShopsController < ApplicationController
 		shop = Shop.find(params[:id])
 		shop.products.each do |product|
 		  product.variables.destroy_all
+		  product.product_info_translations.destroy_all
 		  product.destroy
 		end
 		shop.shop_links.destroy_all

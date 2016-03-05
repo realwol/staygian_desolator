@@ -22,6 +22,11 @@
 
 <script type="text/javascript">
   $('.stopAndDelete').click(function(){
+    if(confirm("确定删除吗？删除之后所有数据不可恢复！")){
+
+    } else {
+      return false;
+    }
     var shopId = $(this).data('shop-id');
     var $this = $(this);
     $.ajax({
