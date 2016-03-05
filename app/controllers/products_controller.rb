@@ -176,7 +176,10 @@ class ProductsController < ApplicationController
   end
 
   def export_products
+    puts '======================'
     puts 'I am in exporting now!'
+    puts Time.now
+
     params[:export_type] = params[:product][:product_type_id]
     start_sku = params[:start_sku]
     if start_sku.blank?
