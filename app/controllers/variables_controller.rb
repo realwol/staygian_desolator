@@ -11,8 +11,12 @@ class VariablesController < ApplicationController
   end
 
   def variable_translate_list
+    a = Time.now
     @variables = VariableTranslateHistory.color_variable.order('updated_at desc')
+    puts Time.now - a
+    b = Time.now
     @colors = VariableTranslateHistory.size_variable.order('updated_at desc')
+    puts Time.now - b
   end
 
   def remove_translate_variable
