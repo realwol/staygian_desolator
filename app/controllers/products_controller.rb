@@ -5,6 +5,7 @@ class ProductsController < ApplicationController
   def regrasp_product
     product = Product.find(params[:id])
     product.variables.destroy_all
+    product.product_info_translations.destroy_all
     product_address = product.origin_address
     product_tmall_link = TmallLink.where(address: product_address).first
     if product_tmall_link.present?

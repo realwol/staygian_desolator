@@ -782,10 +782,10 @@ class Product < ActiveRecord::Base
 
   def save_sku
     # get the last product's sku then add one on it
-    if Product.with_deleted.count == 0
+    if Product.all.count == 0
       base_number = 0
     else
-      base_number = Product.unscope(:where).with_deleted.last.sku_number.to_i
+      base_number = Product.last.sku_number.to_i
     end
     self.sku_number = base_number + 1
 
