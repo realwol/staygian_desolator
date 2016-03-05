@@ -48,7 +48,7 @@ module QiniuUploadHelper
 		end
 
 		def self.update(uri, position, x_pos, y_pos)
-			name = Time.now.to_i + rand(1..9999)
+			name = Time.now.to_i + rand(1..99999999)
       image = MiniMagick::Image.open uri
       path = Rails.root.join('public', "#{name}.jpg")
 			x_start, y_start = get_start position
