@@ -20,6 +20,6 @@ namespace :ab_test do
     puts '*************************'
     puts 'servers result'
     puts '*************************'
-    exec 'ab -n 100 -c 100 http://120.25.74.164/'
+    exec 'ab -n 1000 -c 100 http://120.25.74.164/'
   end
 end
