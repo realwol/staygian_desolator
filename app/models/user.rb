@@ -49,4 +49,25 @@ class User < ActiveRecord::Base
       Product.where(id: all_valid_products)
     end
   end
+
+  def valid_shops
+    if self.is_dd?
+      Shop.all
+    else
+      current_user = self
+      count_children = current_user.little_brothers.to_a
+      all_valid_shops = current_user.shops.pluck(:id)
+
+      while count_children.count > 0
+        current_user = count_children.pop
+        all_valid_shops = all_valid_shops << current_user.shops.pluck(:id)
+      end
+      all_valid_shops.flatten!
+      Shop.where(id: all_valid_shops)
+    end
+  end
+
+  def is_shop_valid? shop
+    !!self.valid_shops.index(shop)
+  end
 end
