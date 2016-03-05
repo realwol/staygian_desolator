@@ -142,6 +142,8 @@ class ProductsController < ApplicationController
       search_query << "sku like '%#{sku_value}%'"
     end
 
+    @search_value = []
+
     case @action_from
     when 'index'
       @search_value = @products.updated.un_shield.onsale.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
