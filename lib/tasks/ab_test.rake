@@ -4,7 +4,7 @@ namespace :ab_test do
     puts '*************************'
     puts 'local result'
     puts '*************************'
-    exec 'ab -n 100 -c 100 http://0.0.0.0:5001/'
+    exec 'ab -n 1000 -c 100 http://localhost:3000/'
   end
 
   desc 'do the server db test for one server'
