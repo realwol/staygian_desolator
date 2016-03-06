@@ -18,7 +18,7 @@ module QiniuUploadHelper
     end
 
 		def self.upload(uri, position=nil, x_pos=nil, y_pos=nil)
-			name = Time.now.to_i
+			name = Time.now.to_i + rand(1..99999999)
 			image = MiniMagick::Image.open uri
 			path = Rails.root.join('public', "#{name}.jpg")
 			image.combine_options do |c|
