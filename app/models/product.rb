@@ -423,9 +423,17 @@ class Product < ActiveRecord::Base
 
           xls_column_values << "UPC"
           # feed_product_type
-          xls_column_values << product_type_translation.read_attribute(language)
+          if product_type_translation.present?
+            xls_column_values << product_type_translation.read_attribute(language)
+          else
+            xls_column_values << ''
+          end
           # brand_name
-          xls_column_values << product_brand_name.read_attribute(language)
+          if product_brand_name.present?
+            xls_column_values << product_brand_name.read_attribute(language)
+          else
+            xls_column_values << ''
+          end
           # manufacture
           xls_column_values << product.shop.manufacture
           # part_number
@@ -441,7 +449,11 @@ class Product < ActiveRecord::Base
           xls_column_values << country_currency[language.to_sym]
           xls_column_values << 'New'
           # condition_note
-          xls_column_values << product_type_introduction1.read_attribute(language)
+          if product_type_introduction1.present?
+            xls_column_values << product_type_introduction1.read_attribute(language)
+          else
+            xls_column_values << ''
+          end
           # quantity
           if v.stock.to_i > 100
             xls_column_values << 100
@@ -457,7 +469,11 @@ class Product < ActiveRecord::Base
           xls_column_values << product_translation[:des1]
           xls_column_values << product_translation[:des2]
           xls_column_values << product_translation[:des3]
-          xls_column_values << product_type_introduction1.read_attribute(language)
+          if product_type_introduction1.present?
+            xls_column_values << product_type_introduction1.read_attribute(language)
+          else
+            xls_column_values << ''
+          end
           if product.product_type.product_type_introduction_2.present? && AttributesTranslationHistory.find(product.product_type.product_type_introduction_2).present?
             product_type_introduction2 = AttributesTranslationHistory.find(product.product_type.product_type_introduction_2)
             xls_column_values << product_type_introduction2.read_attribute(language)
