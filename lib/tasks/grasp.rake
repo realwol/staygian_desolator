@@ -247,7 +247,6 @@ def grasp_product tmall_link
 
   @product.producer = html.css('div#shopExtra strong').text
 
-
   unless @details.present?
     aa = js.index('newProGroup')
     bb = js.index(',"progressiveSupport"')
@@ -367,7 +366,10 @@ def grasp_product tmall_link
           variable_id = "#{@sizes_value[s_index]};#{@colors_value[c_index]}"
           variable_id_backup = "#{@colors_value[c_index]};#{@sizes_value[s_index]}"
           start = js.index(variable_id)
-          start = js.index(variable_id_backup) if start.nil?
+          if start.nil?
+            start = js.index(variable_id_backup)
+            variable_id = variable_id_backup
+          end
           if (start && @stock[stock_count] != 0)
             startt = js[start..-1].index('stock')
             endd = js[start..-1].index('}')
@@ -437,6 +439,7 @@ def grasp_product tmall_link
         end
     else
     end
+  
     Variable.create(variable_array)
   end
 end

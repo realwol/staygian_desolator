@@ -32,13 +32,11 @@ module QiniuUploadHelper
 				  c.resize '1001x1001'
 				end
 			end
-			image.write path
-			key = Time.now.to_i
+			key = Time.now.to_i + rand(1..99999999)
 			put_policy = Qiniu::Auth::PutPolicy.new('amazon', key, '31536000', '')
 
 			uptoken = Qiniu::Auth.generate_uptoken put_policy
-			code, result, response_headers = Qiniu::Storage.upload_with_put_policy(put_policy, path, key,'')
-			File.delete path
+			code, result, response_headers = Qiniu::Storage.upload_with_put_policy(put_policy, image.path, key,'')
 
 			if code == 200
 			  "http://7xj377.com1.z0.glb.clouddn.com/#{result["key"]}"
@@ -60,14 +58,12 @@ module QiniuUploadHelper
 	        c.resize '1001x1001'
 				end
 			end
-			image.write path
 
 			key = uri[(uri.index('com/')+4)..-1]
 			put_policy = Qiniu::Auth::PutPolicy.new('amazon', key, '31536000', '')
 
 			uptoken = Qiniu::Auth.generate_uptoken put_policy
-			code, result, response_headers = Qiniu::Storage.upload_with_put_policy(put_policy, path, key,'')
-			File.delete path
+			code, result, response_headers = Qiniu::Storage.upload_with_put_policy(put_policy, image.path, key,'')
 
 			if code == 200
 			  "http://7xj377.com1.z0.glb.clouddn.com/#{result["key"]}"
