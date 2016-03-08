@@ -90,7 +90,8 @@ class ProductTypesController < ApplicationController
     type_setting_values = params[:type_values].split(',')
     feed_attribute_values, type1_attribute_values, type2_attribute_values = type_setting_values[0..7], type_setting_values[8..15], type_setting_values[16..23]
 
-    attribute_feed = AttributesTranslationHistory.create(china: feed_attribute_values[0],
+    if feed_attribute_values.present?
+      attribute_feed = AttributesTranslationHistory.create(china: feed_attribute_values[0],
                                                           america: feed_attribute_values[1],
                                                           canada: feed_attribute_values[2],
                                                           british: feed_attribute_values[3],
@@ -98,7 +99,10 @@ class ProductTypesController < ApplicationController
                                                           france: feed_attribute_values[5],
                                                           spain: feed_attribute_values[6],
                                                           italy: feed_attribute_values[7])
-    attribute_type1 = AttributesTranslationHistory.create(china: type1_attribute_values[0],
+    end
+
+    if type1_attribute_values.present?
+      attribute_type1 = AttributesTranslationHistory.create(china: type1_attribute_values[0],
                                                           america: type1_attribute_values[1],
                                                           canada: type1_attribute_values[2],
                                                           british: type1_attribute_values[3],
@@ -106,7 +110,10 @@ class ProductTypesController < ApplicationController
                                                           france: type1_attribute_values[5],
                                                           spain: type1_attribute_values[6],
                                                           italy: type1_attribute_values[7])
-    attribute_type2 = AttributesTranslationHistory.create(china: type2_attribute_values[0],
+    end
+
+    if type2_attribute_values.present?
+      attribute_type2 = AttributesTranslationHistory.create(china: type2_attribute_values[0],
                                                           america: type2_attribute_values[1],
                                                           canada: type2_attribute_values[2],
                                                           british: type2_attribute_values[3],
@@ -114,7 +121,14 @@ class ProductTypesController < ApplicationController
                                                           france: type2_attribute_values[5],
                                                           spain: type2_attribute_values[6],
                                                           italy: type2_attribute_values[7])
-    ProductType.find(params[:id]).update_attributes(product_type_feed: attribute_feed.id, product_type_1: attribute_type1.id, product_type_2: attribute_type2.id)
+    end
+
+    update_hash = {}
+    update_hash[:product_type_feed] = attribute_feed.id if attribute_feed.present?
+    update_hash[:product_type_1] = attribute_type1.id if attribute_type1.present?
+    update_hash[:product_type_2] = attribute_type2.id if attribute_type2.present?
+
+    ProductType.find(params[:id]).update_attributes(update_hash)
   end
 
   def update_description

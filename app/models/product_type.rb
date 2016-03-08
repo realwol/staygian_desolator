@@ -29,8 +29,9 @@ class ProductType < ActiveRecord::Base
     
     while count_children.size > 0
       current_product_type = count_children.pop
-      if current_product_type.children_product_types.count > 0
-        count_children << current_product_type.children_product_types
+      current_product_type_children = current_product_type.children_product_types
+      if current_product_type_children.count > 0
+        count_children << current_product_type_children
         count_children.flatten!
       end
       all_children << current_product_type
