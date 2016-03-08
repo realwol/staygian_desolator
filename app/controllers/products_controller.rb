@@ -182,6 +182,7 @@ class ProductsController < ApplicationController
 
     params[:export_type] = params[:product][:product_type_id]
     start_sku = params[:start_sku]
+    choose_product_type = ProductType.find(params[:export_type].to_i)
     if start_sku.blank?
       @products = current_user.valid_products.where("product_type_id = ?", params[:export_type]).order('id desc').limit(1000)
     else
@@ -192,7 +193,6 @@ class ProductsController < ApplicationController
         return
       end
       
-      choose_product_type = ProductType.find(params[:export_type].to_i)
       start_product_type = start_product.try(:product_type)
       unless start_product_type.present?
         redirect_to export_page_products_url, notice:'Sku对应产品无分类！'
@@ -204,8 +204,8 @@ class ProductsController < ApplicationController
         redirect_to export_page_products_url, notice:'Sku与所选分类不匹配'
         return
       end
-
-      @products = current_user.valid_products.where("product_type_id = ? and first_updated_time > ? and on_sale = 1", params[:export_type], start_product.first_updated_time).order('id desc').limit(1000)
+      product_type_combo = choose_product_type.all_children
+      @products = current_user.valid_products.where(product_type: product_type_combo).where("first_updated_time > ? and on_sale = 1", start_product.first_updated_time).order('id desc').limit(1000)
     end
     cookies[:export_language] = params[:language]
     cookies[:export_type] = params[:export_type]
