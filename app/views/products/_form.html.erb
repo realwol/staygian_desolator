@@ -64,12 +64,12 @@
     <% end %>
 
     <% [@product.avatar_img_url, @product.avatar_img_url1, @product.avatar_img_url2].compact.each_with_index do |img,index| %>
-    <%if img.present?%>
-      <div style="float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px; background: grey;">
-        <%= image_tag(img, style:'width:50px;', class:"product_image product_image_count", alt:'', "data-src"=>img) %>
-        <%= hidden_field_tag "product[images#{@product.valid_images.size+index+1}]", nil, class:'avatar_url product_hidden_field_value', value:img %>
-      </div>
-    <% end %>
+      <%if img.present?%>
+        <div style="float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px; background: grey;">
+          <%= image_tag(img, style:'width:50px;', class:"product_image product_image_count", alt:'', "data-src"=>img) %>
+          <%= hidden_field_tag "product[images#{@product.valid_images.size+index+1}]", nil, class:'avatar_url product_hidden_field_value', value:img %>
+        </div>
+      <% end %>
     <% end %>
 
     <div id="avatarImgDiv" style=" display:none; float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px; background: grey;">

@@ -369,14 +369,27 @@ class ProductsController < ApplicationController
   # PATCH/PUT /products/1.json
   def update
     if params[:product][:avatar].present?
-      params[:product][:avatar1] = params[:product][:avatar].second
-      params[:product][:avatar2] = params[:product][:avatar][2]
-      params[:product][:avatar] = params[:product][:avatar].first
+      flag = [false, false, false]
+      if params[:product][:avatar][1].present?
+        params[:product][:avatar1] = params[:product][:avatar][1]
+        flag[1] = true
+      end
+     if params[:product][:avatar][2].present?
+        params[:product][:avatar2] = params[:product][:avatar][2]
+        flag[2] = true
+      end
+     if params[:product][:avatar][0].present?
+        params[:product][:avatar] = params[:product][:avatar][0]
+        flag[0] = true
+      end
     else
       params[:product][:avatar], params[:product][:avatar1], params[:product][:avatar2] = '', '', ''
     end
 
+    # clear all products images before create
     @product.images1 = @product.images2 =@product.images3 = @product.images4 = @product.images5 = @product.images6 = @product.images7 = @product.images8 = @product.images9 = @product.images10 = nil
+    @product.images11 = @product.images12 =@product.images13 = @product.images14 = @product.images15 = @product.images16 = @product.images17 = @product.images18 = @product.images19 = @product.images20 = nil
+    @product.images21 = @product.images22 =@product.images23 = @product.images24 = @product.images25 = @product.images26 = @product.images27 = @product.images28 = @product.images29 = @product.images30 = nil
 
     respond_to do |format|
       @product.shield_type = 0
@@ -421,16 +434,20 @@ class ProductsController < ApplicationController
         if params[:cut_image_urls][2..-1]
           cut_image_urls = params[:cut_image_urls][2..-1].split('|')
           cut_image_urls.each do |url|
-            QiniuUploadHelper::QiNiu.update(url, @product.image_cut_position, @product.image_cut_x, @product.image_cut_y)
+            puts 'old image cut'
+            QiniuUploadHelper::QiNiu.update(url, @product.image_cut_position, @product.image_cut_x, @product.image_cut_y) if url.present?
+            sleep 0.5
           end
         end
 
         avatar_urls = []
         if params[:product][:avatar].present?
           @product.avatar_img_url, @product.avatar_img_url1, @product.avatar_img_url2 = nil
-          [@product.avatar.url, @product.avatar1.url, @product.avatar2.url].each do |img_url|
+          [@product.avatar.url, @product.avatar1.url, @product.avatar2.url].each_with_index do |img_url, index|
             if img_url.present?
-              avatar_urls << QiniuUploadHelper::QiNiu.upload_from_client(Rails.root.join('public' "#{img_url}"))
+              puts 'image upload'
+              avatar_urls << QiniuUploadHelper::QiNiu.upload_from_client(Rails.root.join('public' "#{img_url}")) if flag[index]
+              sleep 1 # keep the upload the right result
             end
           end
           @product.avatar_img_url = avatar_urls[0]
