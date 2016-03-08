@@ -473,12 +473,16 @@ class ProductsController < ApplicationController
   # DELETE /products/1.json
   def destroy
     if @product.update_status
+      @product.product_info_translations.try(:destroy_all)
+      @product.variables.try(:destroy_all)
       @product.destroy
       respond_to do |format|
         format.html { redirect_to products_url, notice: 'Product was successfully destroyed.' }
         format.json { head :no_content }
       end
     else
+      @product.product_info_translations.try(:destroy_all)
+      @product.variables.try(:destroy_all)
       @product.destroy
       respond_to do |format|
         format.html { redirect_to un_updated_page_products_url, notice: 'Product was successfully destroyed.' }
