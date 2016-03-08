@@ -192,7 +192,15 @@ class ProductsController < ApplicationController
         return
       end
       
-      unless start_product.try(:product_type_id) == params[:export_type].to_i
+      choose_product_type = ProductType.find(params[:export_type].to_i)
+      start_product_type = start_product.try(:product_type)
+      unless start_product_type.present?
+        redirect_to export_page_products_url, notice:'Sku对应产品无分类！'
+        return
+      end
+
+      if (choose_product_type != start_product_type) && (choose_product_type.all_children.index(start_product_type) != 0)
+      # unless start_product.try(:product_type) == params[:export_type].to_i
         redirect_to export_page_products_url, notice:'Sku与所选分类不匹配'
         return
       end
