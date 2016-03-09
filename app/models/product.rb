@@ -173,8 +173,9 @@ class Product < ActiveRecord::Base
 
     CSV.generate(options) do |csv|
       csv << xls_column_names
+      # csv_line_count ＝ csv_line_count ＋ 1
       all.un_shield.updated.each do |product|
-        break if max_limit.to_i < (csv_line_count + product.variables.count)
+        break if max_limit.to_i < (csv_line_count + product.variables.count + 1)
         # Customize the xls values
         # csv << ['product.attributes.values_at(*column_names)', 'hello', 'world']
         # 父产品
