@@ -198,19 +198,22 @@ class ProductsController < ApplicationController
         redirect_to export_page_products_url, notice:'Sku对应产品无分类！'
         return
       end
-
-      if (choose_product_type != start_product_type) && (choose_product_type.all_children.index(start_product_type) == 0)
+      if (choose_product_type != start_product_type) && (choose_product_type.all_children.index(start_product_type).nil?)
       # unless start_product.try(:product_type) == params[:export_type].to_i
         redirect_to export_page_products_url, notice:'Sku与所选分类不匹配'
         return
       end
-      product_type_combo = choose_product_type.all_children
+      product_type_combo = [choose_product_type]
+      product_type_combo << choose_product_type.all_children
+      product_type_combo.flatten!
       @products = current_user.valid_products.where(product_type: product_type_combo).where("first_updated_time > ? and on_sale = 1", start_product.first_updated_time).order('id desc').limit(1000)
     end
     cookies[:export_language] = params[:language]
     cookies[:export_type] = params[:export_type]
     request.format = 'xls'
     filename = "#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}_export_data.xls"
+    puts '==========='
+    puts @products.count
     respond_to do |f|
       f.xls {send_data @products.to_csv(params[:language], params[:max_number], col_sep: "\t"), filename: filename }
       # f.xls
