@@ -26,8 +26,8 @@
         <td><%= product.product_number %></td>
         <td><%= product.try(:user).try(:email) %></td>
         <td>
-          <%= text_field_tag 'product_price', product.price, class:'product_price', size:6 %>
-          <%= button_tag 'Save', class:'change_price', "data-link"=> update_price_products_path, 'data-product_id'=>product.id %>
+          <%= text_field_tag 'product_price', product.price, class:'product_price', size:5 %>
+          <%= button_tag '保存', class:'change_price', "data-link"=> update_price_products_path, 'data-product_id'=>product.id %>
         </td>
         <td>
           <%= link_to '翻译预览', translate_preview_product_path(product) %>

