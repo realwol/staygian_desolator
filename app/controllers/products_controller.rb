@@ -179,6 +179,8 @@ class ProductsController < ApplicationController
     puts '======================'
     puts 'I am in exporting now!'
     puts Time.now
+    max_number = params[:max_number].to_i
+    max_number = 1000 if (max_number > 1000 || max_number < 0 || max_number == 0)
 
     params[:export_type] = params[:product][:product_type_id]
     start_sku = params[:start_sku]
@@ -188,7 +190,7 @@ class ProductsController < ApplicationController
     product_type_combo.flatten!
 
     if start_sku.blank?
-      @products = current_user.valid_products.where(product_type: product_type_combo).order('id desc').limit(1000)
+      @products = current_user.valid_products.where(product_type: product_type_combo).order('id').limit(max_number)
     else
       start_product = current_user.valid_products.where(sku:start_sku).last
 
@@ -207,9 +209,10 @@ class ProductsController < ApplicationController
         redirect_to export_page_products_url, notice:'Sku与所选分类不匹配'
         return
       end
-      # @products = current_user.valid_products.where(product_type: product_type_combo).where("first_updated_time > ? and on_sale = 1", start_product.first_updated_time).order('id desc').limit(1000)
-      @products = current_user.valid_products.where("first_updated_time > ? and on_sale = 1", start_product.first_updated_time).order('id desc').where(product_type: product_type_combo).limit(1000)
+      @products = current_user.valid_products.where(product_type: product_type_combo).where("first_updated_time > ? and on_sale = 1", start_product.first_updated_time).order('id').limit(max_number)
+      # @products = current_user.valid_products.where("first_updated_time > ? and on_sale = 1", start_product.first_updated_time).where(product_type: product_type_combo).order('id').limit(max_number)
     end
+    @products = @products.order("id desc")
     cookies[:export_language] = params[:language]
     cookies[:export_type] = params[:export_type]
     request.format = 'xls'
