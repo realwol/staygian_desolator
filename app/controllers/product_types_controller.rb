@@ -158,13 +158,15 @@ class ProductTypesController < ApplicationController
   
   def update_product_type_attribute
     attributes_value_array = params[:attributes_value].split(',')
-    product_attribute_is_locked = attributes_value_array[1] == 'true' ? true : false
+    product_attribute_is_locked = true
+    # product_attribute_is_locked = attributes_value_array[1] == 'true' ? true : false
     if params[:attribute_id].present?
-      product_attribute = ProductAttribute.find(params[:attribute_id])
+      product_attribute = ProductAttribute.where(params[:attribute_id], product_type_id: @product_type.id).first
       product_attribute.update_attributes(attribute_name: attributes_value_array[0], is_locked: product_attribute_is_locked, table_name: attributes_value_array[2], product_type_id: params[:id])
-      product_attribute.attributes_translation_histories.first.update_attributes(attribute_name: attributes_value_array[0], china: attributes_value_array[3], america: attributes_value_array[4], canada: attributes_value_array[5], british: attributes_value_array[6], germany: attributes_value_array[7], spain: attributes_value_array[9], italy: attributes_value_array[10], france: attributes_value_array[8])
+      # product_attribute.attributes_translation_histories.first.update_attributes(attribute_name: attributes_value_array[0], china: attributes_value_array[3], america: attributes_value_array[4], canada: attributes_value_array[5], british: attributes_value_array[6], germany: attributes_value_array[7], spain: attributes_value_array[9], italy: attributes_value_array[10], france: attributes_value_array[8])
+      AttributesTranslationHistory.find(params[:attribute_history_id]).update_attributes(attribute_name: attributes_value_array[0], china: attributes_value_array[3], america: attributes_value_array[4], canada: attributes_value_array[5], british: attributes_value_array[6], germany: attributes_value_array[7], spain: attributes_value_array[9], italy: attributes_value_array[10], france: attributes_value_array[8])
     else
-      product_attribute = ProductAttribute.where(attribute_name: attributes_value_array[0]).first
+      product_attribute = ProductAttribute.where(attribute_name: attributes_value_array[0], product_type_id: @product_type.id).first
       product_attribute = ProductAttribute.create(attribute_name: attributes_value_array[0], is_locked: product_attribute_is_locked, table_name: attributes_value_array[2], product_type_id: params[:id]) unless product_attribute.present?
       AttributesTranslationHistory.create(attribute_name: attributes_value_array[0], china: attributes_value_array[3], america: attributes_value_array[4], canada: attributes_value_array[5], british: attributes_value_array[6], germany: attributes_value_array[7], spain: attributes_value_array[9], italy: attributes_value_array[10], france: attributes_value_array[8], product_attribute_id: product_attribute.id)
     end
@@ -259,11 +261,14 @@ class ProductTypesController < ApplicationController
 
   def remove_product_type_attribute
     product_attribute = ProductAttribute.find(params[:id])
-    @product_type_attributes = product_attribute.product_type.product_attributes
     attribute_translation = AttributesTranslationHistory.find(params[:attribute_translation_id])
     if attribute_translation
       attribute_translation.destroy
     end
+    if product_attribute.attributes_translation_histories.count == 0
+      product_attribute.destroy
+    end
+    @product_type_attributes = product_attribute.product_type.product_attributes
   end
 
   private

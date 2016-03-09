@@ -14,10 +14,14 @@
       <th colspan="3" >操作</th>
     </tr>
     <% if @product_type_attributes.present? %>
-      <% @product_type_attributes.each do |attribute| %>
+      <% @product_type_attributes.each_with_index do |attribute, index| %>
         <% attribute_translations = attribute.attributes_translation_histories %>
         <% attribute_translations.each do |attribute_translation| %>
-        <tr>
+          <% if index.odd? %>
+            <tr>
+          <% else%>
+            <tr style="background:rgba(0, 31, 255, 0.21);">
+          <% end %>
           <td><%= text_field_tag 'attr_text_name', attribute.attribute_name, style:'width:80px;', class: 'attribute_value' %></td>
           <% if attribute.is_locked %>
             <td>
@@ -39,9 +43,8 @@
           <td><%= text_field_tag 'attr_text_france', attribute_translation.try(:france), style:'width:80px;', class: 'attribute_value' %></td>
           <td><%= text_field_tag 'attr_text_spain', attribute_translation.try(:spain), style:'width:80px;', class: 'attribute_value' %></td>
           <td><%= text_field_tag 'attr_text_italy', attribute_translation.try(:italy), style:'width:80px;', class: 'attribute_value' %></td>
-          <td><a class='editAttribues' value=<%= attribute.id %>  >保存</a></td>
-          <td><a class='newAttributeValue' value=<%= attribute.id %>  >新增</a></td>
-          <td><a class='removeAttribues' value=<%= attribute_translation.id %>  >删除</a></td>
+          <td><a class='editAttribues' value=<%= attribute.id %> data-attribute-translation-id="<%= attribute_translation.id %>"  >保存</a></td>
+          <td><a class='removeAttribues' value=<%= attribute.id %> data-attribute-translation-id="<%= attribute_translation.id %>"  >删除</a></td>
         </tr>
         <% end %>
       <% end %>
@@ -64,11 +67,12 @@
           });
           var attribute_id = $(this).attr('value');
           var product_type_id = $('#product_type_id_hidden').val();
+          var attribute_history_id = $(this).data('attribute-translation-id');
 
           $.ajax({
             url: '/product_types/'+ product_type_id +'/update_product_type_attribute',
             type: 'POST',
-            data: { attributes_value: attributes_value, attribute_id: attribute_id},
+            data: { attributes_value: attributes_value, attribute_id: attribute_id, attribute_history_id: attribute_history_id},
             success: function(){
               alert('操作成功！');
             }
@@ -81,8 +85,8 @@
     });
 
     $('.removeAttribues').click(function(){
-      var attribute_id = $(this).parents('tr').find('.newAttributeValue').attr('value');
-      var attribute_translation_id = $(this).attr('value');
+      var attribute_id = $(this).attr('value');
+      var attribute_translation_id = $(this).data('attribute-translation-id');
       $.ajax({
         url: '/product_types/' + attribute_id + '/remove_product_type_attribute',
         data: {attribute_translation_id: attribute_translation_id},
@@ -103,11 +107,12 @@
       });
       var attribute_id = $(this).attr('value');
       var product_type_id = $('#product_type_id_hidden').val();
+      var attribute_history_id = $(this).data('attribute-translation-id');
 
       $.ajax({
         url: '/product_types/'+ product_type_id +'/update_product_type_attribute',
         type: 'POST',
-        data: { attributes_value: attributes_value, attribute_id: attribute_id},
+        data: { attributes_value: attributes_value, attribute_id: attribute_id, attribute_history_id: attribute_history_id},
         success: function(){
           alert('操作成功！');
         }
