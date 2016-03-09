@@ -1,3 +1,5 @@
+#2016-03-09 update the inventory and check the product is still on sale or not
+
 namespace :product_update do
   desc 'update product inventory and check on sale'
   task :check => :environment do

@@ -1,3 +1,4 @@
+# 2016-03-09 check if there are new products or not
 namespace :new_product_check do
   desc 'get new product'
   task :check => :environment do
