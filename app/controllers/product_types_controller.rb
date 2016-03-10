@@ -1,6 +1,33 @@
 class ProductTypesController < ApplicationController
   before_action :set_product_type, only: [:show, :edit, :update, :destroy, :update_product_type_attribute, :update_final_type, :update_key_words, :update_product_type_translation]
   
+  def description_translation_history_page
+    @descriptions = DescriptionTranslationHistory.all
+  end
+
+  def remove_desc_translation
+    if params[:desc_translation_id].present?
+      DescriptionTranslationHistory.find(params[:desc_translation_id]).destroy
+    end
+    render json:true
+  end
+
+  def save_desc_translation
+    attribute_value_array = params[:attribute_value].split(',')
+    if params[:desc_translation_id].present?
+      # update
+      DescriptionTranslationHistory.find(params[:desc_translation_id]).update_attributes(description: attribute_value_array[0], china: attribute_value_array[0], america: attribute_value_array[1], canada: attribute_value_array[2], british: attribute_value_array[3], 
+                                         germany: attribute_value_array[4], spain: attribute_value_array[5],
+                                         italy: attribute_value_array[6], france: attribute_value_array[7])
+    else
+      # new
+      DescriptionTranslationHistory.create(description: attribute_value_array[0], china: attribute_value_array[0], america: attribute_value_array[1], canada: attribute_value_array[2], british: attribute_value_array[3], 
+                                         germany: attribute_value_array[4], spain: attribute_value_array[5],
+                                         italy: attribute_value_array[6], france: attribute_value_array[7])
+    end
+    @descriptions = DescriptionTranslationHistory.all
+  end
+
   def get_children_product_types
     if params[:product_type_id].present?
       if params[:ajax_action_from].present? && params[:ajax_action_from] == 'level2Click'

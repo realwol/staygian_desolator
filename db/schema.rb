@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160304155358) do
+ActiveRecord::Schema.define(version: 20160310063759) do
 
   create_table "attributes_translation_histories", force: :cascade do |t|
     t.string   "attribute_name",       limit: 255
@@ -40,6 +40,20 @@ ActiveRecord::Schema.define(version: 20160304155358) do
     t.datetime "created_at",            null: false
     t.datetime "updated_at",            null: false
     t.datetime "deleted_at"
+  end
+
+  create_table "description_translation_histories", force: :cascade do |t|
+    t.text     "description", limit: 65535
+    t.text     "china",       limit: 65535
+    t.text     "america",     limit: 65535
+    t.text     "canada",      limit: 65535
+    t.text     "british",     limit: 65535
+    t.text     "germany",     limit: 65535
+    t.text     "spain",       limit: 65535
+    t.text     "italy",       limit: 65535
+    t.text     "france",      limit: 65535
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
   end
 
   create_table "product_attributes", force: :cascade do |t|
@@ -390,6 +404,8 @@ ActiveRecord::Schema.define(version: 20160304155358) do
     t.string   "variable_from", limit: 255
     t.integer  "user_id",       limit: 4
   end
+
+  add_index "variable_translate_histories", ["variable_from"], name: "index_variable_translate_histories_on_variable_from", using: :btree
 
   create_table "variables", force: :cascade do |t|
     t.string   "color",                         limit: 255

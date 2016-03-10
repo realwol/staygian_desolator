@@ -20,6 +20,7 @@
     <% unless current_user.is_little_brother? %>
       <% unless current_user.is_manager? %>
         <%= link_to '设定汇率', cash_rates_path %><br/>
+        <%= link_to '描述翻译列表', description_translation_history_page_product_types_path %><br/>
       <% end %>
       <%= link_to '人员管理', users_path %><br/>
       <% link_to '未翻译变体管理', translate_variables_variables_path %><br/>

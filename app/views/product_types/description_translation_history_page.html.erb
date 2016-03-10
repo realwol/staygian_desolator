@@ -1,0 +1,42 @@
+<div id="descTransTable" >
+  <%= render 'desc_translation_history' %>
+</div>
+<script type="text/javascript">
+  $('.saveTranslation').click(function(){
+    var $this = $(this);
+    var attributeValue = '';
+    var desc_translation_id = $(this).data('des-id');
+    $(this).parents('tr').find('.attribute_value').each(function(){
+      attributeValue = attributeValue + $(this).val() + ',';
+    });
+
+    $.ajax({
+      url: '/product_types/save_desc_translation',
+      type: 'post',
+      data: {desc_translation_id: desc_translation_id, attribute_value: attributeValue},
+      success: function(){
+      }
+    })
+
+  });
+
+  $('.removeTranslation').click(function(){
+    var $this = $(this);
+    var desc_translation_id =  $(this).data('des-id');
+    $.ajax({
+      url: '/product_types/remove_desc_translation',
+      type: 'delete',
+      data: {desc_translation_id: desc_translation_id},
+      success: function(){
+        $this.parents('tr').remove();
+        alert('操作成功！');
+      }
+    })
+  });
+
+  $('.clearTranslation').click(function(){
+    $(this).parents('tr').find('.attribute_value').each(function(){
+      $(this).val('');
+    });
+  });
+</script>

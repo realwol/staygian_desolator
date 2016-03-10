@@ -86,7 +86,9 @@ Rails.application.routes.draw do
     end
 
     collection do
+      get 'description_translation_history_page'
       get 'update_price_setting'
+      post 'save_desc_translation'
       post 'get_children_product_types'
       post 'update_shipment_method'
       post 'update_product_type_attribute'
@@ -95,6 +97,7 @@ Rails.application.routes.draw do
       post 'update_type_introduction'
       delete 'remove_product_type_attribute'
       delete 'remove_shipment_relation'
+      delete 'remove_desc_translation'
     end
   end
 
