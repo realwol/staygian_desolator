@@ -10,6 +10,18 @@ class Product < ActiveRecord::Base
 
   has_many :product_info_translations
 
+  # **********************
+  # * shield_type: 1 shield; 2, pre_saled; 3, temp_offsale; 4, wait for edited;
+  # * auto_flag:  11, auto online; 12, auto offline; 13, auto destroy;
+  # *
+  # *
+  # *
+  # *
+  # *
+  # *
+  # *
+  # **********************
+
   scope :un_updated, -> {where(update_status:false)}
   scope :updated, -> {where(update_status:true)}
   scope :un_shield, -> {where(shield_type: 0)}

@@ -1,4 +1,4 @@
-#2016-03-09 update the inventory and check the product is still on sale or not
+#2016-03-011 update the inventory and check the product is still on sale or not, done dev.
 
 namespace :product_update do
   desc 'update product inventory and check on sale'
@@ -26,11 +26,17 @@ end
 def check_on_sale product, html
   text_field = html.css('div.tb-meta strong.sold-out-tit')
   if text_field.present? && text_field.text == '此商品已下架'
-    product.variables.update_all(stock: 0)
+    product.update_attributes(on_sale: false)
+    product.variables.update_all(stock: 0, auto_flag: 12)
     puts 'off sale'
     return false
+  elsif html.css('div#content div.errorDetail h2').text.present? || html.css('div#content div.errorDetail h2').text == '很抱歉，您查看的商品找不到了！'
+    product.update_attributes(auto_flag: 13)
+    puts 'destroy sale'
+    return false
   else
-    puts 'still on sale'
+    puts 'on sale'
+    product.variables.update_all(stock: 0, auto_flag: 11)
     return true
   end
 end
@@ -64,5 +70,6 @@ end
 
 def get_product
   # Product.second
-  Product.onsale.first.try(:origin_address)
+  Product.first.try(:origin_address)
+  # Product.un_shield.updated.first.try(:origin_address)
 end
