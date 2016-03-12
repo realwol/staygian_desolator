@@ -144,7 +144,7 @@ class ProductsController < ApplicationController
 
     case @action_from
     when 'index'
-      @search_value = @products.updated.un_shield.onsale.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
+      @search_value = @products.updated.un_shield.onsale.where("#{search_query.join(' and ')}").order('first_updated_time desc').page(params[:page]).per(15)
     when 'off_sale_products'
       @result_type = '下线产品'
       @search_value = @products.offsale.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
@@ -189,10 +189,13 @@ class ProductsController < ApplicationController
     product_type_combo << choose_product_type.all_children
     product_type_combo.flatten!
 
+    # all_products = current_user.valid_products
+    all_products = Product.all
+
     if start_sku.blank?
-      @products = current_user.valid_products.where(product_type: product_type_combo).order('id').limit(max_number)
+      @products = all_products.where(product_type: product_type_combo).order('first_updated_time').limit(max_number)
     else
-      start_product = current_user.valid_products.where(sku:start_sku).last
+      start_product = all_products.where(sku:start_sku).last
 
       unless start_product
         redirect_to export_page_products_url, notice:'Sku错误'
@@ -209,7 +212,7 @@ class ProductsController < ApplicationController
         redirect_to export_page_products_url, notice:'Sku与所选分类不匹配'
         return
       end
-      @products = current_user.valid_products.where(product_type: product_type_combo).where("first_updated_time > ? and on_sale = 1", start_product.first_updated_time).order('first_updated_time').limit(max_number)
+      @products = all_products.where(product_type: product_type_combo).where("first_updated_time > ? and on_sale = 1", start_product.first_updated_time).order('first_updated_time').limit(max_number)
       # @products = current_user.valid_products.where("first_updated_time > ? and on_sale = 1", start_product.first_updated_time).where(product_type: product_type_combo).order('id').limit(max_number)
     end
     @products = @products.order("id desc")

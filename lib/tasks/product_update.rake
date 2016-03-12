@@ -5,12 +5,12 @@ namespace :product_update do
   task :check => :environment do
     product = get_product
     if product.present?
-      start product
+      start_update product
     end
   end
 end
 
-def start product
+def start_update product
   return if product.origin_address.nil?
   agent = UserAgents.rand()
   html = Nokogiri::HTML(open(product.origin_address, 'User-Agent' => agent, :allow_redirections => :all ))

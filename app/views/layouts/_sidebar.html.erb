@@ -10,7 +10,9 @@
   <h4>功能</h4>
       <%= link_to '按照店铺抓取', get_tmall_links_products_path %><br/>
       <%= link_to '按照搜索链接抓取', get_tmall_link_from_link_products_path %><br/>
-      <%= link_to '导出', export_page_products_path %><br/>
+      <% if current_user.is_jj? or current_user.is_dd? %>
+        <%= link_to '导出', export_page_products_path %><br/>
+      <% end %>
   <h4>设置</h4>
     <%= link_to '变体', variable_translate_list_variables_path %><br/>
     <%= link_to '产品分类管理', product_types_path %><br/>

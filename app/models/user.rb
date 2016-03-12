@@ -17,6 +17,10 @@ class User < ActiveRecord::Base
     self.role == 1
   end
 
+  def is_jj?
+    self.id == 38 && self.email == 'gaojinjin'
+  end
+
   def is_manager?
     self.role == 2
   end
