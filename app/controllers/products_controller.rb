@@ -209,7 +209,7 @@ class ProductsController < ApplicationController
         redirect_to export_page_products_url, notice:'Sku与所选分类不匹配'
         return
       end
-      @products = current_user.valid_products.where(product_type: product_type_combo).where("first_updated_time > ? and on_sale = 1", start_product.first_updated_time).order('id').limit(max_number)
+      @products = current_user.valid_products.where(product_type: product_type_combo).where("first_updated_time > ? and on_sale = 1", start_product.first_updated_time).order('first_updated_time').limit(max_number)
       # @products = current_user.valid_products.where("first_updated_time > ? and on_sale = 1", start_product.first_updated_time).where(product_type: product_type_combo).order('id').limit(max_number)
     end
     @products = @products.order("id desc")
