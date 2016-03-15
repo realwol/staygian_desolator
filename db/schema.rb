@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160311151514) do
+ActiveRecord::Schema.define(version: 20160315021843) do
 
   create_table "attributes_translation_histories", force: :cascade do |t|
     t.string   "attribute_name",       limit: 255
@@ -84,29 +84,29 @@ ActiveRecord::Schema.define(version: 20160311151514) do
   create_table "product_info_translations", force: :cascade do |t|
     t.string   "e_t",        limit: 255
     t.text     "e_detail",   limit: 65535
-    t.string   "e_des1",     limit: 255
-    t.string   "e_des2",     limit: 255
-    t.string   "e_des3",     limit: 255
+    t.text     "e_des1",     limit: 65535
+    t.text     "e_des2",     limit: 65535
+    t.text     "e_des3",     limit: 65535
     t.string   "g_t",        limit: 255
     t.text     "g_detail",   limit: 65535
-    t.string   "g_des1",     limit: 255
-    t.string   "g_des2",     limit: 255
-    t.string   "g_des3",     limit: 255
+    t.text     "g_des1",     limit: 65535
+    t.text     "g_des2",     limit: 65535
+    t.text     "g_des3",     limit: 65535
     t.string   "f_t",        limit: 255
     t.text     "f_detail",   limit: 65535
-    t.string   "f_des1",     limit: 255
-    t.string   "f_des2",     limit: 255
-    t.string   "f_des3",     limit: 255
+    t.text     "f_des1",     limit: 65535
+    t.text     "f_des2",     limit: 65535
+    t.text     "f_des3",     limit: 65535
     t.string   "s_t",        limit: 255
     t.text     "s_detail",   limit: 65535
-    t.string   "s_des1",     limit: 255
-    t.string   "s_des2",     limit: 255
-    t.string   "s_des3",     limit: 255
+    t.text     "s_des1",     limit: 65535
+    t.text     "s_des2",     limit: 65535
+    t.text     "s_des3",     limit: 65535
     t.string   "i_t",        limit: 255
     t.text     "i_detail",   limit: 65535
-    t.string   "i_des1",     limit: 255
-    t.string   "i_des2",     limit: 255
-    t.string   "i_des3",     limit: 255
+    t.text     "i_des1",     limit: 65535
+    t.text     "i_des2",     limit: 65535
+    t.text     "i_des3",     limit: 65535
     t.integer  "product_id", limit: 4
     t.datetime "created_at",               null: false
     t.datetime "updated_at",               null: false
