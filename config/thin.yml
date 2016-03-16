@@ -9,7 +9,7 @@ require: []
 environment: production
 # environment: development
 max_persistent_conns: 512
-servers: 5
+servers: 3
 port: 3001
 # host: localhost
 threaded: true
