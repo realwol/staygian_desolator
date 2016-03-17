@@ -1,3 +1,8 @@
+  <%= form_tag(search_des_translation_product_types_path, remote:true, method: 'get') do %>
+    <%= label_tag '要搜索的名称：' %>
+    <%= text_field_tag 'desc_name', params[:desc_name] %>
+    <%= submit_tag '确定' %>
+  <% end %>
 <table class="table table-bordered" style="width:90%;" >
   <tr>
     <th>次数</th>

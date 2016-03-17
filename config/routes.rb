@@ -86,6 +86,7 @@ Rails.application.routes.draw do
     end
 
     collection do
+      get 'search_des_translation'
       get 'description_translation_history_page'
       get 'update_price_setting'
       post 'save_desc_translation'

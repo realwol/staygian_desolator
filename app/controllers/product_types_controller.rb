@@ -1,8 +1,13 @@
 class ProductTypesController < ApplicationController
   before_action :set_product_type, only: [:show, :edit, :update, :destroy, :update_product_type_attribute, :update_final_type, :update_key_words, :update_product_type_translation]
   
+  def search_des_translation
+    desc_name = params[:desc_name]
+    @descriptions = DescriptionTranslationHistory.where(" description like ? ", "%#{desc_name}%").order('usage_count desc').page(params[:page])
+  end
+
   def description_translation_history_page
-    @descriptions = DescriptionTranslationHistory.order('description desc').page(params[:page])
+    @descriptions = DescriptionTranslationHistory.order('usage_count desc').page(params[:page])
   end
 
   def remove_desc_translation
@@ -25,7 +30,7 @@ class ProductTypesController < ApplicationController
                                          germany: attribute_value_array[4], spain: attribute_value_array[5],
                                          italy: attribute_value_array[6], france: attribute_value_array[7])
     end
-    @descriptions = DescriptionTranslationHistory.order('description').page(params[:page])
+    @descriptions = DescriptionTranslationHistory.order('usage_count desc').page(params[:page])
   end
 
   def get_children_product_types
