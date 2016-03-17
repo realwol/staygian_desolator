@@ -2,7 +2,7 @@ class ProductTypesController < ApplicationController
   before_action :set_product_type, only: [:show, :edit, :update, :destroy, :update_product_type_attribute, :update_final_type, :update_key_words, :update_product_type_translation]
   
   def description_translation_history_page
-    @descriptions = DescriptionTranslationHistory.order('updated_at desc').page(params[:page])
+    @descriptions = DescriptionTranslationHistory.order('description desc').page(params[:page])
   end
 
   def remove_desc_translation
@@ -13,7 +13,7 @@ class ProductTypesController < ApplicationController
   end
 
   def save_desc_translation
-    attribute_value_array = params[:attribute_value].split(',')
+    attribute_value_array = params[:attribute_value].split('|')
     if params[:desc_translation_id].present?
       # update
       DescriptionTranslationHistory.find(params[:desc_translation_id]).update_attributes(description: attribute_value_array[0], china: attribute_value_array[0], america: attribute_value_array[1], canada: attribute_value_array[2], british: attribute_value_array[3], 
@@ -25,7 +25,7 @@ class ProductTypesController < ApplicationController
                                          germany: attribute_value_array[4], spain: attribute_value_array[5],
                                          italy: attribute_value_array[6], france: attribute_value_array[7])
     end
-    @descriptions = DescriptionTranslationHistory.all
+    @descriptions = DescriptionTranslationHistory.order('description').page(params[:page])
   end
 
   def get_children_product_types
