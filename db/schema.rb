@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160315021843) do
+ActiveRecord::Schema.define(version: 20160317032011) do
 
   create_table "attributes_translation_histories", force: :cascade do |t|
     t.string   "attribute_name",       limit: 255
@@ -43,17 +43,20 @@ ActiveRecord::Schema.define(version: 20160315021843) do
   end
 
   create_table "description_translation_histories", force: :cascade do |t|
-    t.text     "description", limit: 65535
-    t.text     "china",       limit: 65535
-    t.text     "america",     limit: 65535
-    t.text     "canada",      limit: 65535
-    t.text     "british",     limit: 65535
-    t.text     "germany",     limit: 65535
-    t.text     "spain",       limit: 65535
-    t.text     "italy",       limit: 65535
-    t.text     "france",      limit: 65535
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.text     "description",  limit: 65535
+    t.text     "china",        limit: 65535
+    t.text     "america",      limit: 65535
+    t.text     "canada",       limit: 65535
+    t.text     "british",      limit: 65535
+    t.text     "germany",      limit: 65535
+    t.text     "spain",        limit: 65535
+    t.text     "italy",        limit: 65535
+    t.text     "france",       limit: 65535
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.boolean  "is_whole",     limit: 1
+    t.boolean  "is_auto_save", limit: 1
+    t.string   "usage_count",  limit: 255
   end
 
   create_table "product_attributes", force: :cascade do |t|

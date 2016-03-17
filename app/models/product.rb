@@ -49,7 +49,9 @@ class Product < ActiveRecord::Base
     if shipment_relation.present?
       shipment_method_id = shipment_relation.attributes_translation_history.read_attribute(language)
       if shipment_method_id
-        shipment_method = ShipmentMethod.find(shipment_method_id).shipment_method_values.where("(weight > ? or weight = ?) and (weight < ?) ", self.product_weight, self.product_weight, self.product_weight.to_f + 0.5).last
+        all_shipment_method_values = ShipmentMethod.find(shipment_method_id).shipment_method_values
+        shipment_method = all_shipment_method_values.where("weight > ?", self.product_weight.to_f).first
+        shipment_method = all_shipment_method_values.order("weight").last unless shipment_method.present?
         if shipment_method.present?
           shipment_method.read_attribute("#{language}_price").to_f
         else

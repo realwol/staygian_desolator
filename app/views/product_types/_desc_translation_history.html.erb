@@ -1,5 +1,6 @@
 <table class="table table-bordered" style="width:90%;" >
   <tr>
+    <th>使用次数</th>
     <th>中文</th>
     <th>英文（美）</th>
     <th>英文（加）</th>
@@ -8,9 +9,10 @@
     <th>西班牙语</th>
     <th>意大利语</th>
     <th>法语</th>
-    <th>操作</th>
+    <th colspan="2">操作</th>
   </tr>
     <tr>
+      <td>/</td>
       <td><%= text_area_tag 'attr_text_table_name', nil, class: 'attribute_value' %></td>
       <td><%= text_area_tag 'attr_text_table_name', nil, class: 'attribute_value' %></td>
       <td><%= text_area_tag 'attr_text_table_name', nil, class: 'attribute_value' %></td>
@@ -20,12 +22,13 @@
       <td><%= text_area_tag 'attr_text_table_name', nil, class: 'attribute_value' %></td>
       <td><%= text_area_tag 'attr_text_table_name', nil, class: 'attribute_value' %></td>
       <td style="width:500px;">
-        <button class="saveTranslation">保存</button>
-        <button class="clearTranslation">清空</button>
+        <button class="saveTranslation" style="width:50px;">保存</button>
+        <button class="clearTranslation" style="width:50px;">清空</button>
       </td>
     </tr>
   <% @descriptions.each do |des| %>
     <tr>
+      <td><%= des.usage_count.to_i %></td>
       <td><%= text_area_tag 'attr_text_table_name', des.description, class: 'attribute_value' %></td>
       <td><%= text_area_tag 'attr_text_table_name', des.america, class: 'attribute_value' %></td>
       <td><%= text_area_tag 'attr_text_table_name', des.canada, class: 'attribute_value' %></td>
@@ -35,8 +38,8 @@
       <td><%= text_area_tag 'attr_text_table_name', des.italy, class: 'attribute_value' %></td>
       <td><%= text_area_tag 'attr_text_table_name', des.france, class: 'attribute_value' %></td>
       <td>
-        <button class="saveTranslation" data-des-id="<%= des.id %>">保存</button>
-        <button class="removeTranslation" data-des-id="<%= des.id %>">删除</button>
+        <button class="saveTranslation" data-des-id="<%= des.id %>" style="width:50px;">保存</button>
+        <button class="removeTranslation" data-des-id="<%= des.id %>" style="width:50px;">删除</button>
       </td>
     </tr>
   <% end %>
