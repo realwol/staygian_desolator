@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160317032011) do
+ActiveRecord::Schema.define(version: 20160317140739) do
 
   create_table "attributes_translation_histories", force: :cascade do |t|
     t.string   "attribute_name",       limit: 255
@@ -56,7 +56,7 @@ ActiveRecord::Schema.define(version: 20160317032011) do
     t.datetime "updated_at",                 null: false
     t.boolean  "is_whole",     limit: 1
     t.boolean  "is_auto_save", limit: 1
-    t.string   "usage_count",  limit: 255
+    t.integer  "usage_count",  limit: 4
   end
 
   create_table "product_attributes", force: :cascade do |t|
