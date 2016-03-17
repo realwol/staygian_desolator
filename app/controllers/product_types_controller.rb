@@ -2,7 +2,7 @@ class ProductTypesController < ApplicationController
   before_action :set_product_type, only: [:show, :edit, :update, :destroy, :update_product_type_attribute, :update_final_type, :update_key_words, :update_product_type_translation]
   
   def description_translation_history_page
-    @descriptions = DescriptionTranslationHistory.all
+    @descriptions = DescriptionTranslationHistory.order('updated_at desc').page(params[:page])
   end
 
   def remove_desc_translation
