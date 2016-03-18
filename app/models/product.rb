@@ -81,53 +81,53 @@ class Product < ActiveRecord::Base
     product_translation = product.product_info_translations.last
     case language
     when 'british'
-      local_infos[:title] = product_translation.try(:e_t)
-      local_infos[:detail] = product_translation.try(:e_detail)
-      local_infos[:des1] = product_translation.try(:e_des1)
-      local_infos[:des2] = product_translation.try(:e_des2)
-      local_infos[:des3] = product_translation.try(:e_des3)
+      local_infos[:title] = product_translation.try(:e_t).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
+      local_infos[:detail] = product_translation.try(:e_detail).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
+      local_infos[:des1] = product_translation.try(:e_des1).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
+      local_infos[:des2] = product_translation.try(:e_des2).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
+      local_infos[:des3] = product_translation.try(:e_des3).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
     when 'germany'
-      local_infos[:title] = product_translation.try(:g_t)
-      local_infos[:detail] = product_translation.try(:g_detail)
-      local_infos[:des1] = product_translation.try(:g_des1)
-      local_infos[:des2] = product_translation.try(:g_des2)
-      local_infos[:des3] = product_translation.try(:g_des3)
+      local_infos[:title] = product_translation.try(:g_t).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
+      local_infos[:detail] = product_translation.try(:g_detail).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
+      local_infos[:des1] = product_translation.try(:g_des1).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
+      local_infos[:des2] = product_translation.try(:g_des2).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
+      local_infos[:des3] = product_translation.try(:g_des3).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
     when 'france'
-      local_infos[:title] = product_translation.try(:f_t)
-      local_infos[:detail] = product_translation.try(:f_detail)
-      local_infos[:des1] = product_translation.try(:f_des1)
-      local_infos[:des2] = product_translation.try(:f_des2)
-      local_infos[:des3] = product_translation.try(:f_des3)
+      local_infos[:title] = product_translation.try(:f_t).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
+      local_infos[:detail] = product_translation.try(:f_detail).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
+      local_infos[:des1] = product_translation.try(:f_des1).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
+      local_infos[:des2] = product_translation.try(:f_des2).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
+      local_infos[:des3] = product_translation.try(:f_des3).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
     when 'spain'
-      local_infos[:title] = product_translation.try(:s_t)
-      local_infos[:detail] = product_translation.try(:s_detail)
-      local_infos[:des1] = product_translation.try(:s_des1)
-      local_infos[:des2] = product_translation.try(:s_des2)
-      local_infos[:des3] = product_translation.try(:s_des3)
+      local_infos[:title] = product_translation.try(:s_t).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
+      local_infos[:detail] = product_translation.try(:s_detail).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
+      local_infos[:des1] = product_translation.try(:s_des1).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
+      local_infos[:des2] = product_translation.try(:s_des2).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
+      local_infos[:des3] = product_translation.try(:s_des3).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
     when 'italy'
-      local_infos[:title] = product_translation.try(:i_t)
-      local_infos[:detail] = product_translation.try(:i_detail)
-      local_infos[:des1] = product_translation.try(:i_des1)
-      local_infos[:des2] = product_translation.try(:i_des2)
-      local_infos[:des3] = product_translation.try(:i_des3)
+      local_infos[:title] = product_translation.try(:i_t).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
+      local_infos[:detail] = product_translation.try(:i_detail).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
+      local_infos[:des1] = product_translation.try(:i_des1).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
+      local_infos[:des2] = product_translation.try(:i_des2).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
+      local_infos[:des3] = product_translation.try(:i_des3).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
     when 'america'
-      local_infos[:title] = product_translation.try(:e_t)
-      local_infos[:detail] = product_translation.try(:e_detail)
-      local_infos[:des1] = product_translation.try(:e_des1)
-      local_infos[:des2] = product_translation.try(:e_des2)
-      local_infos[:des3] = product_translation.try(:e_des3)
+      local_infos[:title] = product_translation.try(:e_t).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
+      local_infos[:detail] = product_translation.try(:e_detail).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
+      local_infos[:des1] = product_translation.try(:e_des1).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
+      local_infos[:des2] = product_translation.try(:e_des2).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
+      local_infos[:des3] = product_translation.try(:e_des3).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
     when 'canada'
-      local_infos[:title] = product_translation.try(:e_t)
-      local_infos[:detail] = product_translation.try(:e_detail)
-      local_infos[:des1] = product_translation.try(:e_des1)
-      local_infos[:des2] = product_translation.try(:e_des2)
-      local_infos[:des3] = product_translation.try(:e_des3)
+      local_infos[:title] = product_translation.try(:e_t).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
+      local_infos[:detail] = product_translation.try(:e_detail).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
+      local_infos[:des1] = product_translation.try(:e_des1).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
+      local_infos[:des2] = product_translation.try(:e_des2).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
+      local_infos[:des3] = product_translation.try(:e_des3).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
     else
-      local_infos[:title] = product.title
-      local_infos[:detail] = product.details
-      local_infos[:des1] = product.product_intro_1
-      local_infos[:des2] = product.product_intro_2
-      local_infos[:des3] = product.product_intro_3
+      local_infos[:title] = product.title.strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
+      local_infos[:detail] = product.details.strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
+      local_infos[:des1] = product.product_intro_1.strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
+      local_infos[:des2] = product.product_intro_2.strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
+      local_infos[:des3] = product.product_intro_3.strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
     end
     local_infos
   end
