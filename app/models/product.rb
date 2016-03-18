@@ -76,58 +76,62 @@ class Product < ActiveRecord::Base
   	@valid_images
   end
 
+  def export_format_string string
+    string.strip.gsub('，', ',').gsub('。', '.').gsub("\r", '') if string.present?
+  end
+
   def self.choose_language(language, product)
     local_infos = {}
     product_translation = product.product_info_translations.last
     case language
     when 'british'
-      local_infos[:title] = product_translation.try(:e_t).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
-      local_infos[:detail] = product_translation.try(:e_detail).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
-      local_infos[:des1] = product_translation.try(:e_des1).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
-      local_infos[:des2] = product_translation.try(:e_des2).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
-      local_infos[:des3] = product_translation.try(:e_des3).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
+      local_infos[:title] = export_format_string(product_translation.try(:e_t))
+      local_infos[:detail] = export_format_string(product_translation.try(:e_detail))
+      local_infos[:des1] = export_format_string(product_translation.try(:e_des1))
+      local_infos[:des2] = export_format_string(product_translation.try(:e_des2))
+      local_infos[:des3] = export_format_string(product_translation.try(:e_des3))
     when 'germany'
-      local_infos[:title] = product_translation.try(:g_t).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
-      local_infos[:detail] = product_translation.try(:g_detail).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
-      local_infos[:des1] = product_translation.try(:g_des1).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
-      local_infos[:des2] = product_translation.try(:g_des2).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
-      local_infos[:des3] = product_translation.try(:g_des3).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
+      local_infos[:title] = export_format_string(product_translation.try(:g_t))
+      local_infos[:detail] = export_format_string(product_translation.try(:g_detail))
+      local_infos[:des1] = export_format_string(product_translation.try(:g_des1))
+      local_infos[:des2] = export_format_string(product_translation.try(:g_des2))
+      local_infos[:des3] = export_format_string(product_translation.try(:g_des3))
     when 'france'
-      local_infos[:title] = product_translation.try(:f_t).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
-      local_infos[:detail] = product_translation.try(:f_detail).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
-      local_infos[:des1] = product_translation.try(:f_des1).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
-      local_infos[:des2] = product_translation.try(:f_des2).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
-      local_infos[:des3] = product_translation.try(:f_des3).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
+      local_infos[:title] = export_format_string(product_translation.try(:f_t))
+      local_infos[:detail] = export_format_string(product_translation.try(:f_detail))
+      local_infos[:des1] = export_format_string(product_translation.try(:f_des1))
+      local_infos[:des2] = export_format_string(product_translation.try(:f_des2))
+      local_infos[:des3] = export_format_string(product_translation.try(:f_des3))
     when 'spain'
-      local_infos[:title] = product_translation.try(:s_t).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
-      local_infos[:detail] = product_translation.try(:s_detail).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
-      local_infos[:des1] = product_translation.try(:s_des1).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
-      local_infos[:des2] = product_translation.try(:s_des2).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
-      local_infos[:des3] = product_translation.try(:s_des3).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
+      local_infos[:title] = export_format_string(product_translation.try(:s_t))
+      local_infos[:detail] = export_format_string(product_translation.try(:s_detail))
+      local_infos[:des1] = export_format_string(product_translation.try(:s_des1))
+      local_infos[:des2] = export_format_string(product_translation.try(:s_des2))
+      local_infos[:des3] = export_format_string(product_translation.try(:s_des3))
     when 'italy'
-      local_infos[:title] = product_translation.try(:i_t).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
-      local_infos[:detail] = product_translation.try(:i_detail).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
-      local_infos[:des1] = product_translation.try(:i_des1).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
-      local_infos[:des2] = product_translation.try(:i_des2).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
-      local_infos[:des3] = product_translation.try(:i_des3).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
+      local_infos[:title] = export_format_string(product_translation.try(:i_t))
+      local_infos[:detail] = export_format_string(product_translation.try(:i_detail))
+      local_infos[:des1] = export_format_string(product_translation.try(:i_des1))
+      local_infos[:des2] = export_format_string(product_translation.try(:i_des2))
+      local_infos[:des3] = export_format_string(product_translation.try(:i_des3))
     when 'america'
-      local_infos[:title] = product_translation.try(:e_t).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
-      local_infos[:detail] = product_translation.try(:e_detail).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
-      local_infos[:des1] = product_translation.try(:e_des1).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
-      local_infos[:des2] = product_translation.try(:e_des2).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
-      local_infos[:des3] = product_translation.try(:e_des3).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
+      local_infos[:title] = export_format_string(product_translation.try(:e_t))
+      local_infos[:detail] = export_format_string(product_translation.try(:e_detail))
+      local_infos[:des1] = export_format_string(product_translation.try(:e_des1))
+      local_infos[:des2] = export_format_string(product_translation.try(:e_des2))
+      local_infos[:des3] = export_format_string(product_translation.try(:e_des3))
     when 'canada'
-      local_infos[:title] = product_translation.try(:e_t).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
-      local_infos[:detail] = product_translation.try(:e_detail).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
-      local_infos[:des1] = product_translation.try(:e_des1).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
-      local_infos[:des2] = product_translation.try(:e_des2).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
-      local_infos[:des3] = product_translation.try(:e_des3).strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
+      local_infos[:title] = export_format_string(product_translation.try(:e_t))
+      local_infos[:detail] = export_format_string(product_translation.try(:e_detail))
+      local_infos[:des1] = export_format_string(product_translation.try(:e_des1))
+      local_infos[:des2] = export_format_string(product_translation.try(:e_des2))
+      local_infos[:des3] = export_format_string(product_translation.try(:e_des3))
     else
-      local_infos[:title] = product.title.strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
-      local_infos[:detail] = product.details.strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
-      local_infos[:des1] = product.product_intro_1.strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
-      local_infos[:des2] = product.product_intro_2.strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
-      local_infos[:des3] = product.product_intro_3.strip.gsub('，', ',').gsub('。', '.').gsub("\r", '')
+      local_infos[:title] = export_format_string(product.title)
+      local_infos[:detail] = export_format_string(product.details)
+      local_infos[:des1] = export_format_string(product.product_intro_1)
+      local_infos[:des2] = export_format_string(product.product_intro_2)
+      local_infos[:des3] = export_format_string(product.product_intro_3)
     end
     local_infos
   end

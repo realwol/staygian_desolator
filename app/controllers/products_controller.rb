@@ -183,6 +183,9 @@ class ProductsController < ApplicationController
     max_number = 1000 if (max_number > 1000 || max_number < 0 || max_number == 0)
 
     params[:export_type] = params[:product][:product_type_id]
+    unless params[:export_type].present?
+      redirect_to export_page_products_url, notice:'分类必须存在！'
+    end
     start_sku = params[:start_sku]
     choose_product_type = ProductType.find(params[:export_type].to_i)
     product_type_combo = [choose_product_type]
