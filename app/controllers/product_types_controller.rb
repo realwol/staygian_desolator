@@ -18,7 +18,7 @@ class ProductTypesController < ApplicationController
   end
 
   def save_desc_translation
-    attribute_value_array = params[:attribute_value].strip.gsub('，', ',').gsub('。', '.').gsub("\r", '').split('|')
+    attribute_value_array = params[:attribute_value].strip.gsub('，', ',').gsub('。', '.').gsub("\r", '').gsub("\n",'').split('|')
     if params[:desc_translation_id].present?
       # update
       DescriptionTranslationHistory.find(params[:desc_translation_id]).update_attributes(description: attribute_value_array[0], china: attribute_value_array[0], america: attribute_value_array[1], canada: attribute_value_array[2], british: attribute_value_array[3], 

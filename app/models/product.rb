@@ -77,7 +77,7 @@ class Product < ActiveRecord::Base
   end
 
   def self.export_format_string string
-    string.strip.gsub('，', ',').gsub('。', '.').gsub("\r", '') if string.present?
+    string.strip.gsub('，', ',').gsub('。', '.').gsub("\r", '').gsub("：",':').gsub(" ", ' ') if string.present?
   end
 
   def self.choose_language(language, product)
