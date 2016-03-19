@@ -76,6 +76,10 @@ class Product < ActiveRecord::Base
   	@valid_images
   end
 
+  def self.unescape(string)
+    String.class_eval(%Q("#{string}"))
+  end
+
   def self.export_format_string string
     string.strip.gsub('，', ',').gsub('。', '.').gsub("\r", '').gsub("：",':').gsub(" ", ' ') if string.present?
   end
