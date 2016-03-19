@@ -123,7 +123,7 @@
       <thead>
         <tr>
           <th><%= check_box_tag 'check_all' %></th>
-          <th><%= '颜色' %></th>
+          <th><%= '颜色' %>&nbsp&nbsp<button id="changeAttributeName" >改名</button></th>
           <th>图片(左键双击删除同类图片)</th>
           <th><%= '尺寸' %></th>
           <th>Price</th>
@@ -144,7 +144,7 @@
           <%= hidden_field_tag 'variable[][index]', nil, value:v.id %>
           <tr>
             <td><%= check_box_tag 'item' %></td>
-            <td><%= text_field_tag 'variable[][color]', nil, value:v.color %></td>
+            <td><%= text_field_tag 'variable[][color]', nil, value:v.color, class:'variable_color' %></td>
             <td>
               <ul id="ul-sortable" style="list-style-type: none; margin: 0; padding: 0; width: 450px;">
               <% v.valid_images.each_with_index do |img, vv_index| %>
@@ -164,7 +164,7 @@
               <% end %>
               </ul>
             </td>
-            <td><%= text_field_tag 'variable[][size]', nil, value:v.size, style:'width:90px' %></td>
+            <td><%= text_field_tag 'variable[][size]', nil, value:v.size, class:'variable_size', style:'width:90px' %></td>
             <td><%= text_field_tag 'variable[][price]', nil, value:v.price, class:'variable_price', style:'width:60px' %></td>
             <td><%= text_field_tag 'variable[][stock]', nil, value:v.stock, style:'width:60px' %></td>
             <td><input type='button' class='remove_variable' value='Remove' data-variable-id="<%= v.id %>" /></td>
@@ -192,6 +192,32 @@
     </div>
 
 <script type="text/javascript">
+  $('.variable_price').change(function(){
+    var price_value = $(this).val();
+    var size_value = $(this).parents('tr').find('.variable_size').val();
+    $('.variable_price').each(function(){
+      if (size_value == $(this).parents('tr').find('.variable_size').val()) {
+        $(this).val(price_value);
+      }
+    });
+  });
+
+  $('#changeAttributeName').click(function(){
+    var current_color = '';
+    var change_name_int = 65;
+    $('.variable_color').each(function(){
+      if (current_color == '' || current_color == $(this).val()) {
+        current_color = $(this).val();
+        $(this).val(String.fromCharCode(change_name_int));
+      } else {
+        change_name_int = change_name_int + 1;
+        current_color = $(this).val();
+        $(this).val(String.fromCharCode(change_name_int));
+      }
+    });
+    return false;
+  });
+
   $('#formSubmit').click(function(){
     if ($('#product_product_weight').val() == '') {
       alert('产品重量不能为空！');

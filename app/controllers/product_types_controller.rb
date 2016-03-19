@@ -18,6 +18,7 @@ class ProductTypesController < ApplicationController
   end
 
   def save_desc_translation
+    @new_flag = false
     attribute_value_array = params[:attribute_value].strip.gsub('，', ',').gsub('。', '.').gsub("\r", '').gsub("\n",'').split('|')
     if params[:desc_translation_id].present?
       # update
@@ -26,9 +27,13 @@ class ProductTypesController < ApplicationController
                                          italy: attribute_value_array[6], france: attribute_value_array[7])
     else
       # new
-      DescriptionTranslationHistory.create(description: attribute_value_array[0], china: attribute_value_array[0], america: attribute_value_array[1], canada: attribute_value_array[2], british: attribute_value_array[3], 
+      if DescriptionTranslationHistory.where(description: attribute_value_array[0]).count > 0
+        @new_flag = true
+      else
+        DescriptionTranslationHistory.create(description: attribute_value_array[0], china: attribute_value_array[0], america: attribute_value_array[1], canada: attribute_value_array[2], british: attribute_value_array[3], 
                                          germany: attribute_value_array[4], spain: attribute_value_array[5],
                                          italy: attribute_value_array[6], france: attribute_value_array[7])
+      end
     end
     @descriptions = DescriptionTranslationHistory.order('usage_count desc').page(params[:page])
   end
