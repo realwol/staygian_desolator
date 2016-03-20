@@ -196,17 +196,18 @@
     var price_value = $(this).val();
     var size_value = $(this).parents('tr').find('.variable_size').val();
     $('.variable_price').each(function(){
-      if (size_value == $(this).parents('tr').find('.variable_size').val()) {
+      if (size_value == $(this).parents('tr').find('.variable_size').val() && '' != $(this).parents('tr').find('.variable_size').val()) {
         $(this).val(price_value);
       }
     });
+    return false;
   });
 
   $('#changeAttributeName').click(function(){
-    var current_color = '';
+    var current_color = 'HelloWrold';
     var change_name_int = 65;
     $('.variable_color').each(function(){
-      if (current_color == '' || current_color == $(this).val()) {
+      if (current_color == 'HelloWrold' || current_color == $(this).val()) {
         current_color = $(this).val();
         $(this).val(String.fromCharCode(change_name_int));
       } else {
