@@ -467,7 +467,11 @@ class Product < ActiveRecord::Base
           xls_column_values << 'Update'
           # standard_price
           # shipment_cost ＝ product.get_shipment_cost(language)
-          xls_column_values << (1 + ((shipment_cost + product.try(:price).try(:to_f)) * profit_rate / cash_rate).to_i ).to_i
+          if v.try(:price).present?
+            xls_column_values << (1 + ((shipment_cost + v.try(:price).try(:to_f)) * profit_rate / cash_rate).to_i ).to_i
+          else
+            xls_column_values << (1 + ((shipment_cost + product.try(:price).try(:to_f)) * profit_rate / cash_rate).to_i ).to_i
+          end
           # currency
           xls_column_values << country_currency[language.to_sym]
           xls_column_values << 'New'
