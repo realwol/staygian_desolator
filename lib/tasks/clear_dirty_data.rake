@@ -1,4 +1,20 @@
 namespace :clear_dirty_data do
+  desc 'replace chinese bracket'
+  task :replace_bracket => :environment do
+    a = Time.now
+    ProductInfoTranslation.all.each do |p|
+      aa = Time.now
+      p.e_t = p.e_t.gsub('（', '(').gsub('）', ')') if p.e_t
+      p.g_t = p.g_t.gsub('（', '(').gsub('）', ')') if p.g_t
+      p.f_t = p.f_t.gsub('（', '(').gsub('）', ')') if p.f_t
+      p.s_t = p.s_t.gsub('（', '(').gsub('）', ')') if p.s_t
+      p.i_t = p.i_t.gsub('（', '(').gsub('）', ')') if p.i_t
+      p.save
+      puts Time.now - aa
+    end
+    puts Time.now - a
+  end
+
   desc 'clear dup data on translation history'
   task :clear_dup => :environment do
     a = Time.now
