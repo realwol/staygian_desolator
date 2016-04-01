@@ -1,4 +1,4 @@
-#2016-03-011 update the inventory and check the product is still on sale or not, done dev.
+#2016-03-11 update the inventory and check the product is still on sale or not, done dev.
 
 namespace :product_update do
   desc 'update product inventory and check on sale'
@@ -20,7 +20,6 @@ def start_update product
   else
     update_stock product
   end
-
 end
 
 def check_on_sale product, html

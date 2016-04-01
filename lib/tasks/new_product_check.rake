@@ -1,11 +1,11 @@
-# 2016-03-011 check if there are new products or not, done dev.
+# 2016-03-11 check if there are new products or not, done dev.
 
 namespace :new_product_check do
   desc 'get new product'
   task :check => :environment do
     # shop = get_shop
     a = Time.now
-    shops = Shop.all
+    shops = get_shop
     shops.each do |shop|
       aa = TIme.now
       shop_links = shop.shop_links
@@ -56,7 +56,7 @@ def check_page shop_link
       product_link_id = link_hash[:address][product_link_start..product_link_end]
       # stop dup product link
       if Product.where(product_link_id: product_link_id).first
-        TmallLink.create(links_array)
+        # TmallLink.create(links_array)
         return false
       else
         link_hash[:address] = "http://detail.tmall.com/item.htm?id=" + product_link_id.to_s
@@ -75,5 +75,5 @@ end
 
 def get_shop
   # check shop link, if one link is done checking, no need to check the rest links in the same shop
-  Shop.first
+  Shop.all
 end

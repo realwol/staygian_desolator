@@ -180,7 +180,7 @@ class ProductsController < ApplicationController
     puts 'I am in exporting now!'
     puts Time.now
     max_number = params[:max_number].to_i
-    max_number = 1000 if (max_number > 1000 || max_number < 0 || max_number == 0)
+    max_number = 2000 if (max_number > 2000 || max_number < 0 || max_number == 0)
 
     params[:export_type] = params[:product][:product_type_id]
     unless params[:export_type].present?
