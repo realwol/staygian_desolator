@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  get 'merchant/index'
+  post 'merchant/create'
+  delete 'merchant/remove'
+
   resources :cash_rates, only:[:index, :create]
 
   resources :variables, only: [:index] do

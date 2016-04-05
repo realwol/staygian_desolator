@@ -8,6 +8,7 @@ class User < ActiveRecord::Base
   has_many :shop_links
   has_many :tmall_links
   has_many :variable_translate_histories
+  has_many :merchants
 
   has_many :little_brothers, class_name: 'User', foreign_key: 'manager'
 
@@ -79,5 +80,22 @@ class User < ActiveRecord::Base
 
   def is_shop_valid? shop
     !!self.valid_shops.index(shop)
+  end
+
+  def valid_merchants
+    if self.is_dd?
+      Merchant.all
+    else
+      current_user = self
+      count_children = current_user.little_brothers.to_a
+      all_valid_merchants = current_user.merchants.pluck(:id)
+
+      while count_children.count > 0
+        current_user = count_children.pop
+        all_valid_merchants = all_valid_merchants << current_user.merchants.pluck(:id)
+      end
+      all_valid_merchants.flatten!
+      Merchant.where(id: all_valid_merchants)
+    end
   end
 end

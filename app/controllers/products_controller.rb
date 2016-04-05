@@ -417,6 +417,9 @@ class ProductsController < ApplicationController
       @product.shield_type = 0
       @product.on_sale = true
       @product.update_status = true
+      product_params["desc1"].gsub!(/[， 、]/, ',')
+      product_params["desc2"].gsub!(/[， 、]/, ',')
+      product_params["desc3"].gsub!(/[， 、]/, ',')
       if @product.update(product_params)
         if @product.first_updated_time
           @product.update_attributes(update_status:true)

@@ -1,19 +1,25 @@
 namespace :clear_dirty_data do
 
-  desc 'replace chinese symbol 2'
-  task :replace_chinese2 => :environment do
-    DescriptionTranslationHistory.all.each do |d|
+  desc 'replace chinese symbol'
+  task :replace_chinese => :environment do
+    a = Time.now
+    Product.all.each do |p|
       aa = Time.now
-      d.china = d.china.gsub('、',',').gsub('，', ',') if d.china
-      d.save
+      p.desc1 = p.desc1.gsub('、',',').gsub('，', ',') if p.desc1
+      p.desc2 = p.desc2.gsub('、',',').gsub('，', ',') if p.desc2
+      p.desc3 = p.desc3.gsub('、',',').gsub('，', ',') if p.desc3
+      p.save
       puts Time.now - aa
     end
-  end
 
-  desc 'replace chinese symbol 1'
-  task :replace_chinese1 => :environment do
     ProductInfoTranslation.all.each do |p|
       aa = Time.now
+      p.e_t = p.e_t.gsub('、', ',').gsub('，', ',') if p.e_t
+      p.g_t = p.g_t.gsub('、', ',').gsub('，', ',') if p.g_t
+      p.f_t = p.f_t.gsub('、', ',').gsub('，', ',') if p.f_t
+      p.s_t = p.s_t.gsub('、', ',').gsub('，', ',') if p.s_t
+      p.i_t = p.i_t.gsub('、', ',').gsub('，', ',') if p.i_t
+
       p.e_detail = p.e_detail.gsub('、', ',').gsub('，', ',') if p.e_detail
       p.e_des1 = p.e_des1.gsub('、', ',').gsub('，', ',') if p.e_des1
       p.e_des2 = p.e_des2.gsub('、', ',').gsub('，', ',') if p.e_des2
@@ -38,27 +44,15 @@ namespace :clear_dirty_data do
       p.i_des1 = p.i_des1.gsub('、', ',').gsub('，', ',') if p.i_des1
       p.i_des2 = p.i_des2.gsub('、', ',').gsub('，', ',') if p.i_des2
       p.i_des3 = p.i_des3.gsub('、', ',').gsub('，', ',') if p.i_des3
-      p.save
-      puts Time.now - aa
-    end
-  end
 
-  desc 'replace chinese symbol'
-  task :replace_chinese => :environment do
-    a = Time.now
-    ProductInfoTranslation.all.each do |p|
-      aa = Time.now
-      p.e_t = p.e_t.gsub('、', ',').gsub('，', ',') if p.e_t
-      p.g_t = p.g_t.gsub('、', ',').gsub('，', ',') if p.g_t
-      p.f_t = p.f_t.gsub('、', ',').gsub('，', ',') if p.f_t
-      p.s_t = p.s_t.gsub('、', ',').gsub('，', ',') if p.s_t
-      p.i_t = p.i_t.gsub('、', ',').gsub('，', ',') if p.i_t
       p.save
       puts Time.now - aa
     end
 
     DescriptionTranslationHistory.all.each do |d|
       aa = Time.now
+      d.description = d.description.gsub('、',',').gsub('，', ',') if d.description
+      d.china = d.china.gsub('、',',').gsub('，', ',') if d.china
       d.america = d.america.gsub('、', ',').gsub('，', ',') if d.america
       d.canada = d.canada.gsub('、', ',').gsub('，', ',') if d.canada
       d.british = d.british.gsub('、', ',').gsub('，', ',') if d.british
