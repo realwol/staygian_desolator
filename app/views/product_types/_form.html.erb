@@ -89,7 +89,7 @@
     $('#saveTypeSetting').click(function(){
       var typeSettingValue = '';
       $('.typeSetting').each(function(){
-        typeSettingValue = typeSettingValue + $(this).val() + ',';
+        typeSettingValue = typeSettingValue + $(this).val() + '|';
       });
       $.ajax({
         url: '/product_types/'+ product_type_id +'/update_type_setting',
@@ -103,7 +103,7 @@
     $('#savePrice').click(function(){
       var priceValues = '';
       $('.salePrice').each(function(){
-        priceValues = priceValues + $(this).val() + ',';
+        priceValues = priceValues + $(this).val() + '|';
       });
       $.ajax({
         url: '/product_types/'+ product_type_id + '/update_price_setting',
@@ -124,7 +124,7 @@
           $(this).parents('tr').find('.locaked_checkbox').next('.attribute_value').val(attributeIsLocked);
 
           $(this).parents('tr').find('.attribute_value').each(function(){
-            attributes_value = attributes_value + $(this).val() + ',';
+            attributes_value = attributes_value + $(this).val() + '｜';
           });
           var attribute_id = $(this).attr('value');
 
@@ -166,7 +166,7 @@
           var attributeIsLocked = $(this).parents('tr').find('.locaked_checkbox').prop('checked');
           $(this).parents('tr').find('.locaked_checkbox').next('.attribute_value').val(attributeIsLocked);
           $(this).parents('tr').find('.attribute_value').each(function(){
-            attributes_value = attributes_value + $(this).val() + ',';
+            attributes_value = attributes_value + $(this).val() + '｜';
           });
           var attribute_id = $(this).attr('value');
           var product_type_id = $('#product_type_id_hidden').val();

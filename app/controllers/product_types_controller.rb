@@ -123,7 +123,7 @@ class ProductTypesController < ApplicationController
   end
 
   def update_type_setting
-    type_setting_values = params[:type_values].split(',')
+    type_setting_values = params[:type_values].split('|')
     feed_attribute_values, type1_attribute_values, type2_attribute_values = type_setting_values[0..7], type_setting_values[8..15], type_setting_values[16..23]
 
     if feed_attribute_values.present?
@@ -180,7 +180,7 @@ class ProductTypesController < ApplicationController
   end
 
   def update_price_setting
-    price_values_array = params[:price_value].split(',')
+    price_values_array = params[:price_value].split('|')
     attribute_translation = AttributesTranslationHistory.create(china: price_values_array[0],
                                                           america: price_values_array[1],
                                                           canada: price_values_array[2],
@@ -193,7 +193,7 @@ class ProductTypesController < ApplicationController
   end
   
   def update_product_type_attribute
-    attributes_value_array = params[:attributes_value].split(',')
+    attributes_value_array = params[:attributes_value].split('｜')
     product_attribute_is_locked = true
     # product_attribute_is_locked = attributes_value_array[1] == 'true' ? true : false
     if params[:attribute_id].present?
