@@ -4,26 +4,26 @@
 </div>
 <hr/>
 <div>
-  <%= form_tag(merchant_create_path, remote:true, method: 'post') do %>
-    <%= label_tag '店铺名称' %>
+  <%= form_tag(merchants_path, remote:true, method: 'post') do %>
+    <%= label_tag '店铺名称:' %>
     <%= text_field_tag 'shop_name' %><br/>
-    <%= label_tag '平台' %>
+    <%= label_tag '平台:' %>
     <%= text_field_tag 'merchant_plantform_name' %><br/>
-    <%= label_tag '平台账号' %>
+    <%= label_tag '平台账号:' %>
     <%= text_field_tag 'merchant_account' %><br/>
-    <%= label_tag '店铺所属国家' %>
+    <%= label_tag '店铺所属国家:' %>
     <%= text_field_tag 'merchant_country_name' %><br/>
-    <%= label_tag '店铺类型' %>
+    <%= label_tag '店铺类型:' %>
     <%= text_field_tag 'merchant_type' %><br/>
-    <%= label_tag 'aws_access_key_id' %>
+    <%= label_tag 'aws_access_key_id:' %>
     <%= text_field_tag 'merchant_aws_access_key_id' %><br/>
-    <%= label_tag 'secret_key' %>
+    <%= label_tag 'secret_key:' %>
     <%= text_field_tag 'merchant_secret_key' %><br/>
-    <%= label_tag 'seller_id' %>
+    <%= label_tag 'seller_id:' %>
     <%= text_field_tag 'merchant_seller_id' %><br/>
-    <%= label_tag 'marketplace_id' %>
+    <%= label_tag 'marketplace_id:' %>
     <%= text_field_tag 'merchant_marketplace_id' %><br/>
-    <%= label_tag 'api_address' %>
+    <%= label_tag 'api_address:' %>
     <%= text_field_tag 'merchant_api_address' %><br/>
     <%= submit_tag '确定' %>
   <% end %>

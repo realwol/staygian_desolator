@@ -1,0 +1,86 @@
+<table class="table table-bordered">
+  <tr>
+    <td>名称</td>
+    <td>平台</td>
+    <td>状态</td>
+    <td>创建者</td>
+    <td>操作</td>
+  </tr>
+  <% @merchants.each do |m| %>
+    <tr>
+      <td><%= m.shop_name %></td>
+      <td><%= m.merchant_plantform_name %></td>
+      <% if m.status %>
+        <td class="merchant-status" >启用</td>
+      <% else %>
+        <td>禁用</td>
+      <% end %>
+      <td><%= m.user.email %></td>
+      <td>
+        <button class="bind-products" >绑定产品</button>
+        <button class="stop-merchant" data-merchant-id="<%= m.id %>" >停用</button>
+        <%= link_to '编辑', edit_merchant_path(m) %>
+        <button class="remove-merchant" data-merchant-id="<%= m.id %>" >删除</button>
+      </td>
+    </tr>
+    <tr style="display:none; background-color: rgba(0, 173, 255, 0.35);" >
+      <td colspan="4"><textarea class="product-skus" cols="100" rows="20" ><%= m.merchant_sku_relations.map(&:sku).join("\n") %></textarea></td>
+      <td><button class="bind-confirm" data-merchant-id="<%= m.id %>" >绑定</button></td>
+    </tr>
+  <% end %>
+</table>
+
+<script type="text/javascript">
+  $('.bind-products').click(function(){
+    var $this = $(this);
+    var currentTr = $(this).parents('tr');
+    var nextTr = currentTr.next('tr');
+    nextTr.show('blind');
+  });
+
+  $('.bind-confirm').click(function(){
+    var $this = $(this);
+    var merchantId = $(this).data('merchant-id');
+    
+    var productSku = $this.parents('tr').find('.product-skus').val();
+    $.ajax({
+      url: '/merchants/' + merchantId + '/add_merchant_product',
+      data: {product_sku: productSku},
+      type: 'post',
+      success: function(){
+        $this.parents('tr').hide('blind');
+        alert('绑定成功！');
+      }
+    })
+  })
+
+  $('.remove-merchant').click(function(){
+    var r = confirm("删除后不可恢复，确定要删除吗？");
+    if (r == false) { return false;}
+    var $this = $(this);
+    var merchantId = $(this).data('merchant-id');
+    $.ajax({
+      url: '/merchants/'+ merchantId,
+      type: 'delete',
+      success: function(){
+        $this.parents('tr').remove();
+        alert('操作成功！');
+      }
+    })
+  });
+
+  $('.stop-merchant').click(function(){
+    var r = confirm("停用的后果很严重，确定要停用吗？");
+    if (r == false) { return false;}
+    var $this = $(this);
+    var merchantId = $(this).data('merchant-id');
+    $.ajax({
+      url: '/merchants/' + merchantId + '/stop_merchant',
+      type: 'post',
+      success: function(){
+        $this.parents('tr').find('td.merchant-status').text('停用');
+        alert('操作成功！');
+      }
+    })
+  });
+</script>

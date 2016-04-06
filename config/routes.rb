@@ -1,7 +1,10 @@
 Rails.application.routes.draw do
-  get 'merchant/index'
-  post 'merchant/create'
-  delete 'merchant/remove'
+  resources :merchants do
+    member do
+      post 'stop_merchant'
+      post 'add_merchant_product'
+    end
+  end
 
   resources :cash_rates, only:[:index, :create]
 

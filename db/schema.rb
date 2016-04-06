@@ -11,10 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160405160439) do
+ActiveRecord::Schema.define(version: 20160406052905) do
 
   create_table "attributes_translation_histories", force: :cascade do |t|
-    t.string   "attribute_name",       limit: 255
+    t.text     "attribute_name",       limit: 65535
     t.text     "china",                limit: 65535
     t.text     "america",              limit: 65535
     t.text     "canada",               limit: 65535
@@ -86,11 +86,11 @@ ActiveRecord::Schema.define(version: 20160405160439) do
   end
 
   create_table "product_attributes", force: :cascade do |t|
-    t.string   "attribute_name",  limit: 255
+    t.text     "attribute_name",  limit: 65535
     t.integer  "product_type_id", limit: 4
-    t.string   "table_name",      limit: 255
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
+    t.text     "table_name",      limit: 65535
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
     t.boolean  "is_locked",       limit: 1
   end
 
