@@ -41,8 +41,8 @@ class MerchantsController < ApplicationController
   end
 
   def destroy
-    if merchant.present?
-      merchant.destroy
+    if @merchant.present?
+      @merchant.destroy
     end
     render json:true
   end

@@ -63,7 +63,7 @@
           var attributeIsLocked = $(this).parents('tr').find('.locaked_checkbox').prop('checked');
           $(this).parents('tr').find('.locaked_checkbox').next('.attribute_value').val(attributeIsLocked);
           $(this).parents('tr').find('.attribute_value').each(function(){
-            attributes_value = attributes_value + $(this).val() + ',';
+            attributes_value = attributes_value + $(this).val() + '|';
           });
           var attribute_id = $(this).attr('value');
           var product_type_id = $('#product_type_id_hidden').val();
@@ -103,7 +103,7 @@
       var attributeIsLocked = $(this).parents('tr').find('.locaked_checkbox').prop('checked');
       $(this).parents('tr').find('.locaked_checkbox').next('.attribute_value').val(attributeIsLocked);
       $(this).parents('tr').find('.attribute_value').each(function(){
-        attributes_value = attributes_value + $(this).val() + ',';
+        attributes_value = attributes_value + $(this).val() + '|';
       });
       var attribute_id = $(this).attr('value');
       var product_type_id = $('#product_type_id_hidden').val();

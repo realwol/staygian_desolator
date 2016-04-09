@@ -6,25 +6,25 @@
 <div>
   <%= form_tag(merchants_path, remote:true, method: 'post') do %>
     <%= label_tag '店铺名称:' %>
-    <%= text_field_tag 'shop_name' %><br/>
+    <%= text_field_tag 'shop_name', nil, class:'clean_after_submit' %><br/>
     <%= label_tag '平台:' %>
-    <%= text_field_tag 'merchant_plantform_name' %><br/>
+    <%= text_field_tag 'merchant_plantform_name', nil, class:'clean_after_submit' %><br/>
     <%= label_tag '平台账号:' %>
-    <%= text_field_tag 'merchant_account' %><br/>
+    <%= text_field_tag 'merchant_account', nil, class:'clean_after_submit' %><br/>
     <%= label_tag '店铺所属国家:' %>
-    <%= text_field_tag 'merchant_country_name' %><br/>
+    <%= text_field_tag 'merchant_country_name', nil, class:'clean_after_submit' %><br/>
     <%= label_tag '店铺类型:' %>
-    <%= text_field_tag 'merchant_type' %><br/>
+    <%= text_field_tag 'merchant_type', nil, class:'clean_after_submit' %><br/>
     <%= label_tag 'aws_access_key_id:' %>
-    <%= text_field_tag 'merchant_aws_access_key_id' %><br/>
+    <%= text_field_tag 'merchant_aws_access_key_id', nil, class:'clean_after_submit' %><br/>
     <%= label_tag 'secret_key:' %>
-    <%= text_field_tag 'merchant_secret_key' %><br/>
+    <%= text_field_tag 'merchant_secret_key', nil, class:'clean_after_submit' %><br/>
     <%= label_tag 'seller_id:' %>
-    <%= text_field_tag 'merchant_seller_id' %><br/>
+    <%= text_field_tag 'merchant_seller_id', nil, class:'clean_after_submit' %><br/>
     <%= label_tag 'marketplace_id:' %>
-    <%= text_field_tag 'merchant_marketplace_id' %><br/>
+    <%= text_field_tag 'merchant_marketplace_id', nil, class:'clean_after_submit' %><br/>
     <%= label_tag 'api_address:' %>
-    <%= text_field_tag 'merchant_api_address' %><br/>
+    <%= text_field_tag 'merchant_api_address', nil, class:'clean_after_submit' %><br/>
     <%= submit_tag '确定' %>
   <% end %>
 </div>

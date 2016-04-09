@@ -193,7 +193,7 @@ class ProductTypesController < ApplicationController
   end
   
   def update_product_type_attribute
-    attributes_value_array = params[:attributes_value].split('｜')
+    attributes_value_array = params[:attributes_value].split('|')
     product_attribute_is_locked = true
     # product_attribute_is_locked = attributes_value_array[1] == 'true' ? true : false
     if params[:attribute_id].present?

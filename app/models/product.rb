@@ -146,7 +146,7 @@ class Product < ActiveRecord::Base
       product_type.product_attributes.map do |attribute|
         attribute.attribute_name
       end
-    end.flatten
+    end.flatten.uniq
   end
 
   def self.get_all_customize_table_columns products
@@ -155,7 +155,7 @@ class Product < ActiveRecord::Base
       product_type.product_attributes.map do |attribute|
         attribute.table_name
       end
-    end.flatten
+    end.flatten.uniq
   end
 
   def get_profit_rate language

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160406052905) do
+ActiveRecord::Schema.define(version: 20160407133929) do
 
   create_table "attributes_translation_histories", force: :cascade do |t|
     t.text     "attribute_name",       limit: 65535
@@ -83,6 +83,13 @@ ActiveRecord::Schema.define(version: 20160406052905) do
     t.datetime "created_at",                                            null: false
     t.datetime "updated_at",                                            null: false
     t.boolean  "status",                     limit: 1,   default: true
+  end
+
+  create_table "mws_upload_histories", force: :cascade do |t|
+    t.integer  "user_id",    limit: 4
+    t.text     "xml_body",   limit: 65535
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
   end
 
   create_table "product_attributes", force: :cascade do |t|

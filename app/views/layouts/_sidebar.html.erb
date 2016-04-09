@@ -15,13 +15,13 @@
       <% end %>
   <h4>设置</h4>
     <%= link_to '变体', variable_translate_list_variables_path %><br/>
-    <%= link_to '产品分类管理', product_types_path %><br/>
-    <%= link_to '编辑运输方式', shipments_path %><br/>
     <%= link_to '产品说明屏蔽列表', product_detail_forbidden_products_path %><br/>
     <% link_to '产品抓取蔽列表', product_grasp_filter_products_path %>
     <%= link_to '店铺绑定', merchants_path if current_user.is_dd? %><br/>
     <% unless current_user.is_little_brother? %>
       <% unless current_user.is_manager? %>
+        <%= link_to '产品分类管理', product_types_path %><br/>
+        <%= link_to '编辑运输方式', shipments_path %><br/>
         <%= link_to '设定汇率', cash_rates_path %><br/>
         <%= link_to '描述翻译列表', description_translation_history_page_product_types_path %><br/>
       <% end %>

@@ -117,7 +117,7 @@ class ProductsController < ApplicationController
     @result[:sku] = sku_value = params[:sku_value]
     @action_from = params[:action_from]
 
-    @products = Product.all
+    @products = selected_user.valid_products
     search_query = []
     unless product_type.empty?
       ids_string = "(#{product_type},"
@@ -455,12 +455,18 @@ class ProductsController < ApplicationController
 
         ProductCustomizeAttributesRelation.create(customize_attributes_array) if customize_attributes_array.present?
 
+        product_images_array = [@product.images1, @product.images2, @product.images3, @product.images4, @product.images5, @product.images6, @product.images7, @product.images8, @product.images9, @product.images10, @product.images11, @product.images12, @product.images13, @product.images14, @product.images15, @product.images16, @product.images17, @product.images18, @product.images19, @product.images20, @product.images21, @product.images22, @product.images23, @product.images24, @product.images25, @product.images26, @product.images27, @product.images28, @product.images29, @product.images30]
+
         # Tobe cut
         if params[:cut_image_urls][2..-1]
           cut_image_urls = params[:cut_image_urls][2..-1].split('|')
           cut_image_urls.each do |url|
             puts 'old image cut'
-            QiniuUploadHelper::QiNiu.update(url, @product.image_cut_position, @product.image_cut_x, @product.image_cut_y) if url.present?
+            new_image_uri = QiniuUploadHelper::QiNiu.update(url, @product.image_cut_position, @product.image_cut_x, @product.image_cut_y) if url.present?
+            
+            product_images_array.each_with_index do |p, index|
+              @product.public_send("images#{index+1}=", new_image_uri) if p == url
+            end
             sleep 0.5
           end
         end
