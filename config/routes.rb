@@ -112,6 +112,7 @@ Rails.application.routes.draw do
   devise_for :users
   resources :users do
     collection do
+      get 'user_statistic'
       post 'create_new_user'
       post 'set_selected_user'
     end

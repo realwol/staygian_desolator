@@ -42,6 +42,28 @@ class User < ActiveRecord::Base
     self.email == 'wangqiangzu' || self.email == 'kefuzu'
   end
 
+  def valid_brothers
+    if self.is_dd?
+      User.all
+    # elsif self.is_hacked?
+    #   User.all
+    else
+      current_user = self
+      count_children = current_user.little_brothers
+      count_children_array = current_user.little_brothers.to_a
+      all_valid_brothers = count_children.pluck(:id)
+
+      while count_children_array.count > 0
+        current_user = count_children_array.pop
+        all_valid_brothers = all_valid_brothers << current_user.little_brothers.pluck(:id)
+      end
+      all_valid_brothers << current_user.id
+      # all_valid_brothers = [current_user.id] + all_valid_brothers
+      all_valid_brothers.flatten!
+      User.where(id: all_valid_brothers)
+    end
+  end
+
   def valid_products
     if self.is_dd?
       Product.all
@@ -97,5 +119,9 @@ class User < ActiveRecord::Base
       all_valid_merchants.flatten!
       Merchant.where(id: all_valid_merchants)
     end
+  end
+
+  def today_products
+    self.products.where('first_updated_time > ? and first_updated_time < ?', Time.now.beginning_of_day, Time.now.end_of_day)
   end
 end

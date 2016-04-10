@@ -1,0 +1,59 @@
+<h4>工作统计</h4>
+<hr/>
+<h5>当天统计</h5>
+<table class="table table-bordered">
+  <tr>
+    <th>序号</th>
+    <th>人员</th>
+    <th>时间</th>
+    <th>上线产品数</th>
+  </tr>
+  </tr>
+  <% today_online_products = 0 %>
+  <% current_user.valid_brothers.each_with_index do |user,index| %>
+    <tr>
+      <td><%= index + 1 %></td>
+      <td><%= user.email %></td>
+      <td><%= Time.now.strftime("%Y-%m-%d") %></td>
+      <td>
+        <%= user.today_products.count %>
+        <% today_online_products = today_online_products + user.today_products.count %>
+      </td>
+    </tr>
+  <% end %>
+  <tr>
+      <td>总计</td>
+      <td></td>
+      <td><%= Time.now.strftime("%Y-%m-%d") %></td>
+      <td><%= today_online_products %></td>
+  </tr>
+</table>
+
+<h5>全部统计</h5>
+<table class="table table-bordered">
+  <tr>
+    <th>序号</th>
+    <th>人员</th>
+    <th>时间</th>
+    <th>上线产品数</th>
+  </tr>
+  </tr>
+  <% all_online_products = 0 %>
+  <% current_user.valid_brothers.each_with_index do |user,index| %>
+    <tr>
+      <td><%= index + 1 %></td>
+      <td><%= user.email %></td>
+      <td><%= Time.now.strftime("%Y-%m-%d") %></td>
+      <td>
+        <%= user.products.onsale.count %>
+        <% all_online_products = all_online_products + user.products.onsale.count %>
+      </td>
+    </tr>
+  <% end %>
+  <tr>
+      <td>总计</td>
+      <td></td>
+      <td><%= Time.now.strftime("%Y-%m-%d") %></td>
+      <td><%= all_online_products %></td>
+  </tr>
+</table>

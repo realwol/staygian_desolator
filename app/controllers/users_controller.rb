@@ -2,6 +2,10 @@ class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy, :change_user_password]
   before_action :authenticate_user!
 
+  def user_statistic
+    
+  end
+
   def show_little_brothers
     @user = User.find(params[:id])
     @user = @user.role > current_user.role ? @user : current_user
