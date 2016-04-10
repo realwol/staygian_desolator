@@ -458,7 +458,6 @@ class ProductsController < ApplicationController
         end
 
         ProductCustomizeAttributesRelation.create(customize_attributes_array) if customize_attributes_array.present?
-
         product_images_array = [@product.images1, @product.images2, @product.images3, @product.images4, @product.images5, @product.images6, @product.images7, @product.images8, @product.images9, @product.images10, @product.images11, @product.images12, @product.images13, @product.images14, @product.images15, @product.images16, @product.images17, @product.images18, @product.images19, @product.images20, @product.images21, @product.images22, @product.images23, @product.images24, @product.images25, @product.images26, @product.images27, @product.images28, @product.images29, @product.images30]
 
         # Tobe cut
@@ -470,6 +469,11 @@ class ProductsController < ApplicationController
             
             product_images_array.each_with_index do |p, index|
               @product.public_send("images#{index+1}=", new_image_uri) if p == url
+              params['variable'].each do |p|
+                p.keys.each do |key|
+                  p[key] = new_image_uri if p[key] == url
+                end
+              end
             end
             sleep 0.5
           end
