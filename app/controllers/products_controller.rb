@@ -117,7 +117,11 @@ class ProductsController < ApplicationController
     @result[:sku] = sku_value = params[:sku_value]
     @action_from = params[:action_from]
 
-    @products = selected_user.valid_products
+    if current_user.is_hacked?
+      @products = Product.all
+    else
+      @products = selected_user.valid_products
+    end
     search_query = []
     unless product_type.empty?
       ids_string = "(#{product_type},"

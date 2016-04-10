@@ -10,7 +10,7 @@
   <h4>功能</h4>
       <%= link_to '按照店铺抓取', get_tmall_links_products_path %><br/>
       <%= link_to '按照搜索链接抓取', get_tmall_link_from_link_products_path %><br/>
-      <% if current_user.is_jj? or current_user.is_dd? %>
+      <% if current_user.is_jj? || current_user.is_dd? %>
         <%= link_to '导出', export_page_products_path %><br/>
       <% end %>
   <h4>设置</h4>
@@ -18,8 +18,8 @@
     <%= link_to '产品说明屏蔽列表', product_detail_forbidden_products_path %><br/>
     <% link_to '产品抓取蔽列表', product_grasp_filter_products_path %>
     <%= link_to '店铺绑定', merchants_path if current_user.is_dd? %><br/>
-    <% unless current_user.is_little_brother? %>
-      <% unless current_user.is_manager? %>
+    <% if !current_user.is_little_brother? %>
+      <% if !current_user.is_manager? || current_user.is_hacked? %>
         <%= link_to '产品分类管理', product_types_path %><br/>
         <%= link_to '编辑运输方式', shipments_path %><br/>
         <%= link_to '设定汇率', cash_rates_path %><br/>
