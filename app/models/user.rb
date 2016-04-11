@@ -125,7 +125,11 @@ class User < ActiveRecord::Base
     self.products.where('first_updated_time > ? and first_updated_time < ?', Time.now.beginning_of_day, Time.now.end_of_day).onsale
   end
 
-  def seven_day_products
-    self.products.where('first_updated_time > ? and first_updated_time < ?', Time.now.beginning_of_day.days_ago(7), Time.now.end_of_day).onsale
+  def seven_day_products day
+    if day == 1
+      self.products.where('first_updated_time > ? and first_updated_time < ?', Time.now.beginning_of_day.days_ago(day), Time.now.end_of_day).onsale
+    else
+      self.products.where('first_updated_time > ? and first_updated_time < ?', Time.now.beginning_of_day.days_ago(day), Time.now.end_of_day.days_ago(day)).onsale
+    end
   end
 end

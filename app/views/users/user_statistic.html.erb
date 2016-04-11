@@ -3,7 +3,6 @@
 <h5>当天统计</h5>
 <table class="table table-bordered">
   <tr>
-    <th>序号</th>
     <th>人员</th>
     <th>时间</th>
     <th>上线产品数</th>
@@ -13,7 +12,6 @@
   <% current_user.valid_brothers.each_with_index do |user,index| %>
     <% next if user.role != 3%>
     <tr>
-      <td><%= index + 1 %></td>
       <td><%= user.email %></td>
       <td><%= Time.now.strftime("%Y-%m-%d") %></td>
       <td>
@@ -24,7 +22,6 @@
   <% end %>
   <tr>
       <td>总计</td>
-      <td></td>
       <td><%= Time.now.strftime("%Y-%m-%d") %></td>
       <td><%= today_online_products %></td>
   </tr>
@@ -34,29 +31,45 @@
 <h5>七天统计</h5>
 <table class="table table-bordered">
   <tr>
-    <th>序号</th>
     <th>人员</th>
     <th>时间</th>
     <th>上线产品数</th>
   </tr>
+  <tr>
+    <% week_online_products = 0 %>
+    <% current_user.valid_brothers.each_with_index do |user,index| %>
+      <% next if user.role != 3%>
+      <% user_week_online_products = 0 %>
+      <tr>
+        <td rowspan="8"><%= user.email %></td>
+        <td><%= Time.now.days_ago(1).strftime('%Y-%m-%d') %></td>
+        <td>
+          <% day_product_count = user.seven_day_products(1).count %>
+          <%= day_product_count %>
+          <% week_online_products = week_online_products + day_product_count %>
+          <% user_week_online_products = user_week_online_products + day_product_count %>
+        </td>
+      </tr>
+      <% 2.upto(7).each do |day| %>
+        <tr>
+          <td><%= Time.now.days_ago(day).strftime('%Y-%m-%d') %></td>
+          <td>
+            <% day_product_count = user.seven_day_products(day).count %>
+            <%= day_product_count %>
+            <% week_online_products = week_online_products + day_product_count %>
+            <% user_week_online_products = user_week_online_products + day_product_count %>
+          </td>
+        </tr>
+      <% end %>
+      <tr>
+        <td>总计</td>
+        <td><%= user_week_online_products %></td>
+      </tr>
+    <% end %>
   </tr>
-  <% week_online_products = 0 %>
-  <% current_user.valid_brothers.each_with_index do |user,index| %>
-    <% next if user.role != 3%>
-    <tr>
-      <td><%= index + 1 %></td>
-      <td><%= user.email %></td>
-      <td><%= "#{Time.now.days_ago(7).strftime('%Y-%m-%d')} - #{Time.now.strftime('%Y-%m-%d')}" %></td>
-      <td>
-        <%= user.seven_day_products.count %>
-        <% week_online_products = week_online_products + user.seven_day_products.count %>
-      </td>
-    </tr>
-  <% end %>
   <tr>
       <td>总计</td>
-      <td></td>
-      <td><%= "#{Time.now.days_ago(7).strftime('%Y-%m-%d')} - #{Time.now.strftime('%Y-%m-%d')}" %></td>
+      <td><%= "#{Time.now.days_ago(7).strftime('%Y-%m-%d')} - #{Time.now.days_ago(1).strftime('%Y-%m-%d')}" %></td>
       <td><%= week_online_products %></td>
   </tr>
 </table>
@@ -66,9 +79,8 @@
 <h5>全部统计</h5>
 <table class="table table-bordered">
   <tr>
-    <th>序号</th>
     <th>人员</th>
-    <th>时间</th>
+    <th>截至时间</th>
     <th>上线产品数</th>
   </tr>
   </tr>
@@ -76,7 +88,6 @@
   <% current_user.valid_brothers.each_with_index do |user,index| %>
     <% next if user.role != 3%>
     <tr>
-      <td><%= index + 1 %></td>
       <td><%= user.email %></td>
       <td><%= Time.now.strftime("%Y-%m-%d") %></td>
       <td>
@@ -87,7 +98,6 @@
   <% end %>
   <tr>
       <td>总计</td>
-      <td></td>
       <td><%= Time.now.strftime("%Y-%m-%d") %></td>
       <td><%= all_online_products %></td>
   </tr>
