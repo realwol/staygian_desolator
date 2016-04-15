@@ -250,8 +250,10 @@ def grasp_product tmall_link
   unless @details.present?
     aa = js.index('newProGroup')
     bb = js.index(',"progressiveSupport"')
+    bb = js.length if bb.nil?
     a = Iconv.iconv("utf-8","gbk", js[aa..bb]).join
     b = a.split('groupName')
+    b.pop
     b.each do |bb|
       if bb.index('name').present?
         bb_start = bb.index('name') + 4
