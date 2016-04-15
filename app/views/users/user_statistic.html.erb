@@ -91,7 +91,7 @@
       <td><%= user.email %></td>
       <td><%= Time.now.strftime("%Y-%m-%d") %></td>
       <td>
-        <%= user.products.onsale.count %>
+        <%= user.products.onsale.un_shield.count %>
         <% all_online_products = all_online_products + user.products.onsale.count %>
       </td>
     </tr>
