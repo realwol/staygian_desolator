@@ -469,9 +469,12 @@ class ProductsController < ApplicationController
             
             product_images_array.each_with_index do |p, index|
               @product.public_send("images#{index+1}=", new_image_uri) if p == url
-              params['variable'].each do |p|
-                p.keys.each do |key|
-                  p[key] = new_image_uri if p[key] == url
+            # when params['variable'] is nil
+              if params['variable'].present?
+                params['variable'].each do |p|
+                  p.keys.each do |key|
+                    p[key] = new_image_uri if p[key] == url
+                  end
                 end
               end
             end

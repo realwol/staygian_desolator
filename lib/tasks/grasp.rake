@@ -14,8 +14,8 @@ namespace :grasp do
 end
 
 def start
-	# tmall_link = ungrasp_tmall_link
-  tmall_link = TmallLink.find(119)
+	tmall_link = ungrasp_tmall_link
+  # tmall_link = TmallLink.find(119)
   # tmall_links.each do |link|
   # while tmall_link.present?
     # do not store the same product

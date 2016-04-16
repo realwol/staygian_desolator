@@ -1,6 +1,6 @@
 module MwsHelper
   class MWS
-    def self.update_price_and_stock merchant
+    def self.update_price_and_stock merchant, products
       return unless merchant.present? && merchant.status && merchant.merchant_plantform_name == 'amazon'
 
       timestamp = Time.now.utc.iso8601
