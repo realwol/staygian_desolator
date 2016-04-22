@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160407133929) do
+ActiveRecord::Schema.define(version: 20160421092845) do
 
   create_table "attributes_translation_histories", force: :cascade do |t|
     t.text     "attribute_name",       limit: 65535
@@ -100,6 +100,33 @@ ActiveRecord::Schema.define(version: 20160407133929) do
     t.datetime "updated_at",                    null: false
     t.boolean  "is_locked",       limit: 1
   end
+
+  create_table "product_basic_infos", force: :cascade do |t|
+    t.string   "sku",                  limit: 255
+    t.float    "price",                limit: 24
+    t.integer  "inventory",            limit: 4
+    t.integer  "product_id",           limit: 4
+    t.integer  "variable_id",          limit: 4
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
+    t.float    "america",              limit: 24
+    t.float    "canada",               limit: 24
+    t.float    "british",              limit: 24
+    t.float    "germany",              limit: 24
+    t.float    "france",               limit: 24
+    t.float    "spain",                limit: 24
+    t.float    "italy",                limit: 24
+    t.boolean  "america_price_change", limit: 1
+    t.boolean  "canada_price_change",  limit: 1
+    t.boolean  "british_price_change", limit: 1
+    t.boolean  "germany_price_change", limit: 1
+    t.boolean  "france_price_change",  limit: 1
+    t.boolean  "spain_price_change",   limit: 1
+    t.boolean  "italy_price_change",   limit: 1
+  end
+
+  add_index "product_basic_infos", ["product_id"], name: "index_product_basic_infos_on_product_id", using: :btree
+  add_index "product_basic_infos", ["variable_id"], name: "index_product_basic_infos_on_variable_id", using: :btree
 
   create_table "product_customize_attributes_relations", force: :cascade do |t|
     t.integer  "product_type_id",                   limit: 4
@@ -476,6 +503,8 @@ ActiveRecord::Schema.define(version: 20160407133929) do
 
   add_index "variables", ["product_id"], name: "index_variables_on_product_id", using: :btree
 
+  add_foreign_key "product_basic_infos", "products"
+  add_foreign_key "product_basic_infos", "variables"
   add_foreign_key "product_info_translations", "products"
   add_foreign_key "products", "product_types"
   add_foreign_key "products", "users"

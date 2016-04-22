@@ -1,6 +1,93 @@
 module MwsHelper
   class MWS
-    def self.update_price_and_stock merchant, products
+      # price_xml_body = "<?xml version='1.0' encoding='utf-8' ?>
+      # <AmazonEnvelope xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:noNamespaceSchemaLocation='amznenvelope.xsd'>
+      #   <Header>
+      #     <DocumentVersion>1.01</DocumentVersion>
+      #     <MerchantIdentifier>M_SELLER_354577</MerchantIdentifier>
+      #   </Header>
+      #   <MessageType>Price</MessageType>
+      #   <Message>
+      #     <MessageID>1</MessageID>
+      #     <Price>
+      #       <SKU> 332384 </SKU>
+      #       <StandardPrice currency='USD'> 99.299 </StandardPrice>
+      #     </Price>
+      #   </Message>
+      #   <Message>
+      #     <MessageID>2</MessageID>
+      #     <Price>
+      #       <SKU> 332390 </SKU>
+      #       <StandardPrice currency='USD'> 99.199 </StandardPrice>
+      #     </Price>
+      #   </Message>
+      # </AmazonEnvelope>"
+
+      # stock_xml_body = "<?xml version='1.0' encoding='utf-8' ?>
+      # <AmazonEnvelope xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:noNamespaceSchemaLocation='amznenvelope.xsd'>
+      #   <Header>
+      #     <DocumentVersion>1.01</DocumentVersion>
+      #     <MerchantIdentifier>M_SELLER_354577</MerchantIdentifier>
+      #   </Header>
+      #   <MessageType>Inventory</MessageType>
+      #   <Message>
+      #     <MessageID>1</MessageID>
+      #     <OperationType>Update</OperationType>
+      #     <Inventory>
+      #       <SKU> 332384 </SKU>
+      #       <Quantity>88</Quantity>
+      #       <FulfillmentLatency>1</FulfillmentLatency>
+      #     </Inventory>
+      #   </Message>
+      #   <Message>
+      #     <MessageID>2</MessageID>
+      #     <OperationType>Update</OperationType>
+      #     <Inventory>
+      #       <SKU> 332390 </SKU>
+      #       <Quantity>99</Quantity>
+      #       <FulfillmentLatency>1</FulfillmentLatency>
+      #     </Inventory>
+      #   </Message>
+      # </AmazonEnvelope>"
+
+    def self.get_xml_body products
+      xml_body_header = "<?xml version='1.0' encoding='utf-8' ?>
+      <AmazonEnvelope xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:noNamespaceSchemaLocation='amznenvelope.xsd'>
+        <Header>
+          <DocumentVersion>1.01</DocumentVersion>
+          <MerchantIdentifier>M_SELLER_354577</MerchantIdentifier>
+        </Header>\n"
+      xml_body_footer = "</AmazonEnvelope>\n"
+
+      price_xml_body, inventory_xml_body = "<MessageType>Price</MessageType>\n", "<MessageType>Inventory</MessageType>\n"
+
+      products.each_with_index do |p,index|
+        # price xml content
+        price_xml_content = "<Message>
+             <MessageID>#{index+1}</MessageID>
+             <Price>
+               <SKU> #{p.sku} </SKU>
+               <StandardPrice currency='USD'> #{p.price} </StandardPrice>
+             </Price>
+           </Message>\n"
+        price_xml_body << price_xml_content.dup
+
+        # inventory xml content
+        inventory_xml_content = "<Message>
+           <MessageID>#{index+1}</MessageID>
+           <OperationType>Update</OperationType>
+           <Inventory>
+             <SKU> #{p.sku} </SKU>
+             <Quantity>#{p.inventory}</Quantity>
+             <FulfillmentLatency>1</FulfillmentLatency>
+           </Inventory>
+         </Message>\n"
+         inventory_xml_body << inventory_xml_content.dup
+      end
+    end
+
+    def self.update_price_and_stock merchant
+       # def self.update_price_and_stock merchant, products
       return unless merchant.present? && merchant.status && merchant.merchant_plantform_name == 'amazon'
 
       timestamp = Time.now.utc.iso8601
@@ -27,6 +114,7 @@ module MwsHelper
       signature = Base64.encode64(OpenSSL::HMAC.digest(OpenSSL::Digest.new('sha256'), secret_key, sign_url)).strip()
       base_url2 = base_url + "&Signature=#{signature.gsub('=','%3D').gsub('+','%2B')}"
 
+      price_xml_body, stock_xml_body = self.get_xml_body products
         # <MessageType>Price</MessageType>
         # <Message>
         #   <MessageID>1</MessageID>
@@ -55,7 +143,7 @@ module MwsHelper
           <OperationType>Update</OperationType>
           <Inventory>
             <SKU> 332384 </SKU>
-            <Quantity>88</Quantity>
+            <Quantity>44</Quantity>
             <FulfillmentLatency>1</FulfillmentLatency>
           </Inventory>
         </Message>
@@ -63,8 +151,8 @@ module MwsHelper
           <MessageID>2</MessageID>
           <OperationType>Update</OperationType>
           <Inventory>
-            <SKU> 332390 </SKU>
-            <Quantity>99</Quantity>
+            <SKU> 332394 </SKU>
+            <Quantity>66</Quantity>
             <FulfillmentLatency>1</FulfillmentLatency>
           </Inventory>
         </Message>
@@ -76,7 +164,7 @@ module MwsHelper
       request.body = xml_body
       response = Net::HTTP.start(url.host, url.port, :use_ssl => url.scheme == 'https') {|http| http.request(request)}
       puts response.body
-      binding.pry
+      # binding.pry
     end
   end
 end

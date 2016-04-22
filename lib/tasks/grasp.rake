@@ -40,14 +40,6 @@ def grasp_product tmall_link
 
   agent = UserAgents.rand()
   html = Nokogiri::HTML(open(tmall_link.address, 'User-Agent' => agent, :allow_redirections => :all ))
-  # url = URI.parse( tmall_link.address)
-  # http = Net::HTTP.new( url.host, url.port )
-  # http.use_ssl = true if url.port == 443
-  # http.verify_mode = OpenSSL::SSL::VERIFY_NONE if url.port == 443
-  # html = Nokogiri::HTML(open(http.to_s))
-
-  
-  # html = Nokogiri::HTML(open(tmall_link.address))
 
   # Create Product
   @product = Product.new(translate_status:false, update_status:false, on_sale:true, user_id: tmall_link.user_id)
@@ -94,75 +86,6 @@ def grasp_product tmall_link
     d_text = d.text.gsub(' ', '/').gsub(':/', ': ')
     @details << d_text + "<br/>\n"
 
-    # if flag1 && d.text.index('帮面材质') 
-    #   outer_material_type = d.text.gsub!('帮面材质', '').lstrip[1..-1]
-    #   @product.outer_material_type = outer_material_type
-    #   attribute_value = ShoesAttributesValue.where(name:outer_material_type).last
-    #   if attribute_value
-    #     @product.outer_material_type_england = attribute_value.england
-    #     @product.outer_material_type_germany = attribute_value.germany
-    #     @product.outer_material_type_france = attribute_value.france
-    #     @product.outer_material_type_spain = attribute_value.spain
-    #     @product.outer_material_type_italy = attribute_value.italy
-    #   end
-    #   flag1 = false
-    # end
-
-    # if flag2 && d.text.index('内里材质') 
-    #   inner_material_type = d.text.gsub!('内里材质', '').lstrip[1..-1]
-    #   @product.inner_material_type = inner_material_type
-    #   attribute_value = ShoesAttributesValue.where(name:inner_material_type).last
-    #   if attribute_value
-    #     @product.inner_material_type_england = attribute_value.england
-    #     @product.inner_material_type_germany = attribute_value.germany
-    #     @product.inner_material_type_france = attribute_value.france
-    #     @product.inner_material_type_spain = attribute_value.spain
-    #     @product.inner_material_type_italy = attribute_value.italy
-    #   end
-    #   flag2 = false
-    # end
-
-    # if flag3 && d.text.index('鞋底材质') 
-    #   sole_material = d.text.gsub!('鞋底材质:', '').lstrip[1..-1]
-    #   @product.sole_material = sole_material
-    #   attribute_value = ShoesAttributesValue.where(name:sole_material).last
-    #   if attribute_value
-    #     @product.sole_material_england = attribute_value.england
-    #     @product.sole_material_germany = attribute_value.germany
-    #     @product.sole_material_france = attribute_value.france
-    #     @product.sole_material_spain = attribute_value.spain
-    #     @product.sole_material_italy = attribute_value.italy
-    #   end
-    #   flag3 = false
-    # end
-
-    # if flag4 && d.text.index('跟底款式') 
-    #   heel_type = d.text.gsub!('跟底款式', '').lstrip[1..-1]
-    #   @product.heel_type = heel_type
-    #   attribute_value = ShoesAttributesValue.where(name:heel_type).last
-    #   if attribute_value
-    #     @product.heel_type_england = attribute_value.england
-    #     @product.heel_type_germany = attribute_value.germany
-    #     @product.heel_type_france = attribute_value.france
-    #     @product.heel_type_spain = attribute_value.spain
-    #     @product.heel_type_italy = attribute_value.italy
-    #   end
-    #   flag4 = false
-    # end
-
-    # if flag5 && d.text.index('闭合方式') 
-    #   closure_type = d.text.gsub!('闭合方式', '').lstrip[1..-1]
-    #   @product.closure_type = closure_type
-    #   attribute_value = ShoesAttributesValue.where(name:closure_type).last
-    #   if attribute_value
-    #     @product.closure_type_england = attribute_value.england
-    #     @product.closure_type_germany = attribute_value.germany
-    #     @product.closure_type_france = attribute_value.france
-    #     @product.closure_type_spain = attribute_value.spain
-    #     @product.closure_type_italy = attribute_value.italy
-    #   end
-    #   flag5 = false
-    # end
   end
 
   d = html.css('table.tm-tableAttr tbody tr')
@@ -174,76 +97,6 @@ def grasp_product tmall_link
   @d_details.each do |d|
     # Todo
     @details << d + "<br/>\n"
-
-    # if flag1 && d.index('帮面材质') 
-    #   outer_material_type = d.gsub!('帮面材质', '').lstrip[1..-1]
-    #   @product.outer_material_type = outer_material_type
-    #   attribute_value = ShoesAttributesValue.where(name:outer_material_type).last
-    #   if attribute_value
-    #     @product.outer_material_type_england = attribute_value.england
-    #     @product.outer_material_type_germany = attribute_value.germany
-    #     @product.outer_material_type_france = attribute_value.france
-    #     @product.outer_material_type_spain = attribute_value.spain
-    #     @product.outer_material_type_italy = attribute_value.italy
-    #   end
-    #   flag1 = false
-    # end
-
-    # if flag2 && d.index('内里材质') 
-    #   inner_material_type = d.gsub!('内里材质:', '').lstrip[1..-1]
-    #   @product.inner_material_type = inner_material_type
-    #   attribute_value = ShoesAttributesValue.where(name:inner_material_type).last
-    #   if attribute_value
-    #     @product.inner_material_type_england = attribute_value.england
-    #     @product.inner_material_type_germany = attribute_value.germany
-    #     @product.inner_material_type_france = attribute_value.france
-    #     @product.inner_material_type_spain = attribute_value.spain
-    #     @product.inner_material_type_italy = attribute_value.italy
-    #   end
-    #   flag2 = false
-    # end
-
-    # if flag3 && d.index('鞋底材质') 
-    #   sole_material = d.gsub!('鞋底材质', '').lstrip[1..-1]
-    #   @product.sole_material = sole_material
-    #   attribute_value = ShoesAttributesValue.where(name:sole_material).last
-    #   if attribute_value
-    #     @product.sole_material_england = attribute_value.england
-    #     @product.sole_material_germany = attribute_value.germany
-    #     @product.sole_material_france = attribute_value.france
-    #     @product.sole_material_spain = attribute_value.spain
-    #     @product.sole_material_italy = attribute_value.italy
-    #   end
-    #   flag3 = false
-    # end
-
-    # if flag4 && d.index('跟底款式') 
-    #   heel_type = d.gsub!('跟底款式', '').lstrip[1..-1]
-    #   @product.heel_type = heel_type
-    #   attribute_value = ShoesAttributesValue.where(name:heel_type).last
-    #   if attribute_value
-    #     @product.heel_type_england = attribute_value.england
-    #     @product.heel_type_germany = attribute_value.germany
-    #     @product.heel_type_france = attribute_value.france
-    #     @product.heel_type_spain = attribute_value.spain
-    #     @product.heel_type_italy = attribute_value.italy
-    #   end
-    #   flag4 = false
-    # end
-
-    # if flag5 && d.index('闭合方式') 
-    #   closure_type = d.gsub!('闭合方式', '').lstrip[1..-1]
-    #   @product.closure_type = closure_type
-    #   attribute_value = ShoesAttributesValue.where(name:closure_type).last
-    #   if attribute_value
-    #     @product.closure_type_england = attribute_value.england
-    #     @product.closure_type_germany = attribute_value.germany
-    #     @product.closure_type_france = attribute_value.france
-    #     @product.closure_type_spain = attribute_value.spain
-    #     @product.closure_type_italy = attribute_value.italy
-    #   end
-    #   flag5 = false
-    # end
   end
 
   @product.producer = html.css('div#shopExtra strong').text
