@@ -52,13 +52,15 @@ def grasp_product tmall_link
   @product = Product.new(translate_status:false, update_status:false, on_sale:true, user_id: tmall_link.user_id)
   @product.origin_address = tmall_link.address
   @product.title = html.css('div.tb-detail-hd h1').text.strip
-
-  grasp_filter_words = tmall_link.shop.grasp_filter
-  filter_flag = false
-  grasp_filter_words.each do |word|
-    filter_flag = true unless @product.title.index(word).nil?
+  
+  if tmall_link.shop.present?
+    grasp_filter_words = tmall_link.shop.grasp_filter
+    filter_flag = false
+    grasp_filter_words.each do |word|
+      filter_flag = true unless @product.title.index(word).nil?
+    end
+    return if filter_flag
   end
-  return if filter_flag
   js = html.css('script').to_s
   stock_start = js.index('quantity":')
   stock_end = js[stock_start..-1].index(',')
