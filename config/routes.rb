@@ -33,6 +33,7 @@ Rails.application.routes.draw do
 
   resources :products do
     collection do
+      get 'grasp_product_from_link'
       get 'product_detail_forbidden'
       get 'product_grasp_filter'
       get 'wait_designer'
@@ -51,6 +52,7 @@ Rails.application.routes.draw do
       get 'update_price'
       get 'change_product_type'
       get 'change_product_type'
+      post 'save_tmall_link'
       post 'search_shop'
       post 'create_product_forbidden_word'
       post 'create_product_grasp_filter'

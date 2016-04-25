@@ -23,6 +23,13 @@ development:
   # username: leo
   # password: realwol
   database: amazon_tmall_development
+  # adapter: mysql2
+  # encoding: utf8
+  # pool: 5
+  # username: amazon_user
+  # password: 123123ab
+  # host: rm-wz95r6023694t579ro.mysql.rds.aliyuncs.com
+  # database: amazon_tmall_prod
 
 production:
   <<: *default

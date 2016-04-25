@@ -1,0 +1,9 @@
+<h4>按照单独链接抓取</h4>
+<hr/>
+<%= flash.now[:notice] %>
+<%= form_tag(save_tmall_link_products_path) do %>
+  <%= text_area_tag 'grasp_link', nil, style:'width:80%; height: 100px;' %><br/>
+  <%= button_tag '填入链接并确定' %>
+<% end %>
+<hr/>
+<%= render 'zero_shop_link_list' %>

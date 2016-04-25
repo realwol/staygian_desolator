@@ -1,0 +1,18 @@
+<table class="table table-bordered" style="width:90%;" >
+  <tr>
+    <th>序号</th>
+    <th>产品链接</th>
+    <th>产品ID</th>
+    <th>产品状态</th>
+  </tr>
+  <% count = 1 %>
+  <% @zero_shop_links.each do |link| %>
+    <tr>
+      <td> <%= count %> </td>
+      <td> <%= 'https://detail.tmall.com/item.htm?id=' + link.product_link_id %> </td>
+      <td> <%= link.product_link_id %> </td>
+      <td> <%= link.status ? '已抓取' : '未抓取' %> </td>
+    </tr>
+    <% count = count + 1 %>
+  <% end %>
+</table>

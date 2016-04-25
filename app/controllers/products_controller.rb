@@ -2,6 +2,32 @@ class ProductsController < ApplicationController
   before_action :set_product, only: [:show, :edit, :update, :destroy, :shield_product, :presale_product, :offsale_product, :temp_offsale_product, :onsale_product, :edited_product, :translate_preview]
   before_action :authenticate_user!
 
+  def grasp_product_from_link
+    @zero_shop_links = current_user.tmall_links.zero_shop
+  end
+
+  def save_tmall_link
+    link = params[:grasp_link]
+    if link.blank?
+      redirect_to grasp_product_from_link_products_path, notice:'请正确填写链接！' and return
+    end
+    product_link_start = link.index('id=') + 3
+    product_link_end = link[product_link_start..-1].index('&') - 1 + product_link_start
+    product_link_id = link[product_link_start..product_link_end]
+    product_tmall_link = TmallLink.where(product_link_id: product_link_id).first
+
+    if product_tmall_link.present?
+      # product_tmall_link.update_attributes(status: false)      
+      redirect_to grasp_product_from_link_products_path, notice:'这个产品已经被抓过！' and return
+    else
+      TmallLink.create(address: link, status: false, user_id: current_user.id, product_link_id: product_link_id, shop_id: 0)
+    end
+
+    @zero_shop_links = current_user.tmall_links.zero_shop
+
+    redirect_to grasp_product_from_link_products_path, notice:'已经加入抓取队列！' 
+  end
+
   def regrasp_product
     product = Product.find(params[:id])
     product.variables.destroy_all
@@ -11,7 +37,7 @@ class ProductsController < ApplicationController
     if product_tmall_link.present?
       product_tmall_link.update_attributes(status: false)
     else
-      product_link_start = product_address.index('id') + 3
+      product_link_start = product_address.index('id=') + 3
       product_link_end = product_address[product_link_start..-1].index('&') - 1 + product_link_start
       product_link_id = product_address[product_link_start..product_link_end]
 

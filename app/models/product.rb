@@ -32,6 +32,7 @@ class Product < ActiveRecord::Base
   scope :temp_offsale, -> {where(shield_type: 3).where(on_sale:false)}
   # scope :pre_saled, -> {where.not(presale_date: nil).where(shield_type:2).where(on_sale:false)}
   scope :pre_saled, -> {where(shield_type:2).where(on_sale:false)}
+  # scope :not_off_sale, ->{where(on_sale:true)}
 
   before_create :save_sku
 

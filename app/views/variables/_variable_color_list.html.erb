@@ -16,7 +16,7 @@
         <td><input type="text" class="variable_translation_value" style="width:100px;" value="<%= variable.try(:fr) %>" ></td>
         <td><input type="text" class="variable_translation_value" style="width:100px;" value="<%= variable.try(:es) %>" ></td>
         <td><input type="text" class="variable_translation_value" style="width:100px;" value="<%= variable.try(:it) %>" ></td>
-        <% if variable.user == current_user %>
+        <% if variable.user == current_user || current_user.is_dd? %>
           <td><a class="update_translation" data-variable-type='size' value=<%= variable.word %>>更新</a> </td>
           <td><a class="remove_translation" data-variable-type='size' value=<%= variable.word %>>删除</a> </td>
         <% else %>
