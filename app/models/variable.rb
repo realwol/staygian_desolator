@@ -72,7 +72,7 @@ class Variable < ActiveRecord::Base
                                        :image_url11, :image_url12,:image_url13,:image_url14, :image_url15,:image_url16, :image_url17, :image_url18,:image_url19, :image_url20,
                                        :image_url21, :image_url22,:image_url23,:image_url24, :image_url25,:image_url26, :image_url27, :image_url28,:image_url29, :image_url30,
                                        :england_color, :england_size, :germany_color, :germany_size, :france_color, :france_size, :spain_color, :spain_size,
-                                       :italy_color, :italy_size, :color_dup, :size_dup)
+                                       :italy_color, :italy_size, :color_dup, :size_dup, :desc, :weight)
     end
 
     def save_dup

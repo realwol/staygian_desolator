@@ -3,7 +3,7 @@ class Product < ActiveRecord::Base
   belongs_to :user
   belongs_to :shop
 
-  has_many :variables
+  has_many :variables, dependent: :delete_all
   has_many :product_customize_attributes_relations
 
   accepts_nested_attributes_for :variables
@@ -231,7 +231,12 @@ class Product < ActiveRecord::Base
           xls_column_values << ''
         end
         # manufacture
-        xls_column_values << product.shop.manufacture
+        if product.shop.present?
+          product_manufacture = product.shop.manufacture
+        else
+          product_manufacture = product.producer
+        end
+        xls_column_values << product_manufacture
         # part_number
         xls_column_values << ('a'..'z').to_a.sample(5).join
         # product_description
@@ -459,7 +464,7 @@ class Product < ActiveRecord::Base
             xls_column_values << ''
           end
           # manufacture
-          xls_column_values << product.shop.manufacture
+          # xls_column_values << product_manufacture
           # part_number
           xls_column_values << ('a'..'z').to_a.sample(5).join
           # product_description
