@@ -226,15 +226,16 @@ class Product < ActiveRecord::Base
         # brand_name
         if product.product_type.present? && product.product_type.product_type_name_translation.present?
           product_brand_name = AttributesTranslationHistory.find(product.product_type.product_type_name_translation)
-          xls_column_values << product_brand_name.read_attribute(language)
+          product_brand_name_translation = product_brand_name.read_attribute(language)
         else
-          xls_column_values << ''
+          product_brand_name_translation = ''
         end
+        xls_column_values << product_brand_name_translation
         # manufacture
         if product.shop.present?
           product_manufacture = product.shop.manufacture
         else
-          product_manufacture = product.producer
+          product_manufacture = product_brand_name_translation
         end
         xls_column_values << product_manufacture
         # part_number
@@ -458,11 +459,7 @@ class Product < ActiveRecord::Base
             xls_column_values << ''
           end
           # brand_name
-          if product_brand_name.present?
-            xls_column_values << product_brand_name.read_attribute(language)
-          else
-            xls_column_values << ''
-          end
+          xls_column_values << product_brand_name_translation
           # manufacture
           xls_column_values << product_manufacture
           # part_number
