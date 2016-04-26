@@ -167,7 +167,13 @@
               </ul>
             </td>
             <td><%= text_area_tag 'variable[][desc]', v.desc, style:'height:47px;', class:'variable_desc' %></td>
-            <td><%= text_field_tag 'variable[][weight]', v.weight, style:'width:100px;', class:'variable_weight' %></td>
+            <td>
+              <% if v.weight.present? %>
+                <%= text_field_tag 'variable[][weight]', v.weight, style:'width:100px;', class:'variable_weight' %>
+              <% else %>
+                <%= text_field_tag 'variable[][weight]', @product.product_weight, style:'width:100px;', class:'variable_weight' %>
+              <% end %>
+            </td>
             <td><%= text_field_tag 'variable[][size]', nil, value:v.size, "data-origin-size" => v.size, class:'variable_size', style:'width:90px' %></td>
             <td><%= text_field_tag 'variable[][price]', nil, value:v.price, class:'variable_price', style:'width:60px' %></td>
             <td><%= text_field_tag 'variable[][stock]', nil, value:v.stock, style:'width:60px' %></td>
@@ -196,6 +202,14 @@
     </div>
 
 <script type="text/javascript">
+  $('#product_product_weight').change(function(){
+    var weight_value = $(this).val();
+    $('.variable_weight').each(function(){
+      $(this).val(weight_value);
+    });
+    return false;
+  });
+
   $('#product_desc3').change(function(){
     var desc_value = $(this).val();
     $('.variable_desc').each(function(){

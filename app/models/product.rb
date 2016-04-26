@@ -464,7 +464,7 @@ class Product < ActiveRecord::Base
             xls_column_values << ''
           end
           # manufacture
-          # xls_column_values << product_manufacture
+          xls_column_values << product_manufacture
           # part_number
           xls_column_values << ('a'..'z').to_a.sample(5).join
           # product_description
