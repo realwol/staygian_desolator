@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160428155447) do
+ActiveRecord::Schema.define(version: 20160428160822) do
 
   create_table "attributes_translation_histories", force: :cascade do |t|
     t.text     "attribute_name",       limit: 65535
@@ -138,6 +138,8 @@ ActiveRecord::Schema.define(version: 20160428155447) do
     t.datetime "created_at",                                    null: false
     t.datetime "updated_at",                                    null: false
   end
+
+  add_index "product_customize_attributes_relations", ["attribute_name"], name: "index_product_customize_attributes_relations_on_attribute_name", using: :btree
 
   create_table "product_detail_forbidden_lists", force: :cascade do |t|
     t.string   "word",            limit: 255
