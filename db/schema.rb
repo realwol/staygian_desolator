@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160426032752) do
+ActiveRecord::Schema.define(version: 20160428155447) do
 
   create_table "attributes_translation_histories", force: :cascade do |t|
     t.text     "attribute_name",       limit: 65535
@@ -28,6 +28,8 @@ ActiveRecord::Schema.define(version: 20160426032752) do
     t.datetime "updated_at",                         null: false
     t.integer  "product_attribute_id", limit: 4
   end
+
+  add_index "attributes_translation_histories", ["id"], name: "index_attributes_translation_histories_on_id", using: :btree
 
   create_table "cash_rates", force: :cascade do |t|
     t.float    "british",    limit: 24

@@ -288,61 +288,123 @@ class Product < ActiveRecord::Base
         else
           xls_column_values << ''
         end
-        if product.product_type.product_type_introduction_2.present? && AttributesTranslationHistory.find(product.product_type.product_type_introduction_2).present?
-          product_type_introduction2 = AttributesTranslationHistory.find(product.product_type.product_type_introduction_2)
-          xls_column_values << product_type_introduction2.read_attribute(language)
+        product_type_introduction_2_id = product.product_type.product_type_introduction_2
+        if product_type_introduction_2_id.present?
+          product_type_introduction_2_id_translation = AttributesTranslationHistory.find(product_type_introduction_2_id)
+          if product_type_introduction_2_id_translation.present?
+            product_type_introduction2 = product_type_introduction_2_id_translation.read_attribute(language)
+            xls_column_values << product_type_introduction2
+          end
         else
           xls_column_values << ''
         end
+
         # recommended_browse_nodes
-        if product.product_type.product_type_1.present? && AttributesTranslationHistory.find(product.product_type.product_type_1).present?
-          product_type1 = AttributesTranslationHistory.find(product.product_type.product_type_1)
-          xls_column_values << product_type1.read_attribute(language)
+        product_type_1_id = product.product_type.product_type_1
+        if product_type_1_id.present?
+          product_type_1_id_translation = AttributesTranslationHistory.find(product_type_1_id)
+          if product_type_1_id_translation.present?
+            product_type1 = product_type_1_id_translation.read_attribute(language)
+            xls_column_values << product_type1
+          end
         else
           xls_column_values << ''
         end
 
-        if product.product_type.product_type_2.present? && AttributesTranslationHistory.find(product.product_type.product_type_2).present?
-          product_type2 = AttributesTranslationHistory.find(product.product_type.product_type_2)
-          xls_column_values << product_type2.read_attribute(language)
+        product_type_2_id = product.product_type.product_type_2
+        if product_type_2_id.present?
+          product_type_2_id_translation = AttributesTranslationHistory.find(product.product_type.product_type_2)
+          if product_type_2_id_translation.present?
+            product_type2 = product_type_2_id_translation.read_attribute(language)
+            xls_column_values << product_type2
+          end
         else
           xls_column_values << ''
         end
+
         # generic_keywords
-        if product.product_type.key_word1_translation.present? && AttributesTranslationHistory.find(product.product_type.key_word1_translation).present?
-          key_word = AttributesTranslationHistory.find(product.product_type.key_word1_translation)
-          xls_column_values << key_word.read_attribute(language)
+        key_word1_translation_id = product.product_type.key_word1_translation
+        if key_word1_translation_id.present?
+          key_word1_translation_id_translation = AttributesTranslationHistory.find(key_word1_translation_id)
+          if key_word1_translation_id_translation.present?
+            key_word1 = key_word1_translation_id_translation.read_attribute(language)
+            xls_column_values << key_word1
+          end
         else
           xls_column_values << ''
         end
 
-        if product.product_type.key_word2_translation.present? && AttributesTranslationHistory.find(product.product_type.key_word2_translation).present?
-          key_word = AttributesTranslationHistory.find(product.product_type.key_word2_translation)
-          xls_column_values << key_word.read_attribute(language)
+        key_word2_translation_id = product.product_type.key_word2_translation
+        if key_word2_translation_id.present?
+          key_word2_translation_id_translation = AttributesTranslationHistory.find(key_word2_translation_id)
+          if key_word2_translation_id_translation.present?
+            key_word2 = key_word2_translation_id_translation.read_attribute(language)
+            xls_column_values << key_word2
+          end
         else
           xls_column_values << ''
         end
 
-        if product.product_type.key_word3_translation.present? && AttributesTranslationHistory.find(product.product_type.key_word3_translation).present?
-          key_word = AttributesTranslationHistory.find(product.product_type.key_word3_translation)
-          xls_column_values << key_word.read_attribute(language)
+        key_word3_translation_id = product.product_type.key_word3_translation
+        if key_word3_translation_id.present?
+          key_word3_translation_id_translation = AttributesTranslationHistory.find(key_word3_translation_id)
+          if key_word3_translation_id_translation.present?
+            key_word3 = key_word3_translation_id_translation.read_attribute(language)
+            xls_column_values << key_word3
+          end
         else
           xls_column_values << ''
         end
 
-        if product.product_type.key_word4_translation.present? && AttributesTranslationHistory.find(product.product_type.key_word4_translation).present?
-          key_word = AttributesTranslationHistory.find(product.product_type.key_word4_translation)
-          xls_column_values << key_word.read_attribute(language)
+        key_word4_translation_id = product.product_type.key_word4_translation
+        if key_word4_translation_id.present?
+          key_word4_translation_id_translation = AttributesTranslationHistory.find(key_word4_translation_id)
+          if key_word4_translation_id_translation.present?
+            key_word4 = key_word4_translation_id_translation.read_attribute(language)
+            xls_column_values << key_word4
+          end
         else
           xls_column_values << ''
         end
 
-        if product.product_type.key_word5_translation.present? && AttributesTranslationHistory.find(product.product_type.key_word5_translation).present?
-          key_word = AttributesTranslationHistory.find(product.product_type.key_word5_translation)
-          xls_column_values << key_word.read_attribute(language)
+        key_word5_translation_id = product.product_type.key_word5_translation
+        if key_word5_translation_id.present?
+          key_word5_translation_id_translation = AttributesTranslationHistory.find(key_word5_translation_id)
+          if key_word5_translation_id_translation.present?
+            key_word5 = key_word5_translation_id_translation.read_attribute(language)
+            xls_column_values << key_word5
+          end
         else
           xls_column_values << ''
         end
+
+        # if product.product_type.key_word2_translation.present? && AttributesTranslationHistory.find(product.product_type.key_word2_translation).present?
+        #   key_word = AttributesTranslationHistory.find(product.product_type.key_word2_translation)
+        #   xls_column_values << key_word.read_attribute(language)
+        # else
+        #   xls_column_values << ''
+        # end
+
+        # if product.product_type.key_word3_translation.present? && AttributesTranslationHistory.find(product.product_type.key_word3_translation).present?
+        #   key_word = AttributesTranslationHistory.find(product.product_type.key_word3_translation)
+        #   xls_column_values << key_word.read_attribute(language)
+        # else
+        #   xls_column_values << ''
+        # end
+
+        # if product.product_type.key_word4_translation.present? && AttributesTranslationHistory.find(product.product_type.key_word4_translation).present?
+        #   key_word = AttributesTranslationHistory.find(product.product_type.key_word4_translation)
+        #   xls_column_values << key_word.read_attribute(language)
+        # else
+        #   xls_column_values << ''
+        # end
+
+        # if product.product_type.key_word5_translation.present? && AttributesTranslationHistory.find(product.product_type.key_word5_translation).present?
+        #   key_word = AttributesTranslationHistory.find(product.product_type.key_word5_translation)
+        #   xls_column_values << key_word.read_attribute(language)
+        # else
+        #   xls_column_values << ''
+        # end
 
         # if product.image_url
         images_url = [product.images1, product.images2, product.images3, product.images4, product.images5, product.images6,
@@ -504,61 +566,92 @@ class Product < ActiveRecord::Base
           else
             xls_column_values << ''
           end
-          if product.product_type.product_type_introduction_2.present? && AttributesTranslationHistory.find(product.product_type.product_type_introduction_2).present?
-            product_type_introduction2 = AttributesTranslationHistory.find(product.product_type.product_type_introduction_2)
-            xls_column_values << product_type_introduction2.read_attribute(language)
+
+          if product_type_introduction_2_id.present? && product_type_introduction_2_id_translation.present?
+            # product_type_introduction2 = AttributesTranslationHistory.find(product.product_type.product_type_introduction_2)
+            xls_column_values << product_type_introduction2
           else
             xls_column_values << ''
           end
           # recommended_browse_nodes
-        if product.product_type.product_type_1.present? && AttributesTranslationHistory.find(product.product_type.product_type_1).present?
-          product_type1 = AttributesTranslationHistory.find(product.product_type.product_type_1)
-          xls_column_values << product_type1.read_attribute(language)
+        if product_type_1_id.present? && product_type_1_id_translation.present?
+          # product_type1 = AttributesTranslationHistory.find(product.product_type.product_type_1)
+          xls_column_values << product_type1
         else
           xls_column_values << ''
         end
 
-        if product.product_type.product_type_2.present? && AttributesTranslationHistory.find(product.product_type.product_type_2).present?
-          product_type2 = AttributesTranslationHistory.find(product.product_type.product_type_2)
-          xls_column_values << product_type2.read_attribute(language)
-        else
-          xls_column_values << ''
-        end
-          # generic_keywords
-        if product.product_type.key_word1_translation.present? && AttributesTranslationHistory.find(product.product_type.key_word1_translation).present?
-          key_word = AttributesTranslationHistory.find(product.product_type.key_word1_translation)
-          xls_column_values << key_word.read_attribute(language)
+        if product_type_2_id.present? && product_type_2_id_translation.present?
+          # product_type2 = product_type_2_id_translation.read_attribute(language)
+          xls_column_values << product_type2
         else
           xls_column_values << ''
         end
 
-        if product.product_type.key_word2_translation.present? && AttributesTranslationHistory.find(product.product_type.key_word2_translation).present?
-          key_word = AttributesTranslationHistory.find(product.product_type.key_word2_translation)
-          xls_column_values << key_word.read_attribute(language)
+        # generic_keywords
+        key_word1_translation_id = product.product_type.key_word1_translation
+        if key_word1_translation_id.present? && key_word1_translation_id_translation.present?
+          # key_word = AttributesTranslationHistory.find(product.product_type.key_word1_translation)
+          xls_column_values << key_word1
+        else
+          xls_column_values << ''
+        end
+        key_word2_translation_id = product.product_type.key_word2_translation
+        if key_word2_translation_id.present? && key_word2_translation_id_translation.present?
+          # key_word = AttributesTranslationHistory.find(product.product_type.key_word2_translation)
+          xls_column_values << key_word2
+        else
+          xls_column_values << ''
+        end
+        key_word3_translation_id = product.product_type.key_word3_translation
+        if key_word3_translation_id.present? && key_word3_translation_id_translation.present?
+          # key_word = AttributesTranslationHistory.find(product.product_type.key_word3_translation)
+          xls_column_values << key_word3
+        else
+          xls_column_values << ''
+        end
+        key_word4_translation_id = product.product_type.key_word4_translation
+        if key_word4_translation_id.present? && key_word4_translation_id_translation.present?
+          # key_word = AttributesTranslationHistory.find(product.product_type.key_word4_translation)
+          xls_column_values << key_word4
+        else
+          xls_column_values << ''
+        end
+        key_word5_translation_id = product.product_type.key_word5_translation
+        if key_word5_translation_id.present? && key_word5_translation_id_translation.present?
+          # key_word = AttributesTranslationHistory.find(product.product_type.key_word5_translation)
+          xls_column_values << key_word5
         else
           xls_column_values << ''
         end
 
-        if product.product_type.key_word3_translation.present? && AttributesTranslationHistory.find(product.product_type.key_word3_translation).present?
-          key_word = AttributesTranslationHistory.find(product.product_type.key_word3_translation)
-          xls_column_values << key_word.read_attribute(language)
-        else
-          xls_column_values << ''
-        end
+        # if product.product_type.key_word2_translation.present? && AttributesTranslationHistory.find(product.product_type.key_word2_translation).present?
+        #   key_word = AttributesTranslationHistory.find(product.product_type.key_word2_translation)
+        #   xls_column_values << key_word.read_attribute(language)
+        # else
+        #   xls_column_values << ''
+        # end
 
-        if product.product_type.key_word4_translation.present? && AttributesTranslationHistory.find(product.product_type.key_word4_translation).present?
-          key_word = AttributesTranslationHistory.find(product.product_type.key_word4_translation)
-          xls_column_values << key_word.read_attribute(language)
-        else
-          xls_column_values << ''
-        end
+        # if product.product_type.key_word3_translation.present? && AttributesTranslationHistory.find(product.product_type.key_word3_translation).present?
+        #   key_word = AttributesTranslationHistory.find(product.product_type.key_word3_translation)
+        #   xls_column_values << key_word.read_attribute(language)
+        # else
+        #   xls_column_values << ''
+        # end
 
-        if product.product_type.key_word5_translation.present? && AttributesTranslationHistory.find(product.product_type.key_word5_translation).present?
-          key_word = AttributesTranslationHistory.find(product.product_type.key_word5_translation)
-          xls_column_values << key_word.read_attribute(language)
-        else
-          xls_column_values << ''
-        end
+        # if product.product_type.key_word4_translation.present? && AttributesTranslationHistory.find(product.product_type.key_word4_translation).present?
+        #   key_word = AttributesTranslationHistory.find(product.product_type.key_word4_translation)
+        #   xls_column_values << key_word.read_attribute(language)
+        # else
+        #   xls_column_values << ''
+        # end
+
+        # if product.product_type.key_word5_translation.present? && AttributesTranslationHistory.find(product.product_type.key_word5_translation).present?
+        #   key_word = AttributesTranslationHistory.find(product.product_type.key_word5_translation)
+        #   xls_column_values << key_word.read_attribute(language)
+        # else
+        #   xls_column_values << ''
+        # end
 
           v_images_url = [v.image_url1,  v.image_url2,  v.image_url3,  v.image_url4,  v.image_url5,  v.image_url6,  v.image_url7,  v.image_url8,  v.image_url9,  v.image_url10,
                           v.image_url11, v.image_url12, v.image_url13, v.image_url14, v.image_url15, v.image_url16, v.image_url17, v.image_url18, v.image_url19, v.image_url20,
