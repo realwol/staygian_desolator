@@ -561,7 +561,13 @@ class Product < ActiveRecord::Base
           # bullet_points
           xls_column_values << product_translation[:des1]
           xls_column_values << product_translation[:des2]
-          xls_column_values << product_translation[:des3]
+
+          if v.desc.present?
+              xls_column_values << v.read_attribute("#{variable_hash[language.to_sym]}")
+          else
+            xls_column_values << product_translation[:des3]
+          end
+
           if product_type_introduction1.present?
             xls_column_values << product_type_introduction1.read_attribute(language)
           else
