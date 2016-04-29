@@ -535,7 +535,7 @@ class Product < ActiveRecord::Base
           # standard_price
           if v.try(:price).present?
             if v.weight.present?
-              shipment_cost ＝ product.get_shipment_cost(language, v.weight)
+              shipment_cost = product.get_shipment_cost(language, v.weight)
             end
             xls_column_values << (1 + ((shipment_cost + v.try(:price).try(:to_f)) * profit_rate / cash_rate).to_i ).to_i
           else
