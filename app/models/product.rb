@@ -44,14 +44,15 @@ class Product < ActiveRecord::Base
     self.translate_status
   end
 
-  def get_shipment_cost language
+  def get_shipment_cost language, weight=nil
     shipment_relations = self.product_type.shipment_weight_relations
-    shipment_relation = shipment_relations.where("(min_weight < ? or min_weight = ?) and (max_weight > ? or max_weight = ?) ", self.product_weight, self.product_weight, self.product_weight, self.product_weight).last
+    weight = self.product_weight if weight.nil?
+    shipment_relation = shipment_relations.where("(min_weight < ? or min_weight = ?) and (max_weight > ? or max_weight = ?) ", weight, weight, weight, weight).last
     if shipment_relation.present?
       shipment_method_id = shipment_relation.attributes_translation_history.read_attribute(language)
       if shipment_method_id
         all_shipment_method_values = ShipmentMethod.find(shipment_method_id).shipment_method_values
-        shipment_method = all_shipment_method_values.where("weight > ?", self.product_weight.to_f).first
+        shipment_method = all_shipment_method_values.where("weight > ?", weight.to_f).first
         shipment_method = all_shipment_method_values.order("weight").last unless shipment_method.present?
         if shipment_method.present?
           shipment_method.read_attribute("#{language}_price").to_f
@@ -532,8 +533,10 @@ class Product < ActiveRecord::Base
 
           xls_column_values << 'Update'
           # standard_price
-          # shipment_cost ＝ product.get_shipment_cost(language)
           if v.try(:price).present?
+            if v.weight.present?
+              shipment_cost ＝ product.get_shipment_cost(language, v.weight)
+            end
             xls_column_values << (1 + ((shipment_cost + v.try(:price).try(:to_f)) * profit_rate / cash_rate).to_i ).to_i
           else
             xls_column_values << (1 + ((shipment_cost + product.try(:price).try(:to_f)) * profit_rate / cash_rate).to_i ).to_i
@@ -556,7 +559,11 @@ class Product < ActiveRecord::Base
             xls_column_values << v.stock
           end
           # website_shipping_weight
-          xls_column_values << product.product_weight
+          if v.weight.present?
+            xls_column_values << v.weight
+          else
+            xls_column_values << product.product_weight
+          end
           xls_column_values << 'KG'
           # bullet_points
           xls_column_values << product_translation[:des1]
