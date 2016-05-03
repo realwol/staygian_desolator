@@ -3,6 +3,7 @@ Rails.application.routes.draw do
     member do
       post 'stop_merchant'
       post 'add_merchant_product'
+      post 'update_shipment_cost'
     end
   end
 

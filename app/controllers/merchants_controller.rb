@@ -1,5 +1,13 @@
 class MerchantsController < ApplicationController
-  before_action :set_merchant, only: [:edit, :update, :stop_merchant, :destroy, :add_merchant_product]
+  before_action :set_merchant, only: [:edit, :update, :stop_merchant, :destroy, :add_merchant_product, :update_shipment_cost]
+
+  def update_shipment_cost
+    unless @merchant.shipment_cost == params[:shipment_cost]
+      @merchant.update_attributes(shipment_cost: params[:shipment_cost])
+      @merchant.reset_all_sku_price
+    end
+    render json:true
+  end
 
   def index
     @merchants = current_user.valid_merchants

@@ -5,6 +5,7 @@
     <td>国家</td>
     <td>状态</td>
     <td>创建者</td>
+    <td>运费(此处为对应国家货币)</td>
     <td>操作</td>
   </tr>
   <% @merchants.each do |m| %>
@@ -18,6 +19,7 @@
         <td>禁用</td>
       <% end %>
       <td><%= m.user.email %></td>
+      <td><%= text_field_tag 'merchant_shipment', m.shipment_cost, type:'number', style:'width:150px;' , class:'merchantShipmentCost' %><%= button_tag '更新', class:'updateMerchantShipment', 'data-merchant-id'=> m.id %></td>
       <td>
         <button class="bind-products" >绑定产品</button>
         <button class="stop-merchant" data-merchant-id="<%= m.id %>" >停用</button>
@@ -26,13 +28,32 @@
       </td>
     </tr>
     <tr style="display:none; background-color: rgba(0, 173, 255, 0.35);" >
-      <td colspan="4"><textarea class="product-skus" cols="100" rows="20" ><%= m.merchant_sku_relations.map(&:sku).join("\n") %></textarea></td>
+      <td colspan="5"><textarea class="product-skus" cols="100" rows="20" ><%= m.merchant_sku_relations.map(&:sku).join("\n") %></textarea></td>
       <td><button class="bind-confirm" data-merchant-id="<%= m.id %>" >绑定</button></td>
     </tr>
   <% end %>
 </table>
 
 <script type="text/javascript">
+  $('.updateMerchantShipment').click(function(){
+    if (confirm('修改商铺运费将会更新所有绑定商铺，确定要修改吗？')) {
+
+    } else {
+      return false;
+    }
+    var merchant_id = $(this).data('merchant-id');
+    var $thisTd = $(this).parents('td');
+    var shipment_cost = $thisTd.find('.merchantShipmentCost').val();
+    $.ajax({
+      url: '/merchants/'+ merchant_id + '/update_shipment_cost',
+      type: 'post',
+      data: {shipment_cost: shipment_cost},
+      success: function(){
+        alert('更新成功！');
+      }
+    })
+  })
+
   $('.bind-products').click(function(){
     var $this = $(this);
     var currentTr = $(this).parents('tr');

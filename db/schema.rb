@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160429024605) do
+ActiveRecord::Schema.define(version: 20160502155607) do
 
   create_table "attributes_translation_histories", force: :cascade do |t|
     t.text     "attribute_name",       limit: 65535
@@ -85,13 +85,15 @@ ActiveRecord::Schema.define(version: 20160429024605) do
     t.datetime "created_at",                                            null: false
     t.datetime "updated_at",                                            null: false
     t.boolean  "status",                     limit: 1,   default: true
+    t.float    "shipment_cost",              limit: 24
   end
 
   create_table "mws_upload_histories", force: :cascade do |t|
-    t.integer  "user_id",    limit: 4
-    t.text     "xml_body",   limit: 65535
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.integer  "user_id",     limit: 4
+    t.text     "xml_body",    limit: 65535
+    t.string   "upload_type", limit: 255
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
   end
 
   create_table "product_attributes", force: :cascade do |t|
@@ -109,22 +111,22 @@ ActiveRecord::Schema.define(version: 20160429024605) do
     t.integer  "inventory",            limit: 4
     t.integer  "product_id",           limit: 4
     t.integer  "variable_id",          limit: 4
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
-    t.float    "america",              limit: 24
-    t.float    "canada",               limit: 24
-    t.float    "british",              limit: 24
-    t.float    "germany",              limit: 24
-    t.float    "france",               limit: 24
-    t.float    "spain",                limit: 24
-    t.float    "italy",                limit: 24
-    t.boolean  "america_price_change", limit: 1
-    t.boolean  "canada_price_change",  limit: 1
-    t.boolean  "british_price_change", limit: 1
-    t.boolean  "germany_price_change", limit: 1
-    t.boolean  "france_price_change",  limit: 1
-    t.boolean  "spain_price_change",   limit: 1
-    t.boolean  "italy_price_change",   limit: 1
+    t.datetime "created_at",                                      null: false
+    t.datetime "updated_at",                                      null: false
+    t.float    "america",              limit: 24,  default: 1.0
+    t.float    "canada",               limit: 24,  default: 1.0
+    t.float    "british",              limit: 24,  default: 1.0
+    t.float    "germany",              limit: 24,  default: 1.0
+    t.float    "france",               limit: 24,  default: 1.0
+    t.float    "spain",                limit: 24,  default: 1.0
+    t.float    "italy",                limit: 24,  default: 1.0
+    t.boolean  "america_price_change", limit: 1,   default: true
+    t.boolean  "canada_price_change",  limit: 1,   default: true
+    t.boolean  "british_price_change", limit: 1,   default: true
+    t.boolean  "germany_price_change", limit: 1,   default: true
+    t.boolean  "france_price_change",  limit: 1,   default: true
+    t.boolean  "spain_price_change",   limit: 1,   default: true
+    t.boolean  "italy_price_change",   limit: 1,   default: true
   end
 
   add_index "product_basic_infos", ["product_id"], name: "index_product_basic_infos_on_product_id", using: :btree
