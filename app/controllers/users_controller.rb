@@ -4,8 +4,8 @@ class UsersController < ApplicationController
 
   def user_statistic
     if current_user.is_dd?
-      all_updated_products = Product.updated.onsale
-      current_updated_product = all_updated_products.where(product_check_flag: true).last
+      all_updated_products = Product.updated.onsale.un_shield.pluck(:id)
+      current_updated_product = Product.updated.onsale.un_shield.where(product_check_flag: true).last.id
       @all_updated_products_count = all_updated_products.count
       @current_updated_product_count = all_updated_products.index(current_updated_product) + 1
       @product_updated_percentage = (@current_updated_product_count.to_f / @all_updated_products_count.to_f * 100).round(1)
