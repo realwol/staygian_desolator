@@ -29,12 +29,19 @@
     </tr>
     <tr style="display:none; background-color: rgba(0, 173, 255, 0.35);" >
       <td colspan="5"><textarea class="product-skus" cols="100" rows="20" ><%= m.merchant_sku_relations.map(&:sku).join("\n") %></textarea></td>
-      <td><button class="bind-confirm" data-merchant-id="<%= m.id %>" >绑定</button></td>
+      <td>
+        <button class="bind-confirm" data-merchant-id="<%= m.id %>" >绑定</button>
+        <button class="bind-close" data-merchant-id="<%= m.id %>" >关闭</button>
+      </td>
     </tr>
   <% end %>
 </table>
 
 <script type="text/javascript">
+  $('.bind-close').click(function(){
+    $(this).parents('tr').fadeOut();
+  });
+
   $('.updateMerchantShipment').click(function(){
     if (confirm('修改商铺运费将会更新所有绑定商铺，确定要修改吗？')) {
 
@@ -72,7 +79,6 @@
       type: 'post',
       success: function(){
         $this.parents('tr').hide('blind');
-
         alert('绑定成功！');
       }
     })

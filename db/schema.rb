@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160502155607) do
+ActiveRecord::Schema.define(version: 20160503142120) do
 
   create_table "attributes_translation_histories", force: :cascade do |t|
     t.text     "attribute_name",       limit: 65535
@@ -86,6 +86,7 @@ ActiveRecord::Schema.define(version: 20160502155607) do
     t.datetime "updated_at",                                            null: false
     t.boolean  "status",                     limit: 1,   default: true
     t.float    "shipment_cost",              limit: 24
+    t.boolean  "update_flag",                limit: 1
   end
 
   create_table "mws_upload_histories", force: :cascade do |t|
@@ -113,13 +114,13 @@ ActiveRecord::Schema.define(version: 20160502155607) do
     t.integer  "variable_id",          limit: 4
     t.datetime "created_at",                                      null: false
     t.datetime "updated_at",                                      null: false
-    t.float    "america",              limit: 24,  default: 1.0
-    t.float    "canada",               limit: 24,  default: 1.0
-    t.float    "british",              limit: 24,  default: 1.0
-    t.float    "germany",              limit: 24,  default: 1.0
-    t.float    "france",               limit: 24,  default: 1.0
-    t.float    "spain",                limit: 24,  default: 1.0
-    t.float    "italy",                limit: 24,  default: 1.0
+    t.float    "america",              limit: 24
+    t.float    "canada",               limit: 24
+    t.float    "british",              limit: 24
+    t.float    "germany",              limit: 24
+    t.float    "france",               limit: 24
+    t.float    "spain",                limit: 24
+    t.float    "italy",                limit: 24
     t.boolean  "america_price_change", limit: 1,   default: true
     t.boolean  "canada_price_change",  limit: 1,   default: true
     t.boolean  "british_price_change", limit: 1,   default: true

@@ -1,3 +1,7 @@
+<% if current_user.is_dd? %>
+  <%= render 'update_div' %>
+<% end %>
+
 <h4>工作统计</h4>
 <hr/>
 <h5>当天统计</h5>

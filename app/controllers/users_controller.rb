@@ -3,7 +3,17 @@ class UsersController < ApplicationController
   before_action :authenticate_user!
 
   def user_statistic
-    
+    if current_user.is_dd?
+      all_updated_products = Product.updated.onsale
+      current_updated_product = all_updated_products.where(product_check_flag: true).last
+      @all_updated_products_count = all_updated_products.count
+      @current_updated_product_count = all_updated_products.index(current_updated_product) + 1
+      @product_updated_percentage = (@current_updated_product_count.to_f / @all_updated_products_count.to_f * 100).round(1)
+
+      @all_merchants_count = Merchant.count
+      @updated_merchants_count = Merchant.where(update_flag: true).count
+      @merchant_updated_percentage = (@updated_merchants_count.to_f / @all_merchants_count.to_f * 100).round(1)
+    end
   end
 
   def show_little_brothers
