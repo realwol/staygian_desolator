@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160503142120) do
+ActiveRecord::Schema.define(version: 20160504032546) do
 
   create_table "attributes_translation_histories", force: :cascade do |t|
     t.text     "attribute_name",       limit: 65535
@@ -68,6 +68,9 @@ ActiveRecord::Schema.define(version: 20160503142120) do
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
   end
+
+  add_index "merchant_sku_relations", ["product_id"], name: "index_merchant_sku_relations_on_product_id", using: :btree
+  add_index "merchant_sku_relations", ["sku"], name: "index_merchant_sku_relations_on_sku", using: :btree
 
   create_table "merchants", force: :cascade do |t|
     t.string   "shop_name",                  limit: 255

@@ -37,13 +37,13 @@ class MerchantsController < ApplicationController
     product_sku = params[:product_sku]
     merchant_sku_relation_array = []
     product_sku.split("\n").each do |sku|
-      product = Product.where(sku: sku[0..7]).first
+      product = Product.(sku: sku[0..7]).first
       if sku.present?
         unless MerchantSkuRelation.where(sku: sku, merchant_id: @merchant.id).first
           merchant_sku_hash = {}
           merchant_sku_hash[:merchant_id] = @merchant.id
           merchant_sku_hash[:sku] = sku
-          merchant_sku_hash[:product_id] = product.id
+          merchant_sku_hash[:product_id] = product.try(:id)
           merchant_sku_relation_array << merchant_sku_hash
         end
       end
