@@ -79,6 +79,7 @@
       type: 'post',
       success: function(){
         $this.parents('tr').hide('blind');
+        $this.parents('tr').find('.product-skus').val('');
         alert('绑定成功！');
       }
     })
