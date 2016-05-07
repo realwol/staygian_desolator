@@ -49,7 +49,6 @@ class MerchantsController < ApplicationController
         product = Product.find_by(sku: sku_part)
         pre_product = product
         pre_sku = sku_part
-        puts pre_sku
       end
       # if sku.present?
       #   # unless MerchantSkuRelation.find_by(sku: sku, merchant_id: @merchant.id)

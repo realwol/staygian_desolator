@@ -28,7 +28,7 @@
       </td>
     </tr>
     <tr style="display:none; background-color: rgba(0, 173, 255, 0.35);" >
-      <td colspan="5"><textarea class="product-skus" cols="100" rows="20" ><%= m.merchant_sku_relations.map(&:sku).join("\n") %></textarea></td>
+      <td colspan="5"><textarea class="product-skus" cols="100" rows="20" ></textarea></td>
       <td>
         <button class="bind-confirm" data-merchant-id="<%= m.id %>" >绑定</button>
         <button class="bind-close" data-merchant-id="<%= m.id %>" >关闭</button>
