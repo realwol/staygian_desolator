@@ -1,49 +1,64 @@
 namespace :clear_dirty_data do
+  desc 'clear variable chinaese symbol'
+  task :replace_variable => :environment do
+    a = 0
+    Variable.all.each do |v|
+      v.desc = v.desc.gsub('、',',').gsub('，', ',').gsub('：',':') if v.desc
+      v.en = v.en.gsub('、',',').gsub('，', ',').gsub('：',':') if v.en
+      v.de = v.de.gsub('、',',').gsub('，', ',').gsub('：',':') if v.de
+      v.fr = v.fr.gsub('、',',').gsub('，', ',').gsub('：',':') if v.fr
+      v.es = v.es.gsub('、',',').gsub('，', ',').gsub('：',':') if v.es
+      v.it = v.it.gsub('、',',').gsub('，', ',').gsub('：',':') if v.it
+      v.save
+      a = a + 1
+      puts a
+    end
+  end
 
   desc 'replace chinese symbol'
   task :replace_chinese => :environment do
     a = Time.now
     Product.all.each do |p|
       aa = Time.now
-      p.desc1 = p.desc1.gsub('、',',').gsub('，', ',') if p.desc1
-      p.desc2 = p.desc2.gsub('、',',').gsub('，', ',') if p.desc2
-      p.desc3 = p.desc3.gsub('、',',').gsub('，', ',') if p.desc3
+      p.desc1 = p.desc1.gsub('、',',').gsub('，', ',').gsub('：',':') if p.desc1
+      p.desc2 = p.desc2.gsub('、',',').gsub('，', ',').gsub('：',':') if p.desc2
+      p.desc3 = p.desc3.gsub('、',',').gsub('，', ',').gsub('：',':') if p.desc3
       p.save
       puts Time.now - aa
     end
 
     ProductInfoTranslation.all.each do |p|
       aa = Time.now
-      p.e_t = p.e_t.gsub('、', ',').gsub('，', ',') if p.e_t
-      p.g_t = p.g_t.gsub('、', ',').gsub('，', ',') if p.g_t
-      p.f_t = p.f_t.gsub('、', ',').gsub('，', ',') if p.f_t
-      p.s_t = p.s_t.gsub('、', ',').gsub('，', ',') if p.s_t
-      p.i_t = p.i_t.gsub('、', ',').gsub('，', ',') if p.i_t
+      p.e_t = p.e_t.gsub('、', ',').gsub('，', ',').gsub('：',':') if p.e_t
+      p.g_t = p.g_t.gsub('、', ',').gsub('，', ',').gsub('：',':') if p.g_t
+      p.f_t = p.f_t.gsub('、', ',').gsub('，', ',').gsub('：',':') if p.f_t
+      p.s_t = p.s_t.gsub('、', ',').gsub('，', ',').gsub('：',':') if p.s_t
+      p.i_t = p.i_t.gsub('、', ',').gsub('，', ',').gsub('：',':') if p.i_t
 
-      p.e_detail = p.e_detail.gsub('、', ',').gsub('，', ',') if p.e_detail
-      p.e_des1 = p.e_des1.gsub('、', ',').gsub('，', ',') if p.e_des1
-      p.e_des2 = p.e_des2.gsub('、', ',').gsub('，', ',') if p.e_des2
-      p.e_des3 = p.e_des3.gsub('、', ',').gsub('，', ',') if p.e_des3
+      p.e_detail = p.e_detail.gsub('、', ',').gsub('，', ',').gsub('：',':') if p.e_detail
+      p.e_des1 = p.e_des1.gsub('、', ',').gsub('，', ',').gsub('：',':') if p.e_des1
+      p.e_des2 = p.e_des2.gsub('、', ',').gsub('，', ',').gsub('：',':') if p.e_des2
+      p.e_des3 = p.e_des3.gsub('、', ',').gsub('，', ',').gsub('：',':') if p.e_des3
 
-      p.g_detail = p.g_detail.gsub('、', ',').gsub('，', ',') if p.g_detail
-      p.g_des1 = p.g_des1.gsub('、', ',').gsub('，', ',') if p.g_des1
-      p.g_des2 = p.g_des2.gsub('、', ',').gsub('，', ',') if p.g_des2
-      p.g_des3 = p.g_des3.gsub('、', ',').gsub('，', ',') if p.g_des3
+      p.g_detail = p.g_detail.gsub('、', ',').gsub('，', ',').gsub('：',':') if p.g_detail
+      p.g_des1 = p.g_des1.gsub('、', ',').gsub('，', ',').gsub('：',':') if p.g_des1
+      p.g_des2 = p.g_des2.gsub('、', ',').gsub('，', ',').gsub('：',':') if p.g_des2
+      p.g_des3 = p.g_des3.gsub('、', ',').gsub('，', ',').gsub('：',':') if p.g_des3
 
-      p.f_detail = p.f_detail.gsub('、', ',').gsub('，', ',') if p.f_detail
-      p.f_des1 = p.f_des1.gsub('、', ',').gsub('，', ',') if p.f_des1
-      p.f_des2 = p.f_des2.gsub('、', ',').gsub('，', ',') if p.f_des2
-      p.f_des3 = p.f_des3.gsub('、', ',').gsub('，', ',') if p.f_des3
+      p.f_detail = p.f_detail.gsub('、', ',').gsub('，', ',').gsub('：',':') if p.f_detail
+      p.f_des1 = p.f_des1.gsub('、', ',').gsub('，', ',').gsub('：',':') if p.f_des1
+      p.f_des2 = p.f_des2.gsub('、', ',').gsub('，', ',').gsub('：',':') if p.f_des2
+      p.f_des3 = p.f_des3.gsub('、', ',').gsub('，', ',').gsub('：',':') if p.f_des3
 
-      p.s_detail = p.s_detail.gsub('、', ',').gsub('，', ',') if p.s_detail
-      p.s_des1 = p.s_des1.gsub('、', ',').gsub('，', ',') if p.s_des1
-      p.s_des2 = p.s_des2.gsub('、', ',').gsub('，', ',') if p.s_des2
-      p.s_des3 = p.s_des3.gsub('、', ',').gsub('，', ',') if p.s_des3
+      p.s_detail = p.s_detail.gsub('、', ',').gsub('，', ',').gsub('：',':') if p.s_detail
+      p.s_des1 = p.s_des1.gsub('、', ',').gsub('，', ',').gsub('：',':') if p.s_des1
+      p.s_des2 = p.s_des2.gsub('、', ',').gsub('，', ',').gsub('：',':') if p.s_des2
+      p.s_des3 = p.s_des3.gsub('、', ',').gsub('，', ',').gsub('：',':') if p.s_des3
 
-      p.i_detail = p.i_detail.gsub('、', ',').gsub('，', ',') if p.i_detail
-      p.i_des1 = p.i_des1.gsub('、', ',').gsub('，', ',') if p.i_des1
-      p.i_des2 = p.i_des2.gsub('、', ',').gsub('，', ',') if p.i_des2
-      p.i_des3 = p.i_des3.gsub('、', ',').gsub('，', ',') if p.i_des3
+      p.i_detail = p.i_detail.gsub('、', ',').gsub('，', ',').gsub('：',':') if p.i_detail
+      p.i_des1 = p.i_des1.gsub('、', ',').gsub('，', ',').gsub('：',':') if p.i_des1
+      p.i_des2 = p.i_des2.gsub('、', ',').gsub('，', ',').gsub('：',':') if p.i_des2
+      p.i_des3 = p.i_des3.gsub('、', ',').gsub('，', ',').gsub('：',':') if p.i_des3
 
       p.save
       puts Time.now - aa
@@ -51,15 +66,15 @@ namespace :clear_dirty_data do
 
     DescriptionTranslationHistory.all.each do |d|
       aa = Time.now
-      d.description = d.description.gsub('、',',').gsub('，', ',') if d.description
-      d.china = d.china.gsub('、',',').gsub('，', ',') if d.china
-      d.america = d.america.gsub('、', ',').gsub('，', ',') if d.america
-      d.canada = d.canada.gsub('、', ',').gsub('，', ',') if d.canada
-      d.british = d.british.gsub('、', ',').gsub('，', ',') if d.british
-      d.germany = d.germany.gsub('、', ',').gsub('，', ',') if d.germany
-      d.spain = d.spain.gsub('、', ',').gsub('，', ',') if d.spain
-      d.italy = d.italy.gsub('、', ',').gsub('，', ',') if d.italy
-      d.france = d.france.gsub('、', ',').gsub('，', ',') if d.france
+      d.description = d.description.gsub('、',',').gsub('，', ',').gsub('：',':') if d.description
+      d.china = d.china.gsub('、',',').gsub('，', ',').gsub('：',':') if d.china
+      d.america = d.america.gsub('、', ',').gsub('，', ',').gsub('：',':') if d.america
+      d.canada = d.canada.gsub('、', ',').gsub('，', ',').gsub('：',':') if d.canada
+      d.british = d.british.gsub('、', ',').gsub('，', ',').gsub('：',':') if d.british
+      d.germany = d.germany.gsub('、', ',').gsub('，', ',').gsub('：',':') if d.germany
+      d.spain = d.spain.gsub('、', ',').gsub('，', ',').gsub('：',':') if d.spain
+      d.italy = d.italy.gsub('、', ',').gsub('，', ',').gsub('：',':') if d.italy
+      d.france = d.france.gsub('、', ',').gsub('，', ',').gsub('：',':') if d.france
       d.save
       puts Time.now - aa
     end

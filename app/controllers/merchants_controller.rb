@@ -36,19 +36,50 @@ class MerchantsController < ApplicationController
   def add_merchant_product
     product_sku = params[:product_sku]
     merchant_sku_relation_array = []
-    product_sku.split("\n").each do |sku|
-      product = Product.(sku: sku[0..7]).first
-      if sku.present?
-        unless MerchantSkuRelation.where(sku: sku, merchant_id: @merchant.id).first
-          merchant_sku_hash = {}
-          merchant_sku_hash[:merchant_id] = @merchant.id
-          merchant_sku_hash[:sku] = sku
-          merchant_sku_hash[:product_id] = product.try(:id)
-          merchant_sku_relation_array << merchant_sku_hash
-        end
+    merchant_sku_relation_test_array = []
+    a = Time.now
+    pre_product = ''
+    pre_sku = 'FLAGNIL'
+    product_sku_array = product_sku.split("\n")
+    product_sku_array.each do |sku|
+      sku_part = sku[0..7]
+      if pre_product != 'FLAGNIL' && pre_sku == sku_part
+        product = pre_product
+      else
+        product = Product.find_by(sku: sku_part)
+        pre_product = product
+        pre_sku = sku_part
+        puts pre_sku
+      end
+      # if sku.present?
+      #   # unless MerchantSkuRelation.find_by(sku: sku, merchant_id: @merchant.id)
+      #     merchant_sku_hash = {}
+      #     merchant_sku_hash[:merchant_id] = @merchant.id
+      #     merchant_sku_hash[:sku] = sku
+      #     merchant_sku_hash[:product_id] = product.try(:id)
+      #     merchant_sku_relation_array << merchant_sku_hash
+      #   # end
+      # end
+      create_time = Time.now.strftime("%Y-%m-%d")
+      if product.present?
+        merchant_sku_relation_test_array << "('#{@merchant.id}', '#{product.try(:id)}', '#{sku}', '#{create_time}', '#{create_time}')"
+      else
+        merchant_sku_relation_test_array << "('#{@merchant.id}', NULL, '#{sku}', '#{create_time}', '#{create_time}')"
       end
     end
-    MerchantSkuRelation.create(merchant_sku_relation_array)
+    # MerchantSkuRelation.create(merchant_sku_relation_array)
+    abc = merchant_sku_relation_test_array.split(',').flatten
+    aaa = "insert into merchant_sku_relations (merchant_id, product_id, sku, created_at, updated_at) values"
+    aaab = ''
+    abc.each do |bc|
+      aaab << bc +','
+    end
+    aaa = aaa + aaab[0..-2] + ';'
+    count = merchant_sku_relation_test_array.count + 1
+    connection = ActiveRecord::Base.connection
+    connection.execute(aaa)
+    puts Time.now - a
+    puts count
     render json:true
   end
 
