@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160507030639) do
+ActiveRecord::Schema.define(version: 20160508094622) do
 
   create_table "attributes_translation_histories", force: :cascade do |t|
     t.text     "attribute_name",       limit: 65535
@@ -135,6 +135,7 @@ ActiveRecord::Schema.define(version: 20160507030639) do
   end
 
   add_index "product_basic_infos", ["product_id"], name: "index_product_basic_infos_on_product_id", using: :btree
+  add_index "product_basic_infos", ["sku"], name: "index_product_basic_infos_on_sku", using: :btree
   add_index "product_basic_infos", ["variable_id"], name: "index_product_basic_infos_on_variable_id", using: :btree
 
   create_table "product_customize_attributes_relations", force: :cascade do |t|
