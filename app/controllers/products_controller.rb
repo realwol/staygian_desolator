@@ -2,6 +2,14 @@ class ProductsController < ApplicationController
   before_action :set_product, only: [:show, :edit, :update, :destroy, :shield_product, :presale_product, :offsale_product, :temp_offsale_product, :onsale_product, :edited_product, :translate_preview]
   before_action :authenticate_user!
 
+  def removed_products
+    @products = selected_user.valid_products.auto_removed.page(params[:page])
+  end
+
+  def stand_by_products
+    @products = selected_user.valid_products.auto_stand_by.page(params[:page])
+  end
+
   def grasp_product_from_link
     @zero_shop_links = current_user.tmall_links.zero_shop
   end

@@ -32,9 +32,9 @@
         <td>
           <%= link_to '翻译预览', translate_preview_product_path(product) %>
           <%= link_to '编辑', edit_product_path(product) %>
-          <%= link_to '屏蔽', shield_product_product_path(product) %>
-          <%= link_to '下架', offsale_product_product_path(product) %>
-          <%= link_to '临时下架', temp_offsale_product_product_path(product) %>
+          <%= link_to '屏蔽', shield_product_product_path(product), data:{ confirm: '确定屏蔽？'} %>
+          <%= link_to '下架', offsale_product_product_path(product), data:{ confirm: '确定下架？'} %>
+          <%= link_to '临时下架', temp_offsale_product_product_path(product), data:{ confirm: '确认临时下架？'} %>
           <a href="#" class="reGraspProduct" data-product-id="<%= product.id %>" >重新抓取</a>
         </td>
       </tr>

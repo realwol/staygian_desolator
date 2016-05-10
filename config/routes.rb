@@ -34,6 +34,8 @@ Rails.application.routes.draw do
 
   resources :products do
     collection do
+      get 'stand_by_products'
+      get 'removed_products'
       get 'grasp_product_from_link'
       get 'product_detail_forbidden'
       get 'product_grasp_filter'
