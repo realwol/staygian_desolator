@@ -1,5 +1,14 @@
 class MerchantsController < ApplicationController
-  before_action :set_merchant, only: [:edit, :update, :stop_merchant, :destroy, :add_merchant_product, :update_shipment_cost]
+  before_action :set_merchant, only: [:edit, :update, :stop_merchant, :destroy, :add_merchant_product, :update_shipment_cost, :get_merchant_skus]
+
+  def get_merchant_skus
+    sku_array = @merchant.merchant_sku_relations.pluck(:sku)
+    # sku_array = MerchantSkuRelation.where('merchant_id = ?', @merchant.id).select(:sku)
+    if sku_array.present?
+      skus = sku_array
+    end
+    render json: skus
+  end
 
   def update_shipment_cost
     unless @merchant.shipment_cost == params[:shipment_cost]

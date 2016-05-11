@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   resources :merchants do
     member do
+      get 'get_merchant_skus'
       post 'stop_merchant'
       post 'add_merchant_product'
       post 'update_shipment_cost'

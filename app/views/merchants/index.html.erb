@@ -1,28 +1,88 @@
+<p>新建商铺</p>
+<div>
+  <%= form_tag(merchants_path, remote:true, method: 'post') do %>
+    <table class="table table-bordered" >
+      <tr>
+        <td><%= label_tag '店铺名称:' %></td>
+        <td><%= text_field_tag 'shop_name', nil, class:'clean_after_submit' %></td>
+        <td><%= label_tag '平台:' %></td>
+        <td><%= text_field_tag 'merchant_plantform_name', nil, class:'clean_after_submit' %></td>
+        <td><%= label_tag '平台账号:' %></td>
+        <td><%= text_field_tag 'merchant_account', nil, class:'clean_after_submit' %></td>
+        <td><%= label_tag '店铺所属国家:' %></td>
+        <td><%= select_tag 'merchant_country_name', "<option value='america'>美国</option><option value='canada'>加拿大</option><option value='british'>英国</option><option value='germany'>德国</option><option value='spain'>西班牙</option><option value='italy'>意大利</option><option value='france'>法国</option>".html_safe, class:'clean_after_submit' %></td>
+      </tr>
+      <tr>
+        <td><%= label_tag '店铺类型:' %></td>
+        <td><%= text_field_tag 'merchant_type', nil, class:'clean_after_submit' %></td>
+        <td><%= label_tag 'aws_access_key_id:' %></td>
+        <td><%= text_field_tag 'merchant_aws_access_key_id', nil, class:'clean_after_submit' %></td>
+        <td><%= label_tag 'secret_key:' %></td>
+        <td><%= text_field_tag 'merchant_secret_key', nil, class:'clean_after_submit' %></td>
+        <td><%= label_tag 'seller_id:' %></td>
+        <td><%= text_field_tag 'merchant_seller_id', nil, class:'clean_after_submit' %></td>
+      </tr>
+      <tr>
+        <td><%= label_tag 'marketplace_id:' %></td>
+        <td><%= text_field_tag 'merchant_marketplace_id', nil, class:'clean_after_submit' %></td>
+        <td><%= submit_tag '确定' %></td>
+      </tr>
+    </table>
+  <% end %>
+</div>
+<hr/>
 <p>商铺列表</p>
 <div id="merchant_list_div">
   <%= render 'merchant_list' %>
 </div>
 <hr/>
-<div>
-  <%= form_tag(merchants_path, remote:true, method: 'post') do %>
-    <%= label_tag '店铺名称:' %>
-    <%= text_field_tag 'shop_name', nil, class:'clean_after_submit' %><br/>
-    <%= label_tag '平台:' %>
-    <%= text_field_tag 'merchant_plantform_name', nil, class:'clean_after_submit' %><br/>
-    <%= label_tag '平台账号:' %>
-    <%= text_field_tag 'merchant_account', nil, class:'clean_after_submit' %><br/>
-    <%= label_tag '店铺所属国家:' %>
-    <%= select_tag 'merchant_country_name', "<option value='america'>美国</option><option value='canada'>加拿大</option><option value='british'>英国</option><option value='germany'>德国</option><option value='spain'>西班牙</option><option value='italy'>意大利</option><option value='france'>法国</option>".html_safe, class:'clean_after_submit' %><br/>
-    <%= label_tag '店铺类型:' %>
-    <%= text_field_tag 'merchant_type', nil, class:'clean_after_submit' %><br/>
-    <%= label_tag 'aws_access_key_id:' %>
-    <%= text_field_tag 'merchant_aws_access_key_id', nil, class:'clean_after_submit' %><br/>
-    <%= label_tag 'secret_key:' %>
-    <%= text_field_tag 'merchant_secret_key', nil, class:'clean_after_submit' %><br/>
-    <%= label_tag 'seller_id:' %>
-    <%= text_field_tag 'merchant_seller_id', nil, class:'clean_after_submit' %><br/>
-    <%= label_tag 'marketplace_id:' %>
-    <%= text_field_tag 'merchant_marketplace_id', nil, class:'clean_after_submit' %><br/>
-    <%= submit_tag '确定' %>
-  <% end %>
-</div>
+<table class="table table-bordered">
+  <tr>
+    <td>
+      <div>
+        <p>查看商铺绑定sku</p>
+        <%= select_tag 'merchant_sku_detail_select', options_from_collection_for_select(@merchants, "id", "shop_name"), include_blank: true %><br/>
+        <%= text_area_tag 'merchant_sku_detail', nil, size:'50x25' %>
+      </div>    
+    </td>
+    <td>
+      <div>
+        <p>商铺sku绑定sku</p>
+        <%= select_tag 'merchant_select', options_from_collection_for_select(@merchants, "id", "shop_name"), include_blank: true %>
+        <%= button_tag '绑定', id: 'bind_merchant_skus' %><br/>
+        <%= text_area_tag 'binding_merchant_sku', nil, size:'50x25' %>
+      </div>    
+    </td>
+  </tr>
+</table>
+
+
+<script type="text/javascript">
+  $('#merchant_sku_detail_select').change(function(){
+    var merchantId = $(this).val();
+    $.ajax({
+      url: '/merchants/' + merchantId + '/get_merchant_skus',
+      type: 'get',
+      success: function(data){
+        $('#merchant_sku_detail').val(data);
+      }
+    })
+    return false;
+  });
+
+  $('#bind_merchant_skus').click(function(){
+    var $this = $(this);
+    var merchantId = $this.parents('div').find('#merchant_select').val();
+    
+    var productSku = $this.parents('div').find('#binding_merchant_sku').val();
+    $.ajax({
+      url: '/merchants/' + merchantId + '/add_merchant_product',
+      data: {product_sku: productSku},
+      type: 'post',
+      success: function(){
+        $this.parents('div').find('#binding_merchant_sku').val('');
+        alert('绑定成功！');
+      }
+    })
+  });
+</script>

@@ -21,20 +21,20 @@
       <td><%= m.user.email %></td>
       <td><%= text_field_tag 'merchant_shipment', m.shipment_cost, type:'number', style:'width:150px;' , class:'merchantShipmentCost' %><%= button_tag '更新', class:'updateMerchantShipment', 'data-merchant-id'=> m.id %></td>
       <td>
-        <button class="bind-products" >绑定产品</button>
+        <!-- <button class="bind-products" >绑定产品</button> -->
         <button class="stop-merchant" data-merchant-id="<%= m.id %>" >停用</button>
         <%= link_to '编辑', edit_merchant_path(m) %>
         <button class="remove-merchant" data-merchant-id="<%= m.id %>" >删除</button>
       </td>
     </tr>
-    <tr style="display:none; background-color: rgba(0, 173, 255, 0.35);" >
+<!--     <tr style="display:none; background-color: rgba(0, 173, 255, 0.35);" >
       <td colspan="5"><textarea class="product-skus" cols="100" rows="20" ></textarea></td>
       <td>
         <button class="bind-confirm" data-merchant-id="<%= m.id %>" >绑定</button>
         <button class="bind-close" data-merchant-id="<%= m.id %>" >关闭</button>
       </td>
     </tr>
-  <% end %>
+ -->  <% end %>
 </table>
 
 <script type="text/javascript">
@@ -59,7 +59,7 @@
         alert('更新成功！');
       }
     })
-  })
+  });
 
   $('.bind-products').click(function(){
     var $this = $(this);
