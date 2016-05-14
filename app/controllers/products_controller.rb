@@ -214,6 +214,7 @@ class ProductsController < ApplicationController
   end
 
   def export_products
+
     puts '======================'
     puts 'I am in exporting now!'
     puts Time.now
@@ -259,13 +260,13 @@ class ProductsController < ApplicationController
     @products = @products.order("id desc")
     cookies[:export_language] = params[:language]
     cookies[:export_type] = params[:export_type]
-    request.format = 'xls'
-    filename = "#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}_export_data.xls"
+    request.format = 'txt'
+    filename = "#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}_export_data.txt"
     puts '==========='
     puts @products.count
     respond_to do |f|
       f.xls {send_data @products.to_csv(params[:language], params[:max_number], col_sep: "\t"), filename: filename }
-      # f.xls
+      # f.txt {send_data @products.to_txt(col_sep: "\t"), filename: filename }
     end
   end
 
