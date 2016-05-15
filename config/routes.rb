@@ -6,6 +6,14 @@ Rails.application.routes.draw do
       post 'add_merchant_product'
       post 'update_shipment_cost'
     end
+
+    collection do
+      get 'account_list'
+      get 'export_account'
+      get 'export_all_account'
+      post 'create_account'
+      delete 'remove_account'
+    end
   end
 
   resources :cash_rates, only:[:index, :create]

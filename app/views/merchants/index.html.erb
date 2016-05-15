@@ -25,6 +25,11 @@
       <tr>
         <td><%= label_tag 'marketplace_id:' %></td>
         <td><%= text_field_tag 'merchant_marketplace_id', nil, class:'clean_after_submit' %></td>
+        <td><%= label_tag '所属账号:' %></td>
+        <td>
+          <%= label_tag @account.name %>
+          <%= hidden_field_tag 'account_id', @account.id %>
+        </td>
         <td><%= submit_tag '确定' %></td>
       </tr>
     </table>
@@ -33,7 +38,11 @@
 <hr/>
 <p>商铺列表</p>
 <div id="merchant_list_div">
-  <%= render 'merchant_list' %>
+  <% if @merchants.present? %>
+    <%= render 'merchant_list' %>
+  <% else %>
+    此账号目前无商铺，请新建。
+  <% end %>
 </div>
 <hr/>
 <table class="table table-bordered">

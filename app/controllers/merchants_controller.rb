@@ -1,6 +1,117 @@
 class MerchantsController < ApplicationController
   before_action :set_merchant, only: [:edit, :update, :stop_merchant, :destroy, :add_merchant_product, :update_shipment_cost, :get_merchant_skus]
 
+  def account_list
+    @accounts = Account.valid
+  end
+
+  def create_account
+    Account.create(name: params[:name], platform: params[:platform], user: current_user)
+    @accounts = Account.valid
+  end
+
+  def remove_account
+    account = Account.find(params[:id])
+    account.destroy
+    @accounts = Account.valid
+  end
+
+  def export_all_account
+    accounts = Account.valid
+    account_file_names = []
+    accounts.each do |account|
+      folder = "public/export/#{account.name}#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}/"
+
+      # create files
+      system("mkdir #{folder}")
+      input_filenames = []
+      account.merchants.each do |m|
+        file_name = "#{m.shop_name}.txt"
+        input_filenames << file_name
+        file = File.open("#{folder}/#{file_name}", 'a+')
+        file.puts("sku\tprice\tminimum-seller-allowed-price\tmaximum-seller-allowed-price\tquantity\tleadtime-to-ship\t")
+        country = m.merchant_country_name
+        merchant_shipment_cost = m.shipment_cost.to_f
+        m.get_merchant_products.each do |p|
+          if p.inventory != 0
+            if p.read_attribute("#{country}_price_change")
+              file.puts("#{p.sku}\t#{p.read_attribute(country) - merchant_shipment_cost}\t\t\t#{p.inventory}\t")
+            end
+          end
+        end
+        file.close
+      end
+
+      zipfile_name = "#{folder}#{account.name}-#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}.zip"
+      Zip::File.open(zipfile_name, Zip::File::CREATE) do |zipfile|
+        input_filenames.each do |filename|
+          # Two arguments:
+          # - The name of the file as it will appear in the archive
+          # - The original file, including the path to find it
+          zipfile.add(filename, folder + '/' + filename)
+        end
+      end
+      account_file_names << zipfile_name
+    end
+
+    big_folder = "public/export"
+    bigzipfile_name = "#{big_folder}/all_accounts-#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}.zip"
+    Zip::File.open(bigzipfile_name, Zip::File::CREATE) do |zipfile|
+      account_file_names.each do |filename|
+        # Two arguments:
+        # - The name of the file as it will appear in the archive
+        # - The original file, including the path to find it
+        zipfile.add(filename.gsub('public/export/',''), filename)
+      end
+    end
+    send_file "#{big_folder}/all_accounts-#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}.zip", :type=> 'application/text', :x_sendfile=>true
+  end
+
+  def export_account
+    account = Account.find(params[:id])
+
+    folder = "public/export/#{account.name}#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}/"
+
+    # create files
+    system("mkdir #{folder}")
+    input_filenames = []
+    account.merchants.each do |m|
+      file_name = "#{m.shop_name}.txt"
+      input_filenames << file_name
+      file = File.open("#{folder}/#{file_name}", 'a+')
+      file.puts("sku\tprice\tminimum-seller-allowed-price\tmaximum-seller-allowed-price\tquantity\tleadtime-to-ship\t")
+      country = m.merchant_country_name
+      merchant_shipment_cost = m.shipment_cost.to_f
+      m.get_merchant_products.each do |p|
+        if p.inventory != 0
+          if p.read_attribute("#{country}_price_change")
+            file.puts("#{p.sku}\t#{p.read_attribute(country) - merchant_shipment_cost}\t\t\t#{p.inventory}\t")
+          end
+        end
+      end
+      file.close
+    end
+
+    # input_filenames.each do |name|
+    #   file = File.open("#{folder}/#{name}", 'a+')
+    #   account.merchants.each do |m|
+    #     file.puts("a\tb\tc")
+    #   end
+    #   file.close
+    # end
+    zipfile_name = "#{folder}#{account.name}-#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}.zip"
+    Zip::File.open(zipfile_name, Zip::File::CREATE) do |zipfile|
+      input_filenames.each do |filename|
+        # Two arguments:
+        # - The name of the file as it will appear in the archive
+        # - The original file, including the path to find it
+        zipfile.add(filename, folder + '/' + filename)
+      end
+      # zipfile.get_output_stream("myFile") { |os| os.write "myFile contains just this" }
+    end
+    send_file "#{folder}#{account.name}-#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}.zip", :type=> 'application/text', :x_sendfile=>true
+  end
+
   def get_merchant_skus
     sku_array = @merchant.merchant_sku_relations.pluck(:sku)
     # sku_array = MerchantSkuRelation.where('merchant_id = ?', @merchant.id).select(:sku)
@@ -19,15 +130,17 @@ class MerchantsController < ApplicationController
   end
 
   def index
-    @merchants = current_user.valid_merchants
+    # @merchants = current_user.valid_merchants
+    @account = Account.find(params[:account_id])
+    @merchants = @account.merchants
   end
 
   def create
     mws_points = {america: 'https://mws.amazonservices.com', canada: 'https://mws.amazonservices.ca', british: 'https://mws-eu.amazonservices.com', germany: 'https://mws-eu.amazonservices.com', spain: 'https://mws-eu.amazonservices.com', italy: 'https://mws-eu.amazonservices.com', france: 'https://mws-eu.amazonservices.com' }
     params[:merchant_api_address] = mws_points["#{merchant_params[:merchant_country_name]}".to_sym]
     current_user.merchants.create(merchant_params)
-    @merchants = current_user.valid_merchants
-  end
+    @account = Account.find(merchant_params[:account_id])
+    @merchants = @account.merchants  end
 
   def edit
   end
@@ -100,7 +213,7 @@ class MerchantsController < ApplicationController
 
   private
   def merchant_params
-    params.permit(:shop_name, :merchant_plantform_name, :merchant_account, :merchant_country_name, :merchant_type, :merchant_aws_access_key_id, :merchant_secret_key, :merchant_seller_id, :merchant_marketplace_id, :merchant_api_address)
+    params.permit(:shop_name, :merchant_plantform_name, :merchant_account, :merchant_country_name, :merchant_type, :merchant_aws_access_key_id, :merchant_secret_key, :merchant_seller_id, :merchant_marketplace_id, :merchant_api_address, :account_id)
   end
 
   def set_merchant

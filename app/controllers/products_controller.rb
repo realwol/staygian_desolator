@@ -260,8 +260,8 @@ class ProductsController < ApplicationController
     @products = @products.order("id desc")
     cookies[:export_language] = params[:language]
     cookies[:export_type] = params[:export_type]
-    request.format = 'txt'
-    filename = "#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}_export_data.txt"
+    request.format = 'xls'
+    filename = "#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}_export_data.xls"
     puts '==========='
     puts @products.count
     respond_to do |f|

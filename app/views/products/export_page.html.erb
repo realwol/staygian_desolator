@@ -22,7 +22,6 @@
   <%= text_field_tag 'max_number' %><br/>
   <%= button_tag '导出', format:'xls' %>
 <% end %>
-<a href="file://Users/Leo/work/rails/projects/amazon_tmall/hello/1.txt" download="1.txt" >download</a>
 <%= javascript_tag do%>
 $(function(){
   var export_language = "<%=cookies[:export_language]%>";

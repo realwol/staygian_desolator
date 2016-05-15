@@ -1,0 +1,10 @@
+<%= link_to '导出所有', export_all_account_merchants_path %>
+<hr/>
+<div id="account_list_div">
+  <%= render 'account_list' %>
+</div>
+<%= form_tag(create_account_merchants_path, remote:true) do %>
+  账号名称：<%= text_field_tag 'name' %>
+  平台：<%= text_field_tag 'platform' %>
+  <%= submit_tag '创建' %>
+<% end %>
