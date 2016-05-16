@@ -29,7 +29,7 @@ class MerchantsController < ApplicationController
         file_name = "#{m.shop_name}.txt"
         input_filenames << file_name
         file = File.open("#{folder}/#{file_name}", 'a+')
-        file.puts("sku\tprice\tminimum-seller-allowed-price\tmaximum-seller-allowed-price\tquantity\tleadtime-to-ship\t")
+        file.puts("sku\tprice\tminimum-seller-allowed-price\tmaximum-seller-allowed-price\tquantity\tleadtime-to-ship\t\n")
         country = m.merchant_country_name
         merchant_shipment_cost = m.shipment_cost.to_f
         symbol_count = 0
@@ -37,10 +37,10 @@ class MerchantsController < ApplicationController
           if p.inventory != 0
             if p.read_attribute("#{country}_price_change")
               if symbol_count == 0
-                file.puts("\"#{p.sku}\"\t#{p.read_attribute(country) - merchant_shipment_cost}\t\t\t#{p.inventory}\t\n") 
+                file.puts("\"#{p.sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
                 symbol_count = 1
               else
-                file.puts("#{p.sku}\t#{p.read_attribute(country) - merchant_shipment_cost}\t\t\t#{p.inventory}\t\n") 
+                file.puts("#{p.sku}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
               end
             end
           end
@@ -86,7 +86,7 @@ class MerchantsController < ApplicationController
       file_name = "#{m.shop_name}.txt"
       input_filenames << file_name
       file = File.open("#{folder}/#{file_name}", 'a+')
-      file.puts("sku\tprice\tminimum-seller-allowed-price\tmaximum-seller-allowed-price\tquantity\tleadtime-to-ship\n")
+      file.puts("sku\tprice\tminimum-seller-allowed-price\tmaximum-seller-allowed-price\tquantity\tleadtime-to-ship\t\n")
       country = m.merchant_country_name
       merchant_shipment_cost = m.shipment_cost.to_f
       symbol_count = 0
@@ -95,10 +95,10 @@ class MerchantsController < ApplicationController
         if p.inventory != 0
           if p.read_attribute("#{country}_price_change")
             if symbol_count ==0
-              file.puts("\"#{p.sku}\"\t#{p.read_attribute(country) - merchant_shipment_cost}\t\t\t#{p.inventory}\t\n")
+              file.puts("\"#{p.sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
               symbol_count = 1
             else
-              file.puts("#{p.sku}\t#{p.read_attribute(country) - merchant_shipment_cost}\t\t\t#{p.inventory}\t\n")
+              file.puts("#{p.sku}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
             end
           end
         end
