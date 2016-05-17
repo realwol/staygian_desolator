@@ -13,6 +13,7 @@
       <% link_to '按照店铺抓取', get_tmall_links_products_path %>
       <%= link_to '按单个链接抓取', grasp_product_from_link_products_path %><br/>
       <%= link_to '按照搜索链接抓取', get_tmall_link_from_link_products_path %><br/>
+      <%= link_to '批量重新翻译', patch_translate_binding_products_path %><br/>
       <% if current_user.is_jj? || current_user.is_dd? %>
         <%= link_to '导出', export_page_products_path %><br/>
       <% end %>

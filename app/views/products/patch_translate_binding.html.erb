@@ -1,0 +1,6 @@
+<h4>批量重新翻译:</h4>
+<%= form_tag patch_translate_products_path do %>
+  <label>需要翻译sku:</label>
+  <%= submit_tag '重新翻译' %><br/>
+  <%= text_area_tag 'retranslate_sku', nil, cols:'50', rows:'30' %>
+<% end %>

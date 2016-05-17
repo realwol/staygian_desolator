@@ -2,6 +2,16 @@ class ProductsController < ApplicationController
   before_action :set_product, only: [:show, :edit, :update, :destroy, :shield_product, :presale_product, :offsale_product, :temp_offsale_product, :onsale_product, :edited_product, :translate_preview]
   before_action :authenticate_user!
 
+  def patch_translate_binding
+  end
+
+  def patch_translate
+    skus = params[:retranslate_sku]
+    sku_array = skus.gsub("\r",'').split("\n")
+    Product.where("sku in (?)", sku_array).update_all(translate_status: false)
+    redirect_to '/products/patch_translate_binding'
+  end
+
   def removed_products
     @action_from = params[:action]
     @products = selected_user.valid_products.auto_removed.page(params[:page])

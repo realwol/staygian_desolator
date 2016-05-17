@@ -43,6 +43,7 @@ Rails.application.routes.draw do
 
   resources :products do
     collection do
+      get 'patch_translate_binding'
       get 'stand_by_products'
       get 'removed_products'
       get 'grasp_product_from_link'
@@ -65,6 +66,7 @@ Rails.application.routes.draw do
       get 'change_product_type'
       get 'change_product_type'
       post 'save_tmall_link'
+      post 'patch_translate'
       post 'search_shop'
       post 'create_product_forbidden_word'
       post 'create_product_grasp_filter'
