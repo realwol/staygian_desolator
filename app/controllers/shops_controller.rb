@@ -4,7 +4,9 @@ class ShopsController < ApplicationController
 	def stop_and_delete
 		shop = Shop.find(params[:id])
 		shop.products.each do |product|
+			# product.variables
 		  product.variables.destroy_all
+		  product.product_info_translations.destroy_all
 		  product.product_info_translations.destroy_all
 		  product.destroy
 		end

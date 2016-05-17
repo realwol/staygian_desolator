@@ -1,6 +1,7 @@
 class Variable < ActiveRecord::Base
   belongs_to :product
   belongs_to :variable_translate_history
+  has_many :product_basic_infos, dependent: :nullify
 
   scope :untranslated, ->{unscope(where: :update_status).where(translate_status: false)}
 

@@ -9,6 +9,7 @@ class Product < ActiveRecord::Base
   accepts_nested_attributes_for :variables
 
   has_many :product_info_translations
+  has_many :product_basic_infos, dependent: :nullify
 
   # **********************
   # * shield_type: 1 shield; 2, pre_saled; 3, temp_offsale; 4, wait for edited;

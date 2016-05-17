@@ -3,10 +3,12 @@ class ProductsController < ApplicationController
   before_action :authenticate_user!
 
   def removed_products
+    @action_from = params[:action]
     @products = selected_user.valid_products.auto_removed.page(params[:page])
   end
 
   def stand_by_products
+    @action_from = params[:action]
     @products = selected_user.valid_products.auto_stand_by.page(params[:page])
   end
 
@@ -198,6 +200,12 @@ class ProductsController < ApplicationController
     when 'temp_off_sale_products'
       @result_type = '临时下线产品'
       @search_value = @products.temp_offsale.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
+    when 'stand_by_products'
+      @result_type = '待定产品'
+      @search_value = @products.auto_stand_by.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
+    when 'removed_products'
+      @result_type = '删除产品'
+      @search_value = @products.auto_removed.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
     end
   end
 
@@ -567,17 +575,17 @@ class ProductsController < ApplicationController
   # DELETE /products/1.json
   def destroy
     if @product.update_status
-      @product.product_info_translations.try(:destroy_all)
-      @product.variables.try(:destroy_all)
-      @product.destroy
+      # @product.product_info_translations.try(:destroy_all)
+      # @product.variables.try(:destroy_all)
+      @product.update_attributes(auto_flag: 13)
       respond_to do |format|
         format.html { redirect_to products_url, notice: 'Product was successfully destroyed.' }
         format.json { head :no_content }
       end
     else
-      @product.product_info_translations.try(:destroy_all)
-      @product.variables.try(:destroy_all)
-      @product.destroy
+      # @product.product_info_translations.try(:destroy_all)
+      # @product.variables.try(:destroy_all)
+      @product.update_attributes(auto_flag: 13)
       respond_to do |format|
         format.html { redirect_to un_updated_page_products_url, notice: 'Product was successfully destroyed.' }
         format.json { head :no_content }

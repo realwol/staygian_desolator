@@ -21,10 +21,6 @@
         <td>
           <%= link_to '编辑', edit_product_path(product) %>
           <%= link_to '上架', onsale_product_product_path(product), data: { confirm: '确认上架?' } %>
-          <%= link_to '下架', offsale_product_product_path(product), data: { confirm: '确认下架?' } %>
-          <%= link_to '预售', presale_product_product_path(product), data: { confirm: '确认预售?' } %>
-          <%= link_to '屏蔽', shield_product_product_path(product), data: { confirm: '确认屏蔽?' } %>
-          <%= link_to '临时下架', temp_offsale_product_product_path(product), data: { confirm: '确认临时下架?' } %>
           <%= link_to '删除', product, method: :delete, data: { confirm: '确认删除?' } %>
         </td>
       </tr>
