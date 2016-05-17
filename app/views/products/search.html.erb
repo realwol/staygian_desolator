@@ -27,12 +27,31 @@
           <td><%= product.product_number %></td>
           <td><%= product.try(:user).try(:email) %></td>
           <td>
-            <%= link_to '翻译预览', translate_preview_product_path(product) %>
-            <%= link_to '编辑', edit_product_path(product) %>
-            <%= link_to '屏蔽', shield_product_product_path(product), data:{ confirm:'确认屏蔽？'} %>
-            <%= link_to '下架', offsale_product_product_path(product), data:{ confirm:'确认下架？'} %>
-            <%= link_to '临时下架', temp_offsale_product_product_path(product), data:{ confirm:'确认临时下架？'} %>
-            <a href="#" class="reGraspProduct" data-product-id="<%= product.id %>" >重新抓取</a>
+            <% case @result_button  %>
+            <% when 1 %>
+              <%= link_to '编辑', edit_product_path(product) %>
+            <% when 2 %>
+              <%= link_to '编辑', edit_product_path(product) %>
+            <% when 3 %>
+              <%= link_to '编辑', edit_product_path(product) %>
+            <% when 4 %>
+              <%= link_to '编辑', edit_product_path(product) %>
+            <% when 5 %>
+              <%= link_to '编辑', edit_product_path(product) %>
+            <% when 6 %>
+              <%= link_to '编辑', edit_product_path(product) %>
+              <%= link_to '上架', onsale_product_product_path(product), data: { confirm: '确认上架?' } %>
+              <%= link_to '删除', product, method: :delete, data: { confirm: '确认删除?' } %>
+            <% when 7 %>
+              <%= link_to '编辑', edit_product_path(product) %>
+            <% when 0 %>
+              <%= link_to '翻译预览', translate_preview_product_path(product) %>
+              <%= link_to '编辑', edit_product_path(product) %>
+              <%= link_to '屏蔽', shield_product_product_path(product), data:{ confirm:'确认屏蔽？'} %>
+              <%= link_to '下架', offsale_product_product_path(product), data:{ confirm:'确认下架？'} %>
+              <%= link_to '临时下架', temp_offsale_product_product_path(product), data:{ confirm:'确认临时下架？'} %>
+              <a href="#" class="reGraspProduct" data-product-id="<%= product.id %>" >重新抓取</a>
+            <% end %>
           </td>
         </tr>
       <% end %>
@@ -42,21 +61,28 @@
 <% end %>
 
 <% if @search_value.present? %>
-  <%= form_tag temp_off_sale_all_products_path do %>
-    <%= hidden_field_tag 'all_products', nil, value: @search_value.map(&:id).join(' ') %>
-    <%= submit_tag '全部临时下架', data: {confirm:'确认临时下架？'} %>
-  <% end %>
-  <%= form_tag off_sale_all_products_path do %>
-    <%= hidden_field_tag 'all_offsale_products', nil, value: @search_value.map(&:id).join(' ') %>
-    <%= submit_tag '全部下架', data: {confirm:'全部下架？'} %>
-  <% end %>
-  <%= form_tag (on_sale_all_products_path ) do %>
-    <%= hidden_field_tag 'all_onsale_products', nil, value: @search_value.map(&:id).join(' ') %>
-    <%= submit_tag '全部上架', data: {confirm:'确认上架？'} %>
-  <% end %>
-  <%= form_tag shield_all_products_path do %>
-    <%= hidden_field_tag 'all_shield_products', nil, value: @search_value.map(&:id).join(' ') %>
-    <%= submit_tag '全部屏蔽', data: {confirm:'全部屏蔽？'} %>
+  <% if @result_button == 6 %>
+    <%= form_tag temp_off_sale_all_products_path do %>
+      <%= hidden_field_tag 'all_products', nil, value: @search_value.map(&:id).join(' ') %>
+      <%= submit_tag '全部临时下架', data: {confirm:'确认临时下架？'} %>
+    <% end %>
+  <% elsif @result_button == 0 %>
+    <%= form_tag temp_off_sale_all_products_path do %>
+      <%= hidden_field_tag 'all_products', nil, value: @search_value.map(&:id).join(' ') %>
+      <%= submit_tag '全部临时下架', data: {confirm:'确认临时下架？'} %>
+    <% end %>
+    <%= form_tag off_sale_all_products_path do %>
+      <%= hidden_field_tag 'all_offsale_products', nil, value: @search_value.map(&:id).join(' ') %>
+      <%= submit_tag '全部下架', data: {confirm:'全部下架？'} %>
+    <% end %>
+    <%= form_tag (on_sale_all_products_path ) do %>
+      <%= hidden_field_tag 'all_onsale_products', nil, value: @search_value.map(&:id).join(' ') %>
+      <%= submit_tag '全部上架', data: {confirm:'确认上架？'} %>
+    <% end %>
+    <%= form_tag shield_all_products_path do %>
+      <%= hidden_field_tag 'all_shield_products', nil, value: @search_value.map(&:id).join(' ') %>
+      <%= submit_tag '全部屏蔽', data: {confirm:'全部屏蔽？'} %>
+    <% end %>
   <% end %>
 
   <%= link_to '更改产品分类', change_product_type_products_path(product_id: @search_value.map(&:id)) %>

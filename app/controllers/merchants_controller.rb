@@ -28,7 +28,8 @@ class MerchantsController < ApplicationController
       account.merchants.each do |m|
         file_name = "#{m.shop_name}.txt"
         input_filenames << file_name
-        file = File.open("#{folder}/#{file_name}", 'a+')
+        account_file_names << "#{folder}#{file_name}"
+        file = File.open("#{folder}#{file_name}", 'a+')
         file.puts("sku\tprice\tminimum-seller-allowed-price\tmaximum-seller-allowed-price\tquantity\tleadtime-to-ship\t\n")
         country = m.merchant_country_name
         merchant_shipment_cost = m.shipment_cost.to_f
@@ -49,16 +50,16 @@ class MerchantsController < ApplicationController
         file.close
       end
 
-      zipfile_name = "#{folder}#{account.name}-#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}.zip"
-      Zip::File.open(zipfile_name, Zip::File::CREATE) do |zipfile|
-        input_filenames.each do |filename|
-          # Two arguments:
-          # - The name of the file as it will appear in the archive
-          # - The original file, including the path to find it
-          zipfile.add(filename, folder + '/' + filename)
-        end
-      end
-      account_file_names << zipfile_name
+      # zipfile_name = "#{folder}#{account.name}-#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}.zip"
+      # Zip::File.open(zipfile_name, Zip::File::CREATE) do |zipfile|
+      #   input_filenames.each do |filename|
+      #     # Two arguments:
+      #     # - The name of the file as it will appear in the archive
+      #     # - The original file, including the path to find it
+      #     zipfile.add(filename, folder + '/' + filename)
+      #   end
+      # end
+      # account_file_names << folder
     end
 
     big_folder = "public/export"
@@ -71,7 +72,7 @@ class MerchantsController < ApplicationController
         zipfile.add(filename.gsub('public/export/',''), filename)
       end
     end
-    send_file "#{big_folder}/all_accounts-#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}.zip", :type=> 'application/text', :x_sendfile=>true
+    send_file bigzipfile_name, :type=> 'application/text', :x_sendfile=>true
   end
 
   def export_account

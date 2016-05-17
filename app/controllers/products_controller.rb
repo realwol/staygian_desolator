@@ -194,27 +194,35 @@ class ProductsController < ApplicationController
 
     case @action_from
     when 'index'
+      @result_button = 0
       @search_value = @products.updated.un_shield.onsale.where("#{search_query.join(' and ')}").order('first_updated_time desc').page(params[:page]).per(15)
     when 'off_sale_products'
       @result_type = '下线产品'
+      @result_button = 1
       @search_value = @products.offsale.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
     when 'presaled_products'
       @result_type = '预售产品'
+      @result_button = 2
       @search_value = @products.pre_saled.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
     when 'shield_products'
       @result_type = '屏蔽产品'
+      @result_button = 3
       @search_value = @products.shield.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
     when 'un_updated_page'
       @result_type = '未更新产品'
+      @result_button = 4
       @search_value = @products.un_updated.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
     when 'temp_off_sale_products'
       @result_type = '临时下线产品'
+      @result_button = 5
       @search_value = @products.temp_offsale.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
     when 'stand_by_products'
       @result_type = '待定产品'
+      @result_button = 6
       @search_value = @products.auto_stand_by.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
     when 'removed_products'
       @result_type = '删除产品'
+      @result_button = 7
       @search_value = @products.auto_removed.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
     end
   end
