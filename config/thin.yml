@@ -10,11 +10,11 @@ environment: production
 # environment: development
 max_persistent_conns: 512
 servers: 3
-port: 3001
+port: 4001
 # host: localhost
 threaded: true
 no-epoll: true
 daemonize: true
 # socket: tmp/sockets/thin.sock
 # chdir: /path/to/your/apps/root
-tag: amazon_tmall
+tag: amazon_tmall_test
