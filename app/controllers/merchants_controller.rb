@@ -16,6 +16,16 @@ class MerchantsController < ApplicationController
     @accounts = Account.valid
   end
 
+  def set_account_updated
+    account = Account.find(params[:id])
+    if account.present?
+      account.merchants.each do |m|
+        m.get_merchant_products.update_all(america_price_change: false, canada_price_change: false, british_price_change: false, germany_price_change: false, france_price_change: false, spain_price_change: false, italy_price_change: false)
+      end
+    end
+    render json: true
+  end
+
   def export_all_account
     accounts = Account.valid
     account_file_names = []

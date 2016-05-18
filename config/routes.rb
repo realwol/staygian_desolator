@@ -12,6 +12,7 @@ Rails.application.routes.draw do
       get 'export_account'
       get 'export_all_account'
       post 'create_account'
+      post 'set_account_updated'
       delete 'remove_account'
     end
   end

@@ -14,12 +14,25 @@
         <%= button_tag '删除', class:'remove_account', "data-account-id" => account.id %>
         <%= link_to '查看', merchants_path(account_id: account.id) %>
         <%= link_to '导出本账户', export_account_merchants_path(id: account.id) %>
+        <%= button_tag '更新本账户', class:'accountUpdated', "data-account-id" => account.id %>
       </td>
     </tr>
   <% end %>
 </table>
 
 <script type="text/javascript">
+  $('.accountUpdated').click(function(){
+    var id = $(this).data('account-id');
+    $.ajax({
+      url: "<%= set_account_updated_merchants_path %>",
+      type: 'post',
+      data: {id: id},
+      success: function(){
+        alert('更新成功！');
+      }
+    })
+  })
+
   $('.remove_account').click(function(){
     if (!confirm('确定要删除吗？')){
       return false;

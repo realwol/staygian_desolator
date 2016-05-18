@@ -32,9 +32,13 @@ class ProductsController < ApplicationController
       redirect_to grasp_product_from_link_products_path, notice:'请正确填写链接！' and return
     end
     product_link_start = link.index('id=') + 3
-    product_link_end = link[product_link_start..-1].index('&') - 1 + product_link_start
-    product_link_id = link[product_link_start..product_link_end]
-    product_tmall_link = TmallLink.where(product_link_id: product_link_id).first
+    if link[product_link_start..-1].index('&').present?
+      product_link_end = product_link_start - 1 + link[product_link_start..-1].index('&').to_i
+      product_link_id = link[product_link_start..product_link_end]
+    else
+      product_link_id = link[product_link_start..-1]
+    end
+    product_tmall_link = Product.where.not(auto_flag: 13).where(product_link_id: product_link_id).first
 
     if product_tmall_link.present?
       # product_tmall_link.update_attributes(status: false)      
