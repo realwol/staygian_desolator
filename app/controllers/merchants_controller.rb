@@ -27,39 +27,42 @@ class MerchantsController < ApplicationController
   end
 
   def export_all_account
+    aa = Time.now
     accounts = Account.valid
     account_file_names = []
+    a, b = 0, 0
     accounts.each do |account|
       folder = "public/export/#{account.name}#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}/"
 
       # create files
       system("mkdir #{folder}")
       input_filenames = []
-      account.merchants.each do |m|
-        file_name = "#{m.shop_name}.txt"
-        input_filenames << file_name
-        account_file_names << "#{folder}#{file_name}"
-        file = File.open("#{folder}#{file_name}", 'a+')
-        file.puts("sku\tprice\tminimum-seller-allowed-price\tmaximum-seller-allowed-price\tquantity\tleadtime-to-ship\t\n")
-        country = m.merchant_country_name
-        merchant_shipment_cost = m.shipment_cost.to_f
-        symbol_count = 0
-        m.get_merchant_products.each do |p|
-          if p.inventory != 0
-            if p.read_attribute("#{country}_price_change")
-              if symbol_count == 0
-                file.puts("\"#{p.sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
-                symbol_count = 1
-              else
-                file.puts("#{p.sku}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+        account.merchants.each do |m|
+          file_name = "#{m.shop_name}.txt"
+          input_filenames << file_name
+          account_file_names << "#{folder}#{file_name}"
+          file = File.open("#{folder}#{file_name}", 'a+')
+          file.puts("sku\tprice\tminimum-seller-allowed-price\tmaximum-seller-allowed-price\tquantity\tleadtime-to-ship\t\n")
+          country = m.merchant_country_name
+          merchant_shipment_cost = m.shipment_cost.to_f
+          symbol_count = 0
+          m.get_merchant_products.each do |p|
+            a = a + 1
+            if p.inventory != 0
+              if p.read_attribute("#{country}_price_change")
+                b = b + 1
+                if symbol_count == 0
+                  file.puts("\"#{p.sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+                  symbol_count = 1
+                else
+                  file.puts("#{p.sku}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+                end
               end
             end
           end
+          symbol_count = 0
+          file.close
         end
-        symbol_count = 0
-        file.close
-      end
-
       # zipfile_name = "#{folder}#{account.name}-#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}.zip"
       # Zip::File.open(zipfile_name, Zip::File::CREATE) do |zipfile|
       #   input_filenames.each do |filename|
@@ -82,6 +85,7 @@ class MerchantsController < ApplicationController
         zipfile.add(filename.gsub('public/export/',''), filename)
       end
     end
+    puts "all counts #{a}, actual counts #{b} and cost #{Time.now - aa}"
     send_file bigzipfile_name, :type=> 'application/text', :x_sendfile=>true
   end
 
@@ -136,6 +140,12 @@ class MerchantsController < ApplicationController
       # zipfile.get_output_stream("myFile") { |os| os.write "myFile contains just this" }
     end
     send_file "#{folder}#{account.name}-#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}.zip", :type=> 'application/text', :x_sendfile=>true
+  end
+
+  def remove_merchant_binding_sku
+    merchant = Merchant.find(params[:id])
+    merchant.merchant_sku_relations.delete_all
+    render json: true
   end
 
   def get_merchant_skus

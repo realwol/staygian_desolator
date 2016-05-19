@@ -5,6 +5,7 @@ Rails.application.routes.draw do
       post 'stop_merchant'
       post 'add_merchant_product'
       post 'update_shipment_cost'
+      delete 'remove_merchant_binding_sku'
     end
 
     collection do

@@ -50,7 +50,7 @@
     <td>
       <div>
         <p>查看商铺绑定sku</p>
-        <%= select_tag 'merchant_sku_detail_select', options_from_collection_for_select(@merchants, "id", "shop_name"), include_blank: true %><br/>
+        <%= select_tag 'merchant_sku_detail_select', options_from_collection_for_select(@merchants, "id", "shop_name"), include_blank: true %><%= button_tag '删除选中商铺sku', class:'remove_binding_skus' %><br/>
         <%= text_area_tag 'merchant_sku_detail', nil, size:'50x25' %>
       </div>    
     </td>
@@ -67,6 +67,24 @@
 
 
 <script type="text/javascript">
+  $('.remove_binding_skus').click(function(){
+    if (!confirm('删除之后不可恢复，确认删除吗？')) {
+      return false;
+    }
+    var $thisDiv = $(this).parents('div');
+    var merchantId = $('#merchant_sku_detail_select').val();
+
+    $.ajax({
+      url: '/merchants/' + merchantId + '/remove_merchant_binding_sku',
+      type: 'delete',
+      success: function(data){
+        $('#merchant_sku_detail').val('');
+        alert('删除成功！');
+      }
+    })
+    return false;
+  })
+
   $('#merchant_sku_detail_select').change(function(){
     var merchantId = $(this).val();
     $.ajax({
