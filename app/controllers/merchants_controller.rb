@@ -130,7 +130,7 @@ class MerchantsController < ApplicationController
       end
       # zipfile.get_output_stream("myFile") { |os| os.write "myFile contains just this" }
     end
-    send_file "#{folder}#{account.name}-#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}.zip", :type=> 'application/text', :x_sendfile=>true
+    send_file zipfile_name, :type=> 'application/text', :x_sendfile=>true
   end
 
   def remove_merchant_binding_sku
