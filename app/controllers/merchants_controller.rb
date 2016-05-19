@@ -32,12 +32,14 @@ class MerchantsController < ApplicationController
     account_file_names = []
     a, b = 0, 0
     accounts.each do |account|
+      puts "current account id is #{account.id}"
       folder = "public/export/#{account.name}#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}/"
 
       # create files
       system("mkdir #{folder}")
       input_filenames = []
-        account.merchants.each do |m|
+      account.merchants.each do |m|
+          puts "current merchant id is #{m.id}"
           file_name = "#{m.shop_name}.txt"
           input_filenames << file_name
           account_file_names << "#{folder}#{file_name}"
@@ -62,17 +64,7 @@ class MerchantsController < ApplicationController
           end
           symbol_count = 0
           file.close
-        end
-      # zipfile_name = "#{folder}#{account.name}-#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}.zip"
-      # Zip::File.open(zipfile_name, Zip::File::CREATE) do |zipfile|
-      #   input_filenames.each do |filename|
-      #     # Two arguments:
-      #     # - The name of the file as it will appear in the archive
-      #     # - The original file, including the path to find it
-      #     zipfile.add(filename, folder + '/' + filename)
-      #   end
-      # end
-      # account_file_names << folder
+      end
     end
 
     big_folder = "public/export"
@@ -91,7 +83,6 @@ class MerchantsController < ApplicationController
 
   def export_account
     account = Account.find(params[:id])
-
     folder = "public/export/#{account.name}#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}/"
 
     # create files
