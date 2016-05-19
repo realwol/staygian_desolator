@@ -10,7 +10,7 @@ environment: production
 # environment: development
 max_persistent_conns: 512
 servers: 3
-port: 4001
+port: 3001
 # host: localhost
 threaded: true
 no-epoll: true
