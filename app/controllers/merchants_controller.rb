@@ -78,7 +78,7 @@ class MerchantsController < ApplicationController
       end
     end
     puts "all counts #{a}, actual counts #{b} and cost #{Time.now - aa}"
-    send_file bigzipfile_name, :type=> 'application/text', :x_sendfile=>true
+    send_file bigzipfile_name, :type=> 'application/text', :x_sendfile=>true and return
   end
 
   def export_account
@@ -120,6 +120,7 @@ class MerchantsController < ApplicationController
     #   end
     #   file.close
     # end
+
     zipfile_name = "#{folder}#{account.name}-#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}.zip"
     Zip::File.open(zipfile_name, Zip::File::CREATE) do |zipfile|
       input_filenames.each do |filename|
