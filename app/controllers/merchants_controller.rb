@@ -87,9 +87,9 @@ class MerchantsController < ApplicationController
   end
 
   def export_account
+    aa = Time.now
     account = Account.find(params[:id])
     folder = "public/export/#{account.name}#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}/"
-    aa.each{|abc| puts abc}
     # create files
     system("mkdir #{folder}")
     input_filenames = []
@@ -136,6 +136,7 @@ class MerchantsController < ApplicationController
       end
       # zipfile.get_output_stream("myFile") { |os| os.write "myFile contains just this" }
     end
+    puts "cost #{Time.now - aa}"
     send_file zipfile_name, :type=> 'application/text', :x_sendfile=>true
   end
 
