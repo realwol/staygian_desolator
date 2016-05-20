@@ -31,42 +31,46 @@ class MerchantsController < ApplicationController
     accounts = Account.valid
     account_file_names = []
     a, b = 0, 0
+    merchant_time_array = []
     accounts.each do |account|
       puts "current account id is #{account.id}"
       folder = "public/export/#{account.name}#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}/"
-
       # create files
       system("mkdir #{folder}")
       input_filenames = []
-      account.merchants.each do |m|
-          puts "current merchant id is #{m.id}"
-          file_name = "#{m.shop_name}.txt"
-          input_filenames << file_name
-          account_file_names << "#{folder}#{file_name}"
-          file = File.open("#{folder}#{file_name}", 'a+')
-          file.puts("sku\tprice\tminimum-seller-allowed-price\tmaximum-seller-allowed-price\tquantity\tleadtime-to-ship\t\n")
-          country = m.merchant_country_name
-          merchant_shipment_cost = m.shipment_cost.to_f
-          symbol_count = 0
-          m.get_merchant_products.each do |p|
-            a = a + 1
-            if p.inventory != 0
-              if p.read_attribute("#{country}_price_change")
-                b = b + 1
-                if symbol_count == 0
-                  file.puts("\"#{p.sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
-                  symbol_count = 1
-                else
-                  file.puts("#{p.sku}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
-                end
+      account_merchants = account.merchants
+      account_merchants.each do |m|
+        aaa = Time.now
+        puts "current merchant id is #{m.id}"
+        file_name = "#{m.shop_name}.txt"
+        input_filenames << file_name
+        account_file_names << "#{folder}#{file_name}"
+        file = File.open("#{folder}#{file_name}", 'a+')
+        file.puts("sku\tprice\tminimum-seller-allowed-price\tmaximum-seller-allowed-price\tquantity\tleadtime-to-ship\t\n")
+        country = m.merchant_country_name
+        merchant_shipment_cost = m.shipment_cost.to_f
+        symbol_count = 0
+        m_merchant_products = m.get_merchant_products
+        m_merchant_products.each do |p|
+          a = a + 1
+          if p.inventory != 0
+            # 只更新价格变化的
+            if p.read_attribute("#{country}_price_change")
+              b = b + 1
+              if symbol_count == 0
+                file.puts("\"#{p.sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+                symbol_count = 1
+              else
+                file.puts("#{p.sku}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
               end
             end
           end
-          symbol_count = 0
-          file.close
+        end
+        symbol_count = 0
+        file.close
+        merchant_time_array << Time.now - aaa
       end
     end
-
     big_folder = "public/export"
     bigzipfile_name = "#{big_folder}/all_accounts-#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}.zip"
     Zip::File.open(bigzipfile_name, Zip::File::CREATE) do |zipfile|
@@ -78,13 +82,14 @@ class MerchantsController < ApplicationController
       end
     end
     puts "all counts #{a}, actual counts #{b} and cost #{Time.now - aa}"
+    merchant_time_array.each{|time| puts time}
     send_file bigzipfile_name, :type=> 'application/text', :x_sendfile=>true and return
   end
 
   def export_account
     account = Account.find(params[:id])
     folder = "public/export/#{account.name}#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}/"
-
+    aa.each{|abc| puts abc}
     # create files
     system("mkdir #{folder}")
     input_filenames = []
