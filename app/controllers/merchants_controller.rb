@@ -57,10 +57,17 @@ class MerchantsController < ApplicationController
           if p.read_attribute("#{country}_price_change")
             b = b + 1
             if symbol_count == 0
-              file.puts("\"#{p.sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+              file.puts("\"#{p.sku}\"\t#{(p.read_attribute(country).to_i - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
               symbol_count = 1
             else
-              file.puts("#{p.sku}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+              file.puts("#{p.sku}\t#{(p.read_attribute(country).to_i - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+            end
+          else
+            if symbol_count == 0
+              file.puts("\"#{p.sku}\"\t\t\t\t#{p.inventory}\t\n")
+              symbol_count = 1
+            else
+              file.puts("#{p.sku}\t\t\t\t#{p.inventory}\t\n")
             end
           end
         end
@@ -103,10 +110,17 @@ class MerchantsController < ApplicationController
       m.get_merchant_products.each do |p|
         if p.read_attribute("#{country}_price_change")
           if symbol_count ==0
-            file.puts("\"#{p.sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+            file.puts("\"#{p.sku}\"\t#{(p.read_attribute(country).to_i - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
             symbol_count = 1
           else
-            file.puts("#{p.sku}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+            file.puts("#{p.sku}\t#{(p.read_attribute(country).to_i - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+          end
+        else
+          if symbol_count ==0
+            file.puts("\"#{p.sku}\"\t\t\t\t#{p.inventory}\t\n")
+            symbol_count = 1
+          else
+            file.puts("#{p.sku}\t\t\t\t#{p.inventory}\t\n")
           end
         end
       end
