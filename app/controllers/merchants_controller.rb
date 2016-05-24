@@ -107,7 +107,9 @@ class MerchantsController < ApplicationController
       merchant_shipment_cost = m.shipment_cost.to_f
       symbol_count = 0
       # all_merchant_products = m.get_merchant_products
+      a = 0
       m.get_merchant_products.each do |p|
+        a = a + 1
         if p.read_attribute("#{country}_price_change")
           if symbol_count ==0
             file.puts("\"#{p.sku}\"\t#{(p.read_attribute(country).to_i - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
