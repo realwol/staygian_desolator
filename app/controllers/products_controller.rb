@@ -2,6 +2,16 @@ class ProductsController < ApplicationController
   before_action :set_product, only: [:show, :edit, :update, :destroy, :shield_product, :presale_product, :offsale_product, :temp_offsale_product, :onsale_product, :edited_product, :translate_preview]
   before_action :authenticate_user!
 
+  def get_product_links_from_search_link
+    @shops = Shop.order('name')
+  end
+
+  def save_search_link
+    SearchLink.create(link: params[:link], grasp_shop_id: params[:grasp_shop_id], forbidden_words: params[:forbidden_words], link_desc: params[:link_desc], user: current_user, status: true, check_status: false)
+    @shops = Shop.order('name')
+    redirect_to '/products/get_product_links_from_search_link'
+  end
+
   def patch_translate_binding
   end
 
@@ -616,6 +626,10 @@ class ProductsController < ApplicationController
   end
 
   private
+    def search_link_param
+      params.permit(:link, :grasp_shop_id, :forbidden_words, :link_desc, :user, :status, :check_status)
+    end
+
     def set_product
       @product = Product.find(params[:id])
     end

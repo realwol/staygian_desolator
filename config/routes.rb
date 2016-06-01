@@ -45,6 +45,7 @@ Rails.application.routes.draw do
 
   resources :products do
     collection do
+      get 'get_product_links_from_search_link'
       get 'patch_translate_binding'
       get 'stand_by_products'
       get 'removed_products'
@@ -67,6 +68,7 @@ Rails.application.routes.draw do
       get 'update_price'
       get 'change_product_type'
       get 'change_product_type'
+      post 'save_search_link'
       post 'save_tmall_link'
       post 'patch_translate'
       post 'search_shop'
