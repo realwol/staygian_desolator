@@ -48,7 +48,7 @@ class Product < ActiveRecord::Base
   end
 
   def get_shipment_cost language, weight=nil
-    shipment_relations = self.product_type.shipment_weight_relations
+    shipment_relations = self.product_type.try(:shipment_weight_relations)
     weight = self.product_weight if weight.nil?
     shipment_relation = shipment_relations.where("(min_weight < ? or min_weight = ?) and (max_weight > ? or max_weight = ?) ", weight, weight, weight, weight).last
     if shipment_relation.present?
