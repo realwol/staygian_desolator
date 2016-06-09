@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160609034053) do
+ActiveRecord::Schema.define(version: 20160609043518) do
 
   create_table "accounts", force: :cascade do |t|
     t.string   "name",       limit: 255
@@ -285,6 +285,7 @@ ActiveRecord::Schema.define(version: 20160609034053) do
     t.text     "italy_detail",       limit: 65535
     t.boolean  "update_status",      limit: 1
     t.string   "shop_id",            limit: 255
+    t.string   "brand_id",           limit: 255
     t.string   "shield_type",        limit: 255,   default: "0"
     t.datetime "shield_untill"
     t.datetime "presale_date"

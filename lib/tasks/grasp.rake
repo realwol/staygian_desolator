@@ -3,11 +3,13 @@ require 'openssl'
 namespace :grasp do
 	desc "Grasp from tmall"
 	task :start => :environment do
+    10.times do
       if start
         sleep rand(5..10)
       else
         puts 'duplicate product'
       end
+    end
 	end
 end
 
@@ -101,6 +103,8 @@ def grasp_product tmall_link
     end
   end
 
+  @product.brand_id = Brand.find_by(name: brand_name).try(:id)
+
   @product.producer = html.css('div#shopExtra strong').text
 
   unless @details.present?
@@ -176,6 +180,9 @@ def grasp_product tmall_link
   end
 
   @product.shield_type = tmall_link.product_status if tmall_link.product_status.present?
+
+  # create connections from shop to brand
+  binding_shop_with_brand @product
 
   @product.save
   @product.reload
@@ -296,6 +303,10 @@ def grasp_product tmall_link
     end
     Variable.create(variable_array)
   end
+end
+
+def binding_shop_with_brand product
+  # brand = (name: product.brand)
 end
 
 def ungrasp_tmall_link
