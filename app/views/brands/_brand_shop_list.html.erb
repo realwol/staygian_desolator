@@ -1,0 +1,84 @@
+<table class="table table-bordered" style="width:90%;" >
+  <tr>
+    <th style="width:10%" ></th>
+    <th style="width:70%" >店铺名称</th>
+    <th>操作</th>
+  </tr>
+  <tr>
+    <th>待审核店铺</th>
+    <td>
+      <% @brand.get_brand_stand_by_shops.each do |name| %>
+        <span class='shop_name_span shop_name_span_color' data-shop-id="<%= name.id %>" > <%= name.name %> </span>&nbsp
+      <% end %>
+    </td>
+    <td>
+      <%= button_tag '屏蔽店铺', class:'forbidden_shop change_shop_status', "data-brand-id"=> @brand.id, "data-status-string"=> '2' %>
+      <%= button_tag '对接店铺', class:'connect_shop change_shop_status', "data-brand-id"=> @brand.id, "data-status-string"=> '1' %>
+    </td>
+  </tr>
+  <tr>
+    <th>已对接店铺</th>
+    <td>
+      <% @brand.get_brand_connect_shops.each do |name| %>
+        <span class='shop_name_span shop_name_span_color' data-shop-id="<%= name.id %>" > <%= name.name %> </span>&nbsp
+      <% end %>
+    </td>
+    <td>
+      <%= button_tag '屏蔽店铺', class:'forbidden_shop change_shop_status', "data-brand-id"=> @brand.id, "data-status-string"=> '2' %>
+      <%= button_tag '待审核店铺', class:'stand_by_shop change_shop_status', "data-brand-id"=> @brand.id, "data-status-string"=> '0' %>
+    </td>
+  </tr>
+  <tr>
+    <th>已屏蔽店铺</th>
+    <td>
+      <% @brand.get_brand_forbidden_shops.each do |name| %>
+        <span class='shop_name_span shop_name_span_color' data-shop-id="<%= name.id %>" > <%= name.name %> </span>&nbsp
+      <% end %>
+    </td>
+    <td>
+      <%= button_tag '对接店铺', class:'connect_shop change_shop_status', "data-brand-id"=> @brand.id, "data-status-string"=> '1' %>
+      <%= button_tag '待审核店铺', class:'stand_by_shop change_shop_status', "data-brand-id"=> @brand.id, "data-status-string"=> '0' %>
+    </td>
+  </tr>
+</table>
+<%= link_to '返回', brands_path %>
+
+<style type="text/css">
+  .brand_shop_selected {
+    border: solid red;
+  }
+  .shop_name_span_color {
+    border: solid 0.5px;
+  }
+</style>
+
+<script type="text/javascript">
+  $('.change_shop_status').click(function(){
+    // $('.change_shop_status').unbind('click');
+    if (!confirm('确定要使用本操作吗？')) {
+      return false;
+    }
+    var brand_id = $(this).data('brand-id');
+    var status_string = $(this).data('status-string');
+    var shop_ids = '';
+    var $this = $(this);
+    $(this).parents('tr').find('.brand_shop_selected').each(function(){
+      shop_ids = shop_ids + $(this).data('shop-id') + '|';
+    });
+    $.ajax({
+      url: '/brands/'+ brand_id + '/update_brand_shop_status',
+      type: 'post',
+      data: {status_string: status_string, shop_ids: shop_ids},
+      success: function(){
+        // $this.parents('tr').find('.brand_shop_selected').removeClass('brand_shop_selected');
+        
+      }
+    })
+  })
+
+  $('.shop_name_span').click(function(){
+    // $('.shop_name_span').unbind('click');
+    $(this).toggleClass('shop_name_span_color');
+    $(this).toggleClass('brand_shop_selected');
+  });
+</script>

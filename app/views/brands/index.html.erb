@@ -18,10 +18,9 @@
           <%= text_field_tag 'brand_english_name', brand.english_name %>
           <%= button_tag '确认', id:'update_brand_english_name', "data-brand-id"=>brand.id %>
         </td>
-        <td></td>
-        <td><%= link_to 'Show', brand %></td>
-        <td><%= link_to 'Edit', edit_brand_path(brand) %></td>
-        <td><%= link_to 'Destroy', brand, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= brand.get_brand_connect_shops.map(&:name).join(',') %></td>
+        <td><%= link_to '详情', brand %></td>
+        <td><%= button_tag '屏蔽品牌', id:'forbidden_brand', "data-brand-id"=> brand.id %></td>
       </tr>
     <% end %>
   </tbody>
@@ -41,5 +40,21 @@
         alert('更新成功！');
       }
     })
-  })
+  });
+
+  $('#forbidden_brand').click(function(){
+    // $('#forbidden_brand').unbind('click');
+    if (!confirm('确定要屏蔽本品牌吗？')) {
+      return false;
+    }
+    var brand_id = $(this).data('brand-id');
+    $.ajax({
+      url: '/brands/'+ brand_id + '/forbidden_brand',
+      type: 'post',
+      success: function(){
+        alert('操作成功！');
+      }
+    })
+  });
+
 </script>

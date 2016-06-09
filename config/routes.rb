@@ -20,6 +20,8 @@ Rails.application.routes.draw do
   resources :brands do
     member do
       post 'update_brand_english_name'
+      post 'forbidden_brand'
+      post 'update_brand_shop_status'
     end
   end
 

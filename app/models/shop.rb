@@ -1,5 +1,6 @@
 class Shop < ActiveRecord::Base
   belongs_to :user
+  has_many :brands, through: :brand_shop_relations
   has_many :products
   has_many :tmall_links
   has_many :shop_links

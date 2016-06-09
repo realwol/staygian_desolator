@@ -1,16 +1,33 @@
 class BrandsController < ApplicationController
-  before_action :set_brand, only: [:show, :edit, :update, :destroy, :update_brand_english_name]
+  before_action :set_brand, only: [:show, :edit, :update, :destroy, :update_brand_english_name, :forbidden_brand, :update_brand_shop_status]
 
   def update_brand_english_name
     @brand.update_attributes(english_name: params[:brand_english_name].strip)
     render json:true
   end
 
+  def forbidden_brand
+    @brand.update_attributes(status: 1)
+    render json:true
+  end
+
+  def update_brand_shop_status
+    shop_ids = params[:shop_ids][0..-2].split('|')
+    brand_shop_relations = @brand.brand_shop_relations.where("shop_id in (?)", shop_ids)
+    brand_shop_relations.update_all(status: params[:status_string]) if brand_shop_relations.present?
+
+    brand_shops = @brand.shops
+    @stand_by_shops = brand_shops.where(status: '')
+    # render json:true
+  end
+
   def index
-    @brands = Brand.all
+    @brands = Brand.non_forbidden
   end
 
   def show
+    brand_shops = @brand.shops
+    @stand_by_shops = brand_shops.where(status: '')
   end
 
   def new
