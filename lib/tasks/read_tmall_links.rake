@@ -1,3 +1,4 @@
+# do not use. 2016-06-01.
 require 'selenium-webdriver'
 
 namespace :read_tmall_links do

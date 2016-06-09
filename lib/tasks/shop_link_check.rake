@@ -1,3 +1,4 @@
+# do not use. 2016-06-01.
 require 'selenium-webdriver'
 
 namespace :shop_link do

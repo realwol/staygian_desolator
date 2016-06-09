@@ -1,3 +1,4 @@
+# not used
 namespace :add_data do
 	desc 'add_shoes_attributes'
 	task :add_shoes_attributes => :environment do

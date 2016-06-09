@@ -3,22 +3,17 @@ require 'openssl'
 namespace :grasp do
 	desc "Grasp from tmall"
 	task :start => :environment do
-    # 10.times do
       if start
         sleep rand(5..10)
       else
         puts 'duplicate product'
       end
-    # end
 	end
 end
 
 def start
-	tmall_link = ungrasp_tmall_link
-  # tmall_link = TmallLink.find(119)
-  # tmall_links.each do |link|
-  # while tmall_link.present?
-    # do not store the same product
+	# tmall_link = ungrasp_tmall_link
+  tmall_link = TmallLink.find(17698)
     if tmall_link.present?
       if TmallLink.where(product_link_id: tmall_link.product_link_id).count > 1
         tmall_link.update_attributes(status:true)
@@ -32,12 +27,10 @@ def start
     else
       puts "sleeping in #{Time.now}"
     end
-    # tmall_link = ungrasp_tmall_link
-  # end
 end
 
 def grasp_product tmall_link
-
+  puts tmall_link.id
   agent = UserAgents.rand()
   html = Nokogiri::HTML(open(tmall_link.address, 'User-Agent' => agent, :allow_redirections => :all ))
 
@@ -45,13 +38,15 @@ def grasp_product tmall_link
   @product = Product.new(translate_status:false, update_status:false, on_sale:true, user_id: tmall_link.user_id)
   @product.origin_address = tmall_link.address
   @product.title = html.css('div.tb-detail-hd h1').text.strip
-
-  grasp_filter_words = tmall_link.shop.grasp_filter
-  filter_flag = false
-  grasp_filter_words.each do |word|
-    filter_flag = true unless @product.title.index(word).nil?
+  
+  if tmall_link.shop.present?
+    grasp_filter_words = tmall_link.shop.grasp_filter
+    filter_flag = false
+    grasp_filter_words.each do |word|
+      filter_flag = true unless @product.title.index(word).nil?
+    end
+    return if filter_flag
   end
-  return if filter_flag
   js = html.css('script').to_s
   stock_start = js.index('quantity":')
   stock_end = js[stock_start..-1].index(',')
@@ -74,18 +69,14 @@ def grasp_product tmall_link
     @main_images << ('https:' + img["src"][0..img["src"].index('.jpg')+3])
   end
 
-  # @main_images = @main_images[0..8]
-
   @details = []
   @details_string = html.css('div#attributes div#J_AttrList ul#J_AttrUL li')
 
   flag1 = flag2 = flag3 = flag4 = flag5 = flag6 = true
-
   @details_string.each do |d|
     # Todo
     d_text = d.text.gsub(' ', '/').gsub(':/', ': ')
     @details << d_text + "<br/>\n"
-
   end
 
   d = html.css('table.tm-tableAttr tbody tr')
@@ -97,6 +88,17 @@ def grasp_product tmall_link
   @d_details.each do |d|
     # Todo
     @details << d + "<br/>\n"
+  end
+
+  b_string = @details.join('')
+  bs = b_string.index('品牌')
+  be = b_string[bs..-1].index("<br/>")
+  brand_name = b_string[bs+4..be+bs-1].strip
+
+  if brand_name.present?
+    unless Brand.find_by(name: brand_name).present?
+      Brand.create(name: brand_name, status: 0)
+    end
   end
 
   @product.producer = html.css('div#shopExtra strong').text
@@ -173,13 +175,10 @@ def grasp_product tmall_link
     @product["images#{index+1}".to_sym] = img
   end
 
+  @product.shield_type = tmall_link.product_status if tmall_link.product_status.present?
+
   @product.save
   @product.reload
-
-  # variable_image_hash = {}
-  # @product_images.each_with_index do |img,index|
-  # 	variable_image_hash["image_url#{index+1}".to_sym] = img
-  # end
 
   @sizes = []
   @colors = []
@@ -295,7 +294,6 @@ def grasp_product tmall_link
         end
     else
     end
-  
     Variable.create(variable_array)
   end
 end
