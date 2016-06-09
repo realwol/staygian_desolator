@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160608153032) do
+ActiveRecord::Schema.define(version: 20160609034053) do
 
   create_table "accounts", force: :cascade do |t|
     t.string   "name",       limit: 255
@@ -41,6 +41,18 @@ ActiveRecord::Schema.define(version: 20160608153032) do
   end
 
   add_index "attributes_translation_histories", ["id"], name: "index_attributes_translation_histories_on_id", using: :btree
+
+  create_table "brand_shop_relations", force: :cascade do |t|
+    t.integer  "brand_id",           limit: 4
+    t.integer  "shop_id",            limit: 4
+    t.string   "status",             limit: 255
+    t.string   "latest_update_user", limit: 255
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
+  end
+
+  add_index "brand_shop_relations", ["brand_id"], name: "index_brand_shop_relations_on_brand_id", using: :btree
+  add_index "brand_shop_relations", ["shop_id"], name: "index_brand_shop_relations_on_shop_id", using: :btree
 
   create_table "brands", force: :cascade do |t|
     t.string   "name",         limit: 255
@@ -560,6 +572,8 @@ ActiveRecord::Schema.define(version: 20160608153032) do
   add_index "variables", ["product_id"], name: "index_variables_on_product_id", using: :btree
 
   add_foreign_key "accounts", "users"
+  add_foreign_key "brand_shop_relations", "brands"
+  add_foreign_key "brand_shop_relations", "shops"
   add_foreign_key "product_basic_infos", "products"
   add_foreign_key "product_basic_infos", "variables"
   add_foreign_key "product_info_translations", "products"

@@ -17,7 +17,11 @@ Rails.application.routes.draw do
       delete 'remove_account'
     end
   end
-  resources :brands
+  resources :brands do
+    member do
+      post 'update_brand_english_name'
+    end
+  end
 
   get 'merchant/index'
   post 'merchant/create'

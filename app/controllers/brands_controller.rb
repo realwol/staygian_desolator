@@ -1,28 +1,25 @@
 class BrandsController < ApplicationController
-  before_action :set_brand, only: [:show, :edit, :update, :destroy]
+  before_action :set_brand, only: [:show, :edit, :update, :destroy, :update_brand_english_name]
 
-  # GET /brands
-  # GET /brands.json
+  def update_brand_english_name
+    @brand.update_attributes(english_name: params[:brand_english_name].strip)
+    render json:true
+  end
+
   def index
     @brands = Brand.all
   end
 
-  # GET /brands/1
-  # GET /brands/1.json
   def show
   end
 
-  # GET /brands/new
   def new
     @brand = Brand.new
   end
 
-  # GET /brands/1/edit
   def edit
   end
 
-  # POST /brands
-  # POST /brands.json
   def create
     @brand = Brand.new(brand_params)
 
@@ -37,8 +34,6 @@ class BrandsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /brands/1
-  # PATCH/PUT /brands/1.json
   def update
     respond_to do |format|
       if @brand.update(brand_params)
@@ -51,8 +46,6 @@ class BrandsController < ApplicationController
     end
   end
 
-  # DELETE /brands/1
-  # DELETE /brands/1.json
   def destroy
     @brand.destroy
     respond_to do |format|

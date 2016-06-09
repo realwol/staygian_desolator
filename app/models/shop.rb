@@ -3,6 +3,8 @@ class Shop < ActiveRecord::Base
   has_many :products
   has_many :tmall_links
   has_many :shop_links
+  has_many :brand_shop_relations
+
   paginates_per 10
 
   def self.shop_avaliable? shop_id
