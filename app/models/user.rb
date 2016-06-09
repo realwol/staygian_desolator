@@ -7,6 +7,7 @@ class User < ActiveRecord::Base
   has_many :products
   has_many :shop_links
   has_many :tmall_links
+  has_many :search_links
   has_many :variable_translate_histories
   has_many :merchants
 

@@ -16,6 +16,7 @@ set :deploy_to, '/root/work/amazon/tmall'
 set :repository, 'https://git.oschina.net/gaaraLi/amazon_tmall.git'
 set :branch, 'master'
 set :term_mode, nil
+set :keep_releases, '2'
 
 # For system-wide RVM install.
 set :rvm_path, '/usr/local/rvm/bin/rvm'

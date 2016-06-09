@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :brands
+
   get 'merchant/index'
   post 'merchant/create'
   delete 'merchant/remove'

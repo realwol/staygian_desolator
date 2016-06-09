@@ -4,7 +4,6 @@ class MerchantController < ApplicationController
   end
 
   def create
-    binding.pry
     current_user.merchants.create(merchant_params)
     @merchants = current_user.valid_merchants
   end

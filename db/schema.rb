@@ -11,10 +11,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160405160439) do
+ActiveRecord::Schema.define(version: 20160608153032) do
+
+  create_table "accounts", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.integer  "user_id",    limit: 4
+    t.string   "platform",   limit: 255
+    t.boolean  "status",     limit: 1,   default: true
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+  end
+
+  add_index "accounts", ["user_id"], name: "index_accounts_on_user_id", using: :btree
 
   create_table "attributes_translation_histories", force: :cascade do |t|
-    t.string   "attribute_name",       limit: 255
+    t.text     "attribute_name",       limit: 65535
     t.text     "china",                limit: 65535
     t.text     "america",              limit: 65535
     t.text     "canada",               limit: 65535
@@ -27,6 +38,16 @@ ActiveRecord::Schema.define(version: 20160405160439) do
     t.datetime "created_at",                         null: false
     t.datetime "updated_at",                         null: false
     t.integer  "product_attribute_id", limit: 4
+  end
+
+  add_index "attributes_translation_histories", ["id"], name: "index_attributes_translation_histories_on_id", using: :btree
+
+  create_table "brands", force: :cascade do |t|
+    t.string   "name",         limit: 255
+    t.string   "english_name", limit: 255
+    t.string   "status",       limit: 255
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
   end
 
   create_table "cash_rates", force: :cascade do |t|
@@ -62,10 +83,14 @@ ActiveRecord::Schema.define(version: 20160405160439) do
   create_table "merchant_sku_relations", force: :cascade do |t|
     t.integer  "merchant_id", limit: 4
     t.integer  "product_id",  limit: 4
-    t.string   "sku",         limit: 255
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.text     "sku",         limit: 65535
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
   end
+
+  add_index "merchant_sku_relations", ["merchant_id"], name: "index_merchant_sku_relations_on_merchant_id", using: :btree
+  add_index "merchant_sku_relations", ["product_id"], name: "index_merchant_sku_relations_on_product_id", using: :btree
+  add_index "merchant_sku_relations", ["sku"], name: "index_merchant_sku_relations_on_sku", length: {"sku"=>255}, using: :btree
 
   create_table "merchants", force: :cascade do |t|
     t.string   "shop_name",                  limit: 255
@@ -73,6 +98,7 @@ ActiveRecord::Schema.define(version: 20160405160439) do
     t.string   "merchant_account",           limit: 255
     t.integer  "admin_id",                   limit: 4
     t.integer  "user_id",                    limit: 4
+    t.integer  "account_id",                 limit: 4
     t.string   "merchant_country_name",      limit: 255
     t.string   "merchant_type",              limit: 255
     t.string   "merchant_aws_access_key_id", limit: 255
@@ -83,16 +109,54 @@ ActiveRecord::Schema.define(version: 20160405160439) do
     t.datetime "created_at",                                            null: false
     t.datetime "updated_at",                                            null: false
     t.boolean  "status",                     limit: 1,   default: true
+    t.float    "shipment_cost",              limit: 24
+    t.boolean  "update_flag",                limit: 1
+  end
+
+  create_table "mws_upload_histories", force: :cascade do |t|
+    t.integer  "user_id",     limit: 4
+    t.text     "xml_body",    limit: 65535
+    t.string   "upload_type", limit: 255
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
   end
 
   create_table "product_attributes", force: :cascade do |t|
-    t.string   "attribute_name",  limit: 255
+    t.text     "attribute_name",  limit: 65535
     t.integer  "product_type_id", limit: 4
-    t.string   "table_name",      limit: 255
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
+    t.text     "table_name",      limit: 65535
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
     t.boolean  "is_locked",       limit: 1
   end
+
+  create_table "product_basic_infos", force: :cascade do |t|
+    t.string   "sku",                  limit: 255
+    t.float    "price",                limit: 24
+    t.integer  "inventory",            limit: 4
+    t.integer  "product_id",           limit: 4
+    t.integer  "variable_id",          limit: 4
+    t.datetime "created_at",                                      null: false
+    t.datetime "updated_at",                                      null: false
+    t.float    "america",              limit: 24
+    t.float    "canada",               limit: 24
+    t.float    "british",              limit: 24
+    t.float    "germany",              limit: 24
+    t.float    "france",               limit: 24
+    t.float    "spain",                limit: 24
+    t.float    "italy",                limit: 24
+    t.boolean  "america_price_change", limit: 1,   default: true
+    t.boolean  "canada_price_change",  limit: 1,   default: true
+    t.boolean  "british_price_change", limit: 1,   default: true
+    t.boolean  "germany_price_change", limit: 1,   default: true
+    t.boolean  "france_price_change",  limit: 1,   default: true
+    t.boolean  "spain_price_change",   limit: 1,   default: true
+    t.boolean  "italy_price_change",   limit: 1,   default: true
+  end
+
+  add_index "product_basic_infos", ["product_id"], name: "index_product_basic_infos_on_product_id", using: :btree
+  add_index "product_basic_infos", ["sku"], name: "index_product_basic_infos_on_sku", using: :btree
+  add_index "product_basic_infos", ["variable_id"], name: "index_product_basic_infos_on_variable_id", using: :btree
 
   create_table "product_customize_attributes_relations", force: :cascade do |t|
     t.integer  "product_type_id",                   limit: 4
@@ -102,6 +166,8 @@ ActiveRecord::Schema.define(version: 20160405160439) do
     t.datetime "created_at",                                    null: false
     t.datetime "updated_at",                                    null: false
   end
+
+  add_index "product_customize_attributes_relations", ["attribute_name"], name: "index_product_customize_attributes_relations_on_attribute_name", using: :btree
 
   create_table "product_detail_forbidden_lists", force: :cascade do |t|
     t.string   "word",            limit: 255
@@ -260,6 +326,7 @@ ActiveRecord::Schema.define(version: 20160405160439) do
   end
 
   add_index "products", ["product_type_id"], name: "index_products_on_product_type_id", using: :btree
+  add_index "products", ["sku"], name: "index_products_on_sku", using: :btree
   add_index "products", ["user_id"], name: "index_products_on_user_id", using: :btree
 
   create_table "references", force: :cascade do |t|
@@ -271,6 +338,21 @@ ActiveRecord::Schema.define(version: 20160405160439) do
     t.datetime "created_at",                              null: false
     t.datetime "updated_at",                              null: false
   end
+
+  create_table "search_links", force: :cascade do |t|
+    t.text     "link",            limit: 65535
+    t.text     "grasp_shop_id",   limit: 65535
+    t.text     "forbidden_words", limit: 65535
+    t.text     "link_desc",       limit: 65535
+    t.text     "backup",          limit: 65535
+    t.integer  "user_id",         limit: 4
+    t.boolean  "status",          limit: 1
+    t.boolean  "check_status",    limit: 1
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+  end
+
+  add_index "search_links", ["user_id"], name: "index_search_links_on_user_id", using: :btree
 
   create_table "shipment_method_values", force: :cascade do |t|
     t.string   "region",             limit: 255
@@ -351,6 +433,7 @@ ActiveRecord::Schema.define(version: 20160405160439) do
   create_table "tmall_links", force: :cascade do |t|
     t.text     "address",         limit: 65535
     t.boolean  "status",          limit: 1
+    t.string   "product_status",  limit: 255
     t.integer  "user_id",         limit: 4
     t.datetime "created_at",                                    null: false
     t.datetime "updated_at",                                    null: false
@@ -414,6 +497,7 @@ ActiveRecord::Schema.define(version: 20160405160439) do
     t.string   "color",                         limit: 255
     t.string   "size",                          limit: 255
     t.string   "price",                         limit: 255
+    t.float    "weight",                        limit: 24
     t.integer  "product_id",                    limit: 4
     t.datetime "deleted_at"
     t.text     "image_url1",                    limit: 65535
@@ -465,13 +549,23 @@ ActiveRecord::Schema.define(version: 20160405160439) do
     t.string   "size_dup",                      limit: 255
     t.string   "variable_id",                   limit: 255
     t.string   "variable_translate_history_id", limit: 255
+    t.text     "desc",                          limit: 65535
+    t.text     "en",                            limit: 65535
+    t.text     "de",                            limit: 65535
+    t.text     "fr",                            limit: 65535
+    t.text     "es",                            limit: 65535
+    t.text     "it",                            limit: 65535
   end
 
   add_index "variables", ["product_id"], name: "index_variables_on_product_id", using: :btree
 
+  add_foreign_key "accounts", "users"
+  add_foreign_key "product_basic_infos", "products"
+  add_foreign_key "product_basic_infos", "variables"
   add_foreign_key "product_info_translations", "products"
   add_foreign_key "products", "product_types"
   add_foreign_key "products", "users"
+  add_foreign_key "search_links", "users"
   add_foreign_key "shop_links", "users"
   add_foreign_key "shops", "users"
   add_foreign_key "tmall_links", "users"
