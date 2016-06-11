@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160609043518) do
+ActiveRecord::Schema.define(version: 20160610171314) do
 
   create_table "accounts", force: :cascade do |t|
     t.string   "name",       limit: 255
@@ -41,6 +41,16 @@ ActiveRecord::Schema.define(version: 20160609043518) do
   end
 
   add_index "attributes_translation_histories", ["id"], name: "index_attributes_translation_histories_on_id", using: :btree
+
+  create_table "auth_lists", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.string   "auth_url",   limit: 255
+    t.boolean  "status",     limit: 1,   default: true
+    t.integer  "parent_id",  limit: 4
+    t.string   "backup",     limit: 255
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+  end
 
   create_table "brand_shop_relations", force: :cascade do |t|
     t.integer  "brand_id",           limit: 4
@@ -73,6 +83,14 @@ ActiveRecord::Schema.define(version: 20160609043518) do
     t.datetime "created_at",            null: false
     t.datetime "updated_at",            null: false
     t.datetime "deleted_at"
+  end
+
+  create_table "departments", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.integer  "parent_id",  limit: 4
+    t.string   "backup",     limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
   end
 
   create_table "description_translation_histories", force: :cascade do |t|
@@ -352,6 +370,25 @@ ActiveRecord::Schema.define(version: 20160609043518) do
     t.datetime "updated_at",                              null: false
   end
 
+  create_table "role_auth_relations", force: :cascade do |t|
+    t.integer  "role_id",      limit: 4
+    t.integer  "auth_list_id", limit: 4
+    t.boolean  "status",       limit: 1, default: true
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+  end
+
+  add_index "role_auth_relations", ["auth_list_id"], name: "index_role_auth_relations_on_auth_list_id", using: :btree
+  add_index "role_auth_relations", ["role_id"], name: "index_role_auth_relations_on_role_id", using: :btree
+
+  create_table "roles", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.boolean  "status",     limit: 1,   default: true
+    t.integer  "parent_id",  limit: 4
+    t.datetime "created_at",                            null: false
+    t.datetime "updated_at",                            null: false
+  end
+
   create_table "search_links", force: :cascade do |t|
     t.text     "link",            limit: 65535
     t.text     "grasp_shop_id",   limit: 65535
@@ -470,16 +507,20 @@ ActiveRecord::Schema.define(version: 20160609043518) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.datetime "created_at",                                      null: false
-    t.datetime "updated_at",                                      null: false
-    t.string   "email",                  limit: 255, default: "", null: false
+    t.datetime "created_at",                                       null: false
+    t.datetime "updated_at",                                       null: false
+    t.string   "email",                  limit: 255, default: "",  null: false
     t.integer  "manager",                limit: 4,   default: 1
     t.integer  "role",                   limit: 4
-    t.string   "encrypted_password",     limit: 255, default: "", null: false
+    t.string   "leader_id",              limit: 255
+    t.string   "user_product_version",   limit: 255, default: "1"
+    t.string   "department_id",          limit: 255
+    t.string   "user_role_id",           limit: 255
+    t.string   "encrypted_password",     limit: 255, default: "",  null: false
     t.string   "reset_password_token",   limit: 255
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          limit: 4,   default: 0,  null: false
+    t.integer  "sign_in_count",          limit: 4,   default: 0,   null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip",     limit: 255
@@ -572,6 +613,20 @@ ActiveRecord::Schema.define(version: 20160609043518) do
 
   add_index "variables", ["product_id"], name: "index_variables_on_product_id", using: :btree
 
+  create_table "vendors", force: :cascade do |t|
+    t.string   "name",             limit: 255
+    t.boolean  "status",           limit: 1,     default: true
+    t.integer  "brand_id",         limit: 4
+    t.string   "shop_id",          limit: 255
+    t.string   "purchase_address", limit: 255
+    t.string   "contact",          limit: 255
+    t.text     "backup",           limit: 65535
+    t.datetime "created_at",                                    null: false
+    t.datetime "updated_at",                                    null: false
+  end
+
+  add_index "vendors", ["brand_id"], name: "index_vendors_on_brand_id", using: :btree
+
   add_foreign_key "accounts", "users"
   add_foreign_key "brand_shop_relations", "brands"
   add_foreign_key "brand_shop_relations", "shops"
@@ -580,9 +635,12 @@ ActiveRecord::Schema.define(version: 20160609043518) do
   add_foreign_key "product_info_translations", "products"
   add_foreign_key "products", "product_types"
   add_foreign_key "products", "users"
+  add_foreign_key "role_auth_relations", "auth_lists"
+  add_foreign_key "role_auth_relations", "roles"
   add_foreign_key "search_links", "users"
   add_foreign_key "shop_links", "users"
   add_foreign_key "shops", "users"
   add_foreign_key "tmall_links", "users"
   add_foreign_key "variables", "products"
+  add_foreign_key "vendors", "brands"
 end

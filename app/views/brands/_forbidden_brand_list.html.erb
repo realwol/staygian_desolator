@@ -1,0 +1,41 @@
+<table class="table table-bordered" style="width:90%;">
+  <thead>
+    <tr>
+      <th>品牌名称</th>
+      <th>品牌英文名</th>
+      <th>已对接店铺</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @brands.each do |brand| %>
+      <tr>
+        <td><%= brand.name %></td>
+        <td>
+          <%= brand.english_name %>
+        </td>
+        <td>
+          <% brand.get_brand_connect_shops.each do |brand_shop| %>
+            <span style='border: 0.5px solid;' ><%= brand_shop.name %></span>
+          <% end %>
+        </td>
+        <td><%= button_tag '恢复品牌', class:'recover_brand', "data-brand-id"=> brand.id %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<script type="text/javascript">
+  $('.recover_brand').click(function(){
+    if (!confirm('确定要恢复这个品牌吗？')){
+      return false;
+    }
+    var brand_id = $(this).data('brand-id');
+    $.ajax({
+      url: '/brands/'+ brand_id +'/recover_brand',
+      type: 'post',
+      success: function(){}
+    })
+  })
+</script>

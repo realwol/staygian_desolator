@@ -1,0 +1,51 @@
+<h4>供应商列表</h4>
+
+<table class="table table-bordered" style="width:90%;">
+  <thead>
+    <tr>
+      <th>品牌</th>
+      <th>供应商</th>
+      <th>店铺名称</th>
+      <th>采购地址</th>
+      <th>联系方式</th>
+      <th>备注</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @vendors.each do |vendor| %>
+      <tr>
+        <td><%= vendor.brand.try(:name) %></td>
+        <td><%= text_field_tag '', vendor.name, class:'vender_name' %></td>
+        <td><%= vendor.shop.try(:name) %></td>
+        <td><%= text_field_tag '', vendor.purchase_address, class:'vendor_purchase_address' %></td>
+        <td><%= text_field_tag '', vendor.contact, class:'vendor_contact' %></td>
+        <td><%= text_area_tag '', vendor.backup, class:'vendor_backup' %></td>
+        <td><%= button_tag '更新', class:'update_vendor', "data-vendor-id"=>vendor.id %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<script type="text/javascript">
+  $('.update_vendor').click(function(){
+    if (!confirm('确定要更新供应商信息吗？')){
+      return false;
+    }
+    var $thisTr = $(this).parents('tr');
+    var vender_name = $thisTr.find('.vender_name').val();
+    var vendor_purchase_address = $thisTr.find('.vendor_purchase_address').val();
+    var vendor_contact = $thisTr.find('.vendor_contact').val();
+    var vendor_backup = $thisTr.find('.vendor_backup').val();
+    var vendor_id = $(this).data('vendor-id');
+    $.ajax({
+      url: '/vendors/'+ vendor_id + '/update_vendor_info',
+      type: 'post',
+      data: { name: vender_name, purchase_address: vendor_purchase_address, contact: vendor_contact, backup: vendor_backup },
+      success: function(){
+        alert('操作成功！');
+      }
+    })
+  });
+</script>

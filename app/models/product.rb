@@ -2,6 +2,7 @@ class Product < ActiveRecord::Base
   belongs_to :product_type
   belongs_to :user
   belongs_to :shop
+  belongs_to :brand
 
   has_many :variables, dependent: :delete_all
   has_many :product_customize_attributes_relations

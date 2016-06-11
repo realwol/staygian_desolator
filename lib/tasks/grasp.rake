@@ -3,19 +3,17 @@ require 'openssl'
 namespace :grasp do
 	desc "Grasp from tmall"
 	task :start => :environment do
-    10.times do
       if start
         sleep rand(5..10)
       else
         puts 'duplicate product'
       end
-    end
 	end
 end
 
 def start
-	# tmall_link = ungrasp_tmall_link
-  tmall_link = TmallLink.find(17698)
+	tmall_link = ungrasp_tmall_link
+  # tmall_link = TmallLink.find(17698)
     if tmall_link.present?
       if TmallLink.where(product_link_id: tmall_link.product_link_id).count > 1
         tmall_link.update_attributes(status:true)
@@ -54,7 +52,7 @@ def grasp_product tmall_link
   stock_end = js[stock_start..-1].index(',')
   stock = js[stock_start+10..stock_end+stock_start-1]
   @product.stock = stock
-  @product.brand = html.css('li#J_attrBrandName').text.slice(4..-1)
+  # @product.brand = html.css('li#J_attrBrandName').text.slice(4..-1)
   @product.shop_id = tmall_link.shop_id
   @product.product_link_id = tmall_link.product_link_id
 
@@ -93,14 +91,17 @@ def grasp_product tmall_link
   end
 
   b_string = @details.join('')
-  bs = b_string.index('品牌')
-  be = b_string[bs..-1].index("<br/>")
+  bs = b_string.index("品牌").to_i
+  be = b_string[bs..-1].index("<br/>").to_i
   brand_name = b_string[bs+4..be+bs-1].strip
 
   if brand_name.present?
-    unless Brand.find_by(name: brand_name).present?
-      Brand.create(name: brand_name, status: 0)
+    related_brand = Brand.find_by(name: brand_name)
+    unless related_brand.present?
+     related_brand = Brand.create(name: brand_name, status: 0)
     end
+    # create connections from shop to brand
+    binding_shop_with_brand @product, related_brand
   end
 
   @product.brand_id = Brand.find_by(name: brand_name).try(:id)
@@ -180,9 +181,6 @@ def grasp_product tmall_link
   end
 
   @product.shield_type = tmall_link.product_status if tmall_link.product_status.present?
-
-  # create connections from shop to brand
-  binding_shop_with_brand @product
 
   @product.save
   @product.reload
@@ -305,8 +303,8 @@ def grasp_product tmall_link
   end
 end
 
-def binding_shop_with_brand product
-  # brand = (name: product.brand)
+def binding_shop_with_brand product, brand
+    BrandShopRelation.create(brand_id: brand.id, shop_id: product.shop_id, status: 0)
 end
 
 def ungrasp_tmall_link

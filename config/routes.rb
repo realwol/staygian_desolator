@@ -1,4 +1,19 @@
 Rails.application.routes.draw do
+  resources :roles do
+    collection do
+      get 'auth_list_index'
+      post 'create_auth'
+      post 'update_auth_role_relation'
+      post 'update_auth_status'
+    end
+  end
+  resources :departments
+  resources :vendors do
+    member do
+      post 'update_vendor_info'
+    end
+  end
+
   resources :merchants do
     member do
       get 'get_merchant_skus'
@@ -22,6 +37,11 @@ Rails.application.routes.draw do
       post 'update_brand_english_name'
       post 'forbidden_brand'
       post 'update_brand_shop_status'
+      post 'recover_brand'
+    end
+
+    collection do
+      get 'forbidden_brand_list'
     end
   end
 
@@ -146,6 +166,7 @@ Rails.application.routes.draw do
       get 'user_statistic'
       post 'create_new_user'
       post 'set_selected_user'
+      post 'create_user_from_depart'
     end
 
     member do

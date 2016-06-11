@@ -1,0 +1,32 @@
+<table class="table table-bordered" style="width:90%;" >
+  <tr>
+    <th>一级功能名称</th>
+    <th>二级功能名称</th>
+    <th>选择</th>
+  </tr>
+  <% @auths.each_with_index do |auth,index| %>
+    <tr>
+      <td><%= auth.parent_auth.try(:name) %></td>
+      <td><%= auth.name %></td>
+      <td><%= check_box_tag '', '', @auth_relation[index].try(:status), class:'auth_checked', "data-auth-id"=> auth.id %></td>
+    </tr>
+  <% end %>
+</table>
+<%= button_tag '提交', class:'update_auth_role_relation' %>
+<%= hidden_field_tag 'role_id', @role.id %>
+
+<script type="text/javascript">
+  $('.update_auth_role_relation').click(function(){
+    var role_id = $('#role_id').val();
+    var checked_auth_string = '';
+    $('.auth_checked:checked').each(function(){
+      checked_auth_string = checked_auth_string + $(this).data('auth-id') + '|';
+    })
+    $.ajax({
+      url: '/roles/update_auth_role_relation',
+      type: 'post',
+      data: {checked_auth_string: checked_auth_string, role_id: role_id },
+      success: function(){}
+    })
+  })
+</script>

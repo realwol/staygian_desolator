@@ -1,0 +1,47 @@
+<hr/>
+<%= form_tag(create_auth_roles_path, remote:true) do %>
+  权限名：<%= text_field_tag 'name' %>
+  父权限：<%= select_tag 'parent_id', options_from_collection_for_select(AuthList.first_level_auth, 'id', 'name'), include_blank: true %>
+  权限链接：<%= text_field_tag 'auth_url' %>
+  备注：<%= text_field_tag 'backup' %>
+  <%= submit_tag '确定' %>
+<% end %>
+<hr/>
+<table class="table table-bordered" style="width:90%;">
+  <tr>
+    <th>权限名</th>
+    <th>父权限</th>
+    <th>权限链接</th>
+    <th>备注</th>
+    <th>操作</th>
+  </tr>
+  <% @auths.each do |auth| %>
+    <tr>
+      <td>
+        <% if auth.parent_id.present? %>
+          <%= auth.name %>
+        <% else %>
+          <h5><%= auth.name %></h5>
+        <% end %>
+      </td>
+      <td><%= auth.parent_auth.try(:name) %></td>
+      <td><%= auth.auth_url %></td>
+      <td><%= auth.backup %></td>
+      <td>
+        <%= button_tag '屏蔽', class:'remove_auth', "data-auth-id"=>auth.id if auth.parent_id != nil %>
+      </td>
+    </tr>
+  <% end %>
+</table>
+
+<script type="text/javascript">
+  $('.remove_auth').click(function(){
+    var auth_id = $(this).data('auth-id');
+    $.ajax({
+      url: '/roles/update_auth_status',
+      type: 'post',
+      data: {auth_id: auth_id},
+      success: function(){}
+    })
+  })
+</script>

@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @vendor.name %>
+</p>
+
+<p>
+  <strong>Brand:</strong>
+  <%= @vendor.brand %>
+</p>
+
+<p>
+  <strong>Purchase address:</strong>
+  <%= @vendor.purchase_address %>
+</p>
+
+<p>
+  <strong>Contact:</strong>
+  <%= @vendor.contact %>
+</p>
+
+<p>
+  <strong>Backup:</strong>
+  <%= @vendor.backup %>
+</p>
+
+<%= link_to 'Edit', edit_vendor_path(@vendor) %> |
+<%= link_to 'Back', vendors_path %>

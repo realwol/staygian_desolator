@@ -1,0 +1,53 @@
+
+<table class="table table-bordered" style="width:90%;" >
+  <tr>
+    <th>员工列表</th>
+    <th>密码</th>
+    <th>部门</th>
+    <th>上级</th>
+    <th>角色</th>
+    <th>操作</th>
+  </tr>
+    <td><%= text_field_tag '', '', class:'user_email' %></td>
+    <td><%= text_field_tag '', '', class:'user_password' %></td>
+    <td>
+      <%= @department.name %>
+      <%= hidden_field_tag '', @department.id, class:'department_id' %>
+    </td>
+    <td><%= select_tag '', options_from_collection_for_select(User.all, 'id', 'email'), include_blank: true, class:'user_leader' %></td>
+    <td><%= select_tag '', options_from_collection_for_select(Role.all, 'id', 'name'), include_blank: true, class:'user_role' %></td>
+    <td><%= button_tag '新建', class:'create_department_user' %></td>
+  <tr>
+    
+  </tr>
+  <% @department_users.each do |user| %>
+    <tr>
+      <td><%= user.email %></td>
+      <td></td>
+      <td><%= @department.name %></td>
+      <td><%= select_tag '', options_from_collection_for_select(User.all, 'id', 'email', user.leader.try(:id)), include_blank: true %></td>
+      <td><%= select_tag '', options_from_collection_for_select(Role.all, 'id', 'name', user.user_role.try(:id)), include_blank: true %></td>
+      <td><%= button_tag '更新', class:'update_department_user' %></td>
+    </tr>
+  <% end %>
+</table>
+
+<%= link_to '返回', departments_path %>
+
+<script type="text/javascript">
+  $('.create_department_user').click(function(){
+    var $thisTr = $(this).parents('tr');
+    var user_email = $thisTr.find('.user_email').val();
+    var user_password = $thisTr.find('.user_password').val();
+    var department_id = $thisTr.find('.department_id').val();
+    var user_leader = $thisTr.find('.user_leader').val();
+    var user_role = $thisTr.find('.user_role').val();
+
+    $.ajax({
+      url: '/users/create_user_from_depart',
+      type: 'post',
+      data: {email: user_email, password: user_password, department_id: department_id, leader_id: user_leader, user_role_id: user_role},
+      success: function(){}
+    })
+  })
+</script>

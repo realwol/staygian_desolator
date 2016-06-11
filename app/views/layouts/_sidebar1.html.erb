@@ -1,0 +1,18 @@
+<div class="sidebar-left" id="sidebarLeft">
+  <% current_user.user_first_level_auths.each do |first_level_auth| %>
+    <h4><%= first_level_auth.name if first_level_auth.child_auths.present?  %></h4>
+    <% first_level_auth.child_auths.each do |child_auth| %>
+      <% if current_user.has_auth? child_auth %>
+        <%= link_to child_auth.name, public_send(child_auth.auth_url) %><br/>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>
+<style type="text/css">
+  .sidebar-left {
+    width: 11%;
+    height: 500px;
+    position: fixed;
+    margin-left: 13px;
+  }
+</style>

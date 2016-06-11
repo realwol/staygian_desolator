@@ -1,6 +1,9 @@
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
+
+  # user_product_version: 1(default) for just products himself; 2 for himeself and his teammember; 3 for all the products
+
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable
   has_many :shops
@@ -12,8 +15,23 @@ class User < ActiveRecord::Base
   has_many :merchants
 
   has_many :little_brothers, class_name: 'User', foreign_key: 'manager'
+  has_many :team_members, class_name: 'User', foreign_key: 'leader_id'
 
   belongs_to :big_brother, class_name: 'User', foreign_key: 'manager'
+  belongs_to :leader, class_name: 'User', foreign_key: 'leader_id'
+  belongs_to :user_role, class_name: 'Role', foreign_key: 'user_role_id'
+  belongs_to :department
+
+  def has_auth? auth
+    !!self.user_role.auth_lists.index(auth)
+  end
+
+  def user_first_level_auths
+    user_role = self.user_role
+    if user_role.present?
+      user_role.auth_lists.first_level_auth
+    end
+  end
 
   def is_dd?
     self.role == 1
@@ -50,13 +68,13 @@ class User < ActiveRecord::Base
     #   User.all
     else
       current_user = self
-      count_children = current_user.little_brothers
-      count_children_array = current_user.little_brothers.to_a
+      count_children = current_user.team_members
+      count_children_array = current_user.team_members.to_a
       all_valid_brothers = count_children.pluck(:id)
 
       while count_children_array.count > 0
         current_user = count_children_array.pop
-        all_valid_brothers = all_valid_brothers << current_user.little_brothers.pluck(:id)
+        all_valid_brothers = all_valid_brothers << current_user.team_members.pluck(:id)
       end
       all_valid_brothers << current_user.id
       # all_valid_brothers = [current_user.id] + all_valid_brothers
@@ -72,7 +90,7 @@ class User < ActiveRecord::Base
       Product.all
     else
       current_user = self
-      count_children = current_user.little_brothers.to_a
+      count_children = current_user.team_members.to_a
       all_valid_products = current_user.products.pluck(:id)
 
       while count_children.count > 0
@@ -89,7 +107,7 @@ class User < ActiveRecord::Base
       Shop.all
     else
       current_user = self
-      count_children = current_user.little_brothers.to_a
+      count_children = current_user.team_members.to_a
       all_valid_shops = current_user.shops.pluck(:id)
 
       while count_children.count > 0
@@ -110,7 +128,7 @@ class User < ActiveRecord::Base
       Merchant.all
     else
       current_user = self
-      count_children = current_user.little_brothers.to_a
+      count_children = current_user.team_members.to_a
       all_valid_merchants = current_user.merchants.pluck(:id)
 
       while count_children.count > 0

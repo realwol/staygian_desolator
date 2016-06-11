@@ -1,6 +1,8 @@
 class Brand < ActiveRecord::Base
   has_many :brand_shop_relations
   has_many :shops, through: :brand_shop_relations
+  has_many :vendors
+  has_many :products
 
   scope :non_forbidden, -> {where(status: 0)}
   scope :forbidden, -> {where(status: 1)}

@@ -2,6 +2,14 @@ class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy, :change_user_password]
   before_action :authenticate_user!
 
+  def create_user_from_depart
+    create_user_from_department_param[:manager] = current_user.id
+    User.create(create_user_from_department_param)
+
+    @department = Department.find(params[:department_id])
+    @department_users = @department.users
+  end
+
   def user_statistic
     if current_user.is_dd?
       all_updated_products = Product.updated.onsale.un_shield.pluck(:id)
@@ -113,5 +121,9 @@ class UsersController < ApplicationController
 
     def user_params
       params[:user]
+    end
+
+    def create_user_from_department_param
+      params.permit(:email, :password, :leader_id, :user_role_id, :manager, :department_id)
     end
 end

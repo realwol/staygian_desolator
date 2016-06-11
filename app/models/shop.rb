@@ -5,6 +5,7 @@ class Shop < ActiveRecord::Base
   has_many :tmall_links
   has_many :shop_links
   has_many :brand_shop_relations
+  has_many :vendors
 
   paginates_per 10
 
@@ -19,4 +20,11 @@ class Shop < ActiveRecord::Base
       []
     end
   end
+
+  def self.update_shield_type shops, shield_value
+    shops.each do |shop|
+      shop.products.update_all(shield_type: shield_value)
+    end
+  end
+
 end

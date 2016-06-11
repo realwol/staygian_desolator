@@ -8,7 +8,7 @@
     <th>待审核店铺</th>
     <td>
       <% @brand.get_brand_stand_by_shops.each do |name| %>
-        <span class='shop_name_span shop_name_span_color' data-shop-id="<%= name.id %>" > <%= name.name %> </span>&nbsp
+        <span class='shop_name_span shop_name_span_color' data-shop-id="<%= name.id %>" > <%= name.name %> </span>
       <% end %>
     </td>
     <td>
@@ -20,7 +20,7 @@
     <th>已对接店铺</th>
     <td>
       <% @brand.get_brand_connect_shops.each do |name| %>
-        <span class='shop_name_span shop_name_span_color' data-shop-id="<%= name.id %>" > <%= name.name %> </span>&nbsp
+        <span class='shop_name_span shop_name_span_color' data-shop-id="<%= name.id %>" > <%= name.name %> </span>
       <% end %>
     </td>
     <td>
@@ -32,11 +32,10 @@
     <th>已屏蔽店铺</th>
     <td>
       <% @brand.get_brand_forbidden_shops.each do |name| %>
-        <span class='shop_name_span shop_name_span_color' data-shop-id="<%= name.id %>" > <%= name.name %> </span>&nbsp
+        <span class='shop_name_span shop_name_span_color' data-shop-id="<%= name.id %>" > <%= name.name %> </span>
       <% end %>
     </td>
     <td>
-      <%= button_tag '对接店铺', class:'connect_shop change_shop_status', "data-brand-id"=> @brand.id, "data-status-string"=> '1' %>
       <%= button_tag '待审核店铺', class:'stand_by_shop change_shop_status', "data-brand-id"=> @brand.id, "data-status-string"=> '0' %>
     </td>
   </tr>
@@ -49,6 +48,9 @@
   }
   .shop_name_span_color {
     border: solid 0.5px;
+  }
+  .shop_name_span {
+    margin-right: 1px;
   }
 </style>
 

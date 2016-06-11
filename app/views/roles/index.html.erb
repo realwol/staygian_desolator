@@ -1,0 +1,19 @@
+<span style='font-size:20px;'>角色列表</span> <%= link_to '新建角色', new_role_path %>
+<hr/>
+<table class="table table-bordered" style="width:90%;">
+  <thead>
+    <tr>
+      <th>角色名</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @roles.each do |role| %>
+      <tr>
+        <td><%= role.name %></td>
+        <td><%= link_to '查看', role %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

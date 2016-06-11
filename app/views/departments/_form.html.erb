@@ -1,0 +1,13 @@
+<%= form_for(@department) do |f| %>
+  <div class="field">
+    <%= f.label '部门名称' %><br>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label '备注' %><br>
+    <%= f.text_field :backup %>
+  </div>
+  <div class="actions">
+    <%= f.submit '确定' %>
+  </div>
+<% end %>
