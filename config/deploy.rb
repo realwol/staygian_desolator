@@ -11,10 +11,17 @@ require 'mina/git'
 #   branch       - Branch name to deploy. (needed by mina/git)
 
 set :user, 'root'
-set :domain, '120.25.74.164'
-set :deploy_to, '/root/work/amazon/tmall'
+if ENV['env'] == 'test'
+  set :domain, '112.74.89.21'
+  set :deploy_to, '/root/amazon/tmall'
+  set :branch, 'test'
+else
+  set :domain, '120.25.74.164'
+  set :deploy_to, '/root/work/amazon/tmall'
+  set :branch, 'master'
+end
 set :repository, 'https://git.oschina.net/gaaraLi/amazon_tmall.git'
-set :branch, 'master'
+
 set :term_mode, nil
 set :keep_releases, '2'
 
@@ -22,7 +29,7 @@ set :keep_releases, '2'
 set :rvm_path, '/usr/local/rvm/bin/rvm'
 # Manually create these paths in shared/ (eg: shared/config/database.yml) in your server.
 # They will be linked in the 'deploy:link_shared_paths' step.
-set :shared_paths, ['config/database.yml', 'config/secrets.yml', 'log']
+set :shared_paths, ['config/database.yml', 'config/secrets.yml', 'config/thin.yml', 'log']
 
 # Optional settings:
 #   set :user, 'foobar'    # Username in the server to SSH to.
@@ -52,7 +59,8 @@ task :setup => :environment do
 
   queue! %[touch "#{deploy_to}/#{shared_path}/config/database.yml"]
   queue! %[touch "#{deploy_to}/#{shared_path}/config/secrets.yml"]
-  queue  %[echo "-----> Be sure to edit '#{deploy_to}/#{shared_path}/config/database.yml' and 'secrets.yml'."]
+  queue! %[touch "#{deploy_to}/#{shared_path}/config/thin.yml"]
+  queue  %[echo "-----> Be sure to edit '#{deploy_to}/#{shared_path}/config/database.yml', 'secrets.yml' and 'thin.yml'."]
 
   if repository
     repo_host = repository.split(%r{@|://}).last.split(%r{:|\/}).first
@@ -98,14 +106,14 @@ desc 'Stop current version on the server.'
 task :stop => :environment do
   queue "cd #{deploy_to}/#{current_path}"
   queue 'pwd'
-  queue "thin stop -C config/thin.yml"
+  queue "bundle exec thin stop -C config/thin.yml"
 end
 
 desc 'Start current version on the server.'
 task :start => :environment do
   queue "cd #{deploy_to}/#{current_path}"
   queue 'pwd'
-  queue "thin start -C config/thin.yml"
+  queue "bundle exec thin start -C config/thin.yml"
 end
 
 # For help in making your deploy script, see the Mina documentation:
