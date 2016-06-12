@@ -14,21 +14,13 @@
         end
       %>
       <% if current_user.is_dd? %>
-        <%= select_tag 'manager_select', options_from_collection_for_select(User.get_all_manager, "id", "email", selected: selected_manager_id), include_blank:true, class:'manager_select' %>
-        <% if @selected_user.is_manager? && @selected_user != current_user %>
-          <%= select_tag 'little_brother_select', options_from_collection_for_select(@selected_user.little_brothers, "id", "email", selected: selected_little_brother_id) , include_blank:true, class:'little_brother_select' %>
-        <% elsif @selected_user == current_user %>
-          <%= select_tag 'little_brother_select', options_from_collection_for_select(User.where("id<0"), "id", "email") , include_blank:true, class:'little_brother_select' %>
-        <% elsif @selected_user.is_little_brother? %>
-          <%= select_tag 'little_brother_select', options_from_collection_for_select(@selected_user.big_brother.little_brothers, "id", "email", selected: selected_little_brother_id) , include_blank:true, class:'little_brother_select' %>
-        <% end %>
+        <%= select_tag 'manager_select', options_from_collection_for_select(User.get_all_leader, "id", "email", selected: selected_manager_id), include_blank:true, class:'manager_select' %>
+        <%= select_tag 'little_brother_select', options_from_collection_for_select(@selected_user.team_members, "id", "email") , include_blank:true, class:'little_brother_select' %>
+      <% else %>
+        <%= select_tag 'little_brother_select', options_from_collection_for_select(current_user.team_members, "id", "email", selected: selected_little_brother_id) , include_blank:true, class:'little_brother_select' %>
       <% end %>
 
-      <% if current_user.is_manager? %>
-        <%= select_tag 'little_brother_select', options_from_collection_for_select(current_user.little_brothers, "id", "email", selected: selected_little_brother_id) , include_blank:true, class:'little_brother_select' %>
-      <% end %>
-
-      <a href="#" value=<%= current_user.id%> class='current_user_select' ><%= current_user.email %></a>
+      <a href="#" value=<%= current_user.id%> class='current_user_select' ><%= current_user.username %></a>
       <%= link_to '登出', destroy_user_session_path, method:'delete' %>
     <%else%>
       <%= link_to '登录', user_session_path %>
@@ -44,9 +36,7 @@
       url: '/users/set_selected_user',
       data: {selected_user_id: selected_user_id, select_type: 1},
       type: 'post',
-      success: function(){
-
-      }
+      success: function(){}
     });
     return false;
   });

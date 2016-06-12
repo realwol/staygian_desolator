@@ -1,6 +1,7 @@
 class TmallLink < ActiveRecord::Base
   belongs_to :user
   belongs_to :shop
+  belongs_to :search_link
 
   scope :zero_shop, -> {where(shop_id: 0)}
 

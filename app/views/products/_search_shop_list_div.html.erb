@@ -1,30 +1,42 @@
   <table class="table table-bordered">
     <tr>
-      <th>店铺名称</th>
-      <th>所属厂商名称</th>
-      <th>搜索词</th>
-      <th>屏蔽词</th>
-      <th>商铺起始链接</th>
+      <th>链接</th>
       <th>添加人</th>
+      <th>屏蔽词</th>
+      <th>链接描述</th>
       <th>操作<span style='color:red;'>(此操作将会删除商铺里所有所有产品，变体和链接，慎用！)</span></th>
     </tr>
-    <% @shops.each do |shop|%>
+    <% @search_links.each do |link|%>
       <tr>
-        <td><%= shop.name %></td>
-        <td><%= shop.manufacture %></td>
-        <td><%= shop.search_word %></td>
-        <td><%= shop.filter_word %></td>
-        <% if shop.shop_links.first.present? %>
-          <td><%= link_to '点击打开', shop.shop_links.first.try(:link), target:'_blank' %></td>
-        <% else %>
-          <td>无链接</td>
-        <% end %>
-        <td><%= shop.user.email %></td>
+        <td><%= link_to '点击打开', link.link, target: '_blank' %></td>
+        <td><%= link.user.try(:username) %></td>
+        <td><%= link.forbidden_words %></td>
+        <td><%= link.link_desc %></td>
         <td>
-          <% if current_user.is_shop_valid? shop %>
-            <button data-shop-id="<%= shop.id %>" class="stopAndDelete" >停止并删除</button>
+          <% if current_user.is_search_link_valid? link %>
+            <button data-search-link-id="<%= link.id %>" class="stopAndDeleteLink" >停止并删除</button>
           <% end %>
         </td>
       </tr>
     <% end %>
-  </table> 
+  </table>
+
+<script type="text/javascript">
+  $('.stopAndDeleteLink').click(function(){
+    if(confirm("确定删除吗？删除之后所有数据不可恢复！")){
+
+    } else {
+      return false;
+    }
+    var search_link_id = $(this).data('search-link-id');
+    var $this = $(this);
+    $.ajax({
+      url: '/shops/' + search_link_id +'/stop_and_delete',
+      type: 'delete',
+      success: function(){
+        $this.parents('tr').remove();
+        alert('操作成功！');
+      }
+    })
+  });
+</script>

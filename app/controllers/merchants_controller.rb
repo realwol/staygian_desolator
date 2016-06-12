@@ -166,9 +166,10 @@ class MerchantsController < ApplicationController
   end
 
   def index
-    # @merchants = current_user.valid_merchants
-    @account = Account.find(params[:account_id])
-    @merchants = @account.merchants
+    @merchants = current_user.valid_merchants
+    @account = Account.new
+    # @account = Account.find(params[:account_id])
+    # @merchants = @account.merchants
   end
 
   def create

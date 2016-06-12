@@ -1,3 +1,4 @@
+# do not user for now
 namespace :reset_products_price do
   desc 'set all product_basic_info for on product'
   task :reset_product => :environment do

@@ -8,6 +8,7 @@
       <th><%= 'Sku' %></th>
       <th><%= '产品号' %></th>
       <th><%= '创建者' %></th>
+      <th><%= '创建时间' %></th>
       <th><%= '价格' %></th>
       <th><%= '操作' %></th>
     </tr>
@@ -25,6 +26,7 @@
         <td><%= product.sku %></td>
         <td><%= product.product_number %></td>
         <td><%= product.try(:user).try(:email) %></td>
+        <td><%= product.first_updated_time.strftime("%Y-%m-%d %H:%M") %></td>
         <td>
           <%= text_field_tag 'product_price', product.price, class:'product_price', size:5 %>
           <%= button_tag '保存', class:'change_price', "data-link"=> update_price_products_path, 'data-product_id'=>product.id %>
@@ -33,7 +35,6 @@
           <%= link_to '翻译预览', translate_preview_product_path(product) %>
           <%= link_to '编辑', edit_product_path(product) %>
           <%= link_to '屏蔽', shield_product_product_path(product), data:{ confirm: '确定屏蔽？'} %>
-          <%= link_to '临时下架', temp_offsale_product_product_path(product), data:{ confirm: '确认临时下架？'} %>
           <%= link_to '删除', product, method: :delete, data: { confirm: '确认删除?' } %>
           <a href="#" class="reGraspProduct" data-product-id="<%= product.id %>" >重新抓取</a>
         </td>
@@ -48,7 +49,6 @@
 <% link_to '屏蔽产品列表', shield_products_products_path %>
 <% link_to '预售产品列表', presaled_products_products_path %>
 <% link_to '下架产品列表', off_sale_products_products_path %>
-<% link_to '临时下架产品列表', temp_off_sale_products_products_path %>
 <b/>
 <br/>
 <% link_to '插入抓取链接', get_tmall_links_products_path %>

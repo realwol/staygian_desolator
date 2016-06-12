@@ -1,7 +1,7 @@
 class Role < ActiveRecord::Base
   has_many :users
   has_many :role_auth_relations
-  has_many :auth_lists, through: :role_auth_relations
+  has_many :auth_lists, through: :role_auth_relations, dependent: :delete_all
 
   scope :valid_role, -> {where(status: 1)}
 

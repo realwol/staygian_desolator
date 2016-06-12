@@ -161,7 +161,7 @@ def grasp_search_link link
         if SearchLink.where(link: new_url).count > 0
           puts 'old next url'
         else
-          SearchLink.create(grasp_shop_id: link.grasp_shop_id, link: new_url, user: link.user, status: true, check_status: false, link_desc: link.link_desc, forbidden_words: link.forbidden_words)
+          SearchLink.create(first_link_status: 0, grasp_shop_id: link.grasp_shop_id, link: new_url, user: link.user, status: true, check_status: false, link_desc: link.link_desc, forbidden_words: link.forbidden_words)
         end
       end
       a = a.children
@@ -196,6 +196,7 @@ def grasp_search_link link
           shop_id = get_shop_id a[i]
           shop = Shop.find_by(shop_id: shop_id)
           link_hash[:shop_id] = shop.try(:id)
+          link_hash[:search_link_id] = link.try(:id)
           link_hash[:product_status] = 1 if shop.status
           links_array << link_hash.dup
         end
@@ -311,7 +312,6 @@ def filter_search_product product_html, link
     return false
   end
 end
-
 
 def check_search_links
   # 2.times do

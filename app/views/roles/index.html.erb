@@ -4,7 +4,7 @@
   <thead>
     <tr>
       <th>角色名</th>
-      <th></th>
+      <th>操作</th>
     </tr>
   </thead>
 
@@ -12,7 +12,10 @@
     <% @roles.each do |role| %>
       <tr>
         <td><%= role.name %></td>
-        <td><%= link_to '查看', role %></td>
+        <td>
+          <%= link_to '查看', role %>
+          <%= link_to '删除', role, method: :delete, data: { confirm: '确认删除?' } %>
+        </td>
       </tr>
     <% end %>
   </tbody>

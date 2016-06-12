@@ -38,6 +38,7 @@ def grasp_product tmall_link
   @product = Product.new(translate_status:false, update_status:false, on_sale:true, user_id: tmall_link.user_id)
   @product.origin_address = tmall_link.address
   @product.title = html.css('div.tb-detail-hd h1').text.strip
+  @product.search_link_id = tmall_link.search_link_id
   
   if tmall_link.shop.present?
     grasp_filter_words = tmall_link.shop.grasp_filter

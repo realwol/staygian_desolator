@@ -2,8 +2,11 @@ class ProductsController < ApplicationController
   before_action :set_product, only: [:show, :edit, :update, :destroy, :shield_product, :presale_product, :offsale_product, :temp_offsale_product, :onsale_product, :edited_product, :translate_preview]
   before_action :authenticate_user!
 
+  def update_separate_product
+  end
+
   def get_product_links_from_search_link
-    @shops = Shop.order('name')
+    @search_links = SearchLink.first_search_link
   end
 
   def save_search_link
@@ -487,6 +490,15 @@ class ProductsController < ApplicationController
       params[:product][:avatar], params[:product][:avatar1], params[:product][:avatar2] = '', '', ''
     end
 
+    # set product separate
+    if params[:is_separate] == 'on'
+      @product.is_separate = true
+      params[:is_separate] = true
+    else
+      @product.is_separate = false
+      params[:is_separate] = false
+    end
+
     # clear all products images before create
     @product.images1 = @product.images2 =@product.images3 = @product.images4 = @product.images5 = @product.images6 = @product.images7 = @product.images8 = @product.images9 = @product.images10 = nil
     @product.images11 = @product.images12 =@product.images13 = @product.images14 = @product.images15 = @product.images16 = @product.images17 = @product.images18 = @product.images19 = @product.images20 = nil
@@ -594,7 +606,11 @@ class ProductsController < ApplicationController
           end
         end
         TranslateToken.create(t_id:@product.id, t_type:'product', t_status: true, t_method:'update')
-        format.html { redirect_to un_updated_page_products_url, notice: 'Product was successfully updated.' }
+        if params[:is_return] == 'on'
+          format.html { redirect_to edit_product_path(@product), notice: 'Product was successfully updated.' }
+        else
+          format.html { redirect_to un_updated_page_products_url, notice: 'Product was successfully updated.' }
+        end
         format.json { render :show, status: :ok, location: @product }
       else
         format.html { render :edit }
@@ -636,7 +652,7 @@ class ProductsController < ApplicationController
 
     def product_params
       params.require(:product).permit(:product_type_id, :title, :sku, :sku_number, :product_number, :user_id, :origin_address, 
-                                      :desc1, :desc2, :desc3, :brand, :price, :on_sale, :translate_status, :product_from,
+                                      :desc1, :desc2, :desc3, :price, :on_sale, :translate_status, :product_from,
                                       :details, :producer, :heel_height, :closure_type, :heel_type, :sole_material, :inner_material_type,
                                       :outer_material_type, :update_status, :seasons, :images1, :images2, :images3, :images4, :images5,
                                       :images6, :images7, :images8, :images9, :images10, :images11, :images12, :images13, :images14, :images15,

@@ -11,9 +11,13 @@ require 'mina/git'
 #   branch       - Branch name to deploy. (needed by mina/git)
 
 set :user, 'root'
-if ENV['env'] == 'test'
+if ENV['env'] == 'test1'
   set :domain, '112.74.89.21'
   set :deploy_to, '/root/amazon/tmall'
+  set :branch, 'test'
+elsif ENV['env'] == 'test'
+  set :domain, '120.25.74.164'
+  set :deploy_to, '/root/work/amazon/tmall_test'
   set :branch, 'test'
 else
   set :domain, '120.25.74.164'

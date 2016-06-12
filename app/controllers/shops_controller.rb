@@ -2,17 +2,16 @@ class ShopsController < ApplicationController
 	before_action :set_shop, only: [:edit, :update, :destroy, :shield, :recover, :add_back_up]
 
 	def stop_and_delete
-		shop = Shop.find(params[:id])
-		shop.products.each do |product|
+		search_link = SearchLink.find(params[:id])
+		search_link.products.each do |product|
 			# product.variables
 		  product.variables.destroy_all
 		  product.product_info_translations.destroy_all
 		  product.product_info_translations.destroy_all
 		  product.destroy
 		end
-		shop.shop_links.destroy_all
-		shop.tmall_links.destroy_all
-		shop.destroy
+		search_link.tmall_links.destroy_all
+		search_link.destroy
 		render json:true
 	end
 

@@ -16,7 +16,7 @@
   <% current_user.valid_brothers.each_with_index do |user,index| %>
     <% next if user.role != 3%>
     <tr>
-      <td><%= user.email %></td>
+      <td><%= user.username %></td>
       <td><%= Time.now.strftime("%Y-%m-%d") %></td>
       <td>
         <%= user.today_products.count %>
@@ -45,7 +45,7 @@
       <% next if user.role != 3%>
       <% user_week_online_products = 0 %>
       <tr>
-        <td rowspan="8"><%= user.email %></td>
+        <td rowspan="8"><%= user.username %></td>
         <td><%= Time.now.days_ago(1).strftime('%Y-%m-%d') %></td>
         <td>
           <% day_product_count = user.seven_day_products(1).count %>
@@ -92,7 +92,7 @@
   <% current_user.valid_brothers.each_with_index do |user,index| %>
     <% next if user.role != 3%>
     <tr>
-      <td><%= user.email %></td>
+      <td><%= user.username %></td>
       <td><%= Time.now.strftime("%Y-%m-%d") %></td>
       <td>
         <%= user.products.onsale.un_shield.count %>

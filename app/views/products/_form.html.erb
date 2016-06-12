@@ -123,8 +123,9 @@
       <thead>
         <tr>
           <th><%= check_box_tag 'check_all' %></th>
+          <th><%= '标题' %></th>
           <th><%= '颜色' %>&nbsp&nbsp<button id="changeAttributeName" >改名</button></th>
-          <th>图片(左键双击删除同类图片)</th>
+          <th>图片(鼠标置于图片上预览大图,左键双击删除同类图片)</th>
           <th><%= '描述' %></th>
           <th><%= '重量' %></th>
           <th><%= '尺寸' %></th>
@@ -146,7 +147,8 @@
           <%= hidden_field_tag 'variable[][index]', nil, value:v.id %>
           <tr>
             <td><%= check_box_tag 'item' %></td>
-            <td><%= text_field_tag 'variable[][color]', nil, value:v.color, class:'variable_color', style:'width:100px;' %></td>
+            <td><%= text_field_tag 'variable[][title]', nil, value: v.title, class:'variable_title' %></td>
+            <td><%= text_field_tag 'variable[][color]', nil, value: v.color, class:'variable_color', style:'width:100px;', "data-origin-color-value"=> v.color %></td>
             <td>
               <ul id="ul-sortable" style="list-style-type: none; margin: 0; padding: 0; width: 450px;">
               <% v.valid_images.each_with_index do |img, vv_index| %>
@@ -185,8 +187,10 @@
 
   <hr/>
   <div class="actions">
-    <!-- <%= f.submit %> -->
+    拆分产品：<%= check_box_tag 'is_separate', nil, @product.is_separate %><br/>
+    <%= hidden_field_tag 'is_return' %>
     <button id="formSubmit" >上传</button>
+    <button id="formSubmitReturn" >上传并返回本页面</button>
   </div>
 <% end %>
     <div >
@@ -201,7 +205,23 @@
       <%= link_to '屏蔽产品', shield_product_product_path(@product) %>
     </div>
 
+<div>
+  <img id="imagePreview" src="" alt="123" style="width:600px; height:600px; position:fixed; left:830px; top:100px; display:none;">
+</div>
+
 <script type="text/javascript">
+  
+  $('.variable_image').mouseover(function(){
+    var img_src = $(this).attr('src');
+    $('#imagePreview').attr('src',img_src);
+    $('#imagePreview').css('display','inline');
+  });
+
+  $('.variable_image').mouseout(function(){
+    $('#imagePreview').attr('src','');
+    $('#imagePreview').css('display','none');
+  })
+
   $('#product_product_weight').change(function(){
     var weight_value = $(this).val();
     $('.variable_weight').each(function(){
@@ -250,6 +270,28 @@
     return false;
   });
 
+  $('.variable_color').change(function(){
+    var origin_color_value = $(this).data('origin-color-value');
+    var color_value = $(this).val();
+    $('.variable_color').each(function(){
+      if (origin_color_value == $(this).data('origin-color-value')) {
+        $(this).val(color_value);
+      }
+    });
+    return false;
+  });
+
+  $('.variable_title').change(function(){
+    var origin_color_value = $(this).parents('tr').find('.variable_color').data('origin-color-value');
+    var vtitle_value = $(this).val();
+    $('.variable_title').each(function(){
+      if (origin_color_value == $(this).parents('tr').find('.variable_color').data('origin-color-value')) {
+        $(this).val(vtitle_value);
+      }
+    });
+    return false;
+  });
+
   $('.variable_size').change(function(){
     var size_value = $(this).val();
     var origin_size_value = $(this).data('origin-size');
@@ -282,6 +324,14 @@
       alert('产品重量不能为空！');
       return false;
     }
+    $('form').submit();
+  });
+  $('#formSubmitReturn').click(function(){
+    if ($('#product_product_weight').val() == '') {
+      alert('产品重量不能为空！');
+      return false;
+    }
+    $('#is_return').val('on');
     $('form').submit();
   });
 

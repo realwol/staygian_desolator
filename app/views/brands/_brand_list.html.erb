@@ -10,7 +10,11 @@
 
   <tbody>
     <% @brands.each do |brand| %>
-      <tr>
+      <% if brand.get_brand_stand_by_shops.present? %>
+        <tr style="background:rgba(0, 128, 0, 0.46);" >
+      <% else %>
+        <tr>
+      <% end %>
         <td><%= brand.name %></td>
         <td>
           <%= text_field_tag 'brand_english_name', brand.english_name %>

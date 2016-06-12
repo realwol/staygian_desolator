@@ -124,6 +124,6 @@ class UsersController < ApplicationController
     end
 
     def create_user_from_department_param
-      params.permit(:email, :password, :leader_id, :user_role_id, :manager, :department_id)
+      params.permit(:email, :username, :password, :leader_id, :user_role_id, :manager, :department_id)
     end
 end

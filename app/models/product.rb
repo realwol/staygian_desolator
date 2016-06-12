@@ -3,6 +3,7 @@ class Product < ActiveRecord::Base
   belongs_to :user
   belongs_to :shop
   belongs_to :brand
+  belongs_to :search_link
 
   has_many :variables, dependent: :delete_all
   has_many :product_customize_attributes_relations
@@ -207,7 +208,7 @@ class Product < ActiveRecord::Base
                           bullet_point4 bullet_point5 recommended_browse_nodes1 recommended_browse_nodes2 generic_keywords1 generic_keywords12
                           generic_keywords13 generic_keywords14 generic_keywords15 main_image_url other_image_url1
                           other_image_url2 other_image_url3 other_image_url4 other_image_url5 other_image_url6 other_image_url7
-                          other_image_url8 parent_child parent_sku relationship_type variation_theme color_name color_map size_name size_map)
+                          other_image_url8 is_separate parent_child parent_sku relationship_type variation_theme color_name color_map size_name size_map)
     cusomize_column_names = Product.get_all_customize_columns self.all
     cusomize_table_names = Product.get_all_customize_table_columns self.all
     xls_column_names = xls_column_names + cusomize_table_names
@@ -458,6 +459,13 @@ class Product < ActiveRecord::Base
         xls_column_values << images_url[7]
         xls_column_values << images_url[8]
 
+        # is separate
+        if product.is_separate
+          xls_column_values << "C"
+        else
+          xls_column_values << ""
+        end
+
         # parent_child
         if product.variables.count < 1
           xls_column_values << "Child"
@@ -525,15 +533,21 @@ class Product < ActiveRecord::Base
               xls_column_values << "这个变体没有翻译，请重新翻译"  
             end
           end
+
+          xls_column_values << v.read_attribute("#{variable_hash[language.to_sym]}")
+          v_title = product_translation[:title]
+          if v.title.present? && v.read_attribute("title_#{variable_hash[language.to_sym]}").present?
+            v_title = v.read_attribute("title_#{variable_hash[language.to_sym]}")
+          end
           
           if v.color.present? && v.size.present? && v_color.present? && v_size.present?
-            xls_column_values << "#{product_translation[:title]}-#{v_color.read_attribute(variable_hash[language.to_sym])} #{v_size.read_attribute(variable_hash[language.to_sym])}"
+            xls_column_values << "#{v_title}-#{v_color.read_attribute(variable_hash[language.to_sym])} #{v_size.read_attribute(variable_hash[language.to_sym])}"
           elsif v.color.present? && v_color.present?
-            xls_column_values << "#{product_translation[:title]}-#{v_color.read_attribute(variable_hash[language.to_sym])}"
+            xls_column_values << "#{v_title}-#{v_color.read_attribute(variable_hash[language.to_sym])}"
           elsif v.size.present? && v_size.present?
-            xls_column_values << "#{product_translation[:title]}-#{v_size.read_attribute(variable_hash[language.to_sym])}"
+            xls_column_values << "#{v_title}-#{v_size.read_attribute(variable_hash[language.to_sym])}"
           else
-            xls_column_values << "#{product_translation[:title]}"
+            xls_column_values << "#{v_title}"
           end
 
           xls_column_values << ""
@@ -593,7 +607,7 @@ class Product < ActiveRecord::Base
           xls_column_values << product_translation[:des2]
 
           if v.desc.present?
-              xls_column_values << v.read_attribute("#{variable_hash[language.to_sym]}")
+            xls_column_values << v.read_attribute("#{variable_hash[language.to_sym]}")
           else
             xls_column_values << product_translation[:des3]
           end
@@ -714,6 +728,7 @@ class Product < ActiveRecord::Base
           xls_column_values << v_images_url[7]
           xls_column_values << v_images_url[8]
 
+          xls_column_values << ""
           xls_column_values << "Child"
           xls_column_values << product.sku
           xls_column_values << "Variation"

@@ -18,7 +18,7 @@
       <% else %>
         <td>禁用</td>
       <% end %>
-      <td><%= m.user.email %></td>
+      <td><%= m.user.username %></td>
       <td><%= text_field_tag 'merchant_shipment', m.shipment_cost, type:'number', style:'width:150px;' , class:'merchantShipmentCost' %><%= button_tag '更新', class:'updateMerchantShipment', 'data-merchant-id'=> m.id %></td>
       <td>
         <!-- <button class="bind-products" >绑定产品</button> -->

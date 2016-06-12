@@ -1,7 +1,8 @@
 
 <table class="table table-bordered" style="width:90%;" >
   <tr>
-    <th>员工列表</th>
+    <th>员工登录名</th>
+    <th>员工姓名</th>
     <th>密码</th>
     <th>部门</th>
     <th>上级</th>
@@ -9,6 +10,7 @@
     <th>操作</th>
   </tr>
     <td><%= text_field_tag '', '', class:'user_email' %></td>
+    <td><%= text_field_tag '', '', class:'username' %></td>
     <td><%= text_field_tag '', '', class:'user_password' %></td>
     <td>
       <%= @department.name %>
@@ -23,6 +25,7 @@
   <% @department_users.each do |user| %>
     <tr>
       <td><%= user.email %></td>
+      <td><%= user.username %></td>
       <td></td>
       <td><%= @department.name %></td>
       <td><%= select_tag '', options_from_collection_for_select(User.all, 'id', 'email', user.leader.try(:id)), include_blank: true %></td>
@@ -42,11 +45,12 @@
     var department_id = $thisTr.find('.department_id').val();
     var user_leader = $thisTr.find('.user_leader').val();
     var user_role = $thisTr.find('.user_role').val();
+    var username = $thisTr.find('.username').val();
 
     $.ajax({
       url: '/users/create_user_from_depart',
       type: 'post',
-      data: {email: user_email, password: user_password, department_id: department_id, leader_id: user_leader, user_role_id: user_role},
+      data: {email: user_email, username: username, password: user_password, department_id: department_id, leader_id: user_leader, user_role_id: user_role},
       success: function(){}
     })
   })

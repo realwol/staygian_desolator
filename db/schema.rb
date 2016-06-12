@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160610171314) do
+ActiveRecord::Schema.define(version: 20160612141306) do
 
   create_table "accounts", force: :cascade do |t|
     t.string   "name",       limit: 255
@@ -354,6 +354,8 @@ ActiveRecord::Schema.define(version: 20160610171314) do
     t.integer  "stock",              limit: 4
     t.string   "auto_flag",          limit: 255
     t.boolean  "product_check_flag", limit: 1,     default: false
+    t.boolean  "is_separate",        limit: 1,     default: false
+    t.string   "search_link_id",     limit: 255
   end
 
   add_index "products", ["product_type_id"], name: "index_products_on_product_type_id", using: :btree
@@ -390,16 +392,17 @@ ActiveRecord::Schema.define(version: 20160610171314) do
   end
 
   create_table "search_links", force: :cascade do |t|
-    t.text     "link",            limit: 65535
-    t.text     "grasp_shop_id",   limit: 65535
-    t.text     "forbidden_words", limit: 65535
-    t.text     "link_desc",       limit: 65535
-    t.text     "backup",          limit: 65535
-    t.integer  "user_id",         limit: 4
-    t.boolean  "status",          limit: 1
-    t.boolean  "check_status",    limit: 1
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
+    t.text     "link",              limit: 65535
+    t.text     "grasp_shop_id",     limit: 65535
+    t.text     "forbidden_words",   limit: 65535
+    t.text     "link_desc",         limit: 65535
+    t.text     "backup",            limit: 65535
+    t.integer  "user_id",           limit: 4
+    t.boolean  "status",            limit: 1
+    t.boolean  "check_status",      limit: 1
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
+    t.boolean  "first_link_status", limit: 1,     default: true
   end
 
   add_index "search_links", ["user_id"], name: "index_search_links_on_user_id", using: :btree
@@ -492,6 +495,7 @@ ActiveRecord::Schema.define(version: 20160610171314) do
     t.datetime "deleted_at"
     t.boolean  "auto_update",     limit: 1
     t.boolean  "link_check_flag", limit: 1,     default: false
+    t.string   "search_link_id",  limit: 255
   end
 
   add_index "tmall_links", ["user_id"], name: "index_tmall_links_on_user_id", using: :btree
@@ -510,6 +514,7 @@ ActiveRecord::Schema.define(version: 20160610171314) do
     t.datetime "created_at",                                       null: false
     t.datetime "updated_at",                                       null: false
     t.string   "email",                  limit: 255, default: "",  null: false
+    t.string   "username",               limit: 255
     t.integer  "manager",                limit: 4,   default: 1
     t.integer  "role",                   limit: 4
     t.string   "leader_id",              limit: 255
@@ -548,6 +553,12 @@ ActiveRecord::Schema.define(version: 20160610171314) do
   add_index "variable_translate_histories", ["variable_from"], name: "index_variable_translate_histories_on_variable_from", using: :btree
 
   create_table "variables", force: :cascade do |t|
+    t.text     "title",                         limit: 65535
+    t.text     "title_it",                      limit: 65535
+    t.text     "title_es",                      limit: 65535
+    t.text     "title_fr",                      limit: 65535
+    t.text     "title_de",                      limit: 65535
+    t.text     "title_en",                      limit: 65535
     t.string   "color",                         limit: 255
     t.string   "size",                          limit: 255
     t.string   "price",                         limit: 255

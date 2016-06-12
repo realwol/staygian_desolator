@@ -12,7 +12,10 @@
     <% @departments.each do |department| %>
       <tr>
         <td><%= department.name %></td>
-        <td><%= link_to '查看', department %></td>
+        <td>
+          <%= link_to '查看', department %>
+          <%= link_to '删除', department, method: :delete, data: { confirm: '确认删除?' } %>
+        </td>
       </tr>
     <% end %>
   </tbody>

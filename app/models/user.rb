@@ -22,6 +22,23 @@ class User < ActiveRecord::Base
   belongs_to :user_role, class_name: 'Role', foreign_key: 'user_role_id'
   belongs_to :department
 
+  def self.get_all_leader
+    all_leader_id = User.all.pluck(:leader_id).uniq
+    User.where("id in (?)", all_leader_id)
+  end
+
+  def is_team_member?
+    !self.leader
+  end
+
+  def is_leader?
+    !!self.team_members.present?
+  end
+
+  def is_search_link_valid? link
+    !!self.search_links.index(link)
+  end
+
   def has_auth? auth
     !!self.user_role.auth_lists.index(auth)
   end

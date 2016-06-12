@@ -1,3 +1,4 @@
+# not used
 namespace :product_check do
 	desc 'check pre sale product'
 	task :pre_sale => :environment do

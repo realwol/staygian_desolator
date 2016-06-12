@@ -125,6 +125,7 @@ Rails.application.routes.draw do
       get 'offsale_product'
       get 'onsale_product'
       get 'temp_offsale_product'
+      post 'update_separate_product'
     end
   end
 
