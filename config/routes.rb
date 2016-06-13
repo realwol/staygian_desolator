@@ -173,6 +173,7 @@ Rails.application.routes.draw do
     member do
       post 'change_user_password'
       get 'show_little_brothers'
+      get 'user_setting'
     end
   end
   resources :shipments do 

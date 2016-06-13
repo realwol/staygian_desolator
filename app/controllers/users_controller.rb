@@ -1,6 +1,10 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy, :change_user_password]
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :change_user_password, :user_setting]
   before_action :authenticate_user!
+
+  def user_setting
+    
+  end
 
   def create_user_from_depart
     create_user_from_department_param[:manager] = current_user.id

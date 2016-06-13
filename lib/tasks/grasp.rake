@@ -94,7 +94,7 @@ def grasp_product tmall_link
   b_string = @details.join('')
   bs = b_string.index("品牌").to_i
   be = b_string[bs..-1].index("<br/>").to_i
-  brand_name = b_string[bs+4..be+bs-1].strip
+  brand_name = b_string[bs+4..be+bs-1].try(:strip)
 
   if brand_name.present?
     related_brand = Brand.find_by(name: brand_name)
