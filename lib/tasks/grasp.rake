@@ -95,6 +95,7 @@ def grasp_product tmall_link
   be = b_string[bs..-1].index("<br/>").to_i
   brand_name = b_string[bs+4..be+bs-1].try(:strip)
 
+  related_brand = ''
   if brand_name.present?
     related_brand = Brand.find_by(name: brand_name)
     unless related_brand.present?
@@ -180,7 +181,11 @@ def grasp_product tmall_link
     @product["images#{index+1}".to_sym] = img
   end
 
-  @product.shield_type = tmall_link.product_status if tmall_link.product_status.present?
+  if related_brand.status
+    @product.shield_type = tmall_link.product_status if tmall_link.product_status.present?
+  else
+    @product.shield_type = 1
+  end
 
   @product.save
   @product.reload
@@ -189,7 +194,7 @@ def grasp_product tmall_link
   product_shop = @product.shop
   brand_shop_relation = BrandShopRelation.find_by(shop_id: product_shop.id, brand_id: product_brand.id)
   if brand_shop_relation.present?
-    @product.update_attributes(shield_type: 5) if brand_shop_relation.status == '0'
+    @product.update_attributes(shield_type: 5) if brand_shop_relation.status == '5'
   end
 
   @sizes = []

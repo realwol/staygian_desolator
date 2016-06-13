@@ -4,8 +4,8 @@ class Brand < ActiveRecord::Base
   has_many :vendors
   has_many :products
 
-  scope :non_forbidden, -> {where(status: 0)}
-  scope :forbidden, -> {where(status: 1)}
+  scope :non_forbidden, -> {where(status: 1)}
+  scope :forbidden, -> {where(status: 0)}
 
   def get_brand_stand_by_shops
     stand_by_shop_ids = self.brand_shop_relations.where(status: '5').pluck(:shop_id)

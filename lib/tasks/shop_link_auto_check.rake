@@ -121,6 +121,7 @@ def grasp_shop link
     end
   end
   link.update_attributes(status: true, link_retry: false)
+  
   TmallLink.create(links_array)
 end
 
@@ -198,7 +199,7 @@ def grasp_search_link link
           link_hash[:shop_id] = shop.try(:id)
           link_hash[:search_link_id] = link.try(:id)
           if shop.status
-            link_hash[:product_status] = 0
+            link_hash[:product_status] = 5
           else
             link_hash[:product_status] = 1
           end

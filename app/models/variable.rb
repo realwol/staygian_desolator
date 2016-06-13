@@ -24,6 +24,15 @@ class Variable < ActiveRecord::Base
     return if options.blank?
     variables = product.variables
     variable =''
+
+    # removed not uploaded variables
+    aa = variables.pluck(:id)
+    bb = options.map{|m| m[:index].to_i}
+    removed_variable_id = aa - bb
+    if removed_variable_id.present?
+      Variable.where("id in (?)", removed_variable_id).destroy_all
+    end
+
     options.each do |option|
         variables.each do |v|
           if v.id == option["index"].to_i

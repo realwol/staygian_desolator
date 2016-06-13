@@ -2,7 +2,7 @@ class BrandsController < ApplicationController
   before_action :set_brand, only: [:show, :edit, :update, :destroy, :update_brand_english_name, :forbidden_brand, :update_brand_shop_status, :recover_brand]
 
   def recover_brand
-    @brand.update_attributes(status: 0)
+    @brand.update_attributes(status: 1)
     @brand.products.update_all(shield_type: 0)
 
     @brands = Brand.forbidden
@@ -18,7 +18,7 @@ class BrandsController < ApplicationController
   end
 
   def forbidden_brand
-    @brand.update_attributes(status: 1)
+    @brand.update_attributes(status: 0)
     @brand.products.update_all(shield_type: 1)
 
     @brands = Brand.non_forbidden
@@ -37,6 +37,7 @@ class BrandsController < ApplicationController
         # make product shield when brand forbidden
         # Shop.update_shield_type update_shops, 1
         # remove all products under the shop
+        update_shops.update_all(status: false)
         update_shops.each do |shop|
           shop.products.each do |product|
             # product.variables
@@ -47,8 +48,10 @@ class BrandsController < ApplicationController
           shop.tmall_links.destroy_all
         end
       when 1
+        update_shops.update_all(status: true)
         Shop.update_shield_type update_shops, 0
       when 5
+        update_shops.update_all(status: true)
         Shop.update_shield_type update_shops, 5
       end
     end

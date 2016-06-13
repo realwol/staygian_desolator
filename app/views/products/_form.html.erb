@@ -137,15 +137,14 @@
       <tbody>
         <% pre_color = nil; count = 0; %>
         <% @product.variables.each_with_index do |v,v_index| %>
-          <%
-            if ((!pre_color) || (pre_color == v.color))
+          <%if ((!pre_color) || (pre_color == v.color))
             else
               count = count + 1
             end
-            pre_color = v.color
-          %>
-          <%= hidden_field_tag 'variable[][index]', nil, value:v.id %>
+            pre_color = v.color%>
+
           <tr>
+            <%= hidden_field_tag 'variable[][index]', nil, value:v.id, class:'hidden_tr_need_remove' %>
             <td><%= check_box_tag 'item' %></td>
             <% if v.title.present? %>
               <td><%= text_field_tag 'variable[][title]', nil, value: v.title, class:'variable_title' %></td>
