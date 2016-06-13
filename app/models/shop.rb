@@ -9,6 +9,8 @@ class Shop < ActiveRecord::Base
 
   paginates_per 10
 
+  # shop status 1 for valid 0 for invalid
+
   def self.shop_avaliable? shop_id
     !Shop.where(shop_id: shop_id).last
   end

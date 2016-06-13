@@ -197,7 +197,11 @@ def grasp_search_link link
           shop = Shop.find_by(shop_id: shop_id)
           link_hash[:shop_id] = shop.try(:id)
           link_hash[:search_link_id] = link.try(:id)
-          link_hash[:product_status] = 1 if shop.status
+          if shop.status
+            link_hash[:product_status] = 0
+          else
+            link_hash[:product_status] = 1
+          end
           links_array << link_hash.dup
         end
       end
