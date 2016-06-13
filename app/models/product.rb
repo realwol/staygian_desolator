@@ -14,8 +14,8 @@ class Product < ActiveRecord::Base
   has_many :product_basic_infos, dependent: :nullify
 
   # **********************
-  # * shield_type: 1 shield; 2, pre_saled; 3, temp_offsale; 4, wait for edited;
-  # * auto_flag:  11, auto online; 12, auto offline; 13, auto destroy; 14, auto from offline to onlie
+  # * shield_type: 1 shield; 2, pre_saled; 3, temp_offsale; 4, wait for edited; 5, auto waited for check;
+  # * auto_flag:  11, auto online; 12, auto offline; 13, auto destroy; 14, auto from offline to onlie;
   # *
   # *
   # *
@@ -25,7 +25,7 @@ class Product < ActiveRecord::Base
   # *
   # **********************
 
-  scope :un_updated, -> {where(update_status:false)}
+  scope :un_updated, -> {where(update_status:false).un_shield}
   scope :updated, -> {where(update_status:true)}
   scope :un_shield, -> {where(shield_type: 0)}
   scope :shield, -> {where(shield_type: 1)}
@@ -37,6 +37,7 @@ class Product < ActiveRecord::Base
   scope :pre_saled, -> {where(shield_type:2).where(on_sale:false)}
   scope :auto_stand_by, -> {where(auto_flag: 14)}
   scope :auto_removed, -> {where(auto_flag: 13)}
+  scope :unchecked, -> {where(shield_type: 5)}
   # scope :not_off_sale, ->{where(on_sale:true)}
 
   before_create :save_sku

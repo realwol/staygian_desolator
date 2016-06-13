@@ -1,36 +1,26 @@
-<p>新建商铺</p>
+账号名称：<span style='font-size:20px;' ><%= @account.name %></span>
+<hr/>
 <div>
   <%= form_tag(merchants_path, remote:true, method: 'post') do %>
     <table class="table table-bordered" >
       <tr>
         <td><%= label_tag '店铺名称:' %></td>
         <td><%= text_field_tag 'shop_name', nil, class:'clean_after_submit' %></td>
-        <td><%= label_tag '平台:' %></td>
-        <td><%= text_field_tag 'merchant_plantform_name', nil, class:'clean_after_submit' %></td>
-        <td><%= label_tag '平台账号:' %></td>
-        <td><%= text_field_tag 'merchant_account', nil, class:'clean_after_submit' %></td>
         <td><%= label_tag '店铺所属国家:' %></td>
         <td><%= select_tag 'merchant_country_name', "<option value='america'>美国</option><option value='canada'>加拿大</option><option value='british'>英国</option><option value='germany'>德国</option><option value='spain'>西班牙</option><option value='italy'>意大利</option><option value='france'>法国</option>".html_safe, class:'clean_after_submit' %></td>
-      </tr>
-      <tr>
-        <td><%= label_tag '店铺类型:' %></td>
-        <td><%= text_field_tag 'merchant_type', nil, class:'clean_after_submit' %></td>
         <td><%= label_tag 'aws_access_key_id:' %></td>
         <td><%= text_field_tag 'merchant_aws_access_key_id', nil, class:'clean_after_submit' %></td>
+      </tr>
+      <tr>
         <td><%= label_tag 'secret_key:' %></td>
         <td><%= text_field_tag 'merchant_secret_key', nil, class:'clean_after_submit' %></td>
         <td><%= label_tag 'seller_id:' %></td>
         <td><%= text_field_tag 'merchant_seller_id', nil, class:'clean_after_submit' %></td>
-      </tr>
-      <tr>
-        <td><%= label_tag 'marketplace_id:' %></td>
-        <td><%= text_field_tag 'merchant_marketplace_id', nil, class:'clean_after_submit' %></td>
         <td><%= label_tag '所属账号:' %></td>
         <td>
-          <%= label_tag @account.name %>
           <%= hidden_field_tag 'account_id', @account.id %>
+          <%= submit_tag '确定' %>
         </td>
-        <td><%= submit_tag '确定' %></td>
       </tr>
     </table>
   <% end %>

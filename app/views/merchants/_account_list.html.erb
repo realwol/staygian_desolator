@@ -1,24 +1,24 @@
-<table class="table table-bordered" >
-  <tr>
-    <th>账号名称</th>
-    <th>平台</th>
-    <th>创建人</th>
-    <th>操作</th>
-  </tr>
-  <% @accounts.each do |account| %>
+<% if @accounts.present? %>
+  <table class="table table-bordered" >
     <tr>
-      <td><%= account.name %></td>
-      <td><%= account.platform %></td>
-      <td><%= account.user.try(:email) %></td>
-      <td>
-        <%= button_tag '删除', class:'remove_account', "data-account-id" => account.id %>
-        <%= link_to '查看', merchants_path(account_id: account.id) %>
-        <%= link_to '导出本账户', export_account_merchants_path(id: account.id) %>
-        <%= button_tag '更新本账户', class:'accountUpdated', "data-account-id" => account.id %>
-      </td>
+      <th>账号名称</th>
+      <th>操作</th>
     </tr>
-  <% end %>
-</table>
+    <% @accounts.each do |account| %>
+      <tr>
+        <td><%= account.name %></td>
+        <td>
+          <%= button_tag '删除', class:'remove_account', "data-account-id" => account.id %>
+          <%= link_to '查看', merchants_path(account_id: account.id) %>
+          <%= link_to '导出本账户', export_account_merchants_path(id: account.id) %>
+          <%= button_tag '更新本账户', class:'accountUpdated', "data-account-id" => account.id %>
+        </td>
+      </tr>
+    <% end %>
+  </table>
+<% else %>
+  目前无可用帐号！
+<% end %>
 
 <script type="text/javascript">
   $('.accountUpdated').click(function(){

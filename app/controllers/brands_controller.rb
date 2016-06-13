@@ -35,9 +35,21 @@ class BrandsController < ApplicationController
       case params[:status_string].to_i
       when 2
         # make product shield when brand forbidden
-        Shop.update_shield_type update_shops, 1
-      when 0
+        # Shop.update_shield_type update_shops, 1
+        # remove all products under the shop
+        update_shops.each do |shop|
+          shop.products.each do |product|
+            # product.variables
+            product.variables.destroy_all
+            product.product_info_translations.destroy_all
+            product.destroy
+          end
+          shop.tmall_links.destroy_all
+        end
+      when 1
         Shop.update_shield_type update_shops, 0
+      when 5
+        Shop.update_shield_type update_shops, 5
       end
     end
 

@@ -13,6 +13,7 @@ class User < ActiveRecord::Base
   has_many :search_links
   has_many :variable_translate_histories
   has_many :merchants
+  has_many :accounts
 
   has_many :little_brothers, class_name: 'User', foreign_key: 'manager'
   has_many :team_members, class_name: 'User', foreign_key: 'leader_id'
@@ -21,6 +22,10 @@ class User < ActiveRecord::Base
   belongs_to :leader, class_name: 'User', foreign_key: 'leader_id'
   belongs_to :user_role, class_name: 'Role', foreign_key: 'user_role_id'
   belongs_to :department
+
+  def valid_account
+    self.accounts
+  end
 
   def self.get_all_leader
     all_leader_id = User.all.pluck(:leader_id).uniq

@@ -7,7 +7,6 @@ class ShopsController < ApplicationController
 			# product.variables
 		  product.variables.destroy_all
 		  product.product_info_translations.destroy_all
-		  product.product_info_translations.destroy_all
 		  product.destroy
 		end
 		search_link.tmall_links.destroy_all

@@ -1,6 +1,6 @@
   <table class="table variableTable">
     <tr>
-      <% %w(中国 美国 加拿大 英国 德国 法国 西班牙 意大利).each do |country| %>
+      <% %w(所有者 中国 美国 加拿大 英国 德国 法国 西班牙 意大利).each do |country| %>
         <td><%= country %></td>
       <% end %>
       <td colspan="2" >操作</td>
@@ -9,6 +9,7 @@
     <% @variables.each do |variable| %>
       <% variable_translation = variable %>
       <tr>
+        <td><%= variable.try(:user).try(:username) %></td>
         <td><input type="text" class="variable_translation_name" style="width:80px;" value="<%= variable_translation.word %>" ></td>
         <td><input type="text" class="variable_translation_value" style="width:80px;" value="<%= variable_translation.try(:en) %>" ></td>
         <td><input type="text" class="variable_translation_value" style="width:80px;" value="<%= variable_translation.try(:en) %>" ></td>

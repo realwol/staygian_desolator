@@ -20,11 +20,10 @@
     <td>
       <select class="user_product_version_select" >
         <option value="1" >仅可见自己产品</option>
-        <option value="2" >可见自己及成员成员</option>
         <option value="3" >可见所有产品</option>
       </select>
     </td>
-    <td><%= select_tag '', options_from_collection_for_select(User.all, 'id', 'email'), include_blank: true, class:'user_leader' %></td>
+    <td><%= select_tag '', options_from_collection_for_select(User.all, 'id', 'username'), include_blank: true, class:'user_leader' %></td>
     <td><%= select_tag '', options_from_collection_for_select(Role.all, 'id', 'name'), include_blank: true, class:'user_role' %></td>
     <td><%= button_tag '新建', class:'create_department_user' %></td>
   <tr>
@@ -44,10 +43,10 @@
         <%= hidden_field_tag '', @department.id, class:'department_id' %>
       </td>
       <td>
-        <% selected_options = [[1, '仅可见自己产品'], [2, '可见自己及成员产品'], [3, '可见所有产品']] %>
+        <% selected_options = [[1, '仅可见自己产品'], [3, '可见所有产品']] %>
         <%= select_tag '', options_from_collection_for_select( selected_options, 'first', 'second', user.user_product_version), include_blank: true, class:'user_product_version_select' %>
       </td>
-      <td><%= select_tag '', options_from_collection_for_select(User.all, 'id', 'email', user.leader.try(:id)), include_blank: true, class:'user_leader' %></td>
+      <td><%= select_tag '', options_from_collection_for_select(User.all, 'id', 'username', user.leader.try(:id)), include_blank: true, class:'user_leader' %></td>
       <td><%= select_tag '', options_from_collection_for_select(Role.all, 'id', 'name', user.user_role.try(:id)), include_blank: true, class:'user_role' %></td>
       <td><%= button_tag '更新', class:'create_department_user', "data-user-id"=> user.id %></td>
     </tr>

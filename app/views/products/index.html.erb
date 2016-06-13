@@ -78,6 +78,9 @@
 
 <script type="text/javascript">
   $('.reGraspProduct').click(function(){
+    if (!confirm('确定重新抓取吗？')){
+      return false;
+    }
     var productId = $(this).data('product-id');
     var $this = $(this);
     $.ajax({

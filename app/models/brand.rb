@@ -8,7 +8,7 @@ class Brand < ActiveRecord::Base
   scope :forbidden, -> {where(status: 1)}
 
   def get_brand_stand_by_shops
-    stand_by_shop_ids = self.brand_shop_relations.where(status: '0').pluck(:shop_id)
+    stand_by_shop_ids = self.brand_shop_relations.where(status: '5').pluck(:shop_id)
     Shop.where("id in (?) ", stand_by_shop_ids)
   end
 

@@ -11,11 +11,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160612141306) do
+ActiveRecord::Schema.define(version: 20160613122052) do
 
   create_table "accounts", force: :cascade do |t|
     t.string   "name",       limit: 255
     t.integer  "user_id",    limit: 4
+    t.integer  "responser",  limit: 4
     t.string   "platform",   limit: 255
     t.boolean  "status",     limit: 1,   default: true
     t.datetime "created_at",                            null: false
@@ -352,7 +353,7 @@ ActiveRecord::Schema.define(version: 20160612141306) do
     t.text     "avatar_img_url1",    limit: 65535
     t.text     "avatar_img_url2",    limit: 65535
     t.integer  "stock",              limit: 4
-    t.string   "auto_flag",          limit: 255
+    t.string   "auto_flag",          limit: 255,   default: "0"
     t.boolean  "product_check_flag", limit: 1,     default: false
     t.boolean  "is_separate",        limit: 1,     default: false
     t.string   "search_link_id",     limit: 255

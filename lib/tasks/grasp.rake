@@ -13,7 +13,6 @@ end
 
 def start
 	tmall_link = ungrasp_tmall_link
-  # tmall_link = TmallLink.find(17698)
     if tmall_link.present?
       if TmallLink.where(product_link_id: tmall_link.product_link_id).count > 1
         tmall_link.update_attributes(status:true)
@@ -186,6 +185,13 @@ def grasp_product tmall_link
   @product.save
   @product.reload
 
+  product_brand = @product.brand
+  product_shop = @product.shop
+  brand_shop_relation = BrandShopRelation.find_by(shop_id: product_shop.id, brand_id: product_brand.id)
+  if brand_shop_relation.present?
+    @product.update_attributes(shield_type: 5) if brand_shop_relation.status == '0'
+  end
+
   @sizes = []
   @colors = []
   @colors_value = []
@@ -305,7 +311,7 @@ def grasp_product tmall_link
 end
 
 def binding_shop_with_brand product, brand
-    BrandShopRelation.create(brand_id: brand.id, shop_id: product.shop_id, status: 0)
+    BrandShopRelation.create(brand_id: brand.id, shop_id: product.shop_id, status: 5)
 end
 
 def ungrasp_tmall_link

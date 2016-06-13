@@ -147,7 +147,11 @@
           <%= hidden_field_tag 'variable[][index]', nil, value:v.id %>
           <tr>
             <td><%= check_box_tag 'item' %></td>
-            <td><%= text_field_tag 'variable[][title]', nil, value: v.title, class:'variable_title' %></td>
+            <% if v.title.present? %>
+              <td><%= text_field_tag 'variable[][title]', nil, value: v.title, class:'variable_title' %></td>
+            <% else %>
+              <td><%= text_field_tag 'variable[][title]', nil, value: @product.title, class:'variable_title' %></td>
+            <% end %>
             <td><%= text_field_tag 'variable[][color]', nil, value: v.color, class:'variable_color', style:'width:100px;', "data-origin-color-value"=> v.color %></td>
             <td>
               <ul id="ul-sortable" style="list-style-type: none; margin: 0; padding: 0; width: 450px;">

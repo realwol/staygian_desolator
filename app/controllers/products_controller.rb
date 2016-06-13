@@ -30,6 +30,11 @@ class ProductsController < ApplicationController
     @products = selected_user.valid_products.auto_removed.page(params[:page])
   end
 
+  def unchecked_products
+    @action_from = params[:action]
+    @products = selected_user.valid_products.unchecked.page(params[:page])
+  end
+
   def stand_by_products
     @action_from = params[:action]
     @products = selected_user.valid_products.auto_stand_by.page(params[:page])
@@ -80,6 +85,9 @@ class ProductsController < ApplicationController
 
       TmallLink.create(address: product_address, status:false, user: current_user, shop_id: product.shop_id, product_link_id: product_link_id)
     end
+    product.variables.destroy_all
+    product.product_info_translations.destroy_all
+    product.product_info_translations.destroy_all
     product.destroy
     render json:true
   end
@@ -597,11 +605,11 @@ class ProductsController < ApplicationController
             variable_color = param_variable["color"]
 
             if VariableTranslateHistory.where(word: variable_size, variable_from: 'size').count < 1
-              VariableTranslateHistory.create(word: variable_size, variable_from: 'size', user: current_user)
+              VariableTranslateHistory.create(word: variable_size, variable_from: 'size', user: @product.user)
             end
 
             if VariableTranslateHistory.where(word: variable_color, variable_from: 'color').count < 1
-              VariableTranslateHistory.create(word: variable_color, variable_from: 'color', user: current_user)
+              VariableTranslateHistory.create(word: variable_color, variable_from: 'color', user: @product.user)
             end
           end
         end

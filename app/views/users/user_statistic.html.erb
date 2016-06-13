@@ -14,7 +14,6 @@
   </tr>
   <% today_online_products = 0 %>
   <% current_user.valid_brothers.each_with_index do |user,index| %>
-    <% next if user.role != 3%>
     <tr>
       <td><%= user.username %></td>
       <td><%= Time.now.strftime("%Y-%m-%d") %></td>

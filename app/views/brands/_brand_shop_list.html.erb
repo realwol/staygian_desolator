@@ -25,7 +25,7 @@
     </td>
     <td>
       <%= button_tag '屏蔽店铺', class:'forbidden_shop change_shop_status', "data-brand-id"=> @brand.id, "data-status-string"=> '2' %>
-      <%= button_tag '待审核店铺', class:'stand_by_shop change_shop_status', "data-brand-id"=> @brand.id, "data-status-string"=> '0' %>
+      <%= button_tag '待审核店铺', class:'stand_by_shop change_shop_status', "data-brand-id"=> @brand.id, "data-status-string"=> '5' %>
     </td>
   </tr>
   <tr>
@@ -36,7 +36,7 @@
       <% end %>
     </td>
     <td>
-      <%= button_tag '待审核店铺', class:'stand_by_shop change_shop_status', "data-brand-id"=> @brand.id, "data-status-string"=> '0' %>
+      <%= button_tag '待审核店铺', class:'stand_by_shop change_shop_status', "data-brand-id"=> @brand.id, "data-status-string"=> '5' %>
     </td>
   </tr>
 </table>

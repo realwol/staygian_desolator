@@ -80,6 +80,7 @@ Rails.application.routes.draw do
       get 'patch_translate_binding'
       get 'stand_by_products'
       get 'removed_products'
+      get 'unchecked_products'
       get 'grasp_product_from_link'
       get 'product_detail_forbidden'
       get 'product_grasp_filter'
