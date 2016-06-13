@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy, :change_user_password, :user_setting]
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :change_user_password, :user_setting, :reset_user_pwd, :admin_reset_user_pwd]
   before_action :authenticate_user!
 
   def user_setting
@@ -8,7 +8,11 @@ class UsersController < ApplicationController
 
   def create_user_from_depart
     create_user_from_department_param[:manager] = current_user.id
-    User.create(create_user_from_department_param)
+    if params[:update_user_id].present?
+      User.find(params[:update_user_id]).update_attributes(create_user_from_department_param)
+    else
+      User.create(create_user_from_department_param)
+    end
 
     @department = Department.find(params[:department_id])
     @department_users = @department.users
@@ -42,6 +46,24 @@ class UsersController < ApplicationController
     end
   end
 
+  def reset_user_pwd
+    if @user.valid_password?(params[:old_pwd])
+      @user.update_attributes(password: params[:new_pwd])      
+      render json: 1
+    else
+      render json: 0
+    end
+  end
+
+  def admin_reset_user_pwd
+    if params[:new_password].present?
+      @user.update_attributes(password: params[:new_password])
+      render json: 1
+    else
+      render json: 0
+    end
+  end
+
   def change_user_password
     if params[:new_password] == params[:new_password_confirmation]
       @user.update_attributes(email: params[:new_user_name], password: params[:new_password])
@@ -53,15 +75,19 @@ class UsersController < ApplicationController
 
   def set_selected_user
     if params[:select_type] == '1'
-      params[:selected_user_id] = '1' if params[:selected_user_id].blank?
+      params[:selected_user_id] = nil if params[:selected_user_id].blank?
     elsif params[:select_type] == '2'
       params[:selected_user_id] = params[:manager_id] if params[:selected_user_id].blank?
       params[:selected_user_id] = current_user.id if params[:selected_user_id].blank?
     end
 
-    @selected_user = User.find(params[:selected_user_id])
-    if @selected_user.present?
-      session[:selected_user_id] = @selected_user.id
+    if params[:selected_user_id].present?
+      @selected_user = User.find(params[:selected_user_id])
+      if @selected_user.present?
+        session[:selected_user_id] = @selected_user.id
+      end
+    else
+      session[:selected_user_id] = nil
     end
   end
 
@@ -128,6 +154,6 @@ class UsersController < ApplicationController
     end
 
     def create_user_from_department_param
-      params.permit(:email, :username, :password, :leader_id, :user_role_id, :manager, :department_id)
+      params.permit(:email, :username, :password, :leader_id, :user_role_id, :manager, :department_id, :user_product_version)
     end
 end

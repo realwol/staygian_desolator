@@ -93,10 +93,14 @@ class RolesController < ApplicationController
   end
 
   def destroy
-    @role.destroy
-    respond_to do |format|
-      format.html { redirect_to roles_url, notice: 'Role was successfully destroyed.' }
-      format.json { head :no_content }
+    if @role.has_user?
+      redirect_to roles_url, notice: '角色中有用户，不可删除！'
+    else
+      @role.destroy
+      respond_to do |format|
+        format.html { redirect_to roles_url, notice: '角色删除成功！' }
+        format.json { head :no_content }
+      end
     end
   end
 

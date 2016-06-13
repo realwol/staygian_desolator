@@ -1,10 +1,11 @@
 
-<table class="table table-bordered" style="width:90%;" >
+<table class="table table-bordered" style="width:95%;" >
   <tr>
     <th>员工登录名</th>
     <th>员工姓名</th>
     <th>密码</th>
     <th>部门</th>
+    <th>产品可见范围</th>
     <th>上级</th>
     <th>角色</th>
     <th>操作</th>
@@ -16,6 +17,13 @@
       <%= @department.name %>
       <%= hidden_field_tag '', @department.id, class:'department_id' %>
     </td>
+    <td>
+      <select class="user_product_version_select" >
+        <option value="1" >仅可见自己产品</option>
+        <option value="2" >可见自己及成员成员</option>
+        <option value="3" >可见所有产品</option>
+      </select>
+    </td>
     <td><%= select_tag '', options_from_collection_for_select(User.all, 'id', 'email'), include_blank: true, class:'user_leader' %></td>
     <td><%= select_tag '', options_from_collection_for_select(Role.all, 'id', 'name'), include_blank: true, class:'user_role' %></td>
     <td><%= button_tag '新建', class:'create_department_user' %></td>
@@ -26,11 +34,22 @@
     <tr>
       <td><%= user.email %></td>
       <td><%= user.username %></td>
-      <td></td>
-      <td><%= @department.name %></td>
-      <td><%= select_tag '', options_from_collection_for_select(User.all, 'id', 'email', user.leader.try(:id)), include_blank: true %></td>
-      <td><%= select_tag '', options_from_collection_for_select(Role.all, 'id', 'name', user.user_role.try(:id)), include_blank: true %></td>
-      <td><%= button_tag '更新', class:'update_department_user' %></td>
+      <td>
+        <% if current_user.is_dd? %>
+          <%= text_field_tag 'new_pwd',nil, class:'new_pwd' %> &nbsp <%= button_tag '改密', class:'change_user_pwd', "data-user-id"=> user.id %>
+        <% end %>
+      </td>
+      <td>
+        <%= @department.name %>
+        <%= hidden_field_tag '', @department.id, class:'department_id' %>
+      </td>
+      <td>
+        <% selected_options = [[1, '仅可见自己产品'], [2, '可见自己及成员产品'], [3, '可见所有产品']] %>
+        <%= select_tag '', options_from_collection_for_select( selected_options, 'first', 'second', user.user_product_version), include_blank: true, class:'user_product_version_select' %>
+      </td>
+      <td><%= select_tag '', options_from_collection_for_select(User.all, 'id', 'email', user.leader.try(:id)), include_blank: true, class:'user_leader' %></td>
+      <td><%= select_tag '', options_from_collection_for_select(Role.all, 'id', 'name', user.user_role.try(:id)), include_blank: true, class:'user_role' %></td>
+      <td><%= button_tag '更新', class:'create_department_user', "data-user-id"=> user.id %></td>
     </tr>
   <% end %>
 </table>
@@ -38,6 +57,25 @@
 <%= link_to '返回', departments_path %>
 
 <script type="text/javascript">
+  $('.change_user_pwd').click(function(){
+    var user_id = $(this).data('user-id');
+    var $new_pwd = $(this).parents('td').find('.new_pwd');
+    var new_pwd = $new_pwd.val();
+    $.ajax({
+      url: '/users/'+ user_id +'/admin_reset_user_pwd',
+      type: 'post',
+      data: {new_password: new_pwd},
+      success: function(data){
+        if (data == 1){
+          alert('操作成功！');
+        } else {
+          alert('操作失败！');
+        }
+        $new_pwd.val('');
+      }
+    })
+  })
+
   $('.create_department_user').click(function(){
     var $thisTr = $(this).parents('tr');
     var user_email = $thisTr.find('.user_email').val();
@@ -46,11 +84,13 @@
     var user_leader = $thisTr.find('.user_leader').val();
     var user_role = $thisTr.find('.user_role').val();
     var username = $thisTr.find('.username').val();
+    var user_product_version = $thisTr.find('.user_product_version_select').val();
+    var update_user_id = $(this).data('user-id')
 
     $.ajax({
       url: '/users/create_user_from_depart',
       type: 'post',
-      data: {email: user_email, username: username, password: user_password, department_id: department_id, leader_id: user_leader, user_role_id: user_role},
+      data: {email: user_email, username: username, password: user_password, department_id: department_id, leader_id: user_leader, user_role_id: user_role, user_product_version: user_product_version, update_user_id: update_user_id},
       success: function(){}
     })
   })

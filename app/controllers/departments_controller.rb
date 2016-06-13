@@ -47,10 +47,14 @@ class DepartmentsController < ApplicationController
   # DELETE /departments/1
   # DELETE /departments/1.json
   def destroy
-    @department.destroy
-    respond_to do |format|
-      format.html { redirect_to departments_url, notice: 'Department was successfully destroyed.' }
-      format.json { head :no_content }
+    if @department.has_user?
+      redirect_to departments_url, notice: '部门内有员工，无法删除！'
+    else
+      @department.destroy
+      respond_to do |format|
+        format.html { redirect_to departments_url, notice: '部门删除成功！' }
+        format.json { head :no_content }
+      end
     end
   end
 

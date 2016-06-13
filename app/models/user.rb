@@ -28,7 +28,7 @@ class User < ActiveRecord::Base
   end
 
   def is_team_member?
-    !self.leader
+    !!self.leader
   end
 
   def is_leader?
@@ -101,9 +101,7 @@ class User < ActiveRecord::Base
   end
 
   def valid_products
-    if self.is_dd?
-      Product.all
-    elsif self.is_hacked?
+    if self.is_dd? || self.is_hacked? || self.user_product_version == 3
       Product.all
     else
       current_user = self

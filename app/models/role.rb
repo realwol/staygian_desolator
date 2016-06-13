@@ -1,9 +1,13 @@
 class Role < ActiveRecord::Base
-  has_many :users
+  has_many :users, class_name: 'User', foreign_key: 'user_role_id'
   has_many :role_auth_relations
   has_many :auth_lists, through: :role_auth_relations, dependent: :delete_all
 
   scope :valid_role, -> {where(status: 1)}
+
+  def has_user?
+    !!self.users.present?
+  end
 
   def remove_or_add_first_level_auth
     role_first_level_auth_array = self.auth_lists.second_level_auth.map(&:parent_id).uniq

@@ -172,6 +172,8 @@ Rails.application.routes.draw do
 
     member do
       post 'change_user_password'
+      post 'admin_reset_user_pwd'
+      post 'reset_user_pwd'
       get 'show_little_brothers'
       get 'user_setting'
     end

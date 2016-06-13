@@ -4,24 +4,29 @@
     <%if current_user%>
       <%
         @selected_user = session[:selected_user_id].present? ? User.find(session[:selected_user_id]) : current_user
-        if @selected_user.is_manager?
-          selected_manager_id = @selected_user.id
-        elsif @selected_user.is_little_brother?
-          selected_little_brother_id = @selected_user.id
-          selected_manager_id = @selected_user.big_brother.id
+        if @selected_user.is_leader?
+          selected_leader_id = @selected_user.id
+        elsif @selected_user.is_team_member?
+          selected_team_member_id = @selected_user.id
+          selected_leader_id = @selected_user.leader.id
         else
-          selected_little_brother_id, selected_manager_id = nil, nil
+          selected_team_member_id, selected_leader_id = nil, nil
         end
       %>
       <% if current_user.is_dd? %>
-        <%= select_tag 'manager_select', options_from_collection_for_select(User.get_all_leader, "id", "email", selected: selected_manager_id), include_blank:true, class:'manager_select' %>
-        <%= select_tag 'little_brother_select', options_from_collection_for_select(@selected_user.team_members, "id", "email") , include_blank:true, class:'little_brother_select' %>
+        <% if @selected_user != current_user %>
+        <%= select_tag 'manager_select', options_from_collection_for_select(User.get_all_leader, "id", "email",selected_leader_id), include_blank:true, class:'manager_select' %>
+          <%= select_tag 'little_brother_select', options_from_collection_for_select(@selected_user.leader.team_members, "id", "email", selected_team_member_id) , include_blank:true, class:'little_brother_select' %>
+        <% else %>
+        <%= select_tag 'manager_select', options_from_collection_for_select(User.get_all_leader, "id", "email"), include_blank:true, class:'manager_select' %>
+          <%= select_tag 'little_brother_select', options_from_collection_for_select([], "id", "email",) , include_blank:true, class:'little_brother_select' %>
+        <% end %>
       <% else %>
-        <%= select_tag 'little_brother_select', options_from_collection_for_select(current_user.team_members, "id", "email", selected: selected_little_brother_id) , include_blank:true, class:'little_brother_select' %>
+        <%= select_tag 'little_brother_select', options_from_collection_for_select(current_user.team_members, "id", "email",selected_team_member_id) , include_blank:true, class:'little_brother_select' %>
       <% end %>
 
       <a href="#" value=<%= current_user.id%> class='current_user_select' ><%= current_user.username %></a>
-      <%= link_to '个人设置', user_setting_user_path %>
+      <%= link_to '个人设置', user_setting_user_path(current_user) %>
       <%= link_to '登出', destroy_user_session_path, method:'delete' %>
     <%else%>
       <%= link_to '登录', user_session_path %>

@@ -1,0 +1,27 @@
+<h5>个人设置</h5>
+<hr/>
+重置密码：老密码<%= text_field_tag 'user_old_pwd' %>&nbsp新密码<%= text_field_tag 'user_new_pwd' %>&nbsp<%= button_tag '确认', id:'user_reset_password', "data-user-id"=> current_user.id %>
+
+<script type="text/javascript">
+  $('#user_reset_password').click(function(){
+    var $old_pwd = $('#user_old_pwd');
+    var $new_pwd = $('#user_new_pwd');
+    var old_pwd = $('#user_old_pwd').val();
+    var new_pwd = $('#user_new_pwd').val();
+    var id = $(this).data('user-id');
+    $.ajax({
+      url: '/users/'+ id +'/reset_user_pwd',
+      type: 'post',
+      data: {old_pwd: old_pwd, new_pwd: new_pwd},
+      success: function(data){
+        if (data == 1){
+          alert('操作成功！');
+        } else {
+          alert('操作失败，请检查老密码之后重试！');
+          $old_pwd.val('');
+          $new_pwd.val('');
+        }
+      }
+    })
+  })
+</script>
