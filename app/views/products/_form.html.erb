@@ -207,14 +207,6 @@
   </div>
 <% end %>
     <div >
-      <%= form_tag(presale_product_product_path(@product), method:'get') do %>
-        <input type="text" id="datetimepicker" name='presale_date' data-date-format="yyyy-mm-dd">
-        <%= button_tag '设产品为预售并选择日期' %>
-      <%end%>
-      <%= form_tag(edited_product_product_path(@product), method:'get') do %>
-        <textarea cols="30" rows="5" name="editing_backup" placeholder="设置待修改备注" ></textarea>
-        <%= button_tag '待修改' %>
-      <%end%>
       <%= link_to '屏蔽产品', shield_product_product_path(@product) %>
     </div>
 

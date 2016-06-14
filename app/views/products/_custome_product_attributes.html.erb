@@ -5,7 +5,7 @@
     <% if attribute.is_locked %>
       <% if attribute.attributes_translation_histories.count > 0 %>
         <%= label_tag 'attribute_label', attribute.attribute_name %>
-        <%= select_tag "attribte_options[attribute_field_#{index}]", options_from_collection_for_select(attribute.attributes_translation_histories, "id", "china", translation_value.try(:id)),  form:"edit_product_#{@product.id}" %>
+        <%= select_tag "attribte_options[attribute_field_#{index}]", options_from_collection_for_select(attribute.attributes_translation_histories, "id", "china", translation_value.try(:id)), inlude_blank:true,  form:"edit_product_#{@product.id}" %>
         <br/>
       <% end %>
     <% else %>
