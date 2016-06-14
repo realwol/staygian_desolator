@@ -20,8 +20,6 @@
         <td><%= product.product_number %></td>
         <td>
           <%= link_to '编辑', edit_product_path(product) %>
-          <%= link_to '上架', onsale_product_product_path(product), data: { confirm: '确认上架?' } %>
-          <%= link_to '删除', product, method: :delete, data: { confirm: '确认删除?' } %>
         </td>
       </tr>
     <% end %>

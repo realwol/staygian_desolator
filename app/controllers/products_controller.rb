@@ -193,6 +193,15 @@ class ProductsController < ApplicationController
     else
       @products = selected_user.valid_products
     end
+
+    if product_brand.present?
+      brand = Brand.find_by(name: product_brand)
+      if brand.present?
+        @products = @products.where(brand_id: brand.id)
+      end
+    else
+    end
+
     search_query = []
     unless product_type.empty?
       ids_string = "(#{product_type},"
@@ -209,9 +218,9 @@ class ProductsController < ApplicationController
       @products = Product.where(producer: product_shop)
     end
 
-    unless product_brand.empty?
-      search_query << "brand like '%#{product_brand}%'"
-    end
+    # unless product_brand.empty?
+    #   search_query << "brand like '%#{product_brand}%'"
+    # end
 
     unless sku_value.empty?
       search_query << "sku like '%#{sku_value}%'"
@@ -326,8 +335,12 @@ class ProductsController < ApplicationController
   end
 
   def onsale_product
-    @product.update_attributes(on_sale:true, shield_type:0, update_status:true, translate_status: false)
-    redirect_to root_path
+    @product.update_attributes(on_sale:true, shield_type:0, update_status:true, translate_status: false, auto_flag: 0)
+    if @product.auto_flag == '14'
+      redirect_to root_path
+    else
+      redirect_to stand_by_products_products_path
+    end
   end
 
   def off_sale_products
@@ -635,20 +648,32 @@ class ProductsController < ApplicationController
   # DELETE /products/1.json
   def destroy
     if @product.update_status
-      # @product.product_info_translations.try(:destroy_all)
-      # @product.variables.try(:destroy_all)
-      @product.update_attributes(auto_flag: 13)
-      respond_to do |format|
-        format.html { redirect_to products_url, notice: 'Product was successfully destroyed.' }
-        format.json { head :no_content }
+      if @product.auto_flag == '14'
+        @product.update_attributes(auto_flag: 13)
+        respond_to do |format|
+          format.html { redirect_to stand_by_products_products_path, notice: 'Product was successfully destroyed.' }
+          format.json { head :no_content }
+        end
+      else
+        @product.update_attributes(auto_flag: 13)
+        respond_to do |format|
+          format.html { redirect_to products_url, notice: 'Product was successfully destroyed.' }
+          format.json { head :no_content }
+        end
       end
     else
-      # @product.product_info_translations.try(:destroy_all)
-      # @product.variables.try(:destroy_all)
-      @product.update_attributes(auto_flag: 13)
-      respond_to do |format|
-        format.html { redirect_to un_updated_page_products_url, notice: 'Product was successfully destroyed.' }
-        format.json { head :no_content }
+      if @product.auto_flag == '14'
+        @product.update_attributes(auto_flag: 13)
+        respond_to do |format|
+          format.html { redirect_to stand_by_products_products_path, notice: 'Product was successfully destroyed.' }
+          format.json { head :no_content }
+        end
+      else
+        @product.update_attributes(auto_flag: 13)
+        respond_to do |format|
+          format.html { redirect_to un_updated_page_products_url, notice: 'Product was successfully destroyed.' }
+          format.json { head :no_content }
+        end
       end
     end
   end
