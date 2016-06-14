@@ -207,8 +207,8 @@ class Product < ActiveRecord::Base
     xls_column_names = %w(item_sku item_name external_product_id external_product_id_type feed_product_type brand_name manufacture
                           part_number product_description update_delete standard_price currency condition_type condition_note quantity
                           website_shipping_weight website_shipping_weight_unit_of_measure bullet_point1 bullet_point2 bullet_point3
-                          bullet_point4 bullet_point5 recommended_browse_nodes1 recommended_browse_nodes2 generic_keywords1 generic_keywords12
-                          generic_keywords13 generic_keywords14 generic_keywords15 main_image_url other_image_url1
+                          bullet_point4 bullet_point5 recommended_browse_nodes1 recommended_browse_nodes2 generic_keywords1 generic_keywords2
+                          generic_keywords3 generic_keywords4 generic_keywords5 main_image_url other_image_url1
                           other_image_url2 other_image_url3 other_image_url4 other_image_url5 other_image_url6 other_image_url7
                           other_image_url8 is_separate parent_child parent_sku relationship_type variation_theme color_name color_map size_name size_map)
     cusomize_column_names = Product.get_all_customize_columns self.all
@@ -267,7 +267,8 @@ class Product < ActiveRecord::Base
         end
         xls_column_values << product_manufacture
         # part_number
-        xls_column_values << ('a'..'z').to_a.sample(5).join
+        xls_column_values << product.sku[0..35].lstrip
+        # xls_column_values << ('a'..'z').to_a.sample(5).join
         # product_description
         if product.product_type.product_type_description.present?
           product_type_description_content = AttributesTranslationHistory.find(product.product_type.product_type_description).read_attribute(language)
@@ -515,24 +516,30 @@ class Product < ActiveRecord::Base
           v_color = ''
           v_size = ''
           v_variable_info_translation = v
+          variable_sku = ''
           if v.color.present? && v.size.present?
             v_color = VariableTranslateHistory.where(word: v.color, variable_from:'color').first
             v_size = VariableTranslateHistory.where(word: v.size, variable_from:'size').first
-            xls_column_values << "#{product.sku}-#{v_color.try(:en)}#{v_size.try(:en)}"[0..35].lstrip
+            variable_sku = "#{product.sku}-#{v_color.try(:en)}#{v_size.try(:en)}"[0..35].lstrip
+            xls_column_values << variable_sku
           elsif v.color.present?
             if v_variable_info_translation
               v_color = VariableTranslateHistory.where(word: v.color, variable_from:'color').first
               v_size = ""
-              xls_column_values << "#{product.sku}-#{v_color.try(:en)}"[0..35].lstrip
+              variable_sku = "#{product.sku}-#{v_color.try(:en)}"[0..35].lstrip
+              xls_column_values << variable_sku
             else
-              xls_column_values << "这个变体没有翻译，请重新翻译"  
+              variable_sku = "这个变体没有翻译，请重新翻译"
+              xls_column_values << "这个变体没有翻译，请重新翻译"
             end
           elsif v.size.present?
             if v_variable_info_translation
               v_size = VariableTranslateHistory.where(word: v.size, variable_from:'size').first
-              xls_column_values << "#{product.sku}-#{v_size.try(:en)}"[0..35].lstrip
+              variable_sku = "#{product.sku}-#{v_size.try(:en)}"[0..35].lstrip
+              xls_column_values << variable_sku
             else
-              xls_column_values << "这个变体没有翻译，请重新翻译"  
+              variable_sku = "这个变体没有翻译，请重新翻译"
+              xls_column_values << "这个变体没有翻译，请重新翻译"
             end
           end
 
@@ -566,7 +573,7 @@ class Product < ActiveRecord::Base
           # manufacture
           xls_column_values << product_manufacture
           # part_number
-          xls_column_values << ('a'..'z').to_a.sample(5).join
+          xls_column_values << variable_sku
           # product_description
           xls_column_values << product_translation_detail
 

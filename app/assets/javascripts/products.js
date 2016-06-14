@@ -40,6 +40,7 @@ $(function(){
   });
 
   $('.remove_variable').click(function(){
+    $(this).parents('tr').next('tr').remove();
     $(this).parents('tr').remove();
     // var variable_id = $(this).data('variable-id');
     // $.ajax({
