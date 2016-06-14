@@ -3,7 +3,8 @@ class BrandsController < ApplicationController
 
   def recover_brand
     @brand.update_attributes(status: 1)
-    @brand.products.update_all(shield_type: 0)
+    @brand.products.update_all(shield_type: 5)
+    @brand.brand_shop_relations.update_all(status: 5)
 
     @brands = Brand.forbidden
   end
