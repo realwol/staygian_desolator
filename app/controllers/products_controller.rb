@@ -249,6 +249,10 @@ class ProductsController < ApplicationController
       @result_type = '删除产品'
       @result_button = 7
       @search_value = @products.auto_removed.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
+    when 'unchecked_products'
+      @result_type = '待审核产品'
+      @result_button = 8
+      @search_value = @products.unchecked.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
     end
   end
 

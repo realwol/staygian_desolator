@@ -99,10 +99,10 @@ def grasp_product tmall_link
   if brand_name.present?
     related_brand = Brand.find_by(name: brand_name)
     unless related_brand.present?
-     related_brand = Brand.create(name: brand_name, status: 0)
+     related_brand = Brand.create(name: brand_name, status: 1)
     end
     # create connections from shop to brand
-    binding_shop_with_brand @product, related_brand
+    binding_shop_with_brand @product.shop_id, related_brand.id
   end
 
   @product.brand_id = Brand.find_by(name: brand_name).try(:id)
@@ -173,7 +173,6 @@ def grasp_product tmall_link
     @product_images << upload_image
   end
 
-
   puts "===========upload cost"
   puts Time.now - test_start
 
@@ -181,21 +180,38 @@ def grasp_product tmall_link
     @product["images#{index+1}".to_sym] = img
   end
 
-  if related_brand.status
+  if related_brand.status != '0'
     @product.shield_type = tmall_link.product_status if tmall_link.product_status.present?
+    product_shop_id = @product.shop_id
+    brand_shop_relation = BrandShopRelation.find_by(shop_id: product_shop_id, brand_id: related_brand.id)
+    if brand_shop_relation.present?
+      if brand_shop_relation.status == '1'
+        @product.shield_type = 0
+      elsif brand_shop_relation.status == '5'
+        @product.shield_type = 5
+      elsif brand_shop_relation.status == '2'
+        tmall_link.destroy
+        return false
+      end
+    end
   else
     @product.shield_type = 1
   end
 
+  # remove products and tmall link if shop forbidden before save
+  unless @product.shop.status
+    tmall_link.destroy
+    return false
+  end
   @product.save
   @product.reload
 
-  product_brand = @product.brand
-  product_shop = @product.shop
-  brand_shop_relation = BrandShopRelation.find_by(shop_id: product_shop.id, brand_id: product_brand.id)
-  if brand_shop_relation.present?
-    @product.update_attributes(shield_type: 5) if brand_shop_relation.status == '5'
-  end
+  # product_brand = @product.brand
+  # product_shop = @product.shop
+  # brand_shop_relation = BrandShopRelation.find_by(shop_id: product_shop.id, brand_id: product_brand.id)
+  # if brand_shop_relation.present?
+  #   @product.update_attributes(shield_type: 5) if brand_shop_relation.status == '5'
+  # end
 
   @sizes = []
   @colors = []
@@ -315,8 +331,11 @@ def grasp_product tmall_link
   end
 end
 
-def binding_shop_with_brand product, brand
-    BrandShopRelation.create(brand_id: brand.id, shop_id: product.shop_id, status: 5)
+def binding_shop_with_brand shop_id, brand_id
+  shop_brand_relation = BrandShopRelation.find_by(shop_id: shop_id, brand_id: brand_id)
+  unless shop_brand_relation.present?
+    BrandShopRelation.create(brand_id: brand_id, shop_id: shop_id, status: 5)
+  end
 end
 
 def ungrasp_tmall_link

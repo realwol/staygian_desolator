@@ -30,13 +30,14 @@ class Product < ActiveRecord::Base
   scope :un_shield, -> {where(shield_type: 0)}
   scope :shield, -> {where(shield_type: 1)}
   scope :edited, -> {where(shield_type: 4)}
-  scope :onsale, -> {where(on_sale: true)}
+  scope :onsale, -> {where(on_sale: true).not_auto_removed}
   scope :offsale, -> {where(on_sale: false).un_shield}
   scope :temp_offsale, -> {where(shield_type: 3).where(on_sale:false)}
   # scope :pre_saled, -> {where.not(presale_date: nil).where(shield_type:2).where(on_sale:false)}
   scope :pre_saled, -> {where(shield_type:2).where(on_sale:false)}
   scope :auto_stand_by, -> {where(auto_flag: 14)}
   scope :auto_removed, -> {where(auto_flag: 13)}
+  scope :not_auto_removed, -> {where.not(auto_flag: 13)}
   scope :unchecked, -> {where(shield_type: 5)}
   # scope :not_off_sale, ->{where(on_sale:true)}
 

@@ -48,8 +48,9 @@
               <%= link_to '翻译预览', translate_preview_product_path(product) %>
               <%= link_to '编辑', edit_product_path(product) %>
               <%= link_to '屏蔽', shield_product_product_path(product), data:{ confirm:'确认屏蔽？'} %>
-              <%= link_to '下架', offsale_product_product_path(product), data:{ confirm:'确认下架？'} %>
               <a href="#" class="reGraspProduct" data-product-id="<%= product.id %>" >重新抓取</a>
+            <% when 8 %>
+
             <% end %>
           </td>
         </tr>
@@ -62,18 +63,6 @@
 <% if @search_value.present? %>
   <% if @result_button == 6 %>
   <% elsif @result_button == 0 %>
-    <%= form_tag off_sale_all_products_path do %>
-      <%= hidden_field_tag 'all_offsale_products', nil, value: @search_value.map(&:id).join(' ') %>
-      <%= submit_tag '全部下架', data: {confirm:'全部下架？'} %>
-    <% end %>
-    <%= form_tag (on_sale_all_products_path ) do %>
-      <%= hidden_field_tag 'all_onsale_products', nil, value: @search_value.map(&:id).join(' ') %>
-      <%= submit_tag '全部上架', data: {confirm:'确认上架？'} %>
-    <% end %>
-    <%= form_tag shield_all_products_path do %>
-      <%= hidden_field_tag 'all_shield_products', nil, value: @search_value.map(&:id).join(' ') %>
-      <%= submit_tag '全部屏蔽', data: {confirm:'全部屏蔽？'} %>
-    <% end %>
   <% end %>
 
   <%= link_to '更改产品分类', change_product_type_products_path(product_id: @search_value.map(&:id)) %>

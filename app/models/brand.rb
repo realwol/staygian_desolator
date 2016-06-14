@@ -21,5 +21,9 @@ class Brand < ActiveRecord::Base
     stand_by_shop_ids = self.brand_shop_relations.where(status: '2').pluck(:shop_id)
     Shop.where("id in (?) ", stand_by_shop_ids)
   end
+
+  def is_forbidden?
+    self.status == '0'
+  end
   
 end

@@ -22,7 +22,7 @@
     <%= f.label "产品号:" %>
     <%= f.text_field :product_number, size:20 %>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
     <%= f.label "品牌:" %>
-    <%= f.text_field :brand, size:30 %>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+    <%= @product.brand.try(:name) %>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
     <%= f.label "生产商家:" %>
     <%= f.text_field :producer %>  
   </div>
@@ -119,19 +119,18 @@
 
   <hr/>
   <h3>Editing Variables</h3>
-    <table class="table">
+    <table class="table table-bordered">
       <thead>
         <tr>
           <th><%= check_box_tag 'check_all' %></th>
-          <th><%= '标题' %></th>
-          <th><%= '颜色' %>&nbsp&nbsp<button id="changeAttributeName" >改名</button></th>
           <th>图片(鼠标置于图片上预览大图,左键双击删除同类图片)</th>
-          <th><%= '描述' %></th>
-          <th><%= '重量' %></th>
+          <th><%= '颜色' %>&nbsp&nbsp<button id="changeAttributeName" >改名</button></th>
           <th><%= '尺寸' %></th>
-          <th>Price</th>
-          <th>Stock</th>
-          <th>Options</th>
+          <th><%= '价格' %></th>
+          <th><%= '重量' %></th>
+          <th><%= '库存' %></th>
+          <th><%= '描述' %></th>
+          <th><%= '操作' %></th>
         </tr>
       </thead>
       <tbody>
@@ -145,14 +144,8 @@
 
           <tr>
             <%= hidden_field_tag 'variable[][index]', nil, value:v.id, class:'hidden_tr_need_remove' %>
-            <td><%= check_box_tag 'item' %></td>
-            <% if v.title.present? %>
-              <td><%= text_field_tag 'variable[][title]', nil, value: v.title, class:'variable_title' %></td>
-            <% else %>
-              <td><%= text_field_tag 'variable[][title]', nil, value: @product.title, class:'variable_title' %></td>
-            <% end %>
-            <td><%= text_field_tag 'variable[][color]', nil, value: v.color, class:'variable_color', style:'width:100px;', "data-origin-color-value"=> v.color %></td>
-            <td>
+            <td rowspan="2"><%= check_box_tag 'item' %></td>
+            <td rowspan="2">
               <ul id="ul-sortable" style="list-style-type: none; margin: 0; padding: 0; width: 450px;">
               <% v.valid_images.each_with_index do |img, vv_index| %>
                 <li class="ui-state-default" style="float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px;">
@@ -171,18 +164,30 @@
               <% end %>
               </ul>
             </td>
-            <td><%= text_area_tag 'variable[][desc]', v.desc, style:'height:47px;', class:'variable_desc' %></td>
+
+            <td><%= text_field_tag 'variable[][color]', nil, value: v.color, class:'variable_color', style:'width:80px;', "data-origin-color-value"=> v.color %></td>
+            <td><%= text_field_tag 'variable[][size]', nil, value:v.size, "data-origin-size" => v.size, class:'variable_size', style:'width:70px' %></td>
+            <td><%= text_field_tag 'variable[][price]', nil, value:v.price, class:'variable_price', style:'width:50px' %></td>
             <td>
               <% if v.weight.present? %>
-                <%= text_field_tag 'variable[][weight]', v.weight, style:'width:100px;', class:'variable_weight' %>
+                <%= text_field_tag 'variable[][weight]', v.weight, style:'width:50px;', class:'variable_weight' %>
               <% else %>
-                <%= text_field_tag 'variable[][weight]', @product.product_weight, style:'width:100px;', class:'variable_weight' %>
+                <%= text_field_tag 'variable[][weight]', @product.product_weight, style:'width:50px;', class:'variable_weight' %>
               <% end %>
             </td>
-            <td><%= text_field_tag 'variable[][size]', nil, value:v.size, "data-origin-size" => v.size, class:'variable_size', style:'width:90px' %></td>
-            <td><%= text_field_tag 'variable[][price]', nil, value:v.price, class:'variable_price', style:'width:60px' %></td>
-            <td><%= text_field_tag 'variable[][stock]', nil, value:v.stock, style:'width:60px' %></td>
-            <td><input type='button' class='remove_variable' value='Remove' data-variable-id="<%= v.id %>" /></td>
+            <td><%= text_field_tag 'variable[][stock]', nil, value:v.stock, style:'width:40px' %></td>
+            <td rowspan="2" ><%= text_area_tag 'variable[][desc]', v.desc, style:'height:60px;', class:'variable_desc' %></td>
+            <td rowspan="2" ><input type='button' class='remove_variable' value='Remove' data-variable-id="<%= v.id %>" /></td>
+          </tr>
+
+          <tr>
+            <td colspan="5">
+              <% if v.title.present? %>
+                <%= text_field_tag 'variable[][title]', nil, value: v.title, class:'variable_title', style:'width:100%;' %>
+              <% else %>
+                <%= text_field_tag 'variable[][title]', nil, value: @product.title, class:'variable_title', style:'width:100%;' %>
+              <% end %>
+            </td>
           </tr>
         <% end %>
       </tbody>

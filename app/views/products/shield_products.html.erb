@@ -20,7 +20,10 @@
         <td><%= product.sku %></td>
         <td><%= product.product_number %></td>
         <td>
-          <%= link_to '编辑', edit_product_path(product) %>
+          <% if product.brand.present? && product.brand.is_forbidden? %>
+          <% else %>
+            <%= link_to '编辑', edit_product_path(product) %>
+          <% end %>
         </td>
       </tr>
     <% end %>
