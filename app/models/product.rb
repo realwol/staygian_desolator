@@ -260,11 +260,7 @@ class Product < ActiveRecord::Base
         end
         xls_column_values << product_brand_name_translation
         # manufacture
-        if product.shop.present?
-          product_manufacture = product.shop.manufacture
-        else
-          product_manufacture = product_brand_name_translation
-        end
+        product_manufacture = product.brand.try(:english_name)
         xls_column_values << product_manufacture
         # part_number
         xls_column_values << product.sku[0..35].lstrip
@@ -543,7 +539,6 @@ class Product < ActiveRecord::Base
             end
           end
 
-          xls_column_values << v.read_attribute("#{variable_hash[language.to_sym]}")
           v_title = product_translation[:title]
           if v.title.present? && v.read_attribute("title_#{variable_hash[language.to_sym]}").present?
             v_title = v.read_attribute("title_#{variable_hash[language.to_sym]}")

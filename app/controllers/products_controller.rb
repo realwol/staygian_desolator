@@ -629,7 +629,10 @@ class ProductsController < ApplicationController
               VariableTranslateHistory.create(word: variable_color, variable_from: 'color', user: @product.user)
             end
           end
+        else
+          @product.variables.destroy_all
         end
+
         TranslateToken.create(t_id:@product.id, t_type:'product', t_status: true, t_method:'update')
         if params[:is_return] == 'on'
           format.html { redirect_to edit_product_path(@product), notice: 'Product was successfully updated.' }
