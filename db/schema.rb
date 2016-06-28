@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160613122052) do
+ActiveRecord::Schema.define(version: 20160628144051) do
 
   create_table "accounts", force: :cascade do |t|
     t.string   "name",       limit: 255
@@ -53,6 +53,15 @@ ActiveRecord::Schema.define(version: 20160613122052) do
     t.datetime "updated_at",                            null: false
   end
 
+  create_table "backup_histories", force: :cascade do |t|
+    t.integer  "order_id",      limit: 4
+    t.integer  "order_item_id", limit: 4
+    t.string   "content",       limit: 255
+    t.integer  "user_id",       limit: 4
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
   create_table "brand_shop_relations", force: :cascade do |t|
     t.integer  "brand_id",           limit: 4
     t.integer  "shop_id",            limit: 4
@@ -71,6 +80,21 @@ ActiveRecord::Schema.define(version: 20160613122052) do
     t.string   "status",       limit: 255
     t.datetime "created_at",               null: false
     t.datetime "updated_at",               null: false
+  end
+
+  create_table "buyers", force: :cascade do |t|
+    t.string   "email",                 limit: 255
+    t.string   "buyer_name",            limit: 255
+    t.string   "state_or_region",       limit: 255
+    t.string   "city",                  limit: 255
+    t.string   "country_code",          limit: 255
+    t.string   "postal_code",           limit: 255
+    t.string   "address_line1",         limit: 255
+    t.string   "name",                  limit: 255
+    t.string   "phone",                 limit: 255
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+    t.string   "platform_order_number", limit: 255
   end
 
   create_table "cash_rates", force: :cascade do |t|
@@ -109,6 +133,44 @@ ActiveRecord::Schema.define(version: 20160613122052) do
     t.boolean  "is_whole",     limit: 1
     t.boolean  "is_auto_save", limit: 1
     t.integer  "usage_count",  limit: 4
+  end
+
+  create_table "financial_turnovers", force: :cascade do |t|
+    t.integer  "turnover_type", limit: 4
+    t.datetime "date"
+    t.float    "amount",        limit: 24
+    t.string   "income_type",   limit: 255
+    t.string   "income_method", limit: 255
+    t.string   "expand_type",   limit: 255
+    t.string   "creater_id",    limit: 255
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.string   "expand_method", limit: 255
+    t.string   "income_one",    limit: 255
+    t.string   "expand_one",    limit: 255
+  end
+
+  create_table "logistic_channels", force: :cascade do |t|
+    t.string   "name",                            limit: 255
+    t.integer  "logistic_company_id",             limit: 4
+    t.boolean  "is_using",                        limit: 1
+    t.datetime "created_at",                                  null: false
+    t.datetime "updated_at",                                  null: false
+    t.string   "platform_shipping_method",        limit: 255
+    t.string   "platform_shipping_method_server", limit: 255
+    t.string   "code",                            limit: 255
+  end
+
+  create_table "logistic_companies", force: :cascade do |t|
+    t.string   "name",       limit: 255
+    t.boolean  "is_auth",    limit: 1
+    t.boolean  "is_using",   limit: 1
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+    t.string   "api_server", limit: 255
+    t.string   "username",   limit: 255
+    t.string   "password",   limit: 255
+    t.text     "auth_token", limit: 65535
   end
 
   create_table "merchant_sku_relations", force: :cascade do |t|
@@ -150,6 +212,114 @@ ActiveRecord::Schema.define(version: 20160613122052) do
     t.string   "upload_type", limit: 255
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
+  end
+
+  create_table "order_items", force: :cascade do |t|
+    t.string   "order_item_id",                          limit: 255
+    t.string   "platform_order_number",                  limit: 255
+    t.string   "order_id",                               limit: 255
+    t.datetime "paid_date"
+    t.string   "principal_currency",                     limit: 255
+    t.float    "principal_amount",                       limit: 24
+    t.string   "tax_currency",                           limit: 255
+    t.float    "tax_amount",                             limit: 24
+    t.string   "gift_wrap_currency",                     limit: 255
+    t.float    "gift_wrap_amount",                       limit: 24
+    t.string   "gift_wrap_tax_currency",                 limit: 255
+    t.float    "gift_wrap_tax_amount",                   limit: 24
+    t.string   "shipping_charge_currency",               limit: 255
+    t.float    "shipping_charge_amount",                 limit: 24
+    t.string   "shipping_tax_currency",                  limit: 255
+    t.float    "shipping_tax_amount",                    limit: 24
+    t.string   "commission_currency",                    limit: 255
+    t.float    "commission_amount",                      limit: 24
+    t.string   "fixed_closing_fee_currency",             limit: 255
+    t.float    "fixed_closing_fee_amount",               limit: 24
+    t.string   "gift_wrap_commission_currency",          limit: 255
+    t.float    "gift_wrap_commission_amount",            limit: 24
+    t.string   "sales_tax_collection_fee_currency",      limit: 255
+    t.float    "sales_tax_collection_fee_amount",        limit: 24
+    t.string   "shipping_hb_currency",                   limit: 255
+    t.float    "shipping_hb_amount",                     limit: 24
+    t.string   "variable_closing_fee_currency",          limit: 255
+    t.float    "variable_closing_fee_amount",            limit: 24
+    t.integer  "quantity_shipped",                       limit: 4
+    t.string   "seller_sku",                             limit: 255
+    t.string   "product_id",                             limit: 255
+    t.string   "user_id",                                limit: 255
+    t.string   "merchant_id",                            limit: 255
+    t.string   "vendor_id",                              limit: 255
+    t.integer  "buyer_id",                               limit: 4
+    t.datetime "posted_date"
+    t.string   "marketplace_name",                       limit: 255
+    t.datetime "created_at",                                                               null: false
+    t.datetime "updated_at",                                                               null: false
+    t.string   "title",                                  limit: 255
+    t.string   "asin",                                   limit: 255
+    t.string   "condition_note",                         limit: 255
+    t.string   "quantity_ordered",                       limit: 255
+    t.string   "shipping_discount_currency",             limit: 255
+    t.float    "shipping_discount_amount",               limit: 24
+    t.string   "image",                                  limit: 255
+    t.string   "purchase_price",                         limit: 255
+    t.datetime "purchase_date"
+    t.datetime "shipped_date"
+    t.integer  "logistic_channel_id",                    limit: 4
+    t.integer  "purchase_method_id",                     limit: 4
+    t.string   "purchase_order_number",                  limit: 255
+    t.string   "purchase_tracking_number",               limit: 255
+    t.string   "shipping_order_number",                  limit: 255
+    t.string   "shipping_tracking_number",               limit: 255
+    t.integer  "shipping_tracking_number_update_status", limit: 4,   default: 1
+    t.string   "order_item_ship_status",                 limit: 255, default: "Unupdated"
+    t.string   "backup",                                 limit: 255
+    t.string   "refund_currency",                        limit: 255
+    t.float    "refund_amount",                          limit: 24
+    t.datetime "first_finish_time"
+    t.datetime "to_problem_date"
+    t.integer  "reship_order_item_id",                   limit: 4
+    t.string   "buyer_country_code",                     limit: 255
+    t.string   "flag_shipping_status",                   limit: 255
+  end
+
+  create_table "orders", force: :cascade do |t|
+    t.string   "platform_order_number",           limit: 255
+    t.string   "local_order_number",              limit: 255
+    t.string   "order_type",                      limit: 255
+    t.datetime "purchase_date"
+    t.datetime "earliest_ship_date"
+    t.datetime "latest_ship_date"
+    t.datetime "last_update_date"
+    t.datetime "earliest_delivery_date"
+    t.datetime "latest_delivery_date"
+    t.string   "ship_service_level",              limit: 255
+    t.integer  "number_of_item_shipped",          limit: 4
+    t.integer  "number_of_item_unshipped",        limit: 4
+    t.string   "order_status",                    limit: 255
+    t.string   "sales_channel",                   limit: 255
+    t.boolean  "shipped_by_amazon_TFM",           limit: 1
+    t.boolean  "is_business_order",               limit: 1
+    t.string   "currency",                        limit: 255
+    t.float    "amount",                          limit: 24
+    t.boolean  "is_premium_order",                limit: 1
+    t.string   "marketplace_id",                  limit: 255
+    t.string   "fulfillment_channel",             limit: 255
+    t.string   "payment_method",                  limit: 255
+    t.boolean  "is_prime",                        limit: 1
+    t.boolean  "shipment_service_level_category", limit: 1
+    t.string   "seller_id",                       limit: 255
+    t.string   "buyer_id",                        limit: 255
+    t.string   "merchant_id",                     limit: 255
+    t.datetime "created_at",                                                  null: false
+    t.datetime "updated_at",                                                  null: false
+    t.string   "contact_email",                   limit: 255
+    t.boolean  "is_item_created",                 limit: 1,   default: false
+    t.datetime "last_request_time"
+    t.string   "country_code",                    limit: 255
+    t.string   "backup",                          limit: 255
+    t.string   "image",                           limit: 255
+    t.string   "order_ship_status",               limit: 255
+    t.integer  "reship_order_id",                 limit: 4
   end
 
   create_table "product_attributes", force: :cascade do |t|
@@ -367,10 +537,28 @@ ActiveRecord::Schema.define(version: 20160613122052) do
     t.string   "key1",       limit: 255
     t.string   "key2",       limit: 255
     t.string   "key3",       limit: 255
+    t.integer  "key4",       limit: 4,     default: 0
     t.text     "value",      limit: 65535
     t.boolean  "is_using",   limit: 1,     default: true
     t.datetime "created_at",                              null: false
     t.datetime "updated_at",                              null: false
+    t.string   "key5",       limit: 255
+  end
+
+  create_table "refund_lists", force: :cascade do |t|
+    t.datetime "refund_date"
+    t.string   "refund_type",              limit: 255
+    t.string   "order_id",                 limit: 255
+    t.string   "order_item_id",            limit: 255
+    t.float    "refund_amount",            limit: 24
+    t.text     "backup",                   limit: 65535
+    t.string   "buyer_memo",               limit: 255
+    t.string   "refund_reason",            limit: 255
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
+    t.string   "currency",                 limit: 255
+    t.float    "shipping_refund_amount",   limit: 24
+    t.string   "shipping_refund_currency", limit: 255
   end
 
   create_table "role_auth_relations", force: :cascade do |t|
@@ -532,6 +720,7 @@ ActiveRecord::Schema.define(version: 20160613122052) do
     t.string   "current_sign_in_ip",     limit: 255
     t.string   "last_sign_in_ip",        limit: 255
     t.datetime "deleted_at"
+    t.integer  "order_role",             limit: 4,   default: 1
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

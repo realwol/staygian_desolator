@@ -16,7 +16,6 @@ def start
     if tmall_link.present?
       if TmallLink.where(product_link_id: tmall_link.product_link_id).count > 1
         tmall_link.update_attributes(status:true)
-        puts tmall_link.address
         return false
       else
         tmall_link.update_attributes(status:true)

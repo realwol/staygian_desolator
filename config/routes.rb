@@ -169,6 +169,7 @@ Rails.application.routes.draw do
       post 'create_new_user'
       post 'set_selected_user'
       post 'create_user_from_depart'
+      post 'update_responser'
     end
 
     member do

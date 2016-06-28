@@ -2,6 +2,12 @@ class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy, :change_user_password, :user_setting, :reset_user_pwd, :admin_reset_user_pwd]
   before_action :authenticate_user!
 
+  def update_responser
+    account = Account.find(params[:account_id])
+    account.update_attributes(user_id: params[:user_id]) if account.present?
+    render json:true
+  end
+
   def user_setting
     
   end
@@ -154,6 +160,6 @@ class UsersController < ApplicationController
     end
 
     def create_user_from_department_param
-      params.permit(:email, :username, :password, :leader_id, :user_role_id, :manager, :department_id, :user_product_version)
+      params.permit( :order_role, :email, :username, :password, :leader_id, :user_role_id, :manager, :department_id, :user_product_version)
     end
 end

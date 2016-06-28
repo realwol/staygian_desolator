@@ -2,7 +2,11 @@ class MerchantsController < ApplicationController
   before_action :set_merchant, only: [:edit, :update, :stop_merchant, :destroy, :add_merchant_product, :update_shipment_cost, :get_merchant_skus]
 
   def account_list
-    @accounts = current_user.valid_account
+    if current_user.is_dd?
+      @accounts = Account.all
+    else
+      @accounts = current_user.valid_account
+    end
   end
 
   def create_account
@@ -166,10 +170,14 @@ class MerchantsController < ApplicationController
   end
 
   def index
-    # @merchants = current_user.valid_merchants
-    # @account = Account.new
-    @account = Account.find(params[:account_id])
-    @merchants = @account.merchants
+    if current_user.is_dd?
+      @merchants = Merchant.all
+    else
+      @merchants = current_user.valid_merchants
+    end
+    @account = Account.new
+    # @account = Account.find(params[:account_id])
+    # @merchants = @account.merchants
   end
 
   def create
