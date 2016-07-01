@@ -33,11 +33,11 @@ class MerchantsController < ApplicationController
   def export_all_account
     aa = Time.now
     accounts = Account.valid
-    account_file_names = []
+    account_file_names, folder_array = [], []
     a, b = 0, 0
     accounts.each do |account|
       folder = "public/export/#{account.name}#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}/"
-
+      folder_array << folder
       # create files
       system("mkdir #{folder}")
       input_filenames = []
@@ -90,7 +90,12 @@ class MerchantsController < ApplicationController
       end
     end
     puts "all counts #{a}, actual counts #{b} and cost #{Time.now - aa}"
+
     send_file bigzipfile_name, :type=> 'application/text', :x_sendfile=>true
+    folder_array.each do |filename|
+      FileUtils.rm_rf filename
+    end
+    # File.delete bigzipfile_name
   end
 
   def export_account
