@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160628144051) do
+ActiveRecord::Schema.define(version: 20160702154006) do
 
   create_table "accounts", force: :cascade do |t|
     t.string   "name",       limit: 255
@@ -204,6 +204,7 @@ ActiveRecord::Schema.define(version: 20160628144051) do
     t.boolean  "status",                     limit: 1,   default: true
     t.float    "shipment_cost",              limit: 24
     t.boolean  "update_flag",                limit: 1
+    t.datetime "last_amazon_datetime"
   end
 
   create_table "mws_upload_histories", force: :cascade do |t|
@@ -218,6 +219,7 @@ ActiveRecord::Schema.define(version: 20160628144051) do
     t.string   "order_item_id",                          limit: 255
     t.string   "platform_order_number",                  limit: 255
     t.string   "order_id",                               limit: 255
+    t.string   "order_status",                           limit: 255
     t.datetime "paid_date"
     t.string   "principal_currency",                     limit: 255
     t.float    "principal_amount",                       limit: 24
@@ -280,6 +282,7 @@ ActiveRecord::Schema.define(version: 20160628144051) do
     t.integer  "reship_order_item_id",                   limit: 4
     t.string   "buyer_country_code",                     limit: 255
     t.string   "flag_shipping_status",                   limit: 255
+    t.string   "origin_address",                         limit: 255
   end
 
   create_table "orders", force: :cascade do |t|
@@ -592,6 +595,7 @@ ActiveRecord::Schema.define(version: 20160628144051) do
     t.datetime "created_at",                                     null: false
     t.datetime "updated_at",                                     null: false
     t.boolean  "first_link_status", limit: 1,     default: true
+    t.integer  "father_id",         limit: 4
   end
 
   add_index "search_links", ["user_id"], name: "index_search_links_on_user_id", using: :btree

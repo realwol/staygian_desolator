@@ -3,6 +3,7 @@ class ShopsController < ApplicationController
 
 	def stop_and_delete
 		search_link = SearchLink.find(params[:id])
+
 		search_link.products.each do |product|
 			# product.variables
 		  product.variables.destroy_all
@@ -11,6 +12,20 @@ class ShopsController < ApplicationController
 		end
 		search_link.tmall_links.destroy_all
 		search_link.destroy
+    search_links = SearchLink.where(father_id: params[:id])
+    if search_links.present?
+    	search_links.each do |search_link|
+				search_link.products.each do |product|
+					# product.variables
+				  product.variables.destroy_all
+				  product.product_info_translations.destroy_all
+				  product.destroy
+				end
+				search_link.tmall_links.destroy_all
+				search_link.destroy
+    	end
+    end
+
 		render json:true
 	end
 
