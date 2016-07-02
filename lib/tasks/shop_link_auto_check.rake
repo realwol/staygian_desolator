@@ -162,7 +162,12 @@ def grasp_search_link link
         if SearchLink.where(link: new_url).count > 0
           puts 'old next url'
         else
-          SearchLink.create(father_id: link.id, first_link_status: 0, grasp_shop_id: link.grasp_shop_id, link: new_url, user: link.user, status: true, check_status: false, link_desc: link.link_desc, forbidden_words: link.forbidden_words)
+          if link.father_id.present?
+            father_id = link.father_id
+          else
+            father_id = link.id
+          end
+          SearchLink.create(father_id: father_id, first_link_status: 0, grasp_shop_id: link.grasp_shop_id, link: new_url, user: link.user, status: true, check_status: false, link_desc: link.link_desc, forbidden_words: link.forbidden_words)
         end
       end
       a = a.children

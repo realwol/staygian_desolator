@@ -986,7 +986,7 @@ class Product < ActiveRecord::Base
     end
     self.sku_number = base_number + 1
 
-    self.sku = self.sku_number.to_s.prepend(("T" + "0" * (7- self.sku_number.to_s.length)) )
+    self.sku = self.sku_number.to_s.prepend(("M" + "0" * (7- self.sku_number.to_s.length)) )
   end
 
 end
