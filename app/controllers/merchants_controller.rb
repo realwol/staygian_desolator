@@ -2,22 +2,18 @@ class MerchantsController < ApplicationController
   before_action :set_merchant, only: [:edit, :update, :stop_merchant, :destroy, :add_merchant_product, :update_shipment_cost, :get_merchant_skus]
 
   def account_list
-    if current_user.is_dd?
-      @accounts = Account.all
-    else
-      @accounts = current_user.valid_account
-    end
+    @accounts = current_user.valid_account
   end
 
   def create_account
     Account.create(name: params[:name], platform: params[:platform], user: current_user)
-    @accounts = Account.valid
+    @accounts = current_user.valid_account
   end
 
   def remove_account
     account = Account.find(params[:id])
     account.destroy
-    @accounts = Account.valid
+    @accounts = current_user.valid_account
   end
 
   def set_account_updated
@@ -32,7 +28,7 @@ class MerchantsController < ApplicationController
 
   def export_all_account
     aa = Time.now
-    accounts = Account.valid
+    accounts = current_user.valid_account
     account_file_names, folder_array = [], []
     a, b = 0, 0
     accounts.each do |account|

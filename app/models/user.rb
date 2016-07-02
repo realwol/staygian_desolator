@@ -24,7 +24,11 @@ class User < ActiveRecord::Base
   belongs_to :department
 
   def valid_account
-    self.accounts
+    if self.is_dd? || self.is_jj?
+      Account.all
+    else
+      self.accounts
+    end
   end
 
   def self.get_all_leader
@@ -60,12 +64,13 @@ class User < ActiveRecord::Base
   end
 
   def is_jj?
-    self.id == 38 && self.email == 'gaojinjin'
-  end
-
-  def is_manager?
+    # self.id == 38 && self.email == 'gaojinjin'
     self.role == 2
   end
+
+  # def is_manager?
+  #   self.role == 2
+  # end
 
   def is_little_brother?
     self.role == 3

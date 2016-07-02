@@ -164,7 +164,6 @@ module MwsHelper
       request.body = xml_body
       response = Net::HTTP.start(url.host, url.port, :use_ssl => url.scheme == 'https') {|http| http.request(request)}
       puts response.body
-      # binding.pry
     end
   end
 end

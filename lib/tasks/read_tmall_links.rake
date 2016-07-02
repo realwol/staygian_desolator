@@ -37,7 +37,6 @@ def grasp_list link
   driver.get link
 
   # make the login
-  binding.pry
   list = File.new("public/tmall_links.txt",'w')
 
   loop do
@@ -46,7 +45,6 @@ def grasp_list link
     images.each do |link|
       list.puts link.attribute('href')
     end
-    # binding.pry
     url = next_url
     driver.get url unless next_url.nil?
     break if next_url.nil?

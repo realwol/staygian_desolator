@@ -11,18 +11,18 @@ require 'mina/git'
 #   branch       - Branch name to deploy. (needed by mina/git)
 
 set :user, 'root'
-if ENV['env'] == 'test1'
+if ENV['env'] == 'test'
   set :domain, '112.74.89.21'
   set :deploy_to, '/root/amazon/tmall'
   set :branch, 'test'
-elsif ENV['env'] == 'test'
-  set :domain, '120.25.74.164'
-  set :deploy_to, '/root/work/amazon/tmall_test'
-  set :branch, 'test'
-else
-  set :domain, '120.25.74.164'
-  set :deploy_to, '/root/work/amazon/tmall'
-  set :branch, 'master'
+elsif ENV['env'] == 'new'
+  set :domain, '120.76.188.226'
+  set :deploy_to, '/root/amazon/tmall_new'
+  set :branch, 'new'
+# else
+#   set :domain, '120.25.74.164'
+#   set :deploy_to, '/root/work/amazon/tmall'
+#   set :branch, 'master'
 end
 set :repository, 'https://git.oschina.net/gaaraLi/amazon_tmall.git'
 

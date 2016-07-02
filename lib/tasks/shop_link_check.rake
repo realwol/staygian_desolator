@@ -32,7 +32,6 @@ def grasp_link shop_links
   driver.get shop_links.first.link
 
   # make the login
-  binding.pry
 
   shop_links.each do |shop_link|
     driver.get shop_link.link
@@ -55,7 +54,6 @@ def grasp_link shop_links
         link_hash[:shop_id]  = shop_link.shop_id
         links_array << link_hash.dup
       end
-      # binding.pry
       begin
         next_url =  driver.find_element(class: 'ui-page-next').attribute('href')
       rescue
