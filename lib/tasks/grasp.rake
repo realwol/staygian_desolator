@@ -89,22 +89,6 @@ def grasp_product tmall_link
     @details << d + "<br/>\n"
   end
 
-  b_string = @details.join('')
-  bs = b_string.index("品牌").to_i
-  be = b_string[bs..-1].index("<br/>").to_i
-  brand_name = b_string[bs+4..be+bs-1].try(:strip)
-
-  related_brand = ''
-  if brand_name.present?
-    related_brand = Brand.find_by(name: brand_name)
-    unless related_brand.present?
-     related_brand = Brand.create(name: brand_name, status: 1)
-    end
-    # create connections from shop to brand
-    binding_shop_with_brand @product.shop_id, related_brand.id
-  end
-
-  @product.brand_id = Brand.find_by(name: brand_name).try(:id)
 
   @product.producer = html.css('div#shopExtra strong').text
 
@@ -139,6 +123,23 @@ def grasp_product tmall_link
     end
     details_after_filter << detail unless filter_word_list.index(detail[0..end_count])
   end
+
+  b_string = @details.join('')
+  bs = b_string.index("品牌").to_i
+  be = b_string[bs..-1].index("<br/>").to_i
+  brand_name = b_string[bs+4..be+bs-1].try(:strip)
+  related_brand = ''
+  if brand_name.present?
+    related_brand = Brand.find_by(name: brand_name)
+    unless related_brand.present?
+     related_brand = Brand.create(name: brand_name, status: 1)
+    end
+    # create connections from shop to brand
+    binding_shop_with_brand @product.shop_id, related_brand.id
+  end
+
+  @product.brand_id = Brand.find_by(name: brand_name).try(:id)
+
 
   @product.details = details_after_filter.join
 

@@ -319,11 +319,11 @@ def filter_search_product product_html, link
 end
 
 def check_search_links
-  # 2.times do
-    # sleep rand(15..20)
+  2.times do
+    sleep rand(15..20)
     link = get_search_link
     grasp_search_link link if link.present?
-  # end
+  end
 end
 
 def get_search_link

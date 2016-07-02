@@ -6,7 +6,10 @@
     </tr>
     <% @accounts.each do |account| %>
       <tr>
-        <td><%= account.name %></td>
+        <td>
+          <%= text_field_tag '', account.name, class:'account_name' %>
+          <%= button_tag '改名', class:'update_account_name', "data-account-id"=> account.id %>
+        </td>
         <td>
           <%= link_to '查看', merchants_path(account_id: account.id) %>
           <%= link_to '导出本账户', export_account_merchants_path(id: account.id) %>
@@ -21,6 +24,10 @@
 <% end %>
 
 <script type="text/javascript">
+  $('.update_account_name').click(function(){
+    var new_name = $(this).parents('td').find('.account_name')
+  });
+
   $('.select_responser').change(function(){
     var user_id = $(this).val();
     var account_id = $(this).data('account-id');
