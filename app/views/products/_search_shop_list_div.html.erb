@@ -21,6 +21,8 @@
     <% end %>
   </table>
 
+  <%= paginate @search_links %>
+
 <script type="text/javascript">
   $('.stopAndDeleteLink').click(function(){
     if(confirm("确定删除吗？删除之后所有数据不可恢复！")){

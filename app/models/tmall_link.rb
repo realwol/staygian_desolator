@@ -4,6 +4,7 @@ class TmallLink < ActiveRecord::Base
   belongs_to :search_link
 
   scope :zero_shop, -> {where(shop_id: 0)}
+  paginates_per 100
 
   # tmall link product status 0 for normal 1 for shield
 

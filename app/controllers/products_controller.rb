@@ -6,7 +6,7 @@ class ProductsController < ApplicationController
   end
 
   def get_product_links_from_search_link
-    @search_links = SearchLink.first_search_link
+    @search_links = SearchLink.first_search_link.page params[:page]
   end
 
   def save_search_link
@@ -41,7 +41,7 @@ class ProductsController < ApplicationController
   end
 
   def grasp_product_from_link
-    @zero_shop_links = current_user.tmall_links.zero_shop
+    @zero_shop_links = current_user.tmall_links.zero_shop.page params[:page]
   end
 
   def save_tmall_link
