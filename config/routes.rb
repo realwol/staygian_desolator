@@ -27,6 +27,7 @@ Rails.application.routes.draw do
       get 'account_list'
       get 'export_account'
       get 'export_all_account'
+      post 'update_account_name'
       post 'create_account'
       post 'set_account_updated'
       delete 'remove_account'
@@ -42,6 +43,8 @@ Rails.application.routes.draw do
 
     collection do
       get 'forbidden_brand_list'
+      post 'search_brand_by_condition'
+      delete 'clear_empty_brand'
     end
   end
 

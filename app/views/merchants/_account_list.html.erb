@@ -25,7 +25,16 @@
 
 <script type="text/javascript">
   $('.update_account_name').click(function(){
-    var new_name = $(this).parents('td').find('.account_name')
+    var new_name = $(this).parents('td').find('.account_name').val();
+    var account_id = $(this).data('account-id');
+    $.ajax({
+      url: '/merchants/update_account_name',
+      type: 'post',
+      data: {new_name: new_name, account_id: account_id},
+      success: function(){
+        alert('修改成功！');
+      }
+    })
   });
 
   $('.select_responser').change(function(){

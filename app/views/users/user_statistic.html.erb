@@ -7,6 +7,7 @@
 <h5>当天统计</h5>
 <table class="table table-bordered">
   <tr>
+    <th>组长</th>
     <th>人员</th>
     <th>时间</th>
     <th>上线产品数</th>
@@ -15,6 +16,7 @@
   <% today_online_products = 0 %>
   <% current_user.valid_brothers.each_with_index do |user,index| %>
     <tr>
+      <td><%= user.try(:leader).try(:username) %></td>
       <td><%= user.username %></td>
       <td><%= Time.now.strftime("%Y-%m-%d") %></td>
       <td>

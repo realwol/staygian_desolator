@@ -1,6 +1,33 @@
 class BrandsController < ApplicationController
   before_action :set_brand, only: [:show, :edit, :update, :destroy, :update_brand_english_name, :forbidden_brand, :update_brand_shop_status, :recover_brand]
 
+  def clear_empty_brand
+    Brand.all.each do |brand|
+      unless brand.products.present?
+        brand.brand_shop_relations.destroy_all
+        brand.destroy
+      end
+    end
+  end
+
+  def search_brand_by_condition
+    brand_name = params[:brand_name]
+    shop_name = params[:shop_name]
+
+    @brands = Brand.non_forbidden.order('has_stand_by desc')
+    @brands = @brands.where(name: brand_name) if brand_name.present?
+    if shop_name.present?
+      shop = Shop.find_by(name: shop_name)
+      if shop.present?
+        brands_id = BrandShopRelation.where(shop_id: shop.id).map(&:brand_id)
+      end
+    end
+
+    @brands = @brands.where("id in (?)", brands_id) if brands_id.present?
+
+    @brands = @brands.page params[:page]
+  end
+
   def recover_brand
     @brand.update_attributes(status: 1)
     @brand.products.update_all(shield_type: 5)
@@ -74,13 +101,19 @@ class BrandsController < ApplicationController
       end
     end
 
+    if @brand.get_brand_stand_by_shops.present?
+      @brand.update_attributes(has_stand_by: true)
+    else
+      @brand.update_attributes(has_stand_by: false)
+    end
+
     brand_shops = @brand.shops
     @stand_by_shops = brand_shops.where(status: '')
     # render json:true
   end
 
   def index
-    @brands = Brand.non_forbidden
+    @brands = Brand.non_forbidden.order('has_stand_by desc').page params[:page]
   end
 
   def show

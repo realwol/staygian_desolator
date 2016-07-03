@@ -1,6 +1,16 @@
 class MerchantsController < ApplicationController
   before_action :set_merchant, only: [:edit, :update, :stop_merchant, :destroy, :add_merchant_product, :update_shipment_cost, :get_merchant_skus]
 
+  def update_account_name
+    new_name = params[:new_name]
+    account_id = params[:account_id]
+    if account_id.present?
+      account = Account.find(account_id)
+      account.update_attributes(name: new_name) if account.present?
+    end
+    render json:true
+  end
+
   def account_list
     @accounts = current_user.valid_account
   end

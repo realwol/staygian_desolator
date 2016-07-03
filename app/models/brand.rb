@@ -4,6 +4,8 @@ class Brand < ActiveRecord::Base
   has_many :vendors
   has_many :products
 
+  paginates_per 100
+
   scope :non_forbidden, -> {where(status: 1)}
   scope :forbidden, -> {where(status: 0)}
 
@@ -24,6 +26,15 @@ class Brand < ActiveRecord::Base
 
   def is_forbidden?
     self.status == '0'
+  end
+
+  private
+  def recheck_stand_by_shop_status
+    if self.get_brand_stand_by_shops.present?
+      self.has_stand_by = true
+    else
+      self.has_stand_by = false
+    end
   end
   
 end

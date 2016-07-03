@@ -18,7 +18,7 @@
         <td><%= brand.name %></td>
         <td>
           <%= text_field_tag 'brand_english_name', brand.english_name %>
-          <%= button_tag '确认', id:'update_brand_english_name', "data-brand-id"=>brand.id %>
+          <%= button_tag '确认', class:'update_brand_english_name', "data-brand-id"=>brand.id %>
         </td>
         <td>
           <% brand.get_brand_connect_shops.each do |brand_shop| %>
@@ -31,9 +31,9 @@
     <% end %>
   </tbody>
 </table>
-
+<%= paginate @brands %>
 <script type="text/javascript">
-  $('#update_brand_english_name').click(function(){
+  $('.update_brand_english_name').click(function(){
     var $thisTd = $(this).parents('td');
     var brand_id = $(this).data('brand-id');
     var brand_english_name = $thisTd.find('#brand_english_name').val();

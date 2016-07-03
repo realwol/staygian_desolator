@@ -464,7 +464,8 @@ class ProductsController < ApplicationController
 
   def index
     @action_from = params[:action]
-    @products = selected_user.valid_products.updated.onsale.un_shield.order('first_updated_time desc').page(params[:page])
+    @products = current_user.products.updated.onsale.un_shield.order('first_updated_time desc').page(params[:page])
+    # @products = selected_user.valid_products.updated.onsale.un_shield.order('first_updated_time desc').page(params[:page])
   end
 
   # GET /products/1

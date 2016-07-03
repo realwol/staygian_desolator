@@ -1,4 +1,13 @@
-<span style="font-size:20px;">品牌列表</span><span>(有待审核店铺的品牌将被绿色标记出来)</span>
+<%= form_tag(clear_empty_brand_brands_path, remote: true, method: :delete, class:' form form-inline') do %>
+  <span style="font-size:20px;">品牌列表</span><span>(有待审核店铺的品牌将被绿色标记出来)</span>
+  <%= submit_tag '删除无产品品牌', class:'btn btn-danger', "data-confirm"=>'删除之后不可恢复，确认删除吗？' %>
+<% end %>
+<hr/>
+  <%= form_tag(search_brand_by_condition_brands_path, remote:true) do %>
+    <%= text_field_tag 'brand_name', nil, placeholder: '品牌名称' %>
+    <%= text_field_tag 'shop_name', nil, placeholder: '店铺名称' %>
+    <%= submit_tag '搜索' %>
+  <% end %>
 <hr/>
 <div id="brand_list_div">
   <%= render 'brand_list' %>

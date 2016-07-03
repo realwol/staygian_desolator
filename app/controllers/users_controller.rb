@@ -35,10 +35,6 @@ class UsersController < ApplicationController
         @current_updated_product_counts = 0
       end
       @product_updated_percentage = (@current_updated_product_count.to_f / @all_updated_products_count.to_f * 100).round(1)
-
-      @all_merchants_count = Merchant.count
-      @updated_merchants_count = Merchant.where(update_flag: true).count
-      @merchant_updated_percentage = (@updated_merchants_count.to_f / @all_merchants_count.to_f * 100).round(1)
     end
   end
 
