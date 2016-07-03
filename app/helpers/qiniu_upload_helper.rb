@@ -1,5 +1,6 @@
 module QiniuUploadHelper
 	require 'mini_magick'
+
 	class QiNiu
 
     # upload image from client

@@ -23,7 +23,8 @@ end
 gem "paranoia", "~> 2.0" # https://github.com/radar/paranoia
 gem 'devise', :git => 'https://github.com/plataformatec/devise.git', :branch => 'lm-rails-4-2'
 gem 'carrierwave'
-gem 'mini_magick', '3.8.1'
+gem 'mini_magick'
+gem 'posix-spawn'
 gem 'kaminari'
 gem 'whenever', :require => false
 gem "lazy_high_charts"
