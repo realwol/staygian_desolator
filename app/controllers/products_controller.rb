@@ -32,17 +32,17 @@ class ProductsController < ApplicationController
 
   def removed_products
     @action_from = params[:action]
-    @products = selected_user.valid_products.auto_removed.page(params[:page])
+    @products = selected_user.products.auto_removed.page(params[:page])
   end
 
   def unchecked_products
     @action_from = params[:action]
-    @products = selected_user.valid_products.unchecked.page(params[:page])
+    @products = selected_user.products.unchecked.page(params[:page])
   end
 
   def stand_by_products
     @action_from = params[:action]
-    @products = selected_user.valid_products.auto_stand_by.page(params[:page])
+    @products = selected_user.products.auto_stand_by.page(params[:page])
   end
 
   def grasp_product_from_link
@@ -196,7 +196,7 @@ class ProductsController < ApplicationController
     if current_user.is_hacked?
       @products = Product.all
     else
-      @products = selected_user.valid_products
+      @products = selected_user.products
     end
 
     if product_brand.present?
@@ -350,38 +350,38 @@ class ProductsController < ApplicationController
 
   def off_sale_products
     @action_from = params[:action]
-    @products = selected_user.valid_products.offsale.page(params[:page])
+    @products = selected_user.products.offsale.page(params[:page])
   end
 
   def off_sale_all
     unless params[:all_offsale_products].blank?
-      selected_user.valid_products.where(id:params[:all_offsale_products].split(' ')).update_all(shield_type:0, on_sale:false, update_status:true)
+      selected_user.products.where(id:params[:all_offsale_products].split(' ')).update_all(shield_type:0, on_sale:false, update_status:true)
     end
     redirect_to root_path
   end
 
   def on_sale_all
     unless params[:all_onsale_products].blank?
-      selected_user.valid_products.where(id:params[:all_onsale_products].split(' ')).update_all(shield_type:0, on_sale:true, update_status:true)
+      selected_user.products.where(id:params[:all_onsale_products].split(' ')).update_all(shield_type:0, on_sale:true, update_status:true)
     end
     redirect_to root_path
   end
 
   def shield_all
     unless params[:all_shield_products].blank?
-      selected_user.valid_products.where(id:params[:all_shield_products].split(' ')).update_all(shield_type:1, on_sale:true, update_status:true)
+      selected_user.products.where(id:params[:all_shield_products].split(' ')).update_all(shield_type:1, on_sale:true, update_status:true)
     end
     redirect_to root_path
   end
 
   def temp_off_sale_products
     @action_from = params[:action]
-    @products = selected_user.valid_products.temp_offsale.page(params[:page])
+    @products = selected_user.products.temp_offsale.page(params[:page])
   end
 
   def temp_off_sale_all
     unless params[:all_products].blank?
-      selected_user.valid_products.where(id:params[:all_products].split(' ')).update_all(shield_type:3, on_sale:false, update_status:true)
+      selected_user.products.where(id:params[:all_products].split(' ')).update_all(shield_type:3, on_sale:false, update_status:true)
     end
     redirect_to root_path
   end
@@ -398,7 +398,7 @@ class ProductsController < ApplicationController
 
   def shield_products
     @action_from = params[:action]
-    @products = selected_user.valid_products.shield.page(params[:page])
+    @products = selected_user.products.shield.page(params[:page])
   end
 
   def shield_product
@@ -413,12 +413,12 @@ class ProductsController < ApplicationController
 
   def edited_products
     @action_from = params[:action]
-    @products = selected_user.valid_products.edited.page(params[:page])
+    @products = selected_user.products.edited.page(params[:page])
   end
 
   def presaled_products
     @action_from = params[:action]
-    @products = selected_user.valid_products.pre_saled.page(params[:page])
+    @products = selected_user.products.pre_saled.page(params[:page])
   end
 
   def presale_product
@@ -427,12 +427,12 @@ class ProductsController < ApplicationController
   end
 
   def wait_designer
-    @products = selected_user.valid_products.edited.page(params[:page])
+    @products = selected_user.products.edited.page(params[:page])
   end
 
   def un_updated_page
     @action_from = params[:action]
-    @products = selected_user.valid_products.un_updated.page(params[:page])
+    @products = selected_user.products.un_updated.page(params[:page])
   end
 
   def get_tmall_links 
@@ -464,8 +464,11 @@ class ProductsController < ApplicationController
 
   def index
     @action_from = params[:action]
-    @products = current_user.products.updated.onsale.un_shield.order('first_updated_time desc').page(params[:page])
-    # @products = selected_user.valid_products.updated.onsale.un_shield.order('first_updated_time desc').page(params[:page])
+    if current_user.is_dd?
+      @products = selected_user.valid_products.updated.onsale.un_shield.order('first_updated_time desc').page(params[:page])
+    else
+      @products = selected_user.products.updated.onsale.un_shield.order('first_updated_time desc').page(params[:page])
+    end
   end
 
   # GET /products/1

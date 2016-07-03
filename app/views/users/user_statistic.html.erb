@@ -27,6 +27,7 @@
   <% end %>
   <tr>
       <td>总计</td>
+      <td></td>
       <td><%= Time.now.strftime("%Y-%m-%d") %></td>
       <td><%= today_online_products %></td>
   </tr>
@@ -36,6 +37,7 @@
 <h5>七天统计</h5>
 <table class="table table-bordered">
   <tr>
+    <th>组长</th>
     <th>人员</th>
     <th>时间</th>
     <th>上线产品数</th>
@@ -46,6 +48,7 @@
       <% next if user.role != 3%>
       <% user_week_online_products = 0 %>
       <tr>
+        <td rowspan="8"><%= user.try(:leader).try(:username) %></td>
         <td rowspan="8"><%= user.username %></td>
         <td><%= Time.now.days_ago(1).strftime('%Y-%m-%d') %></td>
         <td>
@@ -74,6 +77,7 @@
   </tr>
   <tr>
       <td>总计</td>
+      <td></td>
       <td><%= "#{Time.now.days_ago(7).strftime('%Y-%m-%d')} - #{Time.now.days_ago(1).strftime('%Y-%m-%d')}" %></td>
       <td><%= week_online_products %></td>
   </tr>
@@ -84,6 +88,7 @@
 <h5>全部统计</h5>
 <table class="table table-bordered">
   <tr>
+    <th>组长</th>
     <th>人员</th>
     <th>截至时间</th>
     <th>上线产品数</th>
@@ -93,6 +98,7 @@
   <% current_user.valid_brothers.each_with_index do |user,index| %>
     <% next if user.role != 3%>
     <tr>
+      <td rowspan="8"><%= user.try(:leader).try(:username) %></td>
       <td><%= user.username %></td>
       <td><%= Time.now.strftime("%Y-%m-%d") %></td>
       <td>
@@ -103,6 +109,7 @@
   <% end %>
   <tr>
       <td>总计</td>
+      <td></td>
       <td><%= Time.now.strftime("%Y-%m-%d") %></td>
       <td><%= all_online_products %></td>
   </tr>

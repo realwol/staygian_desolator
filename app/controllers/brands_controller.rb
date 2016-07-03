@@ -5,6 +5,7 @@ class BrandsController < ApplicationController
     Brand.all.each do |brand|
       unless brand.products.present?
         brand.brand_shop_relations.destroy_all
+        brand.vendors.destroy_all
         brand.destroy
       end
     end
@@ -41,8 +42,13 @@ class BrandsController < ApplicationController
   end
 
   def update_brand_english_name
-    @brand.update_attributes(english_name: params[:brand_english_name].strip)
-    render json:true
+    brand = Brand.find_by(english_name: params[:brand_english_name].strip)
+    return_value = 1
+    if brand.present?
+      @brand.update_attributes(english_name: params[:brand_english_name].strip)
+      return_value = 2
+    end
+    render json: return_value
   end
 
   def forbidden_brand

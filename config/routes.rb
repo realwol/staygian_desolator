@@ -12,6 +12,9 @@ Rails.application.routes.draw do
     member do
       post 'update_vendor_info'
     end
+    collection do
+      post 'search_by_condition'
+    end
   end
 
   resources :merchants do

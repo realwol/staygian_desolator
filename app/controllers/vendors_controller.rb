@@ -1,13 +1,30 @@
 class VendorsController < ApplicationController
   before_action :set_vendor, only: [:show, :edit, :update, :destroy, :update_vendor_info]
 
+  def search_by_condition
+    shop_name = params[:shop_name]
+    brand_name = params[:brand_name]
+    @vendors = []
+    @vendors = Vendor.valid_vendor if shop_name.present? || brand_name.present?
+    if shop_name.present?
+      shop = Shop.find_by(name: shop_name)
+      @vendors = @vendors.where(shop_id: shop.try(:id))
+    end
+
+    if brand_name.present?
+      brand = Brand.find_by(name: brand_name)
+      @vendors = @vendors.where(brand_id: brand.try(:id))
+    end
+    @vendors.order(:brand_id).page params[:page]
+  end
+
   def update_vendor_info
     @vendor.update_attributes(vendor_update_params)
     render json:true
   end
 
   def index
-    @vendors = Vendor.valid_vendor
+    @vendors = Vendor.valid_vendor.order(:brand_id).page params[:page]
   end
 
   def show

@@ -15,7 +15,7 @@
       <% else %>
         <tr>
       <% end %>
-        <td><%= brand.name %></td>
+        <td><%= link_to brand.name, brand %></td>
         <td>
           <%= text_field_tag 'brand_english_name', brand.english_name %>
           <%= button_tag '确认', class:'update_brand_english_name', "data-brand-id"=>brand.id %>
@@ -42,8 +42,12 @@
       url: "/brands/" + brand_id + "/update_brand_english_name",
       data: { brand_english_name: brand_english_name},
       type: 'post',
-      success: function(){
-        alert('更新成功！');
+      success: function(data){
+        if (data == '1'){
+          alert('名称已经存在!');
+        } else {
+          alert('更新成功！');
+        }
       }
     })
   });

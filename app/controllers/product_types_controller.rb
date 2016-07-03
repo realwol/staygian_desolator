@@ -34,16 +34,17 @@ class ProductTypesController < ApplicationController
     attribute_value_array = params[:attribute_value].strip.gsub('，', ',').gsub('、',',').gsub('。', '.').gsub("\r", '').gsub("\n",'').split('|')
     if params[:desc_translation_id].present?
       # update
-      DescriptionTranslationHistory.find(params[:desc_translation_id]).update_attributes(description: attribute_value_array[0], china: attribute_value_array[0], america: attribute_value_array[1], canada: attribute_value_array[2], british: attribute_value_array[3], 
-                                         germany: attribute_value_array[4], spain: attribute_value_array[5],
-                                         italy: attribute_value_array[6], france: attribute_value_array[7])
+      DescriptionTranslationHistory.find(params[:desc_translation_id]).update_attributes(description: attribute_value_array[0], 
+                                         china: attribute_value_array[0], america: attribute_value_array[1], canada: attribute_value_array[1],
+                                         british: attribute_value_array[2],germany: attribute_value_array[3], spain: attribute_value_array[4],
+                                         italy: attribute_value_array[5], france: attribute_value_array[6])
     else
       if DescriptionTranslationHistory.where(description: attribute_value_array[0]).count > 0
         @new_flag = false
       else
-        DescriptionTranslationHistory.create(description: attribute_value_array[0], china: attribute_value_array[0], america: attribute_value_array[1], canada: attribute_value_array[2], british: attribute_value_array[3], 
-                                         germany: attribute_value_array[4], spain: attribute_value_array[5],
-                                         italy: attribute_value_array[6], france: attribute_value_array[7])
+        DescriptionTranslationHistory.create(description: attribute_value_array[0], china: attribute_value_array[0], america: attribute_value_array[1],
+                                             canada: attribute_value_array[1], british: attribute_value_array[2], germany: attribute_value_array[3],
+                                             spain: attribute_value_array[4],italy: attribute_value_array[5], france: attribute_value_array[6])
       end
     end
     @descriptions = DescriptionTranslationHistory.order('usage_count desc').page(params[:page])

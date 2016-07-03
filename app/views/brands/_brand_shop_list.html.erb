@@ -8,7 +8,7 @@
     <th>待审核店铺</th>
     <td>
       <% @brand.get_brand_stand_by_shops.each do |name| %>
-        <span class='shop_name_span shop_name_span_color' data-shop-id="<%= name.id %>" > <%= name.name %> </span>
+        <span class='shop_name_span shop_name_span_color' data-shop-id="<%= name.id %>" data-user-id="<%= name.shop_id %>" > <%= name.name %> </span>
       <% end %>
     </td>
     <td>
@@ -20,7 +20,7 @@
     <th>已对接店铺</th>
     <td>
       <% @brand.get_brand_connect_shops.each do |name| %>
-        <span class='shop_name_span shop_name_span_color' data-shop-id="<%= name.id %>" > <%= name.name %> </span>
+        <span class='shop_name_span shop_name_span_color' data-shop-id="<%= name.id %>" data-user-id="<%= name.shop_id %>" > <%= name.name %> </span>
       <% end %>
     </td>
     <td>
@@ -32,7 +32,7 @@
     <th>已屏蔽店铺</th>
     <td>
       <% @brand.get_brand_forbidden_shops.each do |name| %>
-        <span class='shop_name_span shop_name_span_color' data-shop-id="<%= name.id %>" > <%= name.name %> </span>
+        <span class='shop_name_span shop_name_span_color' data-shop-id="<%= name.id %>" data-user-id="<%= name.shop_id %>" > <%= name.name %> </span>
       <% end %>
     </td>
     <td>
@@ -80,5 +80,10 @@
     // $('.shop_name_span').unbind('click');
     $(this).toggleClass('shop_name_span_color');
     $(this).toggleClass('brand_shop_selected');
+  });
+
+  $('.shop_name_span').dblclick(function(){
+    var user_id = $(this).data('user-id');
+    window.open("https://list.tmall.com/search_shopitem.htm?user_id=" + user_id);
   });
 </script>

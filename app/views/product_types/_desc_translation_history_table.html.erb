@@ -55,7 +55,7 @@
     $(this).parents('tr').find('.attribute_value').each(function(){
       attributeValue = attributeValue + $(this).val() + '|';
     });
-
+alert(attributeValue);
     $.ajax({
       url: '/product_types/save_desc_translation',
       type: 'post',

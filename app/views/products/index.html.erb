@@ -26,7 +26,7 @@
         <td><%= product.sku %></td>
         <td><%= product.product_number %></td>
         <td><%= product.try(:user).try(:username) %></td>
-        <td><%= product.first_updated_time.strftime("%Y-%m-%d %H:%M") %></td>
+        <td><%= (product.first_updated_time + 7.hours + 56.minutes).strftime("%Y-%m-%d %H:%M") %></td>
         <td>
           <%= text_field_tag 'product_price', product.price, class:'product_price', size:5 %>
           <%= button_tag '保存', class:'change_price', "data-link"=> update_price_products_path, 'data-product_id'=>product.id %>
