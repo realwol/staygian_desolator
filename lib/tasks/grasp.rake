@@ -26,7 +26,6 @@ def start
       end
     else
       puts "sleeping in #{Time.now}"
-      return false
     end
 end
 
