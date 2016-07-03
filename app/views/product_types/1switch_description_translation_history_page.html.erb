@@ -1,0 +1,49 @@
+<% case @table_id %>
+<% when 1 %>
+  <%= render 'product_types/desc_translation_history_table' %>
+<% when 2 %>
+  <%= form_tag(search_des_translation_product_types_path, remote:true, method: 'get') do %>
+    <%= label_tag '要搜索的名称：' %>
+    <%= text_field_tag 'desc_name', params[:desc_name] %>
+    <%= submit_tag '确定' %>
+  <% end %>
+  <hr/>
+  <ul class="nav nav-pills">
+    <li role="presentation" class="switch_btn" data-table-id="1"><a href="#">按照翻译使用排序</a></li>
+    <li role="presentation" class="active switch_btn" data-table-id="2"><a href="#">未编辑翻译使用排序</a></li>
+    <li role="presentation" class="switch_btn" data-table-id="3"><a href="#">创建时间倒序</a></li>
+  </ul>
+  <hr/>
+  <%= render 'product_types/desc_translation_history_table1' %>
+<% when 2 %>
+  <%= form_tag(search_des_translation_product_types_path, remote:true, method: 'get') do %>
+    <%= label_tag '要搜索的名称：' %>
+    <%= text_field_tag 'desc_name', params[:desc_name] %>
+    <%= submit_tag '确定' %>
+  <% end %>
+  <hr/>
+  <ul class="nav nav-pills">
+    <li role="presentation" class="switch_btn" data-table-id="1"><a href="#">按照翻译使用排序</a></li>
+    <li role="presentation" class="switch_btn" data-table-id="2"><a href="#">未编辑翻译使用排序</a></li>
+    <li role="presentation" class="active switch_btn" data-table-id="3"><a href="#">创建时间倒序</a></li>
+  </ul>
+  <hr/>
+  <%= render 'product_types/desc_translation_history_table2' %>
+<% end %>
+
+<script type="text/javascript">
+  $('.switch_btn').click(function(){
+    $('.switch_btn').each(function(){
+      $(this).removeClass('active');
+    });
+    $(this).addClass('active');
+
+    var table_id = $(this).data('table-id');
+    $.ajax({
+      url: '/product_types/switch_description_translation_history_page',
+      data: {table_id: table_id},
+      type: 'get',
+      success: function(){}
+    });
+  })
+</script>

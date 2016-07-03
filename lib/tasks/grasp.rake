@@ -342,7 +342,7 @@ end
 def ungrasp_tmall_link
   last_grasp = TmallLink.where(status: true).order('updated_at').last
   if last_grasp.present?
-    next_grasp = TmallLink.where('id > ? and shop_id != ? and status = ?', last_grasp.id, last_grasp.shop_id, false).first
+    next_grasp = TmallLink.where('id > ? and user_id != ? and status = ?', last_grasp.id, last_grasp.user_id, false).first
     if next_grasp.present?
       return next_grasp
     end

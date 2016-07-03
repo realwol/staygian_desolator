@@ -1,0 +1,89 @@
+
+<table class="table table-bordered" style="width:90%;" >
+  <tr>
+    <th>次数</th>
+    <th>中文</th>
+    <th>英文（美）</th>
+    <th>英文（英）</th>
+    <th>德语</th>
+    <th>西班牙语</th>
+    <th>意大利语</th>
+    <th>法语</th>
+    <th colspan="2">操作</th>
+  </tr>
+    <tr>
+      <td>/</td>
+      <td><%= text_area_tag 'attr_text_table_name', nil, class: 'attribute_value' %></td>
+      <td><%= text_area_tag 'attr_text_table_name', nil, class: 'attribute_value' %></td>
+      <td><%= text_area_tag 'attr_text_table_name', nil, class: 'attribute_value' %></td>
+      <td><%= text_area_tag 'attr_text_table_name', nil, class: 'attribute_value' %></td>
+      <td><%= text_area_tag 'attr_text_table_name', nil, class: 'attribute_value' %></td>
+      <td><%= text_area_tag 'attr_text_table_name', nil, class: 'attribute_value' %></td>
+      <td><%= text_area_tag 'attr_text_table_name', nil, class: 'attribute_value' %></td>
+      <td style="width:500px;">
+        <button class="saveTranslation" style="width:50px;">保存</button>
+        <button class="clearTranslation" style="width:50px;">清空</button>
+      </td>
+    </tr>
+  <% @descriptions.each do |des| %>
+    <tr>
+      <td><%= des.usage_count.to_i %></td>
+      <td><%= text_area_tag 'attr_text_table_name', des.description, class: 'attribute_value' %></td>
+      <td><%= text_area_tag 'attr_text_table_name', des.america, class: 'attribute_value' %></td>
+      <td><%= text_area_tag 'attr_text_table_name', des.british, class: 'attribute_value' %></td>
+      <td><%= text_area_tag 'attr_text_table_name', des.germany, class: 'attribute_value' %></td>
+      <td><%= text_area_tag 'attr_text_table_name', des.spain, class: 'attribute_value' %></td>
+      <td><%= text_area_tag 'attr_text_table_name', des.italy, class: 'attribute_value' %></td>
+      <td><%= text_area_tag 'attr_text_table_name', des.france, class: 'attribute_value' %></td>
+      <td>
+        <button class="saveTranslation" data-des-id="<%= des.id %>" style="width:50px;">保存</button>
+        <button class="removeTranslation" data-des-id="<%= des.id %>" style="width:50px;">删除</button>
+      </td>
+    </tr>
+  <% end %>
+</table>
+<%= paginate @descriptions %>
+
+<script type="text/javascript">
+  $('.saveTranslation').unbind('click');
+  $('.removeTranslation').unbind('click');
+  $('.clearTranslation').unbind('click');
+
+  $('.saveTranslation').click(function(){
+    var $this = $(this);
+    var attributeValue = '';
+    var desc_translation_id = $(this).data('des-id');
+    $(this).parents('tr').find('.attribute_value').each(function(){
+      attributeValue = attributeValue + $(this).val() + '|';
+    });
+
+    $.ajax({
+      url: '/product_types/save_desc_translation',
+      type: 'post',
+      data: {desc_translation_id: desc_translation_id, attribute_value: attributeValue},
+      success: function(){
+      }
+    })
+
+  });
+
+  $('.removeTranslation').click(function(){
+    var $this = $(this);
+    var desc_translation_id =  $(this).data('des-id');
+    $.ajax({
+      url: '/product_types/remove_desc_translation',
+      type: 'delete',
+      data: {desc_translation_id: desc_translation_id},
+      success: function(){
+        $this.parents('tr').remove();
+        alert('操作成功！');
+      }
+    })
+  });
+
+  $('.clearTranslation').click(function(){
+    $(this).parents('tr').find('.attribute_value').each(function(){
+      $(this).val('');
+    });
+  });
+</script>

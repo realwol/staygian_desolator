@@ -2,6 +2,11 @@ class ProductsController < ApplicationController
   before_action :set_product, only: [:show, :edit, :update, :destroy, :shield_product, :presale_product, :offsale_product, :temp_offsale_product, :onsale_product, :edited_product, :translate_preview]
   before_action :authenticate_user!
 
+  def search_by_condition
+    link_desc = params[:link_desc]
+    @search_links = SearchLink.first_search_link.where(link_desc: link_desc).page params[:page]
+  end
+
   def update_separate_product
   end
 

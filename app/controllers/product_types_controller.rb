@@ -10,6 +10,18 @@ class ProductTypesController < ApplicationController
     @descriptions = DescriptionTranslationHistory.order('usage_count desc').page(params[:page])
   end
 
+  def switch_description_translation_history_page
+    @table_id = params[:table_id].to_i
+    case @table_id
+    when 1
+      @descriptions = DescriptionTranslationHistory.order('usage_count desc').page(params[:page])
+    when 2
+      @descriptions = DescriptionTranslationHistory.order(:america, usage_count: :desc).page(params[:page])
+    when 3
+      @descriptions = DescriptionTranslationHistory.order(created_at: :desc).page(params[:page])
+    end
+  end
+
   def remove_desc_translation
     if params[:desc_translation_id].present?
       DescriptionTranslationHistory.find(params[:desc_translation_id]).destroy

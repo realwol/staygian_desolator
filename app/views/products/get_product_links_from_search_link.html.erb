@@ -8,6 +8,11 @@
   <%= button_tag '抓取' %>
 <% end %>
 <hr/>
+  <%= form_tag(search_by_condition_products_path, remote: true, method: :post) do %>
+    <%= text_field_tag 'link_desc' %>
+    <%= submit_tag '搜索' %>
+  <% end %>
+<hr/>
 <div id="shop_list_table_div">
   <%= render 'search_shop_list_div' %> 
 </div>
