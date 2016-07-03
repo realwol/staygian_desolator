@@ -15,7 +15,8 @@ end
 def start
 	tmall_link = ungrasp_tmall_link
     if tmall_link.present?
-      if TmallLink.where(product_link_id: tmall_link.product_link_id).count > 1
+      # if TmallLink.where(product_link_id: tmall_link.product_link_id).count > 1
+      if TmallLink.find_by(product_link_id: tmall_link.product_link_id).present? || Product.find_by(product_link_id: tmall_link.product_link_id).present?
         tmall_link.update_attributes(status:true)
         puts 'duplicate product'
         return false
@@ -25,6 +26,7 @@ def start
       end
     else
       puts "sleeping in #{Time.now}"
+      return false
     end
 end
 
