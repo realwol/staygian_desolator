@@ -19,10 +19,10 @@ elsif ENV['env'] == 'new'
   set :domain, '120.76.188.226'
   set :deploy_to, '/root/amazon/tmall_new'
   set :branch, 'new'
-# else
-#   set :domain, '120.25.74.164'
-#   set :deploy_to, '/root/work/amazon/tmall'
-#   set :branch, 'master'
+else
+  set :domain, '120.25.74.164'
+  set :deploy_to, '/root/work/amazon/tmall'
+  set :branch, 'master'
 end
 set :repository, 'https://git.oschina.net/gaaraLi/amazon_tmall.git'
 

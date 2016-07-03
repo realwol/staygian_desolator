@@ -3,11 +3,12 @@ require 'openssl'
 namespace :grasp do
 	desc "Grasp from tmall"
 	task :start => :environment do
+    a = Time.now
+    while (Time.now - a) < (60 * 10 - 5)
       if start
-        sleep rand(5..10)
-      else
-        puts 'duplicate product'
+        sleep rand(1..5)
       end
+    end
 	end
 end
 
@@ -16,11 +17,11 @@ def start
     if tmall_link.present?
       if TmallLink.where(product_link_id: tmall_link.product_link_id).count > 1
         tmall_link.update_attributes(status:true)
+        puts 'duplicate product'
         return false
       else
         tmall_link.update_attributes(status:true)
         grasp_product tmall_link
-        sleep rand(5..10)
       end
     else
       puts "sleeping in #{Time.now}"
