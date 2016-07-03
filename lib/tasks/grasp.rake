@@ -4,7 +4,7 @@ namespace :grasp do
 	desc "Grasp from tmall"
 	task :start => :environment do
     a = Time.now
-    while (Time.now - a) < (60 * 10 - 5)
+    while (Time.now - a) < (60 * 5 - 5)
       if start
         # sleep rand(1..5)
       end
