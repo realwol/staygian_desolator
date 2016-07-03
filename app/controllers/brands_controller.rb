@@ -14,9 +14,13 @@ class BrandsController < ApplicationController
   def search_brand_by_condition
     brand_name = params[:brand_name]
     shop_name = params[:shop_name]
+    condition_flag = false
 
     @brands = Brand.non_forbidden.order('has_stand_by desc')
-    @brands = @brands.where(name: brand_name) if brand_name.present?
+    if brand_name.present?
+      @brands = @brands.where(name: brand_name)
+      condition_flag = true
+    end
     if shop_name.present?
       shop = Shop.find_by(name: shop_name)
       if shop.present?
@@ -24,9 +28,15 @@ class BrandsController < ApplicationController
       end
     end
 
-    @brands = @brands.where("id in (?)", brands_id) if brands_id.present?
-
-    @brands = @brands.page params[:page]
+    if brands_id.present?
+      @brands = @brands.where("id in (?)", brands_id)
+      condition_flag = true
+    end
+    if condition_flag
+      @brands = @brands.page params[:page]
+    else
+      @brands = Brand.where(id = 0).page params[:page]
+    end
   end
 
   def recover_brand
@@ -44,7 +54,7 @@ class BrandsController < ApplicationController
   def update_brand_english_name
     brand = Brand.find_by(english_name: params[:brand_english_name].strip)
     return_value = 1
-    if brand.present?
+    unless brand.present?
       @brand.update_attributes(english_name: params[:brand_english_name].strip)
       return_value = 2
     end
