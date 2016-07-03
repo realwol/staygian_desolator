@@ -4,7 +4,7 @@ namespace :grasp do
 	desc "Grasp from tmall"
 	task :start => :environment do
     a = Time.now
-    while (Time.now - a) < (60 * 10 - 15)
+    while (Time.now - a) < (60 * 10 - 5)
       if start
         # sleep rand(1..5)
       end
@@ -21,8 +21,10 @@ def start
         puts 'duplicate product'
         return false
       else
+        a = Time.now
         tmall_link.update_attributes(status:true)
         grasp_product tmall_link
+        puts Time.now - a
       end
     else
       puts "sleeping in #{Time.now}"
@@ -174,9 +176,6 @@ def grasp_product tmall_link
     @main_images[index] = upload_image
     @product_images << upload_image
   end
-
-  puts "===========upload cost"
-  puts Time.now - test_start
 
   @product_images.each_with_index do |img, index|
     @product["images#{index+1}".to_sym] = img
