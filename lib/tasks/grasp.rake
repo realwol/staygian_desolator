@@ -6,7 +6,7 @@ namespace :grasp do
     a = Time.now
     while (Time.now - a) < (60 * 10 - 15)
       if start
-        sleep rand(1..5)
+        # sleep rand(1..5)
       end
     end
 	end
