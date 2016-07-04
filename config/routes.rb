@@ -171,7 +171,8 @@ Rails.application.routes.draw do
     end
   end
 
-  devise_for :users
+  devise_for :users, skip: :registration
+
   resources :users do
     collection do
       get 'user_statistic'
@@ -197,6 +198,7 @@ Rails.application.routes.draw do
   end
 
   root 'products#index'
+  
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

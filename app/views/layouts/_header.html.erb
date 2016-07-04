@@ -3,7 +3,7 @@
   <div style="margin-left:60%; margin-top:-35px;">
     <%if current_user%>
       <%
-        @selected_user = session[:selected_user_id].present? ? User.find(session[:selected_user_id]) : current_user
+        @selected_user = (session[:selected_user_id].present? && User.where(session[:selected_user_id]).first.present?) ? User.where(session[:selected_user_id]).first : current_user
         if @selected_user.is_leader?
           selected_leader_id = @selected_user.id
         elsif @selected_user.is_team_member?
