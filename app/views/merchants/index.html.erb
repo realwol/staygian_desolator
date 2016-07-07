@@ -16,7 +16,7 @@
         <td><%= text_field_tag 'merchant_secret_key', nil, class:'clean_after_submit' %></td>
         <td><%= label_tag 'seller_id:' %></td>
         <td><%= text_field_tag 'merchant_seller_id', nil, class:'clean_after_submit' %></td>
-        <td><%= label_tag '所属账号:' %></td>
+        <td><%= label_tag '所属账号:' %><%= @account.name %></td>
         <td>
           <%= hidden_field_tag 'account_id', @account.id %>
           <%= submit_tag '确定' %>

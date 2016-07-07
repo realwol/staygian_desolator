@@ -186,9 +186,8 @@ class MerchantsController < ApplicationController
     else
       @merchants = current_user.valid_merchants
     end
-    @account = Account.new
-    # @account = Account.find(params[:account_id])
-    # @merchants = @account.merchants
+    @account = Account.find(params[:account_id])
+    @merchants = @account.merchants
   end
 
   def create
@@ -196,7 +195,8 @@ class MerchantsController < ApplicationController
     params[:merchant_api_address] = mws_points["#{merchant_params[:merchant_country_name]}".to_sym]
     current_user.merchants.create(merchant_params)
     @account = Account.find(merchant_params[:account_id])
-    @merchants = @account.merchants  end
+    @merchants = @account.merchants
+  end
 
   def edit
   end
