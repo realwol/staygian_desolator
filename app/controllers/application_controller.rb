@@ -11,12 +11,12 @@ class ApplicationController < ActionController::Base
 
   def record_memory
     process_status = File.open("/proc/#{Process.pid}/status")
-    13.times {process_status.get}
+    13.times {process_status.gets}
     res_before_action = process_status.gets.split[1].to_i
     process_status.close
     yield
     process_status = File.open("/proc/#{Process.pid}/status")
-    13.times {process_status.get}
+    13.times {process_status.gets}
     res_after_action = process_status.gets.split[1].to_i
     process_status.close
     logger.info("CONSUME MEMORY: #{res_after_action - res_before_action} KB\t NOW #{res_after_action} KB\t #{request.url}")
