@@ -205,7 +205,7 @@ class ProductsController < ApplicationController
     @result[:sku] = sku_value = params[:sku_value]
     @action_from = params[:action_from]
 
-    if current_user.is_hacked?
+    if selected_user.is_dd? || selected_user.can_user_see_all?
       @products = Product.all
     else
       @products = selected_user.products
