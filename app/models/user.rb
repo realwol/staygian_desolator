@@ -36,6 +36,10 @@ class User < ActiveRecord::Base
     User.where("id in (?)", all_leader_id)
   end
 
+  def can_user_see_all?
+    self.user_product_version == 3
+  end
+
   def is_team_member?
     !!self.leader
   end
