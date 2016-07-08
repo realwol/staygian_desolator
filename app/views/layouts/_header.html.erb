@@ -3,7 +3,7 @@
   <div style="margin-left:60%; margin-top:-35px;">
     <%if current_user%>
       <%
-        @selected_user = (session[:selected_user_id].present? && User.where(session[:selected_user_id]).first.present?) ? User.where(session[:selected_user_id]).first : current_user
+        @selected_user = (session[:selected_user_id].present? && User.where(id: session[:selected_user_id]).first.present?) ? User.where(id: session[:selected_user_id]).first : current_user
         if @selected_user.is_leader?
           selected_leader_id = @selected_user.id
         elsif @selected_user.is_team_member?
@@ -15,14 +15,14 @@
       %>
       <% if current_user.is_dd? %>
         <% if @selected_user != current_user %>
-        <%= select_tag 'manager_select', options_from_collection_for_select(User.get_all_leader, "id", "email",selected_leader_id), include_blank:true, class:'manager_select' %>
-          <%= select_tag 'little_brother_select', options_from_collection_for_select(@selected_user.leader.team_members, "id", "email", selected_team_member_id) , include_blank:true, class:'little_brother_select' %>
+        <%= select_tag 'manager_select', options_from_collection_for_select(User.get_all_leader, "id", "username",selected_leader_id), include_blank:true, class:'manager_select' %>
+          <%= select_tag 'little_brother_select', options_from_collection_for_select(@selected_user.leader.team_members, "id", "username", selected_team_member_id) , include_blank:true, class:'little_brother_select' %>
         <% else %>
-        <%= select_tag 'manager_select', options_from_collection_for_select(User.get_all_leader, "id", "email"), include_blank:true, class:'manager_select' %>
-          <%= select_tag 'little_brother_select', options_from_collection_for_select([], "id", "email",) , include_blank:true, class:'little_brother_select' %>
+        <%= select_tag 'manager_select', options_from_collection_for_select(User.get_all_leader, "id", "username"), include_blank:true, class:'manager_select' %>
+          <%= select_tag 'little_brother_select', options_from_collection_for_select([], "id", "username",) , include_blank:true, class:'little_brother_select' %>
         <% end %>
       <% else %>
-        <%= select_tag 'little_brother_select', options_from_collection_for_select(current_user.team_members, "id", "email",selected_team_member_id) , include_blank:true, class:'little_brother_select' %>
+        <%= select_tag 'little_brother_select', options_from_collection_for_select(current_user.team_members, "id", "username",selected_team_member_id) , include_blank:true, class:'little_brother_select' %>
       <% end %>
 
       <a href="#" value=<%= current_user.id%> class='current_user_select' ><%= current_user.username %></a>
