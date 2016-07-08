@@ -464,11 +464,11 @@ class ProductsController < ApplicationController
 
   def index
     @action_from = params[:action]
-    if current_user.is_dd?
-      @products = selected_user.valid_products.updated.onsale.un_shield.order('first_updated_time desc').page(params[:page])
-    else
+    # if current_user.is_dd?
+      # @products = selected_user.valid_products.updated.onsale.un_shield.order('first_updated_time desc').page(params[:page])
+    # else
       @products = selected_user.products.updated.onsale.un_shield.order('first_updated_time desc').page(params[:page])
-    end
+    # end
   end
 
   # GET /products/1
