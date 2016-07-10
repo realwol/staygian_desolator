@@ -1,1 +1,1 @@
-<%= select_tag 'little_brother_select', options_from_collection_for_select(@selected_user.team_members, "id", "email") , include_blank:true, class:'little_brother_select' %>
+<%= select_tag 'little_brother_select', options_from_collection_for_select(@selected_user.team_members, "id", "username") , include_blank:true, class:'little_brother_select' %>

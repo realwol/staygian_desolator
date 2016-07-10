@@ -32,17 +32,29 @@ class ProductsController < ApplicationController
 
   def removed_products
     @action_from = params[:action]
-    @products = selected_user.products.auto_removed.page(params[:page])
+    if selected_user.is_dd? || selected_user.can_user_see_all?
+      @products = Product.auto_removed.page(params[:page])
+    else
+      @products = selected_user.valid_products.auto_removed.page(params[:page])
+    end
   end
 
   def unchecked_products
     @action_from = params[:action]
-    @products = selected_user.products.unchecked.page(params[:page])
+    if selected_user.is_dd? || selected_user.can_user_see_all?
+      @products = Product.unchecked.page(params[:page])
+    else
+      @products = selected_user.valid_products.unchecked.page(params[:page])
+    end
   end
 
   def stand_by_products
     @action_from = params[:action]
-    @products = selected_user.products.auto_stand_by.page(params[:page])
+    if selected_user.is_dd? || selected_user.can_user_see_all?
+      @products = Product.auto_stand_by.page(params[:page])
+    else
+      @products = selected_user.valid_products.auto_stand_by.page(params[:page])
+    end
   end
 
   def grasp_product_from_link
@@ -193,7 +205,7 @@ class ProductsController < ApplicationController
     @result[:sku] = sku_value = params[:sku_value]
     @action_from = params[:action_from]
 
-    if current_user.is_hacked?
+    if selected_user.is_dd? || selected_user.can_user_see_all?
       @products = Product.all
     else
       @products = selected_user.products
@@ -350,7 +362,11 @@ class ProductsController < ApplicationController
 
   def off_sale_products
     @action_from = params[:action]
-    @products = selected_user.products.offsale.page(params[:page])
+    if selected_user.is_dd? || selected_user.can_user_see_all?
+      @products = Product.offsale.page(params[:page])
+    else
+      @products = selected_user.valid_products.offsale.page(params[:page])
+    end
   end
 
   def off_sale_all
@@ -398,7 +414,11 @@ class ProductsController < ApplicationController
 
   def shield_products
     @action_from = params[:action]
-    @products = selected_user.products.shield.page(params[:page])
+    if selected_user.is_dd? || selected_user.can_user_see_all?
+      @products = Product.shield.page(params[:page])
+    else
+      @products = selected_user.valid_products.shield.page(params[:page])
+    end
   end
 
   def shield_product
@@ -432,7 +452,11 @@ class ProductsController < ApplicationController
 
   def un_updated_page
     @action_from = params[:action]
-    @products = selected_user.products.un_updated.page(params[:page])
+    if selected_user.is_dd? || selected_user.can_user_see_all?
+      @products = Product.un_updated.page(params[:page])
+    else
+      @products = selected_user.valid_products.un_updated.page(params[:page])
+    end
   end
 
   def get_tmall_links 
@@ -464,10 +488,10 @@ class ProductsController < ApplicationController
 
   def index
     @action_from = params[:action]
-    if current_user.is_dd?
-      @products = selected_user.valid_products.updated.onsale.un_shield.order('first_updated_time desc').page(params[:page])
+    if selected_user.is_dd? || selected_user.can_user_see_all?
+      @products = Product.updated.onsale.un_shield.order('first_updated_time desc').page(params[:page])
     else
-      @products = selected_user.products.updated.onsale.un_shield.order('first_updated_time desc').page(params[:page])
+      @products = selected_user.valid_products.updated.onsale.un_shield.order('first_updated_time desc').page(params[:page])
     end
   end
 

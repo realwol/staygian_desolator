@@ -116,6 +116,7 @@ end
 desc 'Start current version on the server.'
 task :start => :environment do
   queue "cd #{deploy_to}/#{current_path}"
+  queue "mkdir public/export"
   queue 'pwd'
   queue "bundle exec thin start -C config/thin.yml"
 end

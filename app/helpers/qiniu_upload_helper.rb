@@ -45,7 +45,6 @@ module QiniuUploadHelper
 			else
 				false
 			end
-			puts "http://image.diewei2016.com/#{result["key"]}"
 		end
 
     # used in product update

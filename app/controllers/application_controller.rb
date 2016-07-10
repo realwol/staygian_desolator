@@ -5,7 +5,8 @@ class ApplicationController < ActionController::Base
   around_filter :record_memory if Rails.env.production?
 
   def selected_user
-    @selected_user = session[:selected_user_id].present? ? User.find(session[:selected_user_id]) : current_user
+    @selected_user = (session[:selected_user_id].present? && User.where(id: session[:selected_user_id]).first.present?) ? User.where(id: session[:selected_user_id]).first : current_user
+
     @selected_user
   end
 

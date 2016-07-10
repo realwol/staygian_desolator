@@ -127,11 +127,15 @@ def grasp_product tmall_link
     end
     details_after_filter << detail unless filter_word_list.index(detail[0..end_count])
   end
-
   b_string = @details.join('')
   bs = b_string.index("品牌").to_i
   be = b_string[bs..-1].index("<br/>").to_i
-  brand_name = b_string[bs+4..be+bs-1].try(:strip)
+  tmp_string = b_string[bs+3..be+bs-1]
+  if tmp_string.first.blank?
+    brand_name = b_string[bs+4..be+bs-1].try(:strip)
+  else
+    brand_name = b_string[bs+3..be+bs-1].try(:strip)
+  end
   related_brand = ''
   if brand_name.present?
     related_brand = Brand.find_by(name: brand_name)
@@ -146,7 +150,6 @@ def grasp_product tmall_link
 
 
   @product.details = details_after_filter.join
-
   # Create variables
   @product_images = []
   @variable_images = []
