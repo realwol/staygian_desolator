@@ -1,4 +1,28 @@
 namespace :clear_dirty_data do
+  desc 're grasp unused products'
+  task :regrasp_product => :environment do
+    # products = Product.where("id > 40649 and id < 40653 ")
+    products = Product.where("id in (?) ",[14319])
+    products.each do |product|
+      product.variables.destroy_all
+      product.product_info_translations.destroy_all
+      product.destroy
+    end
+    tmall_links = TmallLink.where("product_link_id in (?) ", products.map(&:product_link_id))
+    puts tmall_links.map(&:id)
+    tmall_links.update_all(status: false)
+  end
+
+  desc 'delete products'
+  task :remove_products => :environment do
+    products = Product.where("id in (?) ",[14319])
+    products.each do |product|
+      product.variables.destroy_all
+      product.product_info_translations.destroy_all
+      product.destroy
+    end
+  end
+
   desc 'clear variable chinaese symbol'
   task :replace_variable => :environment do
     a = 0

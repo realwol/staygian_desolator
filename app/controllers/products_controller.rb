@@ -15,7 +15,9 @@ class ProductsController < ApplicationController
   end
 
   def save_search_link
-    SearchLink.create(link: params[:link], grasp_shop_id: params[:grasp_shop_id], forbidden_words: params[:forbidden_words], link_desc: params[:link_desc], user: current_user, status: true, check_status: false)
+    if !!params[:link].index('https://list.tmall.com/search_product.htm')
+      SearchLink.create(link: params[:link], grasp_shop_id: params[:grasp_shop_id], forbidden_words: params[:forbidden_words], link_desc: params[:link_desc], user: current_user, status: true, check_status: false)
+    end
     @shops = Shop.order('name')
     redirect_to '/products/get_product_links_from_search_link'
   end

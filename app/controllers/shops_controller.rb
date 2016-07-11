@@ -25,7 +25,6 @@ class ShopsController < ApplicationController
 				search_link.destroy
     	end
     end
-
 		render json:true
 	end
 
