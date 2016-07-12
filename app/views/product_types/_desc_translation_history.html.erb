@@ -5,16 +5,25 @@
   <% end %>
 <hr/>
 <ul class="nav nav-pills">
-  <li role="presentation" class="active switch_btn" data-table-id="1"><a href="#">按照翻译使用排序</a></li>
+  <li role="presentation" class="active switch_btn switch_btn_first" data-table-id="1"><a href="#">按照翻译使用排序</a></li>
   <li role="presentation" class="switch_btn" data-table-id="2"><a href="#">未编辑翻译使用排序</a></li>
   <li role="presentation" class="switch_btn" data-table-id="3"><a href="#">创建时间倒序</a></li>
 </ul>
 <hr/>
 <div id="desc_translation_history_div" >
-  <%= render 'product_types/desc_translation_history_table' %>
 </div>
 
 <script type="text/javascript">
+  $(function(){
+    $.ajax({
+      url: '/product_types/switch_description_translation_history_page',
+      data: {table_id: 1},
+      type: 'get',
+      success: function(){}
+    });
+
+  })
+
   $('.switch_btn').click(function(){
     $('.switch_btn').each(function(){
       $(this).removeClass('active');

@@ -41,6 +41,7 @@
     </tr>
   <% end %>
 </table>
+
 <%= paginate @descriptions, remote: true %>
 
 <script type="text/javascript">
@@ -55,7 +56,6 @@
     $(this).parents('tr').find('.attribute_value').each(function(){
       attributeValue = attributeValue + $(this).val() + '|';
     });
-alert(attributeValue);
     $.ajax({
       url: '/product_types/save_desc_translation',
       type: 'post',

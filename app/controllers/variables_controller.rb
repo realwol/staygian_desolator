@@ -19,7 +19,7 @@ class VariablesController < ApplicationController
     delete_flag = true
     variable_name = params[:variableName]
     variable_from = params[:variableType]
-    on_sale_products_id = Product.onsale.pluck(:id)
+    on_sale_products_id = Product.updated.onsale.un_shield.pluck(:id)
     on_sale_variables = Variable.where("product_id in (?)", on_sale_products_id)
     if variable_from == 'size'
       using_variable = on_sale_variables.find_by(size: variable_name)
