@@ -19,10 +19,12 @@ class VariablesController < ApplicationController
     delete_flag = true
     variable_name = params[:variableName]
     variable_from = params[:variableType]
+    on_sale_products_id = Product.onsale.pluck(:id)
+    on_sale_variables = Variable.where("product_id in (?)", on_sale_products_id)
     if variable_from == 'size'
-      using_variable = Variable.where(size: variable_name).first
+      using_variable = on_sale_variables.find_by(size: variable_name)
     elsif variable_from == 'color'
-      using_variable = Variable.where(color: variable_name).first
+      using_variable = on_sale_variables.find_by(color: variable_name)
     end
 
     delete_flag = false if using_variable.present?
