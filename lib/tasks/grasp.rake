@@ -203,9 +203,11 @@ def grasp_product tmall_link
   end
 
   # remove products and tmall link if shop forbidden before save
-  unless @product.shop.status
-    tmall_link.destroy
-    return false
+  if @product.shop.present?
+    if !@product.shop.status
+      tmall_link.destroy
+      return false
+    end
   end
   @product.save
   @product.reload
