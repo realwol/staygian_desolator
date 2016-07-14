@@ -3,8 +3,8 @@ namespace :clear_dirty_data do
   task :reset_sku => :environment do
     products = Product.where('id > 85233')
     products.each do |p|
-      p.sku_number = p.sku_number + 85035
-      p.sku = p.sku_number.to_s.prepend(("M" + "0" * (7- p.sku_number.to_s.length)) )
+      # p.sku_number = p.sku_number + 85035
+      p.sku = p.sku_number.to_s.prepend(("T" + "0" * (7- p.sku_number.to_s.length)) )
       p.save
     end
   end

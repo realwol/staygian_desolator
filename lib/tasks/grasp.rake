@@ -336,10 +336,12 @@ def grasp_product tmall_link
 end
 
 def binding_shop_with_brand shop_id, brand_id
-  shop_brand_relation = BrandShopRelation.find_by(shop_id: shop_id, brand_id: brand_id)
-  unless shop_brand_relation.present?
-    BrandShopRelation.create(brand_id: brand_id, shop_id: shop_id, status: 5)
-    Brand.find(brand_id).update_attributes(has_stand_by: true)
+  if shop_id != 0
+    shop_brand_relation = BrandShopRelation.find_by(shop_id: shop_id, brand_id: brand_id)
+    unless shop_brand_relation.present?
+      BrandShopRelation.create(brand_id: brand_id, shop_id: shop_id, status: 5)
+      Brand.find(brand_id).update_attributes(has_stand_by: true)
+    end
   end
 end
 
