@@ -982,7 +982,7 @@ class Product < ActiveRecord::Base
     if Product.all.count == 0
       base_number = 0
     else
-      base_number = Product.last.sku_number.to_i
+      base_number = Product.order('sku_number').last.sku_number.to_i
     end
     self.sku_number = base_number + 1
 
