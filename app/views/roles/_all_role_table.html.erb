@@ -6,7 +6,11 @@
     <th>选择</th>
   </tr>
   <% @auth_from_amazon.each_with_index do |auth,index| %>
-    <tr>
+    <% if auth.parent_id.present? %>
+      <tr>
+    <% else %>
+      <tr style="background:#e2eaea;" >
+    <% end %>
       <td><%= auth.parent_auth.try(:name) %></td>
       <td><%= auth.name %></td>
       <td><%= check_box_tag '', '', @auth_from_amazon_relation[index].try(:status), class:'auth_checked', "data-auth-id"=> auth.id %></td>
@@ -21,7 +25,11 @@
     <th>选择</th>
   </tr>
   <% @auth_from_order.each_with_index do |auth,index| %>
-    <tr>
+    <% if auth.parent_id.present? %>
+      <tr>
+    <% else %>
+      <tr style="background:#e2eaea;" >
+    <% end %>
       <td><%= auth.parent_auth.try(:name) %></td>
       <td><%= auth.name %></td>
       <td><%= check_box_tag '', '', @auth_from_order_relation[index].try(:status), class:'auth_checked', "data-auth-id"=> auth.id %></td>
