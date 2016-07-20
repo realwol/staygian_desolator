@@ -62,7 +62,7 @@
       <td><%= select_tag '', options_from_collection_for_select(Role.all, 'id', 'name', user.user_role.try(:id)), include_blank: true, class:'user_role' %></td>
       <td>
         <%= button_tag '更新', class:'create_department_user', "data-user-id"=> user.id %>
-        <%= button_tag '删除', class:'remove_department_user', "data-user-id"=> user.id %>
+        <%= button_tag '删除', class:'remove_department_user', "data-user-id"=> user.id, data:{ confirm: '确定删除？'} %>
       </td>
     </tr>
   <% end %>

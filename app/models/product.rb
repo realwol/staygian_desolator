@@ -54,6 +54,10 @@ class Product < ActiveRecord::Base
     self.translate_status
   end
 
+  def get_unscope_user
+    User.all.unscope(:where).find(self.user_id)
+  end
+
   def get_shipment_cost language, weight=nil
     shipment_relations = self.product_type.try(:shipment_weight_relations)
     weight = self.product_weight if weight.nil?

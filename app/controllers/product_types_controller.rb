@@ -4,10 +4,12 @@ class ProductTypesController < ApplicationController
   def search_des_translation
     desc_name = params[:desc_name]
     @descriptions = DescriptionTranslationHistory.where(" description like ? ", "%#{desc_name}%").order('usage_count desc').page(params[:page])
+    @switch = 0
   end
 
   def description_translation_history_page
     @descriptions = DescriptionTranslationHistory.order('usage_count desc').page(params[:page])
+    @switch = 1
   end
 
   def switch_description_translation_history_page
@@ -20,6 +22,7 @@ class ProductTypesController < ApplicationController
     when 3
       @descriptions = DescriptionTranslationHistory.order(created_at: :desc).page(params[:page])
     end
+    @switch = 0
   end
 
   def remove_desc_translation

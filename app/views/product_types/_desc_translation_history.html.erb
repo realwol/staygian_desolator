@@ -15,12 +15,14 @@
 
 <script type="text/javascript">
   $(function(){
-    $.ajax({
-      url: '/product_types/switch_description_translation_history_page',
-      data: {table_id: 1},
-      type: 'get',
-      success: function(){}
-    });
+    if ("<%= @switch %>" == '1'){
+      $.ajax({
+        url: '/product_types/switch_description_translation_history_page',
+        data: {table_id: 1},
+        type: 'get',
+        success: function(){}
+      });
+    }
   })
 
   $('.switch_btn').click(function(){
