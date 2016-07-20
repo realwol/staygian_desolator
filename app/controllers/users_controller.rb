@@ -4,7 +4,7 @@ class UsersController < ApplicationController
 
   def remove_department_user
     if @user.present?
-      @user.update_attributes(password:'123123ab', status: false)
+      @user.update_attributes(password:'123123ab', status: false, username: '离职员工' )
       @department = @user.department
       @department_users = @department.users
     end
