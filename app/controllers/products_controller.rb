@@ -533,7 +533,7 @@ class ProductsController < ApplicationController
   # PATCH/PUT /products/1.json
   def update
     if params[:product][:avatar].present?
-      flag = [false, false, false]
+      flag = [false, false, false, false, false, false]
       if params[:product][:avatar][1].present?
         params[:product][:avatar1] = params[:product][:avatar][1]
         flag[1] = true
@@ -542,12 +542,24 @@ class ProductsController < ApplicationController
         params[:product][:avatar2] = params[:product][:avatar][2]
         flag[2] = true
       end
+     if params[:product][:avatar][3].present?
+        params[:product][:avatar3] = params[:product][:avatar][3]
+        flag[3] = true
+      end
+     if params[:product][:avatar][4].present?
+        params[:product][:avatar4] = params[:product][:avatar][4]
+        flag[4] = true
+      end
+     if params[:product][:avatar][5].present?
+        params[:product][:avatar5] = params[:product][:avatar][5]
+        flag[5] = true
+      end
      if params[:product][:avatar][0].present?
         params[:product][:avatar] = params[:product][:avatar][0]
         flag[0] = true
       end
     else
-      params[:product][:avatar], params[:product][:avatar1], params[:product][:avatar2] = '', '', ''
+      params[:product][:avatar], params[:product][:avatar1], params[:product][:avatar2], params[:product][:avatar3], params[:product][:avatar4], params[:product][:avatar5] = '', '', '', '', '', ''
     end
 
     # set product separate
@@ -572,7 +584,7 @@ class ProductsController < ApplicationController
       product_params["desc2"].gsub!(/[，、]/, ',')
       product_params["desc3"].gsub!(/[，、]/, ',')
       if @product.update(product_params)
-        if @product.first_updated_time
+        if @product.first_updated_time.present?
           @product.update_attributes(update_status:true)
         else
           @product.update_attributes(update_status:true, first_updated_time: Time.now)
@@ -631,8 +643,8 @@ class ProductsController < ApplicationController
 
         avatar_urls = []
         if params[:product][:avatar].present?
-          @product.avatar_img_url, @product.avatar_img_url1, @product.avatar_img_url2 = nil
-          [@product.avatar.url, @product.avatar1.url, @product.avatar2.url].each_with_index do |img_url, index|
+          @product.avatar_img_url, @product.avatar_img_url1, @product.avatar_img_url2, @product.avatar_img_url3, @product.avatar_img_url4, @product.avatar_img_url5 = nil
+          [@product.avatar.try(:url), @product.avatar1.try(:url), @product.avatar2.try(:url), @product.avatar3.try(:url), @product.avatar4.try(:url), @product.avatar5.try(:url)].each_with_index do |img_url, index|
             if img_url.present?
               puts 'image upload'
               avatar_urls << QiniuUploadHelper::QiNiu.upload_from_client(Rails.root.join('public' "#{img_url}")) if flag[index]
@@ -642,10 +654,13 @@ class ProductsController < ApplicationController
           @product.avatar_img_url = avatar_urls[0]
           @product.avatar_img_url1 = avatar_urls[1]
           @product.avatar_img_url2 = avatar_urls[2]
-          @product.avatar = @product.avatar1 = @product.avatar2 = nil
+          @product.avatar_img_url3 = avatar_urls[3]
+          @product.avatar_img_url4 = avatar_urls[4]
+          @product.avatar_img_url5 = avatar_urls[5]
+          @product.avatar = @product.avatar1 = @product.avatar2 = @product.avatar3 = @product.avatar4 = @product.avatar5 = nil
         else
-          @product.avatar_img_url, @product.avatar_img_url1, @product.avatar_img_url2 = nil
-          @product.avatar = @product.avatar1 = @product.avatar2 = nil
+          @product.avatar_img_url, @product.avatar_img_url1, @product.avatar_img_url2, @product.avatar_img_url3, @product.avatar_img_url4, @product.avatar_img_url5 = nil
+          @product.avatar = @product.avatar1 = @product.avatar2 = @product.avatar3 = @product.avatar4 = @product.avatar5 = nil
         end
         @product.translate_status = false
         @product.save
@@ -735,7 +750,7 @@ class ProductsController < ApplicationController
                                       :images26, :images27, :images28, :images29, :images30, :image_cut_x, :image_cut_y, :image_cut_position,
                                       :shield_type, :shop_id, :shield_untill, :presale_date, :strap_type, :lining_description, :shoe_width,
                                       :platform_height, :shaft_diameter, :shaft_height, :leather_type, :style_name, :department_name, :purchase_link,
-                                      :product_weight, :editing_backup, :avatar, :avatar1, :avatar2, :stock)
+                                      :product_weight, :editing_backup, :avatar, :avatar1, :avatar2, :avatar3, :avatar4, :avatar5, :stock)
     end
 
     def avaliable? link

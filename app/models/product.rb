@@ -46,6 +46,9 @@ class Product < ActiveRecord::Base
   mount_uploader :avatar, AvatarUploader
   mount_uploader :avatar1, AvatarUploader
   mount_uploader :avatar2, AvatarUploader
+  mount_uploader :avatar3, AvatarUploader
+  mount_uploader :avatar4, AvatarUploader
+  mount_uploader :avatar5, AvatarUploader
 
   def is_translated?
     self.translate_status

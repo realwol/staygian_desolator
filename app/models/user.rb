@@ -23,6 +23,8 @@ class User < ActiveRecord::Base
   belongs_to :user_role, class_name: 'Role', foreign_key: 'user_role_id'
   belongs_to :department
 
+  default_scope {where(status:true)}
+
   def valid_account
     if self.is_dd? || self.is_jj?
       Account.all
@@ -37,7 +39,7 @@ class User < ActiveRecord::Base
   end
 
   def can_user_see_all?
-    self.user_product_version == 3
+    self.user_product_version == '3'
   end
 
   def is_team_member?

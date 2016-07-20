@@ -1,17 +1,34 @@
+<h5>数据库系统权限</h5>
 <table class="table table-bordered" style="width:90%;" >
   <tr>
     <th>一级功能名称</th>
     <th>二级功能名称</th>
     <th>选择</th>
   </tr>
-  <% @auths.each_with_index do |auth,index| %>
+  <% @auth_from_amazon.each_with_index do |auth,index| %>
     <tr>
       <td><%= auth.parent_auth.try(:name) %></td>
       <td><%= auth.name %></td>
-      <td><%= check_box_tag '', '', @auth_relation[index].try(:status), class:'auth_checked', "data-auth-id"=> auth.id %></td>
+      <td><%= check_box_tag '', '', @auth_from_amazon_relation[index].try(:status), class:'auth_checked', "data-auth-id"=> auth.id %></td>
     </tr>
   <% end %>
 </table>
+<h5>订单系统权限</h5>
+<table class="table table-bordered" style="width:90%;" >
+  <tr>
+    <th>一级功能名称</th>
+    <th>二级功能名称</th>
+    <th>选择</th>
+  </tr>
+  <% @auth_from_order.each_with_index do |auth,index| %>
+    <tr>
+      <td><%= auth.parent_auth.try(:name) %></td>
+      <td><%= auth.name %></td>
+      <td><%= check_box_tag '', '', @auth_from_order_relation[index].try(:status), class:'auth_checked', "data-auth-id"=> auth.id %></td>
+    </tr>
+  <% end %>
+</table>
+
 <%= button_tag '提交', class:'update_auth_role_relation' %>
 <%= hidden_field_tag 'role_id', @role.id %>
 

@@ -60,7 +60,10 @@
       </td>
       <td><%= select_tag '', options_from_collection_for_select(User.all, 'id', 'username', user.leader.try(:id)), include_blank: true, class:'user_leader' %></td>
       <td><%= select_tag '', options_from_collection_for_select(Role.all, 'id', 'name', user.user_role.try(:id)), include_blank: true, class:'user_role' %></td>
-      <td><%= button_tag '更新', class:'create_department_user', "data-user-id"=> user.id %></td>
+      <td>
+        <%= button_tag '更新', class:'create_department_user', "data-user-id"=> user.id %>
+        <%= button_tag '删除', class:'remove_department_user', "data-user-id"=> user.id %>
+      </td>
     </tr>
   <% end %>
 </table>
@@ -68,6 +71,15 @@
 <%= link_to '返回', departments_path %>
 
 <script type="text/javascript">
+  $('.remove_department_user').click(function(){
+    var user_id = $(this).data('user-id');
+    $.ajax({
+      url: '/users/' + user_id + '/remove_department_user',
+      type: 'delete',
+      success: function(){}
+    })
+  });
+
   $('.change_user_pwd').click(function(){
     var user_id = $(this).data('user-id');
     var $new_pwd = $(this).parents('td').find('.new_pwd');

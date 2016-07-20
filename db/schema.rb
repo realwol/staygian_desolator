@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160703062903) do
+ActiveRecord::Schema.define(version: 20160720055035) do
 
   create_table "accounts", force: :cascade do |t|
     t.string   "name",       limit: 255
@@ -46,6 +46,7 @@ ActiveRecord::Schema.define(version: 20160703062903) do
   create_table "auth_lists", force: :cascade do |t|
     t.string   "name",       limit: 255
     t.string   "auth_url",   limit: 255
+    t.integer  "auth_from",  limit: 4,   default: 0
     t.boolean  "status",     limit: 1,   default: true
     t.integer  "parent_id",  limit: 4
     t.string   "backup",     limit: 255
@@ -531,6 +532,12 @@ ActiveRecord::Schema.define(version: 20160703062903) do
     t.boolean  "product_check_flag", limit: 1,     default: false
     t.boolean  "is_separate",        limit: 1,     default: false
     t.string   "search_link_id",     limit: 255
+    t.text     "avatar3",            limit: 65535
+    t.text     "avatar4",            limit: 65535
+    t.text     "avatar5",            limit: 65535
+    t.text     "avatar_img_url3",    limit: 65535
+    t.text     "avatar_img_url4",    limit: 65535
+    t.text     "avatar_img_url5",    limit: 65535
   end
 
   add_index "products", ["product_type_id"], name: "index_products_on_product_type_id", using: :btree
@@ -705,9 +712,9 @@ ActiveRecord::Schema.define(version: 20160703062903) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.datetime "created_at",                                       null: false
-    t.datetime "updated_at",                                       null: false
-    t.string   "email",                  limit: 255, default: "",  null: false
+    t.datetime "created_at",                                        null: false
+    t.datetime "updated_at",                                        null: false
+    t.string   "email",                  limit: 255, default: "",   null: false
     t.string   "username",               limit: 255
     t.integer  "manager",                limit: 4,   default: 1
     t.integer  "role",                   limit: 4
@@ -715,17 +722,18 @@ ActiveRecord::Schema.define(version: 20160703062903) do
     t.string   "user_product_version",   limit: 255, default: "1"
     t.string   "department_id",          limit: 255
     t.string   "user_role_id",           limit: 255
-    t.string   "encrypted_password",     limit: 255, default: "",  null: false
+    t.string   "encrypted_password",     limit: 255, default: "",   null: false
     t.string   "reset_password_token",   limit: 255
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",          limit: 4,   default: 0,   null: false
+    t.integer  "sign_in_count",          limit: 4,   default: 0,    null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip",     limit: 255
     t.string   "last_sign_in_ip",        limit: 255
     t.datetime "deleted_at"
     t.integer  "order_role",             limit: 4,   default: 1
+    t.boolean  "status",                 limit: 1,   default: true
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

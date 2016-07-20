@@ -1,5 +1,23 @@
-<span style='font-size:20px;' >权限列表</span>
-
-<div id="role_list_div" >
+<!-- <span style='font-size:20px;' >权限列表</span> -->
+<!-- <hr/> -->
+<h5>数据库权限 <button class="btn btn-primary btn-toggle-list" >展开</button></h5>
+<div id="role_list_div" style="display:none;" >
   <%= render 'roles/role_list' %>
 </div>
+
+<hr/>
+
+<h5>订单系统权限 <button class="btn btn-primary btn-toggle-order-list">展开</button></h5>
+<div id="order_role_list_div" style="display:none;" >
+  <%= render 'roles/order_role_list' %>
+</div>
+
+<script type="text/javascript">
+  $('.btn-toggle-list').click(function(){
+    $('#role_list_div').toggle();
+  });
+
+  $('.btn-toggle-order-list').click(function(){
+    $('#order_role_list_div').toggle();
+  })
+</script>

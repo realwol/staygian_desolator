@@ -188,6 +188,7 @@ Rails.application.routes.draw do
       post 'reset_user_pwd'
       get 'show_little_brothers'
       get 'user_setting'
+      delete 'remove_department_user'
     end
   end
   resources :shipments do 

@@ -1,6 +1,15 @@
 class UsersController < ApplicationController
-  before_action :set_user, only: [:show, :edit, :update, :destroy, :change_user_password, :user_setting, :reset_user_pwd, :admin_reset_user_pwd]
+  before_action :set_user, only: [ :remove_department_user, :show, :edit, :update, :destroy, :change_user_password, :user_setting, :reset_user_pwd, :admin_reset_user_pwd]
   before_action :authenticate_user!
+
+  def remove_department_user
+    if @user.present?
+      @user.update_attributes(password:'123123ab', status: false)
+      @department = @user.department
+      @department_users = @department.users
+    end
+    # render json:true
+  end
 
   def update_responser
     account = Account.find(params[:account_id])

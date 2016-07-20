@@ -36,6 +36,15 @@ def grasp_product tmall_link
   agent = UserAgents.rand()
   html = Nokogiri::HTML(open(tmall_link.address, 'User-Agent' => agent, :allow_redirections => :all ))
 
+  text_field = html.css('div.tb-meta strong.sold-out-tit')
+  if text_field.present? && text_field.text == '此商品已下架'
+    puts "tmall link #{tmall_link.id} offline when grasp"
+    return false
+  elsif html.css('div#content div.errorDetail h2').text.present? || html.css('div#content div.errorDetail h2').text == '很抱歉，您查看的商品找不到了！'
+    puts "tmall link #{tmall_link.id} destroied when grasp"
+    return false
+  end
+
   # Create Product
   @product = Product.new(translate_status:false, update_status:false, on_sale:true, user_id: tmall_link.user_id)
   @product.origin_address = tmall_link.address
@@ -130,12 +139,19 @@ def grasp_product tmall_link
   b_string = @details.join('')
   bs = b_string.index("品牌").to_i
   be = b_string[bs..-1].index("<br/>").to_i
-  tmp_string = b_string[bs+3..be+bs-1]
-  if tmp_string.first.blank?
-    brand_name = b_string[bs+4..be+bs-1].try(:strip)
+  if b_string.index("品牌").nil?
+    brand_name = '其他品牌'
+    puts "tmall link #{tmall_link.id} no brand in this!"
+    return false
   else
-    brand_name = b_string[bs+3..be+bs-1].try(:strip)
+    tmp_string = b_string[bs+3..be+bs-1]
+    if tmp_string.first.blank?
+      brand_name = b_string[bs+4..be+bs-1].try(:strip)
+    else
+      brand_name = b_string[bs+3..be+bs-1].try(:strip)
+    end
   end
+
   related_brand = ''
   if brand_name.present?
     related_brand = Brand.find_by(name: brand_name)

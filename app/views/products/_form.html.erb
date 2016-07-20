@@ -63,7 +63,7 @@
       </div>
     <% end %>
 
-    <% [@product.avatar_img_url, @product.avatar_img_url1, @product.avatar_img_url2].compact.each_with_index do |img,index| %>
+    <% [@product.avatar_img_url, @product.avatar_img_url1, @product.avatar_img_url2, @product.avatar_img_url3, @product.avatar_img_url4, @product.avatar_img_url5].compact.each_with_index do |img,index| %>
       <%if img.present?%>
         <div style="float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px; background: grey;">
           <%= image_tag(img, style:'width:50px;', class:"product_image product_image_count", alt:'', "data-src"=>img) %>
@@ -80,6 +80,15 @@
     </div>
     <div id="avatarImgDiv2" style=" display:none; float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px; background: grey;">
       <%= image_tag('', style:'width:50px; display:none;', class:" product_image_count", id:'myImg3', alt:'', "data-src"=>'') %>
+    </div>
+    <div id="avatarImgDiv3" style=" display:none; float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px; background: grey;">
+      <%= image_tag('', style:'width:50px; display:none;', class:" product_image_count", id:'myImg4', alt:'', "data-src"=>'') %>
+    </div>
+    <div id="avatarImgDiv4" style=" display:none; float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px; background: grey;">
+      <%= image_tag('', style:'width:50px; display:none;', class:" product_image_count", id:'myImg5', alt:'', "data-src"=>'') %>
+    </div>
+    <div id="avatarImgDiv5" style=" display:none; float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px; background: grey;">
+      <%= image_tag('', style:'width:50px; display:none;', class:" product_image_count", id:'myImg6', alt:'', "data-src"=>'') %>
     </div>
     <br/>
     <%= hidden_field_tag 'cut_image_urls' %>
@@ -365,6 +374,21 @@
             reader2.onload = imageIsLoaded2;
             reader2.readAsDataURL(this.files[2]);
         }
+        if (this.files && this.files[3]) {
+            var reader3 = new FileReader();
+            reader3.onload = imageIsLoaded3;
+            reader3.readAsDataURL(this.files[3]);
+        }
+        if (this.files && this.files[4]) {
+            var reader4 = new FileReader();
+            reader4.onload = imageIsLoaded4;
+            reader4.readAsDataURL(this.files[4]);
+        }
+        if (this.files && this.files[5]) {
+            var reader5 = new FileReader();
+            reader5.onload = imageIsLoaded5;
+            reader5.readAsDataURL(this.files[5]);
+        }
     // alert($(this).val());
     // alert(this.files[0]);
     // var uploadPath = $(this).val();
@@ -395,6 +419,24 @@
     $('#avatarImgDiv2').css('display','inline');
     $('#myImg3').attr('src', e.target.result);
     $('#myImg3').css('display','inline');
+  };
+
+  function imageIsLoaded3(e) {
+    $('#avatarImgDiv3').css('display','inline');
+    $('#myImg4').attr('src', e.target.result);
+    $('#myImg4').css('display','inline');
+  };
+
+  function imageIsLoaded4(e) {
+    $('#avatarImgDiv4').css('display','inline');
+    $('#myImg5').attr('src', e.target.result);
+    $('#myImg5').css('display','inline');
+  };
+
+  function imageIsLoaded5(e) {
+    $('#avatarImgDiv5').css('display','inline');
+    $('#myImg6').attr('src', e.target.result);
+    $('#myImg6').css('display','inline');
   };
   // $('form#upload_custome_image').submit(function(){
   //   var valuesToSubmit = $(this).serialize();

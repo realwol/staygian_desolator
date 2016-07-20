@@ -29,22 +29,34 @@ class RolesController < ApplicationController
     # handle first level auth
     @role.remove_or_add_first_level_auth
 
-    @auths = AuthList.second_level_auth
-    @auth_relation = []
+    @auths = AuthList.valid_auth.order('auth_from')
+    @auth_from_amazon = AuthList.valid_auth.from_amazon
+    @auth_from_order = AuthList.valid_auth.from_order
+
+    @auth_relation, @auth_from_amazon_relation, @auth_from_order_relation = [], [], []
     @auths.each do |auth|
       @auth_relation << RoleAuthRelation.find_by(role_id: @role.id, auth_list_id: auth.id)
+    end
+    @auth_from_amazon.each do |auth|
+      @auth_from_amazon_relation << RoleAuthRelation.find_by(role_id: @role.id, auth_list_id: auth.id)
+    end
+    @auth_from_order.each do |auth|
+      @auth_from_order_relation << RoleAuthRelation.find_by(role_id: @role.id, auth_list_id: auth.id)
     end
     # render json:true
   end
 
   def create_auth
-    AuthList.create(name: params[:name], parent_id: params[:parent_id], backup: params[:backup], auth_url: params[:auth_url])
+    AuthList.create(name: params[:name], parent_id: params[:parent_id], backup: params[:backup], auth_url: params[:auth_url], auth_from: params[:auth_from])
     
+    @auth_from = params[:auth_from]
     @auths = AuthList.valid_auth
+    @order_auths = AuthList.valid_auth.from_order
   end
 
   def auth_list_index
-    @auths = AuthList.valid_auth
+    @auths = AuthList.valid_auth.from_amazon
+    @order_auths = AuthList.valid_auth.from_order
   end
 
   def index
@@ -52,10 +64,18 @@ class RolesController < ApplicationController
   end
 
   def show
-    @auths = AuthList.second_level_auth
-    @auth_relation = []
+    @auths = AuthList.valid_auth.order('auth_from')
+    @auth_from_amazon = AuthList.valid_auth.from_amazon
+    @auth_from_order = AuthList.valid_auth.from_order
+    @auth_relation, @auth_from_amazon_relation, @auth_from_order_relation = [], [], []
     @auths.each do |auth|
       @auth_relation << RoleAuthRelation.find_by(role_id: @role.id, auth_list_id: auth.id)
+    end
+    @auth_from_amazon.each do |auth|
+      @auth_from_amazon_relation << RoleAuthRelation.find_by(role_id: @role.id, auth_list_id: auth.id)
+    end
+    @auth_from_order.each do |auth|
+      @auth_from_order_relation << RoleAuthRelation.find_by(role_id: @role.id, auth_list_id: auth.id)
     end
   end
 
