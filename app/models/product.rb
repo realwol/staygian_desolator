@@ -160,7 +160,7 @@ class Product < ActiveRecord::Base
     all_product_types = products.map {|product| product.product_type }.compact.uniq
     all_product_types.map do |product_type|
       product_type.product_attributes.map do |attribute|
-        attribute.attribute_name
+        attribute.attribute_name.strip
       end
     end.flatten.uniq
   end
@@ -169,7 +169,7 @@ class Product < ActiveRecord::Base
     all_product_types = products.map {|product| product.product_type }.compact.uniq
     all_product_types.map do |product_type|
       product_type.product_attributes.map do |attribute|
-        attribute.table_name
+        attribute.table_name.strip
       end
     end.flatten.uniq
   end

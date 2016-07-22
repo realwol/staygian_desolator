@@ -192,7 +192,9 @@ class MerchantsController < ApplicationController
 
   def create
     mws_points = {america: 'https://mws.amazonservices.com', canada: 'https://mws.amazonservices.ca', british: 'https://mws-eu.amazonservices.com', germany: 'https://mws-eu.amazonservices.com', spain: 'https://mws-eu.amazonservices.com', italy: 'https://mws-eu.amazonservices.com', france: 'https://mws-eu.amazonservices.com' }
+    mws_marketplace_id = {america: 'ATVPDKIKX0DER', canada: 'A2EUQ1WTGCTBG2', british: 'A1F83G8C2ARO7P', germany: 'A1PA6795UKMFR9', spain: 'A1RKKUPIHCS9HS', italy: 'APJ6JRA9NG5V4', france: 'A13V1IB3VIYZZH' }
     params[:merchant_api_address] = mws_points["#{merchant_params[:merchant_country_name]}".to_sym]
+    params[:merchant_marketplace_id] = mws_points["#{merchant_params[:merchant_country_name]}".to_sym]
     current_user.merchants.create(merchant_params)
     @account = Account.find(merchant_params[:account_id])
     @merchants = @account.merchants
