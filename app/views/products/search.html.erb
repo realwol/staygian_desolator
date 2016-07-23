@@ -25,7 +25,7 @@
           <% end %>
           <td><%= product.sku %></td>
           <td><%= product.product_number %></td>
-          <td><%= product.try(:user).try(:username) %></td>
+          <td><%= product.get_unscope_user.try(:username) %></td>
           <td>
             <% case @result_button  %>
             <% when 1 %>
