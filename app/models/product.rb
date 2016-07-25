@@ -167,25 +167,6 @@ class Product < ActiveRecord::Base
     profit_rate
   end
 
-  # def self.to_txt options={}
-  #   system("mkdir 'hello'")
-  #   file = File.new("hello/1.rb", 'a+')
-  #   file.puts("a\tb\tc")
-  #   file.puts("1\t2\t3")
-  #   file.close
-  #   file = File.new("hello/2.rb", 'a+')
-  #   file.puts("a2\tb2\tc2")
-  #   file.puts("11\t22\t33")
-  #   file.close
-  #   # system(" wget -r -np -nH --cut-dirs=3 -R index.html file://Users/Leo/work/rails/projects/amazon_tmall/hello ")
-  #   # xls_column_names = %w(a b c)
-  #   # CSV.generate(options) do |csv|
-  #   #   csv << xls_column_names
-  #   #   csv << ['a1', 'b1', 'c1']
-  #   #   csv << ['end']
-  #   # end
-  # end
-
   def self.to_csv(language, max_limit, options={})
     cash_rate = CashRate.last.try(language.to_sym).to_f
     # Custome the xls columns and languages
