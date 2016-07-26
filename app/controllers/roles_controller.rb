@@ -65,8 +65,8 @@ class RolesController < ApplicationController
 
   def show
     @auths = AuthList.valid_auth.order('auth_from')
-    @auth_from_amazon = AuthList.valid_auth.from_amazon
-    @auth_from_order = AuthList.valid_auth.from_order
+    @auth_from_amazon = AuthList.valid_auth.from_amazon.order(:parent_id)
+    @auth_from_order = AuthList.valid_auth.from_order.order(:parent_id)
     @auth_relation, @auth_from_amazon_relation, @auth_from_order_relation = [], [], []
     @auths.each do |auth|
       @auth_relation << RoleAuthRelation.find_by(role_id: @role.id, auth_list_id: auth.id)

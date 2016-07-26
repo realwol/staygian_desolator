@@ -1,5 +1,5 @@
 <h5>数据库系统权限</h5>
-<table class="table table-bordered" style="width:90%;" >
+<table class="table table-bordered table-striped" style="width:90%;" >
   <tr>
     <th>一级功能名称</th>
     <th>二级功能名称</th>
@@ -9,16 +9,17 @@
     <% if auth.parent_id.present? %>
       <tr>
     <% else %>
-      <tr style="background:#e2eaea;" >
+      <tr style="background:#e2eaea; display:none;" >
     <% end %>
       <td><%= auth.parent_auth.try(:name) %></td>
       <td><%= auth.name %></td>
-      <td><%= check_box_tag '', '', @auth_from_amazon_relation[index].try(:status), class:'auth_checked', "data-auth-id"=> auth.id %></td>
+      <td><%= check_box_tag '', '', @auth_from_amazon_relation[index].try(:status), class:'auth_checked', "data-auth-related-id"=>auth.parent_id,  "data-auth-id"=> auth.id %></td>
     </tr>
   <% end %>
 </table>
+
 <h5>订单系统权限</h5>
-<table class="table table-bordered" style="width:90%;" >
+<table class="table table-bordered table-striped" style="width:90%;" >
   <tr>
     <th>一级功能名称</th>
     <th>二级功能名称</th>
@@ -28,7 +29,7 @@
     <% if auth.parent_id.present? %>
       <tr>
     <% else %>
-      <tr style="background:#e2eaea;" >
+      <tr style="background:#e2eaea; display:none;" >
     <% end %>
       <td><%= auth.parent_auth.try(:name) %></td>
       <td><%= auth.name %></td>
@@ -41,6 +42,31 @@
 <%= hidden_field_tag 'role_id', @role.id %>
 
 <script type="text/javascript">
+  $('.auth_checked').click(function(){
+    var auth_parent_id = $(this).data('auth-related-id');
+    if($(this).prop('checked')){
+      $('.auth_checked').each(function(){
+        if ($(this).data('auth-id') == auth_parent_id) {
+          $(this).prop('checked','checked');
+        }
+      })
+    } else {
+      var should_check_or_not = 0;
+      $('.auth_checked:checked').each(function(){
+        if ($(this).data('auth-related-id') == auth_parent_id) {
+          should_check_or_not = 1;
+        }
+      })
+      if (should_check_or_not == 0) {
+        $('.auth_checked').each(function(){
+          if ($(this).data('auth-id') == auth_parent_id) {
+            $(this).prop('checked',false);
+          }
+        })
+      }
+    }
+  })
+
   $('.update_auth_role_relation').click(function(){
     var role_id = $('#role_id').val();
     var checked_auth_string = '';
