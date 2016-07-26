@@ -29,11 +29,11 @@
     <% if auth.parent_id.present? %>
       <tr>
     <% else %>
-      <tr style="background:#e2eaea; display:none;" >
+      <tr style="background:#e2eaea;" >
     <% end %>
       <td><%= auth.parent_auth.try(:name) %></td>
       <td><%= auth.name %></td>
-      <td><%= check_box_tag '', '', @auth_from_order_relation[index].try(:status), class:'auth_checked', "data-auth-id"=> auth.id %></td>
+      <td><%= check_box_tag '', '', @auth_from_order_relation[index].try(:status), class:'auth_checked', "data-auth-related-id"=>auth.parent_id, "data-auth-id"=> auth.id %></td>
     </tr>
   <% end %>
 </table>
