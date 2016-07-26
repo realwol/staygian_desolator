@@ -29,7 +29,7 @@
     <% if auth.parent_id.present? %>
       <tr>
     <% else %>
-      <tr style="background:#e2eaea;" >
+      <tr style="background:#e2eaea; display:none;" >
     <% end %>
       <td><%= auth.parent_auth.try(:name) %></td>
       <td><%= auth.name %></td>
