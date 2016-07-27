@@ -3,6 +3,19 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
   around_filter :record_memory if Rails.env.production?
+  before_action :curfew_in_work
+
+  def curfew_in_work
+    if Rails.env == 'production' && current_user.present? && !current_user.is_dd?
+      render text: '每天早七点之前，晚七点之后，网站消失了!', status: 404 unless time_in_curfew Time.now
+    end
+  end
+
+  def time_in_curfew time
+    work_start = time.beginning_of_day + 7.hours + 30.minutes
+    work_end   = time.end_of_day - 4.hours - 30.minutes
+    time > work_start && time < work_end
+  end
 
   def selected_user
     @selected_user = (session[:selected_user_id].present? && User.where(id: session[:selected_user_id]).first.present?) ? User.where(id: session[:selected_user_id]).first : current_user
