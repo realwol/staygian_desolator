@@ -7,7 +7,7 @@ class ApplicationController < ActionController::Base
 
   def curfew_in_work
     if Rails.env == 'production' && current_user.present? && !current_user.is_dd?
-      render text: '每天早七点之前，晚七点之后，网站消失了!', status: 404 unless time_in_curfew Time.now
+      render text: '系统正在维护，请稍后再试！', status: 404 unless time_in_curfew Time.now
     end
   end
 
