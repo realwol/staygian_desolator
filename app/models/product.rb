@@ -134,21 +134,27 @@ class Product < ActiveRecord::Base
     local_infos
   end
 
-  def self.get_all_customize_columns products
+  def self.get_all_customize_columns cusomize_table_names
+    # all_product_types = products.map {|product| product.product_type }.compact.uniq
+    # all_product_types.map do |product_type|
+    #   product_type.product_attributes.map do |attribute|
+    #     attribute.attribute_name.strip
+    #   end
+    # end.flatten.uniq
+    customize_column_array = []
+    cusomize_table_names.each do |table_name|
+      customize_column_array << ProductAttribute.find_by(table_name: table_name).attribute_name
+    end
+    customize_column_array
+  end
+
+  def self.get_all_customize_table_columns products
     all_product_types = products.map {|product| product.product_type }.compact.uniq
     all_product_types.map do |product_type|
       product_type.product_attributes.map do |attribute|
-        attribute.attribute_name.strip
+        attribute.table_name.strip
       end
     end.flatten.uniq
-  end
-
-  def self.get_all_customize_table_columns names
-    name_array = []
-    names.each do |name|
-      name_array << ProductAttribute.find_by(attribute_name: name).table_name
-    end
-    name_array
   end
 
   def get_profit_rate language
@@ -176,10 +182,10 @@ class Product < ActiveRecord::Base
                           generic_keywords3 generic_keywords4 generic_keywords5 main_image_url other_image_url1
                           other_image_url2 other_image_url3 other_image_url4 other_image_url5 other_image_url6 other_image_url7
                           other_image_url8 is_separate parent_child parent_sku relationship_type variation_theme color_name color_map size_name size_map)
-    cusomize_column_names = Product.get_all_customize_columns self.all.un_shield.updated.not_auto_removed
-    cusomize_table_names = Product.get_all_customize_table_columns cusomize_column_names
+    cusomize_table_names = Product.get_all_customize_table_columns self.all.un_shield.updated.not_auto_removed
+    cusomize_column_names = Product.get_all_customize_columns cusomize_table_names
+    # cusomize_column_names = Product.get_all_customize_columns self.all.un_shield.updated.not_auto_removed
     xls_column_names = xls_column_names + cusomize_table_names
-
     country_currency = {british:'GBP', germany:'EUR', france: 'EUR', spain:'EUR', italy:'EUR', china:'人民币', america:'USD', canada:'CAD'}
     country_sku = {british: 'UK', germany:'DE', france:'FR', spain:'ES', italy:'IT', america:'US', canada:'CA'}
     variable_hash = {british: 'en', germany:'de', france:'fr', spain:'es', italy:'it', america:'en', canada:'en'}
