@@ -143,13 +143,12 @@ class Product < ActiveRecord::Base
     end.flatten.uniq
   end
 
-  def self.get_all_customize_table_columns products
-    all_product_types = products.map {|product| product.product_type }.compact.uniq
-    all_product_types.map do |product_type|
-      product_type.product_attributes.map do |attribute|
-        attribute.table_name.strip
-      end
-    end.flatten.uniq
+  def self.get_all_customize_table_columns names
+    name_array = []
+    names.each do |name|
+      name_array << ProductAttribute.find_by(attribute_name: name).table_name
+    end
+    name_array
   end
 
   def get_profit_rate language
@@ -177,8 +176,8 @@ class Product < ActiveRecord::Base
                           generic_keywords3 generic_keywords4 generic_keywords5 main_image_url other_image_url1
                           other_image_url2 other_image_url3 other_image_url4 other_image_url5 other_image_url6 other_image_url7
                           other_image_url8 is_separate parent_child parent_sku relationship_type variation_theme color_name color_map size_name size_map)
-    cusomize_column_names = Product.get_all_customize_columns self.all
-    cusomize_table_names = Product.get_all_customize_table_columns self.all
+    cusomize_column_names = Product.get_all_customize_columns self.all.un_shield.updated.not_auto_removed
+    cusomize_table_names = Product.get_all_customize_table_columns cusomize_column_names
     xls_column_names = xls_column_names + cusomize_table_names
 
     country_currency = {british:'GBP', germany:'EUR', france: 'EUR', spain:'EUR', italy:'EUR', china:'人民币', america:'USD', canada:'CAD'}
@@ -190,7 +189,7 @@ class Product < ActiveRecord::Base
     CSV.generate(options) do |csv|
       csv << xls_column_names
       # csv_line_count ＝ csv_line_count ＋ 1
-      all.un_shield.updated.find_in_batches(batch_size: 100) do |products|
+      all.un_shield.updated.not_auto_removed.find_in_batches(batch_size: 100) do |products|
         products.each do |product|
           puts "#{product.id} | csv_line_count #{csv_line_count} "
           product_variable_count = product.variables.count

@@ -1,4 +1,41 @@
 namespace :clear_dirty_data do
+  desc 'generate variable sku translation'
+  task :gen_variable_sku => :environment do
+    a = Time.now
+    products = Product.includes(:variables).limit(1)
+    products.each do |product|
+      product.variables.each do |v|
+        v_color = ''
+        v_size = ''
+        v_variable_info_translation = v
+        variable_sku = ''
+        if v.color.present? && v.size.present?
+          v_color = VariableTranslateHistory.where(word: v.color, variable_from:'color').first
+          v_size = VariableTranslateHistory.where(word: v.size, variable_from:'size').first
+          variable_sku = "#{product.sku}-#{v_color.try(:en)}#{v_size.try(:en)}"[0..35].lstrip
+        elsif v.color.present?
+          if v_variable_info_translation
+            v_color = VariableTranslateHistory.where(word: v.color, variable_from:'color').first
+            v_size = ""
+            variable_sku = "#{product.sku}-#{v_color.try(:en)}"[0..35].lstrip
+          else
+            variable_sku = "这个变体没有翻译，请重新翻译"
+          end
+        elsif v.size.present?
+          if v_variable_info_translation
+            v_size = VariableTranslateHistory.where(word: v.size, variable_from:'size').first
+            variable_sku = "#{product.sku}-#{v_size.try(:en)}"[0..35].lstrip
+          else
+            variable_sku = "这个变体没有翻译，请重新翻译"
+          end
+        end
+        # puts v.id, variable_sku
+        v.update_attributes(seller_sku: variable_sku)
+      end
+    end
+    puts Time.now - a
+  end
+
   desc 'reset wrong sku'
   task :reset_sku => :environment do
     products = Product.where('id > 85233')

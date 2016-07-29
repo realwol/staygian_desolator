@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160720055035) do
+ActiveRecord::Schema.define(version: 20160728141507) do
 
   create_table "accounts", force: :cascade do |t|
     t.string   "name",       limit: 255
@@ -92,6 +92,7 @@ ActiveRecord::Schema.define(version: 20160720055035) do
     t.string   "country_code",          limit: 255
     t.string   "postal_code",           limit: 255
     t.string   "address_line1",         limit: 255
+    t.string   "address_line2",         limit: 255
     t.string   "name",                  limit: 255
     t.string   "phone",                 limit: 255
     t.datetime "created_at",                        null: false
@@ -132,9 +133,9 @@ ActiveRecord::Schema.define(version: 20160720055035) do
     t.text     "france",       limit: 65535
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
+    t.integer  "usage_count",  limit: 4
     t.boolean  "is_whole",     limit: 1
     t.boolean  "is_auto_save", limit: 1
-    t.integer  "usage_count",  limit: 4
   end
 
   create_table "financial_turnovers", force: :cascade do |t|
@@ -285,6 +286,7 @@ ActiveRecord::Schema.define(version: 20160720055035) do
     t.string   "buyer_country_code",                     limit: 255
     t.string   "flag_shipping_status",                   limit: 255
     t.string   "origin_address",                         limit: 255
+    t.float    "shipping_cost",                          limit: 24
   end
 
   create_table "orders", force: :cascade do |t|
@@ -317,9 +319,9 @@ ActiveRecord::Schema.define(version: 20160720055035) do
     t.string   "merchant_id",                     limit: 255
     t.datetime "created_at",                                                  null: false
     t.datetime "updated_at",                                                  null: false
-    t.string   "contact_email",                   limit: 255
     t.boolean  "is_item_created",                 limit: 1,   default: false
     t.datetime "last_request_time"
+    t.string   "contact_email",                   limit: 255
     t.string   "country_code",                    limit: 255
     t.string   "backup",                          limit: 255
     t.string   "image",                           limit: 255
@@ -529,9 +531,9 @@ ActiveRecord::Schema.define(version: 20160720055035) do
     t.text     "avatar_img_url2",    limit: 65535
     t.integer  "stock",              limit: 4
     t.string   "auto_flag",          limit: 255,   default: "0"
-    t.boolean  "product_check_flag", limit: 1,     default: false
     t.boolean  "is_separate",        limit: 1,     default: false
     t.string   "search_link_id",     limit: 255
+    t.boolean  "product_check_flag", limit: 1,     default: false
     t.text     "avatar3",            limit: 65535
     t.text     "avatar4",            limit: 65535
     t.text     "avatar5",            limit: 65535
@@ -695,8 +697,8 @@ ActiveRecord::Schema.define(version: 20160720055035) do
     t.string   "product_link_id", limit: 255
     t.datetime "deleted_at"
     t.boolean  "auto_update",     limit: 1
-    t.boolean  "link_check_flag", limit: 1,     default: false
     t.string   "search_link_id",  limit: 255
+    t.boolean  "link_check_flag", limit: 1,     default: false
   end
 
   add_index "tmall_links", ["user_id"], name: "index_tmall_links_on_user_id", using: :btree
@@ -823,6 +825,7 @@ ActiveRecord::Schema.define(version: 20160720055035) do
     t.text     "fr",                            limit: 65535
     t.text     "es",                            limit: 65535
     t.text     "it",                            limit: 65535
+    t.string   "seller_sku",                    limit: 255
   end
 
   add_index "variables", ["product_id"], name: "index_variables_on_product_id", using: :btree
