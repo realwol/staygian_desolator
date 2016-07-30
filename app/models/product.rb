@@ -135,24 +135,29 @@ class Product < ActiveRecord::Base
   end
 
   def self.get_all_customize_columns cusomize_table_names
-    # all_product_types = products.map {|product| product.product_type }.compact.uniq
-    # all_product_types.map do |product_type|
-    #   product_type.product_attributes.map do |attribute|
-    #     attribute.attribute_name.strip
-    #   end
-    # end.flatten.uniq
     customize_column_array = []
     cusomize_table_names.each do |table_name|
-      customize_column_array << ProductAttribute.find_by(table_name: table_name).attribute_name
+      new_column = ''
+      name_and_id = table_name.split('|')
+      new_column = name_and_id.first
+      new_column = new_column + '|' + ProductAttribute.find_by(table_name: name_and_id.first, product_type_id: name_and_id.second).attribute_name
+      customize_column_array << new_column
     end
-    customize_column_array
+    table_names, attribute_names = [], []
+    customize_column_array.uniq.each do |column|
+      column_array = column.split('|')
+      table_names << column_array.first
+      attribute_names << column_array.second
+    end
+    return table_names, attribute_names
   end
 
   def self.get_all_customize_table_columns products
     all_product_types = products.map {|product| product.product_type }.compact.uniq
+    product_table_name_nuiq = []
     all_product_types.map do |product_type|
       product_type.product_attributes.map do |attribute|
-        attribute.table_name.strip
+        attribute.table_name.strip + '|' + product_type.id.to_s
       end
     end.flatten.uniq
   end
@@ -182,8 +187,9 @@ class Product < ActiveRecord::Base
                           generic_keywords3 generic_keywords4 generic_keywords5 main_image_url other_image_url1
                           other_image_url2 other_image_url3 other_image_url4 other_image_url5 other_image_url6 other_image_url7
                           other_image_url8 is_separate parent_child parent_sku relationship_type variation_theme color_name color_map size_name size_map)
-    cusomize_table_names = Product.get_all_customize_table_columns self.all.un_shield.updated.not_auto_removed
-    cusomize_column_names = Product.get_all_customize_columns cusomize_table_names
+    cusomize_table_name_and_id = Product.get_all_customize_table_columns self.all.un_shield.updated.not_auto_removed
+    cusomize_table_names, cusomize_column_names = Product.get_all_customize_columns cusomize_table_name_and_id
+
     # cusomize_column_names = Product.get_all_customize_columns self.all.un_shield.updated.not_auto_removed
     xls_column_names = xls_column_names + cusomize_table_names
     country_currency = {british:'GBP', germany:'EUR', france: 'EUR', spain:'EUR', italy:'EUR', china:'人民币', america:'USD', canada:'CAD'}
