@@ -32,4 +32,4 @@
     <% end %>
   </table>
 
-<%= paginate @variables %>
+<%= paginate @variables, remote: true, param_name: 'var_page', params_on_first_page: true %>

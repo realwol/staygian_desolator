@@ -210,7 +210,7 @@ class ProductsController < ApplicationController
     if selected_user.is_dd? || selected_user.can_user_see_all?
       @products = Product.all
     else
-      @products = selected_user.products
+      @products = selected_user.valid_products
     end
 
     if product_brand.present?

@@ -11,8 +11,10 @@ class VariablesController < ApplicationController
   end
 
   def variable_translate_list
-    @variables = VariableTranslateHistory.color_variable.order('created_at desc').page params[:page]
-    @colors = VariableTranslateHistory.size_variable.order('created_at desc').page params[:page]
+    @variables = VariableTranslateHistory.color_variable.order('created_at desc').page params[:var_page]
+    @colors = VariableTranslateHistory.size_variable.order('created_at desc').page params[:color_page]
+    @var_page = params[:var_page].present?
+    @color_page = params[:color_page].present?
   end
 
   def remove_translate_variable

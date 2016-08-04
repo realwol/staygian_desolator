@@ -1,0 +1,6 @@
+<% if @var_page.present? %>
+  $('#TranslatedVariableList').html("<%= raw j render 'untranslated_list' %>");
+<% end %>
+<% if @color_page.present? %>
+  $('#TranslatedSizeList').html("<%= raw j render 'variable_color_list' %>");
+<% end %>

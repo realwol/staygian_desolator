@@ -29,4 +29,4 @@
       无变体
     <% end %>
   </table>
-  <%= paginate @colors %>
+  <%= paginate @colors, remote: true, param_name: 'color_page', params_on_first_page: true %>
