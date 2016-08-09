@@ -39,6 +39,8 @@ class Product < ActiveRecord::Base
   scope :auto_removed, -> {where(auto_flag: 13)}
   scope :not_auto_removed, -> {where.not(auto_flag: 13)}
   scope :unchecked, -> {where(shield_type: 5)}
+  scope :yestoday_product, ->{where("first_updated_time < '#{Time.now.end_of_day.days_ago(1).strftime('%Y-%m-%d %H:%M:%S')}' and first_updated_time > ''#{Time.now.beginning_of_day.days_ago(1).strftime('%Y-%m-%d %H:%M:%S')}'' ")}
+  scope :month_product, ->{where("first_updated_time < '#{Time.now.end_of_day.days_ago(1).strftime('%Y-%m-%d %H:%M:%S')}' and first_updated_time > ''#{Time.now.beginning_of_day.days_ago(30).strftime('%Y-%m-%d %H:%M:%S')}'' ")}
   # scope :not_off_sale, ->{where(on_sale:true)}
 
   before_create :save_sku
@@ -189,7 +191,6 @@ class Product < ActiveRecord::Base
                           other_image_url8 is_separate parent_child parent_sku relationship_type variation_theme color_name color_map size_name size_map)
     cusomize_table_name_and_id = Product.get_all_customize_table_columns self.all.un_shield.updated.not_auto_removed
     cusomize_table_names, cusomize_column_names = Product.get_all_customize_columns cusomize_table_name_and_id
-
     # cusomize_column_names = Product.get_all_customize_columns self.all.un_shield.updated.not_auto_removed
     xls_column_names = xls_column_names + cusomize_table_names
     country_currency = {british:'GBP', germany:'EUR', france: 'EUR', spain:'EUR', italy:'EUR', china:'人民币', america:'USD', canada:'CAD'}

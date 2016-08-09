@@ -34,17 +34,24 @@ class UsersController < ApplicationController
   end
 
   def user_statistic
-    if current_user.is_dd?
-      all_updated_products = Product.updated.onsale.un_shield.pluck(:id)
-      current_updated_product = Product.updated.onsale.un_shield.where(product_check_flag: true).last.try(:id)
-      @all_updated_products_count = all_updated_products.count
-      if current_updated_product
-        @current_updated_product_count = all_updated_products.index(current_updated_product) + 1
-      else
-        @current_updated_product_counts = 0
-      end
-      @product_updated_percentage = (@current_updated_product_count.to_f / @all_updated_products_count.to_f * 100).round(1)
-    end
+    @rank_users = current_user.get_rank_users
+    @all_rank_users = User.get_all_rank_users.pluck(:id)
+    all_rank_user_string = "(#{@all_rank_users.join(',')})"
+    # @today_rank_user_products = Product.updated.onsale.un_shield.yestoday_product.find_by_sql("")
+    @today_rank_user_products = Product.find_by_sql("select id, count(id) as user_count, user_id
+                                                     from products
+                                                     where user_id in #{all_rank_user_string} and update_status = 1 and on_sale = 1 and auto_flag != 13 and shield_type = 0 and
+                                                     first_updated_time < '#{Time.now.end_of_day.days_ago(1).strftime('%Y-%m-%d %H:%M:%S')}' and first_updated_time > '#{Time.now.beginning_of_day.days_ago(1).strftime('%Y-%m-%d %H:%M:%S')}'
+                                                     group by user_id order by user_count desc")
+    @month_rank_user_products = Product.find_by_sql("select id, count(id) as user_count, user_id
+                                                     from products
+                                                     where user_id in #{all_rank_user_string} and update_status = 1 and on_sale = 1 and auto_flag != 13 and shield_type = 0 and
+                                                     first_updated_time < '#{Time.now.end_of_day.days_ago(1).strftime('%Y-%m-%d %H:%M:%S')}' and first_updated_time > '#{Time.now.beginning_of_day.days_ago(30).strftime('%Y-%m-%d %H:%M:%S')}'
+                                                     group by user_id order by user_count desc")
+    @all_rank_user_products = Product.find_by_sql("select id, count(id) as user_count, user_id
+                                                     from products
+                                                     where user_id in #{all_rank_user_string} and update_status = 1 and on_sale = 1 and auto_flag != 13 and shield_type = 0
+                                                     group by user_id order by user_count desc")
   end
 
   def show_little_brothers

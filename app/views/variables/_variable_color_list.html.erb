@@ -30,3 +30,82 @@
     <% end %>
   </table>
   <%= paginate @colors, remote: true, param_name: 'color_page', params_on_first_page: true %>
+
+  
+<script type="text/javascript">
+  $(document).ready(function(){
+    $("#listTabs").tabs();
+
+    $('.newVariableLine').click(function(){
+      var newVariableType = $(this).data('variable-type');
+      var addTrLine = "<tr><td><input type='text' class='variable_translation_name' style='width:80px;'></td><td><input type='text' class='variable_translation_value' style='width:80px;' ></td><td><input type='text' class='variable_translation_value' style='width:80px;' ></td><td><input type='text' class='variable_translation_value' style='width:80px;' ></td><td><input type='text' class='variable_translation_value' style='width:80px;' ></td><td><input type='text' class='variable_translation_value' style='width:80px;' ></td><td><input type='text' class='variable_translation_value' style='width:80px;' ></td><td><input type='text' class='variable_translation_value' style='width:80px;' ></td><td><a class='update_translation' data-variable-type='"+ newVariableType +"' >更新</a> </td></tr>";
+      if (newVariableType == 'color') {
+        $('.variableTable').find('tr:last').after(addTrLine);
+      } else {
+        $('.sizeTable').find('tr:last').after(addTrLine);
+      }
+      $('.update_translation').click(function(){
+        var variableTranslationValue = '';
+        $(this).parents('tr').find('.variable_translation_value').each(function(){
+          variableTranslationValue =  variableTranslationValue + $(this).val() + ',' ;
+        });
+        var variableNewName = $(this).parents('tr').find('.variable_translation_name').val();
+        var variableName = $(this).parents('tr').find('.variable_translation_name').val();
+        var oldVariableName = $(this).attr('value');
+        var variableType = $(this).data('variable-type');
+
+        $.ajax({
+          url: '/variables/update_translate_variable',
+          type: 'post',
+          data: {variableTranslationValue: variableTranslationValue, variableName: variableName, oldVariableName: oldVariableName, variableType: variableType},
+          success: function(){
+            alert('操作成功！');
+          }
+        });
+        return false;
+      });
+    });
+
+    $('.update_translation').click(function(){
+      var variableTranslationValue = '';
+      $(this).parents('tr').find('.variable_translation_value').each(function(){
+        variableTranslationValue =  variableTranslationValue + $(this).val() + ',' ;
+      });
+      var variableNewName = $(this).parents('tr').find('.variable_translation_name').val();
+      var variableName = $(this).parents('tr').find('.variable_translation_name').val();
+      var oldVariableName = $(this).attr('value');
+      var variableType = $(this).data('variable-type');
+
+      $.ajax({
+        url: '/variables/update_translate_variable',
+        type: 'post',
+        data: {variableTranslationValue: variableTranslationValue, variableName: variableName, oldVariableName: oldVariableName, variableType: variableType},
+        success: function(){
+          alert('操作成功！');
+        }
+      });
+      return false;
+    });
+
+    $('.remove_translation').click(function(){
+      var $trLine = $(this).parents('tr');
+      var variableName = $(this).parents('tr').find('.variable_translation_name').val();
+      var variableType = $(this).data('variable-type');
+
+      $.ajax({
+        url: '/variables/remove_translate_variable',
+        type: 'delete',
+        data: { variableName: variableName, variableType: variableType },
+        success: function(data){
+          if (data == 1) {
+            alert('该变体正在使用，不可删除！');
+          } else {
+            $trLine.remove();
+            alert('操作成功！');
+          }
+        }
+      });
+      return false;
+    });
+  })
+</script>
