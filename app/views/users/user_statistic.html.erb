@@ -14,7 +14,6 @@
     <tr>
       <th>人员</th>
       <th>组长</th>
-      <th>组内排名</th>
       <th>全部排名</th>
       <th>上线产品数</th>
     </tr>
@@ -28,20 +27,12 @@
         <tr>
           <td><%= user.username %></td>
           <td><%= user.try(:leader).try(:username) %></td>
-          <td><%= count1 %></td>
           <td><%= count2 %></td>
           <td><%= user_rank_info.user_count %></td>
         </tr>
         <% count1 = count1 + 1 %>
       <% end %>
       <% count2 = count2 + 1 %>
-    <% end %>
-    <% unless current_user.is_dd? %>
-      <tr>
-        <td>总计</td>
-        <td></td>
-        <td><%= Time.now.strftime("%Y-%m-%d") %></td>
-      </tr>
     <% end %>
   </table>
 
@@ -66,7 +57,6 @@
   <tr>
     <th>人员</th>
     <th>组长</th>
-    <th>组内排名</th>
     <th>全部排名</th>
     <th>上线产品数</th>
   </tr>
@@ -80,20 +70,12 @@
       <tr>
         <td><%= user.username %></td>
         <td><%= user.try(:leader).try(:username) %></td>
-        <td><%= count1 %></td>
         <td><%= count2 %></td>
         <td><%= user_rank_info.user_count %></td>
       </tr>
       <% count1 = count1 + 1 %>
     <% end %>
     <% count2 = count2 + 1 %>
-  <% end %>
-  <% unless current_user.is_dd? %>
-    <tr>
-      <td>总计</td>
-      <td></td>
-      <td><%= Time.now.strftime("%Y-%m-%d") %></td>
-    </tr>
   <% end %>
 </table>
 <table class="table table-bordered" >
@@ -118,7 +100,6 @@
   <tr>
     <th>人员</th>
     <th>组长</th>
-    <th>组内排名</th>
     <th>全部排名</th>
     <th>上线产品数</th>
   </tr>
@@ -132,20 +113,12 @@
       <tr>
         <td><%= user.username %></td>
         <td><%= user.try(:leader).try(:username) %></td>
-        <td><%= count1 %></td>
         <td><%= count2 %></td>
         <td><%= user_rank_info.user_count %></td>
       </tr>
       <% count1 = count1 + 1 %>
     <% end %>
     <% count2 = count2 + 1 %>
-  <% end %>
-  <% unless current_user.is_dd? %>
-    <tr>
-      <td>总计</td>
-      <td></td>
-      <td><%= Time.now.strftime("%Y-%m-%d") %></td>
-    </tr>
   <% end %>
 </table>
 <table class="table table-bordered" >

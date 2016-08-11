@@ -40,19 +40,20 @@ class User < ActiveRecord::Base
       group_product = []
       group_product << charger.id
       members_id = charger.team_members.not_lzyg.pluck(:id)
+      # members_id = User.seller.pluck(:id)
       all_product_array = Product.updated.onsale.un_shield.where("user_id in (?)", members_id).count
       group_product << all_product_array
       group_product << charger.username
       group_product_array << group_product
     end
     sorted_group_product_array = group_product_array.sort{|x,y| y.second<=> x.second}
-    if self.is_dd?
+    # if self.is_dd?
       sorted_group_product_array
-    else
-      group_product = sorted_group_product_array.find {|line| line.first == self.id }
-      group_product << sorted_group_product_array.index(group_product)
-      group_product.flatten
-    end
+    # else
+      # group_product = sorted_group_product_array.find {|line| line.first == self.id }
+      # group_product << sorted_group_product_array.index(group_product)
+      # group_product.flatten
+    # end
   end
 
   def get_month_group_rank
@@ -62,6 +63,7 @@ class User < ActiveRecord::Base
       group_product = []
       group_product << charger.id
       members_id = charger.team_members.not_lzyg.pluck(:id)
+      # members_id = User.seller.pluck(:id)
       all_product_array = Product.updated.onsale.un_shield.where("user_id in (?) and first_updated_time < '#{Time.now.end_of_day.days_ago(1).strftime('%Y-%m-%d %H:%M:%S')}'
                                       and first_updated_time > '#{Time.now.beginning_of_day.days_ago(30).strftime('%Y-%m-%d %H:%M:%S')}' ", members_id).count
       group_product << all_product_array
@@ -69,13 +71,13 @@ class User < ActiveRecord::Base
       group_product_array << group_product
     end
     sorted_group_product_array = group_product_array.sort{|x,y| y.second<=> x.second}
-    if self.is_dd?
+    # if self.is_dd?
       sorted_group_product_array
-    else
-      group_product = sorted_group_product_array.find {|line| line.first == self.id }
-      group_product << sorted_group_product_array.index(group_product)
-      group_product.flatten
-    end
+    # else
+      # group_product = sorted_group_product_array.find {|line| line.first == self.id }
+      # group_product << sorted_group_product_array.index(group_product)
+      # group_product.flatten
+    # end
   end
 
   def get_day_group_rank
@@ -85,6 +87,7 @@ class User < ActiveRecord::Base
       group_product = []
       group_product << charger.id
       members_id = charger.team_members.not_lzyg.pluck(:id)
+      # members_id = User.seller.pluck(:id)
       all_product_array = Product.updated.onsale.un_shield.where("user_id in (?) and first_updated_time < '#{Time.now.end_of_day.strftime('%Y-%m-%d %H:%M:%S')}'
                                       and first_updated_time > '#{Time.now.beginning_of_day.strftime('%Y-%m-%d %H:%M:%S')}' ", members_id).count
       group_product << all_product_array
@@ -92,13 +95,13 @@ class User < ActiveRecord::Base
       group_product_array << group_product
     end
     sorted_group_product_array = group_product_array.sort{|x,y| y.second<=> x.second}
-    if self.is_dd?
+    # if self.is_dd?
       sorted_group_product_array
-    else
-      group_product = sorted_group_product_array.find {|line| line.first == self.id }
-      group_product << sorted_group_product_array.index(group_product)
-      group_product.flatten
-    end
+    # else
+      # group_product = sorted_group_product_array.find {|line| line.first == self.id }
+      # group_product << sorted_group_product_array.index(group_product)
+      # group_product.flatten
+    # end
   end
 
 
@@ -111,22 +114,23 @@ class User < ActiveRecord::Base
   end
 
   def get_group_users
-    if self.is_dd?
-      User.not_lzyg.seller
-    else
-      user_id = self.id
-      if self.order_role == 1
-        group_members = User.where(leader_id: user_id).not_lzyg.seller
-        is_leader = group_members.present?
-        if is_leader
-          group_members
-        else
-          User.where(leader_id: self.leader_id).not_lzyg.seller
-        end
-      else
-        []
-      end
-    end
+    User.seller
+    # if self.is_dd?
+    #   User.not_lzyg.seller
+    # else
+    #   user_id = self.id
+    #   if self.order_role == 1
+    #     group_members = User.where(leader_id: user_id).not_lzyg.seller
+    #     is_leader = group_members.present?
+    #     if is_leader
+    #       group_members
+    #     else
+    #       User.where(leader_id: self.leader_id).not_lzyg.seller
+    #     end
+    #   else
+    #     []
+    #   end
+    # end
   end
 
 
