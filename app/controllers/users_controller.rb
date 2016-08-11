@@ -41,7 +41,7 @@ class UsersController < ApplicationController
     @today_rank_user_products = Product.find_by_sql("select id, count(id) as user_count, user_id
                                                      from products
                                                      where user_id in #{all_rank_user_string} and update_status = 1 and on_sale = 1 and auto_flag != 13 and shield_type = 0 and
-                                                     first_updated_time < '#{Time.now.end_of_day.days_ago(1).strftime('%Y-%m-%d %H:%M:%S')}' and first_updated_time > '#{Time.now.beginning_of_day.days_ago(1).strftime('%Y-%m-%d %H:%M:%S')}'
+                                                     first_updated_time < '#{Time.now.end_of_day.strftime('%Y-%m-%d %H:%M:%S')}' and first_updated_time > '#{Time.now.beginning_of_day.strftime('%Y-%m-%d %H:%M:%S')}'
                                                      group by user_id order by user_count desc")
     @month_rank_user_products = Product.find_by_sql("select id, count(id) as user_count, user_id
                                                      from products
