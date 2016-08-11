@@ -85,8 +85,8 @@ class User < ActiveRecord::Base
       group_product = []
       group_product << charger.id
       members_id = charger.team_members.not_lzyg.pluck(:id)
-      all_product_array = Product.updated.onsale.un_shield.where("user_id in (?) and first_updated_time < '#{Time.now.end_of_day.days_ago(1).strftime('%Y-%m-%d %H:%M:%S')}'
-                                      and first_updated_time > '#{Time.now.beginning_of_day.days_ago(1).strftime('%Y-%m-%d %H:%M:%S')}' ", members_id).count
+      all_product_array = Product.updated.onsale.un_shield.where("user_id in (?) and first_updated_time < '#{Time.now.end_of_day.strftime('%Y-%m-%d %H:%M:%S')}'
+                                      and first_updated_time > '#{Time.now.beginning_of_day.strftime('%Y-%m-%d %H:%M:%S')}' ", members_id).count
       group_product << all_product_array
       group_product << charger.username
       group_product_array << group_product
