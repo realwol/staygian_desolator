@@ -4,7 +4,7 @@ class ProductsController < ApplicationController
 
   def search_by_condition
     link_desc = params[:link_desc]
-    @search_links = SearchLink.first_search_link.where(link_desc: link_desc).page params[:page]
+    @search_links = SearchLink.first_search_link.where("link_desc like '%#{link_desc}%'").page params[:page]
   end
 
   def update_separate_product

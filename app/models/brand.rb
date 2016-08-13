@@ -4,7 +4,7 @@ class Brand < ActiveRecord::Base
   has_many :vendors
   has_many :products
 
-  paginates_per 20
+  paginates_per 50
 
   scope :non_forbidden, -> {where(status: 1)}
   scope :forbidden, -> {where(status: 0)}

@@ -1,5 +1,5 @@
 <%= form_tag(clear_empty_brand_brands_path, remote: true, method: :delete, class:' form form-inline') do %>
-  <span style="font-size:20px;">品牌列表(共<%= @brands.count %>个品牌)</span><span>(有待审核店铺的品牌将被绿色标记出来)</span>
+  <span style="font-size:20px;">品牌列表(共<%= @brands.total_count %>个品牌)</span><span>(有待审核店铺的品牌将被绿色标记出来)</span>
   <%= submit_tag '删除无产品品牌', class:'btn btn-danger', "data-confirm"=>'删除之后不可恢复，确认删除吗？' %>
 <% end %>
 <hr/>
