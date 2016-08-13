@@ -42,4 +42,46 @@
   $('#closevariableSearch').click(function(){
     $('#variableSearchTable').hide('blind', {}, 500);
   })
+
+    $('.update_translation').click(function(){
+      var variableTranslationValue = '';
+      $(this).parents('tr').find('.variable_translation_value').each(function(){
+        variableTranslationValue =  variableTranslationValue + $(this).val() + ',' ;
+      });
+      var variableNewName = $(this).parents('tr').find('.variable_translation_name').val();
+      var variableName = $(this).parents('tr').find('.variable_translation_name').val();
+      var oldVariableName = $(this).attr('value');
+      var variableType = $(this).data('variable-type');
+
+      $.ajax({
+        url: '/variables/update_translate_variable',
+        type: 'post',
+        data: {variableTranslationValue: variableTranslationValue, variableName: variableName, oldVariableName: oldVariableName, variableType: variableType},
+        success: function(){
+          alert('操作成功！');
+        }
+      });
+      return false;
+    });
+
+    $('.remove_translation').click(function(){
+      var $trLine = $(this).parents('tr');
+      var variableName = $(this).parents('tr').find('.variable_translation_name').val();
+      var variableType = $(this).data('variable-type');
+
+      $.ajax({
+        url: '/variables/remove_translate_variable',
+        type: 'delete',
+        data: { variableName: variableName, variableType: variableType },
+        success: function(data){
+          if (data == 1) {
+            alert('该变体正在使用，不可删除！');
+          } else {
+            $trLine.remove();
+            alert('操作成功！');
+          }
+        }
+      });
+      return false;
+    });
 </script>
