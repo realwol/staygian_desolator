@@ -8,13 +8,14 @@
     <% if @search_result.present? %>
     <table class="table table-bordered">
       <tr>
-        <% %w(中国 美国 加拿大 英国 德国 法国 西班牙 意大利).each do |country| %>
+        <% %w(类型 中国 美国 加拿大 英国 德国 法国 西班牙 意大利).each do |country| %>
           <td><%= country %></td>
         <% end %>
         <td colspan="2" >操作</td>
       </tr>
         <% @search_result.each do |variable| %>
           <tr>
+            <td><%= variable.variable_from == 'size' ? '尺寸' : '颜色' %></td>
             <td><input type="text" class="variable_translation_name" style="width:80px;" value=<%= variable.word %> ></td>
             <td><input type="text" class="variable_translation_value" style="width:80px;" value=<%= variable.try(:en) %> ></td>
             <td><input type="text" class="variable_translation_value" style="width:80px;" value=<%= variable.try(:en) %> ></td>
