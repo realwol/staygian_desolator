@@ -25,8 +25,8 @@ end
 def check_on_sale product, html
   text_field = html.css('div.tb-meta strong.sold-out-tit')
   if text_field.present? && text_field.text == '此商品已下架'
-    product.update_attributes(on_sale: false)
-    product.variables.update_all(stock: 0, auto_flag: 12)
+    product.update_attributes(on_sale: false, auto_flag: 12)
+    product.variables.update_all(stock: 0)
     puts 'off sale'
     return false
   elsif html.css('div#content div.errorDetail h2').text.present? || html.css('div#content div.errorDetail h2').text == '很抱歉，您查看的商品找不到了！'
@@ -35,7 +35,8 @@ def check_on_sale product, html
     return false
   else
     puts 'on sale'
-    product.variables.update_all(stock: 0, auto_flag: 11)
+    product.update_attributes(auto_flag: 11)
+    product.variables.update_all(stock: 0)
     return true
   end
 end
