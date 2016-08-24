@@ -202,7 +202,7 @@ class Product < ActiveRecord::Base
     CSV.generate(options) do |csv|
       csv << xls_column_names
       # csv_line_count ＝ csv_line_count ＋ 1
-      all.un_shield.updated.not_auto_removed.find_in_batches(batch_size: 100) do |products|
+      all.onsale.un_shield.updated.not_auto_removed.find_in_batches(batch_size: 100) do |products|
         products.each do |product|
           puts "#{product.id} | csv_line_count #{csv_line_count} "
           product_variable_count = product.variables.count

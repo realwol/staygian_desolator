@@ -1,4 +1,15 @@
 namespace :clear_dirty_data do
+  desc 'gsub translation words'
+  task :gsub_exchange_words => :environment do
+    ProductInfoTranslation.all.each do |t|
+      if t.e_detail.present? && t.e_detail.index('Shell Type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       ').present?
+        puts t.id
+        t.e_detail.gsub!('Shell Type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       ', 'Shell Type')
+        t.save
+      end
+    end
+  end
+
   desc 'generate variable sku translation'
   task :gen_variable_sku => :environment do
     a = Time.now
