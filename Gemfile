@@ -18,6 +18,7 @@ group :development, :test do
   gem 'pry'
   gem 'pry-nav'
   gem 'rspec-rails', '~> 3.0.0'
+  gem 'rubycritic', '~> 2.9', '>= 2.9.2'
 end
 
 gem "paranoia", "~> 2.0" # https://github.com/radar/paranoia

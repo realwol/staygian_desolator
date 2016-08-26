@@ -52,6 +52,22 @@ class Product < ActiveRecord::Base
   mount_uploader :avatar4, AvatarUploader
   mount_uploader :avatar5, AvatarUploader
 
+  def stock_should_zero?
+    self.is_shield? || self.is_offsale? || self.is_auto_stand_by?
+  end
+
+  def is_auto_stand_by?
+    self.auto_flag == '14'
+  end
+
+  def is_shield?
+    self.shield_type == '1'
+  end
+
+  def is_offsale?
+    !!(self.on_sale == false && shield_type == '0')
+  end
+
   def is_translated?
     self.translate_status
   end
@@ -556,12 +572,16 @@ class Product < ActiveRecord::Base
               xls_column_values << ''
             end
             # quantity
-            if v.stock.to_i > 100
-              xls_column_values << 100
-            elsif v.stock.to_i <= 2
-              xls_column_values << 0
+            if product.stock_should_zero?
+              if v.stock.to_i > 100
+                xls_column_values << 100
+              elsif v.stock.to_i <= 2
+                xls_column_values << 0
+              else
+                xls_column_values << v.stock
+              end
             else
-              xls_column_values << v.stock
+              xls_column_values << 0
             end
             # website_shipping_weight
             if v.weight.present?
