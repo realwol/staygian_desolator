@@ -73,16 +73,6 @@ class MerchantsController < ApplicationController
           symbol_count = 0
           file.close
         end
-      # zipfile_name = "#{folder}#{account.name}-#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}.zip"
-      # Zip::File.open(zipfile_name, Zip::File::CREATE) do |zipfile|
-      #   input_filenames.each do |filename|
-      #     # Two arguments:
-      #     # - The name of the file as it will appear in the archive
-      #     # - The original file, including the path to find it
-      #     zipfile.add(filename, folder + '/' + filename)
-      #   end
-      # end
-      # account_file_names << folder
     end
 
     big_folder = "public/export"
@@ -124,11 +114,20 @@ class MerchantsController < ApplicationController
       m.get_merchant_products.each do |p|
         if p.inventory != 0
           if p.read_attribute("#{country}_price_change")
+            product = Product.find(p.product_id)
             if symbol_count ==0
-              file.puts("\"#{p.sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+              if product.stock_should_zero?
+                file.puts("\"#{p.sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t0\t\n")
+              else
+                file.puts("\"#{p.sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+              end
               symbol_count = 1
             else
-              file.puts("#{p.sku}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+              if product.stock_should_zero?
+                file.puts("#{p.sku}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t0\t\n")
+              else
+                file.puts("#{p.sku}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+              end
             end
           end
         end
@@ -137,13 +136,6 @@ class MerchantsController < ApplicationController
       file.close
     end
 
-    # input_filenames.each do |name|
-    #   file = File.open("#{folder}/#{name}", 'a+')
-    #   account.merchants.each do |m|
-    #     file.puts("a\tb\tc")
-    #   end
-    #   file.close
-    # end
     zipfile_name = "#{folder}#{account.name}-#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}.zip"
     Zip::File.open(zipfile_name, Zip::File::CREATE) do |zipfile|
       input_filenames.each do |filename|
