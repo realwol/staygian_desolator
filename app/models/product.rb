@@ -573,6 +573,8 @@ class Product < ActiveRecord::Base
             end
             # quantity
             if product.stock_should_zero?
+              xls_column_values << 0
+            else
               if v.stock.to_i > 100
                 xls_column_values << 100
               elsif v.stock.to_i <= 2
@@ -580,8 +582,6 @@ class Product < ActiveRecord::Base
               else
                 xls_column_values << v.stock
               end
-            else
-              xls_column_values << 0
             end
             # website_shipping_weight
             if v.weight.present?
