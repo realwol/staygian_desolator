@@ -62,11 +62,9 @@ module QiniuUploadHelper
 				end
 			end
 
-			# key = uri[(uri.index('com/')+4)..-1]
       key = Time.now.to_i + rand(1..99999)
 
 			put_policy = Qiniu::Auth::PutPolicy.new('amazonupdate', key, '31536000', '')
-
 			uptoken = Qiniu::Auth.generate_uptoken put_policy
 			code, result, response_headers = Qiniu::Storage.upload_with_put_policy(put_policy, image.path, key,'')
 			if code == 200
