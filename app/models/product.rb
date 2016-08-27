@@ -65,7 +65,7 @@ class Product < ActiveRecord::Base
   end
 
   def is_offsale?
-    !!(self.on_sale == false && shield_type == '0')
+    self.on_sale == false
   end
 
   def is_translated?
