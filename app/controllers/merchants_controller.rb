@@ -60,12 +60,23 @@ class MerchantsController < ApplicationController
             a = a + 1
             if p.inventory != 0
               if p.read_attribute("#{country}_price_change")
-                b = b + 1
-                if symbol_count == 0
-                  file.puts("\"#{p.sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
-                  symbol_count = 1
+                product = Product.find(p.product_id)
+                if product.stock_should_zero?
+                  b = b + 1
+                  if symbol_count == 0
+                    file.puts("\"#{p.sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t0\t\n")
+                    symbol_count = 1
+                  else
+                    file.puts("#{p.sku}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t0\t\n")
+                  end
                 else
-                  file.puts("#{p.sku}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+                  b = b + 1
+                  if symbol_count == 0
+                    file.puts("\"#{p.sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+                    symbol_count = 1
+                  else
+                    file.puts("#{p.sku}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+                  end
                 end
               end
             end

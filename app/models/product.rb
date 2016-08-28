@@ -53,7 +53,7 @@ class Product < ActiveRecord::Base
   mount_uploader :avatar5, AvatarUploader
 
   def stock_should_zero?
-    self.is_shield? || self.is_offsale? || self.is_auto_stand_by?
+    self.is_shield? || self.is_offsale? || self.is_auto_stand_by? || self.is_removed?
   end
 
   def is_auto_stand_by?
@@ -66,6 +66,10 @@ class Product < ActiveRecord::Base
 
   def is_offsale?
     self.on_sale == false
+  end
+
+  def is_removed?
+    self.auto_flag == '13'
   end
 
   def is_translated?
