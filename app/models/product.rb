@@ -44,7 +44,7 @@ class Product < ActiveRecord::Base
   mount_uploader :avatar2, AvatarUploader
 
   def set_stock_zero?
-    self.on_sale == 0 || self.shield_type == '1'
+    self.on_sale == 0 || self.shield_type == '1' || self.auto_flag == '14' || self.auto_flag == '13'
   end
 
   def is_translated?
