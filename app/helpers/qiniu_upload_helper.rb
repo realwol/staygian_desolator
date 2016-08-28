@@ -5,7 +5,7 @@ module QiniuUploadHelper
 
     # upload image from client
     def self.upload_from_client(path)
-			key = Time.now.to_i
+			key = Time.now.to_i.to_s + SecureRandom.hex(10)
 			put_policy = Qiniu::Auth::PutPolicy.new('amazonclient', key, '31536000', '')
 
 			uptoken = Qiniu::Auth.generate_uptoken put_policy
@@ -21,9 +21,7 @@ module QiniuUploadHelper
 
     # used in product grasp
 		def self.upload(uri, position=nil, x_pos=nil, y_pos=nil)
-			name = Time.now.to_i + rand(1..99999999)
 			image = MiniMagick::Image.open uri
-			path = Rails.root.join('public', "#{name}.jpg")
 			image.combine_options do |c|
 				# Do not cut in the first time
 				unless position
@@ -35,7 +33,7 @@ module QiniuUploadHelper
 				  c.resize '1001x1001'
 				end
 			end
-			key = Time.now.to_i + rand(1..99999999)
+			key = Time.now.to_i.to_s + SecureRandom.hex(10)
 			put_policy = Qiniu::Auth::PutPolicy.new('amazonnew', key, '31536000', '')
 
 			uptoken = Qiniu::Auth.generate_uptoken put_policy
@@ -49,9 +47,7 @@ module QiniuUploadHelper
 
     # used in product update
 		def self.update(uri, position, x_pos, y_pos)
-			name = Time.now.to_i + rand(1..99999999)
       image = MiniMagick::Image.open uri
-      path = Rails.root.join('public', "#{name}.jpg")
 			x_start, y_start = get_start position
       unless position.blank? || x_pos.blank? || y_pos.blank?
 	      image.combine_options do |c|
@@ -62,8 +58,7 @@ module QiniuUploadHelper
 				end
 			end
 
-      key = Time.now.to_i + rand(1..99999)
-
+      key = Time.now.to_i.to_s + SecureRandom.hex(10)
 			put_policy = Qiniu::Auth::PutPolicy.new('amazonupdate', key, '31536000', '')
 			uptoken = Qiniu::Auth.generate_uptoken put_policy
 			code, result, response_headers = Qiniu::Storage.upload_with_put_policy(put_policy, image.path, key,'')
