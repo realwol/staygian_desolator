@@ -138,7 +138,7 @@ end
 def grasp_search_link link
   agent = UserAgents.rand()
   page = Nokogiri::HTML(open(link.link, 'User-Agent' => agent, :allow_redirections => :all ))
-   
+  
   if page.title == '上天猫，就够了'
     puts '***********************'
     puts '*                     *'
@@ -327,6 +327,7 @@ def check_search_links
   2.times do
     sleep rand(15..20)
     link = get_search_link
+    puts link.id
     grasp_search_link link if link.present?
   end
 end

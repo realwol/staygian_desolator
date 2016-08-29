@@ -60,8 +60,8 @@ class MerchantsController < ApplicationController
             a = a + 1
             if p.inventory != 0
               if p.read_attribute("#{country}_price_change")
-                product = Product.find(p.product_id)
-                if product.stock_should_zero?
+                product = Product.find(p.product_id) if p.product_id.present?
+                if product.present? && product.stock_should_zero?
                   b = b + 1
                   if symbol_count == 0
                     file.puts("\"#{p.sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t0\t\n")
@@ -124,9 +124,9 @@ class MerchantsController < ApplicationController
       m.get_merchant_products.each do |p|
         if p.inventory != 0
           if p.read_attribute("#{country}_price_change")
-            product = Product.find(p.product_id)
+            product = Product.find(p.product_id) if p.product_id.present?
             if symbol_count ==0
-              if product.stock_should_zero?
+              if product.present? && product.stock_should_zero?
                 file.puts("\"#{p.sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t0\t\n")
               else
                 file.puts("\"#{p.sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
