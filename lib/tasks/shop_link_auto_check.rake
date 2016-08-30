@@ -31,9 +31,61 @@ end
 def grasp_shop link
   # OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
   # I_KNOW_THAT_OPENSSL_VERIFY_PEER_EQUALS_VERIFY_NONE_IS_WRONG = nil
-  agent = UserAgents.rand()
-  # agent = Mechanize.new
-  page = Nokogiri::HTML(open(link.link, 'User-Agent' => agent, :allow_redirections => :all ))
+  # agent = UserAgents.rand()
+  agent = Mechanize.new
+cookie = Mechanize::Cookie.new("cookie1", "UUiHXHY94MibArpt6eDcP5sl%2BJqgt1sbu3Vk8cKBCUw%3D")
+cookie.domain = ".tmall.com"
+cookie.path = "/"
+agent.cookie_jar.add!(cookie)
+
+cookie = Mechanize::Cookie.new("cookie17", "WvELDNoWjz8c")
+cookie.domain = ".tmall.com"
+cookie.path = "/"
+agent.cookie_jar.add!(cookie)
+
+cookie = Mechanize::Cookie.new("uc1", "cookie15=UIHiLt3xD8xYTw%3D%3D&existShop=false")
+cookie.domain = ".tmall.com"
+cookie.path = "/"
+agent.cookie_jar.add!(cookie)
+
+cookie = Mechanize::Cookie.new("login", "true")
+cookie.domain = ".tmall.com"
+cookie.path = "/"
+agent.cookie_jar.add!(cookie)
+
+cookie = Mechanize::Cookie.new("_l_g_", "Ug%3D%3D")
+cookie.domain = ".tmall.com"
+cookie.path = "/"
+agent.cookie_jar.add!(cookie)
+
+cookie = Mechanize::Cookie.new("_med", "dw:1440&dh:900&pw:1440&ph:900&ist:0")
+cookie.domain = ".tmall.com"
+cookie.path = "/"
+agent.cookie_jar.add!(cookie)
+
+cookie = Mechanize::Cookie.new("_nk_", "realwol")
+cookie.domain = ".tmall.com"
+cookie.path = "/"
+agent.cookie_jar.add!(cookie)
+
+cookie = Mechanize::Cookie.new("_tb_token_", "765343e630ee3")
+cookie.domain = ".tmall.com"
+cookie.path = "/"
+agent.cookie_jar.add!(cookie)
+
+cookie = Mechanize::Cookie.new("cna", "b91vDALZiDECASQuwCMFpCOV")
+cookie.domain = ".tmall.com"
+cookie.path = "/"
+agent.cookie_jar.add!(cookie)
+
+cookie = Mechanize::Cookie.new("cookie2", "1cf4c2dc31c41909a1ce311a5673b2b6")
+cookie.domain = ".tmall.com"
+cookie.path = "/"
+agent.cookie_jar.add!(cookie)
+
+  # page = Nokogiri::HTML(open(link.link, 'User-Agent' => agent, :allow_redirections => :all ))
+  page = agent.get url
+  binding.pry
    
   if page.title == '上天猫，就够了'
     puts '***********************'
@@ -136,9 +188,62 @@ end
 # all the old shop links check above, new links checked below
 
 def grasp_search_link link
-  agent = UserAgents.rand()
-  page = Nokogiri::HTML(open(link.link, 'User-Agent' => agent, :allow_redirections => :all ))
+  # agent = UserAgents.rand()
+  # page = Nokogiri::HTML(open(link.link, 'User-Agent' => agent, :allow_redirections => :all ))
   
+  agent = Mechanize.new
+cookie = Mechanize::Cookie.new("cookie1", "UUiHXHY94MibArpt6eDcP5sl%2BJqgt1sbu3Vk8cKBCUw%3D")
+cookie.domain = ".tmall.com"
+cookie.path = "/"
+agent.cookie_jar.add!(cookie)
+
+cookie = Mechanize::Cookie.new("cookie17", "WvELDNoWjz8c")
+cookie.domain = ".tmall.com"
+cookie.path = "/"
+agent.cookie_jar.add!(cookie)
+
+cookie = Mechanize::Cookie.new("uc1", "cookie15=UIHiLt3xD8xYTw%3D%3D&existShop=false")
+cookie.domain = ".tmall.com"
+cookie.path = "/"
+agent.cookie_jar.add!(cookie)
+
+cookie = Mechanize::Cookie.new("login", "true")
+cookie.domain = ".tmall.com"
+cookie.path = "/"
+agent.cookie_jar.add!(cookie)
+
+cookie = Mechanize::Cookie.new("_l_g_", "Ug%3D%3D")
+cookie.domain = ".tmall.com"
+cookie.path = "/"
+agent.cookie_jar.add!(cookie)
+
+cookie = Mechanize::Cookie.new("_med", "dw:1440&dh:900&pw:1440&ph:900&ist:0")
+cookie.domain = ".tmall.com"
+cookie.path = "/"
+agent.cookie_jar.add!(cookie)
+
+cookie = Mechanize::Cookie.new("_nk_", "realwol")
+cookie.domain = ".tmall.com"
+cookie.path = "/"
+agent.cookie_jar.add!(cookie)
+
+cookie = Mechanize::Cookie.new("_tb_token_", "765343e630ee3")
+cookie.domain = ".tmall.com"
+cookie.path = "/"
+agent.cookie_jar.add!(cookie)
+
+cookie = Mechanize::Cookie.new("cna", "b91vDALZiDECASQuwCMFpCOV")
+cookie.domain = ".tmall.com"
+cookie.path = "/"
+agent.cookie_jar.add!(cookie)
+
+cookie = Mechanize::Cookie.new("cookie2", "1cf4c2dc31c41909a1ce311a5673b2b6")
+cookie.domain = ".tmall.com"
+cookie.path = "/"
+agent.cookie_jar.add!(cookie)
+
+page = agent.get link.link
+
   if page.title == '上天猫，就够了'
     puts '***********************'
     puts '*                     *'
@@ -324,8 +429,8 @@ def filter_search_product product_html, link
 end
 
 def check_search_links
-  2.times do
-    sleep rand(15..20)
+  50.times do
+    sleep rand(20..25)
     link = get_search_link
     puts link.id
     grasp_search_link link if link.present?
