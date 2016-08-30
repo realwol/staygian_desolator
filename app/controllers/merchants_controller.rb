@@ -62,25 +62,25 @@ class MerchantsController < ApplicationController
               if p.inventory != 0
                 if p.read_attribute("#{country}_price_change")
                   if p.product_id.present?
-                    # product = Product.find(p.product_id) 
-                    if false
-                      b = b + 1
-                      if symbol_count == 0
-                        file.puts("\"#{p.sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t0\t\n")
-                        symbol_count = 1
-                      else
-                        file.puts("#{p.sku}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t0\t\n")
-                      end
-                    else
-                      b = b + 1
-                      if symbol_count == 0
-                        file.puts("\"#{p.sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
-                        symbol_count = 1
-                      else
-                        file.puts("#{p.sku}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
-                      end
-                    end
-                  else
+                    # product = Product.find(p.product_id)
+                  #   if false
+                  #     b = b + 1
+                  #     if symbol_count == 0
+                  #       file.puts("\"#{p.sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t0\t\n")
+                  #       symbol_count = 1
+                  #     else
+                  #       file.puts("#{p.sku}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t0\t\n")
+                  #     end
+                  #   else
+                  #     b = b + 1
+                  #     if symbol_count == 0
+                  #       file.puts("\"#{p.sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+                  #       symbol_count = 1
+                  #     else
+                  #       file.puts("#{p.sku}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+                  #     end
+                  #   end
+                  # else
                       b = b + 1
                       if symbol_count == 0
                         file.puts("\"#{p.sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
