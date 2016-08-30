@@ -56,7 +56,7 @@ class MerchantsController < ApplicationController
           country = m.merchant_country_name
           merchant_shipment_cost = m.shipment_cost.to_f
           symbol_count = 0
-          m.get_merchant_products.each do |p|
+          m.get_merchant_products.find_in_batches(batch_size: 1000).each do |p|
             a = a + 1
             if p.inventory != 0
               if p.read_attribute("#{country}_price_change")
