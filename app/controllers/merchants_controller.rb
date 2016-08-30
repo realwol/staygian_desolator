@@ -143,7 +143,7 @@ class MerchantsController < ApplicationController
               end
               symbol_count = 1
             else
-              if product.stock_should_zero?
+              if product.present? && product.stock_should_zero?
                 file.puts("#{p.sku}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t0\t\n")
               else
                 file.puts("#{p.sku}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
@@ -166,7 +166,7 @@ class MerchantsController < ApplicationController
       end
       # zipfile.get_output_stream("myFile") { |os| os.write "myFile contains just this" }
     end
-    send_file "#{folder}#{account.name}-#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}.zip", :type=> 'application/text', :x_sendfile=>true
+    send_file zipfile_name, :type=> 'application/text', :x_sendfile=>true
   end
 
   def remove_merchant_binding_sku
