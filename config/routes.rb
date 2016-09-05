@@ -181,13 +181,13 @@ Rails.application.routes.draw do
       post 'set_selected_user'
       post 'create_user_from_depart'
       post 'update_responser'
+      post 'replace_user'
     end
 
     member do
       post 'change_user_password'
       post 'admin_reset_user_pwd'
       post 'reset_user_pwd'
-      post 'replace_user'
       get 'show_little_brothers'
       get 'user_setting'
       delete 'remove_department_user'
