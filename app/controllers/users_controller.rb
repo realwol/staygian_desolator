@@ -2,9 +2,46 @@ class UsersController < ApplicationController
   before_action :set_user, only: [ :remove_department_user, :show, :edit, :update, :destroy, :change_user_password, :user_setting, :reset_user_pwd, :admin_reset_user_pwd]
   before_action :authenticate_user!
 
+  def replace_user_page
+  end
+
+  def replace_user
+    need_replace_user_id, target_user_id = params[:need_replace_user], params[:target_user]
+
+    accounts = Account.where(user_id: need_replace_user_id)
+    accounts.update_all(user_id: target_user_id) if accounts.present?
+    backups = BackupHistory.where(user_id: need_replace_user_id)
+    backups.update_all(user_id: target_user_id) if backups.present?
+    turnovers = FinancialTurnover.where(creater_id: need_replace_user_id)
+    turnovers.update_all(creater_id: target_user_id) if turnovers.present?
+    turnovers = FinancialTurnover.where(creater_id: need_replace_user_id)
+    turnovers.update_all(creater_id: target_user_id) if turnovers.present?
+    merchants = Merchant.where(user_id: need_replace_user_id)
+    merchants.update_all(user_id: target_user_id) if merchants.present?
+    merchants = Merchant.where(admin_id: need_replace_user_id)
+    merchants.update_all(admin_id: target_user_id) if merchants.present?
+    # orderitems = OrderItem.where(user_id: need_replace_user_id)
+    # orderitems.update_all(user_id: target_user_id) if orderitems.present?
+    # orders = Order.where(seller_id: need_replace_user_id)
+    # orders.update_all(seller_id: target_user_id) if orders.present?
+    products = Product.where(user_id: need_replace_user_id)
+    products.update_all(user_id: target_user_id) if products.present?
+    search_links = SearchLink.where(user_id: need_replace_user_id)
+    search_links.update_all(user_id: target_user_id) if search_links.present?
+    shop_links = ShopLink.where(user_id: need_replace_user_id)
+    shop_links.update_all(user_id: target_user_id) if shop_links.present?
+    shops = Shop.where(user_id: need_replace_user_id)
+    shops.update_all(user_id: target_user_id) if shops.present?
+    tmall_links = TmallLink.where(user_id: need_replace_user_id)
+    tmall_links.update_all(user_id: target_user_id) if tmall_links.present?
+    histories = VariableTranslateHistory.where(user_id: need_replace_user_id)
+    histories.update_all(user_id: target_user_id) if histories.present?
+    redirect_to replace_user_page_user_path
+  end
+
   def remove_department_user
     if @user.present?
-      @user.update_attributes(password:'123123ab', status: false, username: '离职员工' )
+      @user.update_attributes(password:'123123ab', status: false )
       @department = @user.department
       @department_users = @department.users
     end

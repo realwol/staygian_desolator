@@ -78,7 +78,7 @@ cookie.domain = ".tmall.com"
 cookie.path = "/"
 agent.cookie_jar.add!(cookie)
 
-cookie = Mechanize::Cookie.new("cookie2", "1cf4c2dc31c41909a1ce311a5673b2b6")
+cookie = Mechanize::Cookie.new("cookie2", "1d457483cd84455c2843552d5e7df0dd")
 cookie.domain = ".tmall.com"
 cookie.path = "/"
 agent.cookie_jar.add!(cookie)
@@ -191,58 +191,64 @@ def grasp_search_link link
   # agent = UserAgents.rand()
   # page = Nokogiri::HTML(open(link.link, 'User-Agent' => agent, :allow_redirections => :all ))
   
-  agent = Mechanize.new
-cookie = Mechanize::Cookie.new("cookie1", "UUiHXHY94MibArpt6eDcP5sl%2BJqgt1sbu3Vk8cKBCUw%3D")
-cookie.domain = ".tmall.com"
-cookie.path = "/"
-agent.cookie_jar.add!(cookie)
+  # agent = Mechanize.new
+  # cookie = Mechanize::Cookie.new("cookie1", "UUiHXHY94MibArpt6eDcP5sl%2BJqgt1sbu3Vk8cKBCUw%3D")
+  # cookie.domain = ".tmall.com"
+  # cookie.path = "/"
+  # agent.cookie_jar.add!(cookie)
+  # # do not change
+  # cookie = Mechanize::Cookie.new("cookie17", "WvELDNoWjz8c")
+  # cookie.domain = ".tmall.com"
+  # cookie.path = "/"
+  # agent.cookie_jar.add!(cookie)
 
-cookie = Mechanize::Cookie.new("cookie17", "WvELDNoWjz8c")
-cookie.domain = ".tmall.com"
-cookie.path = "/"
-agent.cookie_jar.add!(cookie)
+  # cookie = Mechanize::Cookie.new("uc1", "cookie15=Vq8l%2BKCLz3%2F65A%3D%3D&existShop=false")
+  # cookie.domain = ".tmall.com"
+  # cookie.path = "/"
+  # agent.cookie_jar.add!(cookie)
 
-cookie = Mechanize::Cookie.new("uc1", "cookie15=UIHiLt3xD8xYTw%3D%3D&existShop=false")
-cookie.domain = ".tmall.com"
-cookie.path = "/"
-agent.cookie_jar.add!(cookie)
+  # cookie = Mechanize::Cookie.new("login", "true")
+  # cookie.domain = ".tmall.com"
+  # cookie.path = "/"
+  # agent.cookie_jar.add!(cookie)
 
-cookie = Mechanize::Cookie.new("login", "true")
-cookie.domain = ".tmall.com"
-cookie.path = "/"
-agent.cookie_jar.add!(cookie)
+  # cookie = Mechanize::Cookie.new("_l_g_", "Ug%3D%3D")
+  # cookie.domain = ".tmall.com"
+  # cookie.path = "/"
+  # agent.cookie_jar.add!(cookie)
+  # # do not change
+  # cookie = Mechanize::Cookie.new("_med", "dw:1440&dh:900&pw:1440&ph:900&ist:0")
+  # cookie.domain = ".tmall.com"
+  # cookie.path = "/"
+  # agent.cookie_jar.add!(cookie)
 
-cookie = Mechanize::Cookie.new("_l_g_", "Ug%3D%3D")
-cookie.domain = ".tmall.com"
-cookie.path = "/"
-agent.cookie_jar.add!(cookie)
+  # cookie = Mechanize::Cookie.new("_nk_", "realwol")
+  # cookie.domain = ".tmall.com"
+  # cookie.path = "/"
+  # agent.cookie_jar.add!(cookie)
 
-cookie = Mechanize::Cookie.new("_med", "dw:1440&dh:900&pw:1440&ph:900&ist:0")
-cookie.domain = ".tmall.com"
-cookie.path = "/"
-agent.cookie_jar.add!(cookie)
+  # cookie = Mechanize::Cookie.new("_tb_token_", "IhH3aWdeIvAv")
+  # cookie.domain = ".tmall.com"
+  # cookie.path = "/"
+  # agent.cookie_jar.add!(cookie)
 
-cookie = Mechanize::Cookie.new("_nk_", "realwol")
-cookie.domain = ".tmall.com"
-cookie.path = "/"
-agent.cookie_jar.add!(cookie)
+  # # do not change
+  # cookie = Mechanize::Cookie.new("cna", "b91vDALZiDECASQuwCMFpCOV")
+  # cookie.domain = ".tmall.com"
+  # cookie.path = "/"
+  # agent.cookie_jar.add!(cookie)
 
-cookie = Mechanize::Cookie.new("_tb_token_", "765343e630ee3")
-cookie.domain = ".tmall.com"
-cookie.path = "/"
-agent.cookie_jar.add!(cookie)
+  # cookie = Mechanize::Cookie.new("cookie2", "1d457483cd84455c2843552d5e7df0dd")
+  # cookie.domain = ".tmall.com"
+  # cookie.path = "/"
+  # agent.cookie_jar.add!(cookie)
 
-cookie = Mechanize::Cookie.new("cna", "b91vDALZiDECASQuwCMFpCOV")
-cookie.domain = ".tmall.com"
-cookie.path = "/"
-agent.cookie_jar.add!(cookie)
+  # page = agent.get link.link
 
-cookie = Mechanize::Cookie.new("cookie2", "1cf4c2dc31c41909a1ce311a5673b2b6")
-cookie.domain = ".tmall.com"
-cookie.path = "/"
-agent.cookie_jar.add!(cookie)
-
-page = agent.get link.link
+  ff = Watir::Browser.new
+  ff.goto link.link
+  binding.pry
+  page = Nokogiri::HTML(ff.html)
 
   if page.title == '上天猫，就够了'
     puts '***********************'
@@ -446,8 +452,5 @@ namespace :shop_link_auto_check do
   desc 'check shop link automatically'
   task :check => :environment do
     check_search_links
-    # unless check_search_links
-    #   check_old_shop_links
-    # end
   end
 end

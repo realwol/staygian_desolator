@@ -1,10 +1,25 @@
 namespace :clear_dirty_data do
+  desc 'gsub space'
+  task :gsub_space => :environment do
+    ProductInfoTranslation.find_in_batches do |group|
+      group.each do |p|
+        puts p.id
+        p.e_detail = p.e_detail.gsub(': ',':').gsub(' :', ':') if p.e_detail.present?
+        p.g_detail = p.g_detail.gsub(': ',':').gsub(' :', ':') if p.g_detail.present?
+        p.f_detail = p.f_detail.gsub(': ',':').gsub(' :', ':') if p.f_detail.present?
+        p.s_detail = p.s_detail.gsub(': ',':').gsub(' :', ':') if p.s_detail.present?
+        p.i_detail = p.i_detail.gsub(': ',':').gsub(' :', ':') if p.i_detail.present?
+        p.save
+      end
+    end
+  end
+
   desc 'gsub translation words'
   task :gsub_exchange_words => :environment do
     ProductInfoTranslation.all.each do |t|
-      if t.e_detail.present? && t.e_detail.index('Shell Type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       ').present?
+      if t.e_detail.present? && !t.e_detail.index(/Shell Type\s+/).nil?
         puts t.id
-        t.e_detail.gsub!('Shell Type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       ', 'Shell Type')
+        t.e_detail.gsub!(/Shell Type\s+/, 'Shell Type')
         t.save
       end
     end

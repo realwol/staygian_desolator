@@ -176,6 +176,7 @@ Rails.application.routes.draw do
   resources :users do
     collection do
       get 'user_statistic'
+      get 'replace_user_page'
       post 'create_new_user'
       post 'set_selected_user'
       post 'create_user_from_depart'
@@ -186,6 +187,7 @@ Rails.application.routes.draw do
       post 'change_user_password'
       post 'admin_reset_user_pwd'
       post 'reset_user_pwd'
+      post 'replace_user'
       get 'show_little_brothers'
       get 'user_setting'
       delete 'remove_department_user'

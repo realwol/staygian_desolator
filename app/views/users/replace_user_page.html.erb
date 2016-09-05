@@ -1,0 +1,6 @@
+<h5>用户转移</h5>
+<%= form_tag(replace_user_user_path) do %>
+  <%= select_tag 'need_replace_user', options_from_collection_for_select(User.all, "id", "username"), prompt:'请选择要转移用户' %>
+  <%= select_tag 'target_user', options_from_collection_for_select(User.all, "id", "username"), prompt:'请选择转移目标' %>
+  <%= submit_tag '确定' %>
+<% end %>
