@@ -37,18 +37,19 @@ class ApplicationController < ActionController::Base
     logger.info("CONSUME MEMORY: #{res_after_action - res_before_action} KB\t NOW #{res_after_action} KB\t #{request.url}")
   end
 
-def log_rss
+  def log_rss
     before_rss,before_rss_t = _worker_rss
     yield
     after_rss,after_rss_t = _worker_rss
     after_rss_t ||= 0
     before_rss_t ||= 0
-    if after_rss_t - before_rss_t > 100000000
+    # show bigger than about 10M
+    if after_rss_t - before_rss_t > 10000000
       logger.info "#{controller_name}_#{action_name} rss info #{Process.pid} VmRSS: #{before_rss}----#{after_rss}"
     end
   end
 
-def _worker_rss
+  def _worker_rss
     proc_status = "/proc/#{Process.pid}/status"
     if File.exists? proc_status
       open(proc_status).each_line { |l|
