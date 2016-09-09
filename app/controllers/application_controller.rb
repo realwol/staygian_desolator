@@ -45,7 +45,7 @@ class ApplicationController < ActionController::Base
     before_rss_t ||= 0
     # show bigger than about 10M
     if after_rss_t - before_rss_t > 10000000
-      file_path = Rails.root.dirname.join('shared','log','mem_trace.log')
+      file_path = "/root/amazon/tmall_new/shared/log/mem_trace.log"
       if File.exist?(file_path)
         log_trace = File.open(file_path)
       else
