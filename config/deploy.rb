@@ -33,7 +33,7 @@ set :keep_releases, '2'
 set :rvm_path, '/usr/local/rvm/bin/rvm'
 # Manually create these paths in shared/ (eg: shared/config/database.yml) in your server.
 # They will be linked in the 'deploy:link_shared_paths' step.
-set :shared_paths, ['config/database.yml', 'config/secrets.yml', 'config/thin.yml', 'log']
+set :shared_paths, ['config/database.yml', 'config/secrets.yml', 'config/thin.yml', 'log', 'log/mem_trace.log']
 
 # Optional settings:
 #   set :user, 'foobar'    # Username in the server to SSH to.
@@ -64,6 +64,7 @@ task :setup => :environment do
   queue! %[touch "#{deploy_to}/#{shared_path}/config/database.yml"]
   queue! %[touch "#{deploy_to}/#{shared_path}/config/secrets.yml"]
   queue! %[touch "#{deploy_to}/#{shared_path}/config/thin.yml"]
+  queue! %[touch "#{deploy_to}/#{shared_path}/log/mem_trace.log"]
   queue  %[echo "-----> Be sure to edit '#{deploy_to}/#{shared_path}/config/database.yml', 'secrets.yml' and 'thin.yml'."]
 
   if repository
