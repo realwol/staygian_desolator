@@ -45,7 +45,9 @@ class ApplicationController < ActionController::Base
     before_rss_t ||= 0
     # show bigger than about 10M
     if after_rss_t - before_rss_t > 10000000
-      logger.info "#{controller_name}_#{action_name} rss info #{Process.pid} VmRSS: #{before_rss}----#{after_rss}"
+      log_trace = File.open(Rails.root.join('log','mem_trace.log'))
+      log_trace.puts "#{controller_name} #{action_name} rss info #{Process.pid} VmRSS: #{before_rss}----#{after_rss}\n"
+      log_trace.close
     end
   end
 
