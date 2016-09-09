@@ -2,7 +2,8 @@ class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
-  around_filter :record_memory if Rails.env.production?
+  # around_filter :record_memory if Rails.env.production?
+  around_filter :log_rss if Rails.env.production?
   before_action :curfew_in_work
 
   def curfew_in_work
@@ -34,5 +35,42 @@ class ApplicationController < ActionController::Base
     res_after_action = process_status.gets.split[1].to_i
     process_status.close
     logger.info("CONSUME MEMORY: #{res_after_action - res_before_action} KB\t NOW #{res_after_action} KB\t #{request.url}")
+  end
+
+def log_rss
+    before_rss,before_rss_t = _worker_rss
+    yield
+    after_rss,after_rss_t = _worker_rss
+    after_rss_t ||= 0
+    before_rss_t ||= 0
+    if after_rss_t - before_rss_t > 100000000
+      logger.info "#{controller_name}_#{action_name} rss info #{Process.pid} VmRSS: #{before_rss}----#{after_rss}"
+    end
+  end
+
+def _worker_rss
+    proc_status = "/proc/#{Process.pid}/status"
+    if File.exists? proc_status
+      open(proc_status).each_line { |l|
+        if l.include? 'VmRSS'
+          ls = l.split
+          if ls.length == 3
+            value = ls[1].to_i
+            unit = ls[2]
+            val = case unit.downcase
+                  when 'kb'
+                    value*(1024**1)
+                  when 'mb'
+                     value*(1024**2)
+                  when 'gb'
+                     value*(1024**3)
+                  end
+            return ["#{value} #{unit}",val]
+          end
+        end
+      }
+      ["0",0]
+    end
+    ["0",0]
   end
 end

@@ -40,62 +40,57 @@ class MerchantsController < ApplicationController
     aa = Time.now
     accounts = current_user.valid_account
     account_file_names, folder_array = [], []
-    a, b = 0, 0
     accounts.each do |account|
       folder = "public/export/#{account.name}#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}/"
       folder_array << folder
       # create files
       system("mkdir #{folder}")
       input_filenames = []
-        account.merchants.each do |m|
-          file_name = "#{m.shop_name}.txt"
-          input_filenames << file_name
-          account_file_names << "#{folder}#{file_name}"
-          file = File.open("#{folder}#{file_name}", 'a+')
-          file.puts("sku\tprice\tminimum-seller-allowed-price\tmaximum-seller-allowed-price\tquantity\tleadtime-to-ship\t\n")
-          country = m.merchant_country_name
-          merchant_shipment_cost = m.shipment_cost.to_f
-          symbol_count = 0
-          m.get_merchant_products.find_in_batches(batch_size: 1000).each do |pp|
-            pp.each do |p|
-              a = a + 1
-              if p.inventory != 0
-                if p.read_attribute("#{country}_price_change")
-                  if p.product_id.present?
-                    # product = Product.find(p.product_id)
-                  #   if false
-                  #     b = b + 1
-                  #     if symbol_count == 0
-                  #       file.puts("\"#{p.sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t0\t\n")
-                  #       symbol_count = 1
-                  #     else
-                  #       file.puts("#{p.sku}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t0\t\n")
-                  #     end
-                  #   else
-                  #     b = b + 1
-                  #     if symbol_count == 0
-                  #       file.puts("\"#{p.sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
-                  #       symbol_count = 1
-                  #     else
-                  #       file.puts("#{p.sku}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
-                  #     end
-                  #   end
-                  # else
-                      b = b + 1
-                      if symbol_count == 0
-                        file.puts("\"#{p.sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
-                        symbol_count = 1
-                      else
-                        file.puts("#{p.sku}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
-                      end
+      account.merchants.each do |m|
+        file_name = "#{m.shop_name}.txt"
+        input_filenames << file_name
+        account_file_names << "#{folder}#{file_name}"
+        file = File.open("#{folder}#{file_name}", 'a+')
+        file.puts("sku\tprice\tminimum-seller-allowed-price\tmaximum-seller-allowed-price\tquantity\tleadtime-to-ship\t\n")
+        country = m.merchant_country_name
+        merchant_shipment_cost = m.shipment_cost.to_f
+        symbol_count = 0
+        m.get_merchant_products.find_in_batches(batch_size: 1000).each do |pp|
+          pp.each do |p|
+            if p.inventory != 0
+              if p.read_attribute("#{country}_price_change")
+                if p.product_id.present?
+                  product = Product.find(p.product_id)
+                  if product.stock_should_zero?
+                    if symbol_count
+                      file.puts("\"#{p.sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t0\t\n")
+                      symbol_count = false
+                    else
+                      file.puts("#{p.sku}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t0\t\n")
+                    end
+                  else
+                    if symbol_count
+                      file.puts("\"#{p.sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+                      symbol_count = false
+                    else
+                      file.puts("#{p.sku}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+                    end
+                  end
+                else
+                  if symbol_count
+                    file.puts("\"#{p.sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+                    symbol_count = false
+                  else
+                    file.puts("#{p.sku}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
                   end
                 end
               end
             end
           end
-          symbol_count = 0
-          file.close
         end
+        symbol_count = true
+        file.close
+      end
     end
 
     big_folder = "public/export"
@@ -108,13 +103,11 @@ class MerchantsController < ApplicationController
         zipfile.add(filename.gsub('public/export/',''), filename)
       end
     end
-    puts "all counts #{a}, actual counts #{b} and cost #{Time.now - aa}"
 
     send_file bigzipfile_name, :type=> 'application/text', :x_sendfile=>true
     folder_array.each do |filename|
       FileUtils.rm_rf filename
     end
-    # File.delete bigzipfile_name
   end
 
   def export_account

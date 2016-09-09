@@ -23,6 +23,13 @@ class ProductsController < ApplicationController
   end
 
   def patch_translate_binding
+    @un_translate_sku = []
+    need_check_products = Product.where("first_updated_time < ? and translate_status = 1", Time.now - 30.days)
+    need_check_products.find_in_batches.each do |batch_products|
+      batch_products.each do |p|
+        @un_translate_sku << p.sku unless ProductInfoTranslation.find_by(product_id: p.id).present?
+      end
+    end
   end
 
   def patch_translate
