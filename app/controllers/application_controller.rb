@@ -47,7 +47,7 @@ class ApplicationController < ActionController::Base
     if after_rss_t - before_rss_t > 10000000
       file_path = "/root/amazon/tmall_new/shared/log/mem_trace.log"
       trace_file = File.open file_path, 'a'
-      trace_file.puts "#{controller_name} #{action_name} rss info #{Process.pid} VmRSS: #{before_rss}----#{after_rss}\n"
+      trace_file.puts "#{controller_name} #{action_name} rss info #{Process.pid} VmRSS: #{after_rss.to_i - before_rss.to_i}\n"
       trace_file.close
     end
   end
