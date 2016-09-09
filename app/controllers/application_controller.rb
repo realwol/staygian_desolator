@@ -45,7 +45,12 @@ class ApplicationController < ActionController::Base
     before_rss_t ||= 0
     # show bigger than about 10M
     if after_rss_t - before_rss_t > 10000000
-      log_trace = File.open(Rails.root.join('log','mem_trace.log'))
+      file_path = Rails.root.dirname.join('shared','log','mem_trace.log')
+      if File.exist?(file_path)
+        log_trace = File.open(file_path)
+      else
+        log_trace = File.new(file_path)
+      end
       log_trace.puts "#{controller_name} #{action_name} rss info #{Process.pid} VmRSS: #{before_rss}----#{after_rss}\n"
       log_trace.close
     end
