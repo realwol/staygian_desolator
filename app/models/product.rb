@@ -222,9 +222,8 @@ class Product < ActiveRecord::Base
     CSV.generate(options) do |csv|
       csv << xls_column_names
       # csv_line_count ＝ csv_line_count ＋ 1
-      all.onsale.un_shield.updated.not_auto_removed.find_in_batches(batch_size: 100) do |products|
-        products.each do |product|
-          puts "#{product.id} | csv_line_count #{csv_line_count} "
+      all.onsale.un_shield.updated.not_auto_removed.each do |product|
+          puts "#{product.sku} | csv_line_count #{csv_line_count} "
           product_variable_count = product.variables.count
           break if max_limit.to_i < (csv_line_count + product_variable_count + 1)
           # Customize the xls values
@@ -753,7 +752,6 @@ class Product < ActiveRecord::Base
             csv << xls_column_values
             csv_line_count = csv_line_count + 1
           end
-        end
       end
     end
   end
