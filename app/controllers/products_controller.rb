@@ -347,7 +347,6 @@ class ProductsController < ApplicationController
       @products = all_products.where(product_type: product_type_combo).where("first_updated_time > ? and on_sale = 1", start_product.first_updated_time).order('first_updated_time').limit(max_number)
       # @products = current_user.valid_products.where("first_updated_time > ? and on_sale = 1", start_product.first_updated_time).where(product_type: product_type_combo).order('id').limit(max_number)
     end
-    @products = @products.order("id desc")
     cookies[:export_language] = params[:language]
     cookies[:export_type] = params[:export_type]
     request.format = 'xls'
