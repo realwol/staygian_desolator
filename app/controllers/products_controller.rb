@@ -304,7 +304,6 @@ class ProductsController < ApplicationController
   end
 
   def export_products
-
     puts '======================'
     puts 'I am in exporting now!'
     puts Time.now
