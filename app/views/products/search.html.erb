@@ -26,7 +26,7 @@
           <% end %>
           <td><%= product.sku %></td>
           <td><%= product.product_number %></td>
-          <td><%= product.first_updated_time %></td>
+          <td><%= product.first_updated_time.strftime("%Y-%m-%d %H:%M:%S") %></td>
           <td><%= product.get_unscope_user.try(:username) %></td>
           <td>
             <% case @result_button  %>
