@@ -41,12 +41,14 @@ class MerchantsController < ApplicationController
     accounts = current_user.valid_account
     account_file_names, folder_array = [], []
     accounts.each do |account|
+      puts "export account #{account.id}"
       folder = "public/export/#{account.name}#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}/"
       folder_array << folder
       # create files
       system("mkdir #{folder}")
       input_filenames = []
       account.merchants.each do |m|
+        puts "export merchant #{m.id}"
         file_name = "#{m.shop_name}.txt"
         input_filenames << file_name
         account_file_names << "#{folder}#{file_name}"
@@ -55,8 +57,7 @@ class MerchantsController < ApplicationController
         country = m.merchant_country_name
         merchant_shipment_cost = m.shipment_cost.to_f
         symbol_count = 0
-        m.get_merchant_products.find_in_batches(batch_size: 1000).each do |pp|
-          pp.each do |p|
+        m.get_merchant_products.each do |p|
             if p.inventory != 0
               if p.read_attribute("#{country}_price_change")
                 if p.product_id.present?
@@ -86,13 +87,12 @@ class MerchantsController < ApplicationController
                 end
               end
             end
-          end
         end
         symbol_count = true
         file.close
       end
     end
-
+    puts 'done export update.'
     big_folder = "public/export"
     bigzipfile_name = "#{big_folder}/all_accounts-#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}.zip"
     Zip::File.open(bigzipfile_name, Zip::File::CREATE) do |zipfile|

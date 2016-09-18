@@ -218,12 +218,11 @@ class Product < ActiveRecord::Base
     variable_hash = {british: 'en', germany:'de', france:'fr', spain:'es', italy:'it', america:'en', canada:'en'}
     max_limit = 9999999 unless max_limit.present?
     csv_line_count = 0
-
     CSV.generate(options) do |csv|
       csv << xls_column_names
       # csv_line_count ＝ csv_line_count ＋ 1
       all.onsale.un_shield.updated.not_auto_removed.each do |product|
-          puts "#{product.sku} | csv_line_count #{csv_line_count} "
+          puts "#{product.sku} | csv_line_count #{csv_line_count}"
           product_variable_count = product.variables.count
           break if max_limit.to_i < (csv_line_count + product_variable_count + 1)
           # Customize the xls values
@@ -754,6 +753,7 @@ class Product < ActiveRecord::Base
           end
       end
     end
+
   end
 
 

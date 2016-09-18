@@ -1,4 +1,44 @@
 namespace :clear_dirty_data do
+  desc 'gsub brackets'
+  task :gsub_brackets => :environment do
+    ProductInfoTranslation.find_in_batches do |pp|
+      pp.each do |p|
+        p.e_t = p.e_t.gsub('[', '').gsub(']', '') if p.e_t
+        p.g_t = p.g_t.gsub('[', '').gsub(']', '') if p.g_t
+        p.f_t = p.f_t.gsub('[', '').gsub(']', '') if p.f_t
+        p.s_t = p.s_t.gsub('[', '').gsub(']', '') if p.s_t
+        p.i_t = p.i_t.gsub('[', '').gsub(']', '') if p.i_t
+
+        p.e_detail = p.e_detail.gsub('[', '').gsub(']', '') if p.e_detail
+        p.e_des1 = p.e_des1.gsub('[', '').gsub(']', '') if p.e_des1
+        p.e_des2 = p.e_des2.gsub('[', '').gsub(']', '') if p.e_des2
+        p.e_des3 = p.e_des3.gsub('[', '').gsub(']', '') if p.e_des3
+
+        p.g_detail = p.g_detail.gsub('[', '').gsub(']', '') if p.g_detail
+        p.g_des1 = p.g_des1.gsub('[', '').gsub(']', '') if p.g_des1
+        p.g_des2 = p.g_des2.gsub('[', '').gsub(']', '') if p.g_des2
+        p.g_des3 = p.g_des3.gsub('[', '').gsub(']', '') if p.g_des3
+
+        p.f_detail = p.f_detail.gsub('[', '').gsub(']', '') if p.f_detail
+        p.f_des1 = p.f_des1.gsub('[', '').gsub(']', '') if p.f_des1
+        p.f_des2 = p.f_des2.gsub('[', '').gsub(']', '') if p.f_des2
+        p.f_des3 = p.f_des3.gsub('[', '').gsub(']', '') if p.f_des3
+
+        p.s_detail = p.s_detail.gsub('[', '').gsub(']', '') if p.s_detail
+        p.s_des1 = p.s_des1.gsub('[', '').gsub(']', '') if p.s_des1
+        p.s_des2 = p.s_des2.gsub('[', '').gsub(']', '') if p.s_des2
+        p.s_des3 = p.s_des3.gsub('[', '').gsub(']', '') if p.s_des3
+
+        p.i_detail = p.i_detail.gsub('[', '').gsub(']', '') if p.i_detail
+        p.i_des1 = p.i_des1.gsub('[', '').gsub(']', '') if p.i_des1
+        p.i_des2 = p.i_des2.gsub('[', '').gsub(']', '') if p.i_des2
+        p.i_des3 = p.i_des3.gsub('[', '').gsub(']', '') if p.i_des3
+        puts p.id
+        p.save
+      end
+    end
+   end
+
   desc 'gsub space'
   task :gsub_space => :environment do
     ProductInfoTranslation.find_in_batches do |group|
