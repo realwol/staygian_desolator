@@ -104,10 +104,12 @@ class MerchantsController < ApplicationController
         zipfile.add(filename.gsub('public/export/',''), filename)
       end
     end
-
-    send_file bigzipfile_name, :type=> 'application/text', :x_sendfile=>true
-    folder_array.each do |filename|
-      FileUtils.rm_rf filename
+    
+    respond_to do |f|
+      send_file bigzipfile_name, :type=> 'application/text', :x_sendfile=>true
+      folder_array.each do |filename|
+        FileUtils.rm_rf filename
+      end
     end
   end
 
