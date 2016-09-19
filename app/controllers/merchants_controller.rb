@@ -106,11 +106,9 @@ class MerchantsController < ApplicationController
       end
     end
     
-    respond_to do |f|
-      send_file bigzipfile_name, :type=> 'application/text', :x_sendfile=>true
-      folder_array.each do |filename|
-        FileUtils.rm_rf filename
-      end
+    send_file bigzipfile_name, :type=> 'application/text', :x_sendfile=>true
+    folder_array.each do |filename|
+      FileUtils.rm_rf filename
     end
   end
 
