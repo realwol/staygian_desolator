@@ -105,9 +105,9 @@ class MerchantsController < ApplicationController
     end
 
     send_file bigzipfile_name, :type=> 'application/text', :x_sendfile=>true
-    folder_array.each do |filename|
-      FileUtils.rm_rf filename
-    end
+    # folder_array.each do |filename|
+    #   FileUtils.rm_rf filename
+    # end
   end
 
   def export_account

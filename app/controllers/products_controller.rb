@@ -308,7 +308,7 @@ class ProductsController < ApplicationController
     puts 'I am in exporting now!'
     puts Time.now
     max_number = params[:max_number].to_i
-    max_number = 2000 if (max_number > 2000 || max_number < 0 || max_number == 0)
+    max_number = 6000 if (max_number > 2000 || max_number < 0 || max_number == 0)
 
     params[:export_type] = params[:product][:product_type_id]
     unless params[:export_type].present?
@@ -350,11 +350,8 @@ class ProductsController < ApplicationController
     cookies[:export_type] = params[:export_type]
     request.format = 'xls'
     filename = "#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}_export_data.xls"
-    puts '==========='
-    puts @products.count
     respond_to do |f|
       f.xls {send_data @products.to_csv(params[:language], params[:max_number], col_sep: "\t"), filename: filename }
-      # f.txt {send_data @products.to_txt(col_sep: "\t"), filename: filename }
     end
   end
 
