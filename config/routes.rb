@@ -29,7 +29,7 @@ Rails.application.routes.draw do
     collection do
       get 'account_list'
       get 'export_account'
-      get 'export_all_account'
+      post 'export_all_account'
       post 'update_account_name'
       post 'create_account'
       post 'set_account_updated'

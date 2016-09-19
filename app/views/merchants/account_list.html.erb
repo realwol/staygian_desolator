@@ -1,4 +1,4 @@
-<%= link_to '导出所有', export_all_account_merchants_path, 'data-no-turbolink' => true, data:{ "no-turbolink" => true} %>
+<%= link_to '导出所有', export_all_account_merchants_path, 'data-no-turbolink' => true, method: 'post' %>
 <hr/>
 <div id="account_list_div">
   <%= render 'account_list' %>
