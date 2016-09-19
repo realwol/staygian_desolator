@@ -40,6 +40,7 @@ class MerchantsController < ApplicationController
     aa = Time.now
     accounts = current_user.valid_account
     account_file_names, folder_array = [], []
+    accounts = Account.where(id: [1,2])
     accounts.each do |account|
       puts "export account #{account.id}"
       folder = "public/export/#{account.name}#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}/"
