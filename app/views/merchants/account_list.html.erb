@@ -1,5 +1,6 @@
-<div data-turbolinks="false">
-  <%= link_to '导出所有', export_all_account_merchants_path, data: { turbolinks: false }, method: 'post' %>
+<div>
+  <%= link_to '导出所有', export_all_account_merchants_path, method: 'post' %>
+  <a href="/merchants/export_all_account" data-no-turbolink data-method='post' >导出</a>
 </div>
 <hr/>
 <div id="account_list_div">
