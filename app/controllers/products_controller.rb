@@ -351,7 +351,7 @@ class ProductsController < ApplicationController
     request.format = 'xls'
     filename = "#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}_export_data.xls"
     respond_to do |f|
-      f.xls {send_data @products.to_csv(params[:language], params[:max_number], col_sep: "\t"), filename: filename }
+      f.xls {send_data @products.to_csv(params[:language], params[:max_number], col_sep: "\t"), filename: filename, 'data-no-turbolink': true }
     end
   end
 

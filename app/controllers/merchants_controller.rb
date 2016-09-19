@@ -92,6 +92,7 @@ class MerchantsController < ApplicationController
         file.close
       end
     end
+
     puts 'done export update.'
     big_folder = "public/export"
     bigzipfile_name = "#{big_folder}/all_accounts-#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}.zip"
@@ -105,9 +106,9 @@ class MerchantsController < ApplicationController
     end
 
     send_file bigzipfile_name, :type=> 'application/text', :x_sendfile=>true
-    # folder_array.each do |filename|
-    #   FileUtils.rm_rf filename
-    # end
+    folder_array.each do |filename|
+      FileUtils.rm_rf filename
+    end
   end
 
   def export_account
