@@ -202,7 +202,7 @@ def grasp_search_link link
   cookie.path = "/"
   agent.cookie_jar.add!(cookie)
 
-  cookie = Mechanize::Cookie.new("uc1", "cookie15=Vq8l%2BKCLz3%2F65A%3D%3D&existShop=false")
+  cookie = Mechanize::Cookie.new("uc1", "cookie15=UtASsssmOIJ0bQ%3D%3D&existShop=false")
   cookie.domain = ".tmall.com"
   cookie.path = "/"
   agent.cookie_jar.add!(cookie)
@@ -227,7 +227,7 @@ def grasp_search_link link
   cookie.path = "/"
   agent.cookie_jar.add!(cookie)
 
-  cookie = Mechanize::Cookie.new("_tb_token_", "IhH3aWdeIvAv")
+  cookie = Mechanize::Cookie.new("_tb_token_", "9SZpBwGXdhjR")
   cookie.domain = ".tmall.com"
   cookie.path = "/"
   agent.cookie_jar.add!(cookie)
@@ -238,7 +238,7 @@ def grasp_search_link link
   cookie.path = "/"
   agent.cookie_jar.add!(cookie)
 
-  cookie = Mechanize::Cookie.new("cookie2", "1d457483cd84455c2843552d5e7df0dd")
+  cookie = Mechanize::Cookie.new("cookie2", "cfadeba8f7958bdd216ed401a18a432e")
   cookie.domain = ".tmall.com"
   cookie.path = "/"
   agent.cookie_jar.add!(cookie)
@@ -444,6 +444,7 @@ def check_search_links
 end
 
 def get_search_link
+  # SearchLink.where(user_id: 48).where(check_status: false).first
   SearchLink.where(check_status: false).first
 end
 
