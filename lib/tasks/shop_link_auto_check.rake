@@ -444,7 +444,7 @@ def check_search_links
 end
 
 def get_search_link
-  # SearchLink.where(user_id: 48).where(check_status: false).first
+  # SearchLink.where(user_id: 43).where(check_status: false).first
   SearchLink.where(check_status: false).first
 end
 
