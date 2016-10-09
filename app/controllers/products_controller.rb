@@ -299,6 +299,23 @@ class ProductsController < ApplicationController
     end
   end
 
+  def sku_export_page
+    
+  end
+
+  def sku_export_products
+    sku_array = params[:sku].split("\n")
+    @products = Product.where("sku in (?) ", sku_array.map(&:strip))
+    cookies[:export_language] = params[:language]
+    cookies[:export_type] = params[:export_type]
+    binding.pry
+    request.format = 'xls'
+    filename = "#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}_export_data.xls"
+    respond_to do |f|
+      f.xls {send_data @products.to_csv(params[:language], params[:max_number], col_sep: "\t"), filename: filename }
+    end
+  end
+
   def export_page
     
   end

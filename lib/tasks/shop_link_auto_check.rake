@@ -28,154 +28,154 @@ def filter_product product_html, shop_id
   end
 end
 
-def grasp_shop link
-  # OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
-  # I_KNOW_THAT_OPENSSL_VERIFY_PEER_EQUALS_VERIFY_NONE_IS_WRONG = nil
-  # agent = UserAgents.rand()
-  agent = Mechanize.new
-cookie = Mechanize::Cookie.new("cookie1", "UUiHXHY94MibArpt6eDcP5sl%2BJqgt1sbu3Vk8cKBCUw%3D")
-cookie.domain = ".tmall.com"
-cookie.path = "/"
-agent.cookie_jar.add!(cookie)
+# def grasp_shop link
+#   # OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
+#   # I_KNOW_THAT_OPENSSL_VERIFY_PEER_EQUALS_VERIFY_NONE_IS_WRONG = nil
+#   # agent = UserAgents.rand()
+#   agent = Mechanize.new
+# cookie = Mechanize::Cookie.new("cookie1", "UUiHXHY94MibArpt6eDcP5sl%2BJqgt1sbu3Vk8cKBCUw%3D")
+# cookie.domain = ".tmall.com"
+# cookie.path = "/"
+# agent.cookie_jar.add!(cookie)
 
-cookie = Mechanize::Cookie.new("cookie17", "WvELDNoWjz8c")
-cookie.domain = ".tmall.com"
-cookie.path = "/"
-agent.cookie_jar.add!(cookie)
+# cookie = Mechanize::Cookie.new("cookie17", "WvELDNoWjz8c")
+# cookie.domain = ".tmall.com"
+# cookie.path = "/"
+# agent.cookie_jar.add!(cookie)
 
-cookie = Mechanize::Cookie.new("uc1", "cookie15=UIHiLt3xD8xYTw%3D%3D&existShop=false")
-cookie.domain = ".tmall.com"
-cookie.path = "/"
-agent.cookie_jar.add!(cookie)
+# cookie = Mechanize::Cookie.new("uc1", "cookie15=UIHiLt3xD8xYTw%3D%3D&existShop=false")
+# cookie.domain = ".tmall.com"
+# cookie.path = "/"
+# agent.cookie_jar.add!(cookie)
 
-cookie = Mechanize::Cookie.new("login", "true")
-cookie.domain = ".tmall.com"
-cookie.path = "/"
-agent.cookie_jar.add!(cookie)
+# cookie = Mechanize::Cookie.new("login", "true")
+# cookie.domain = ".tmall.com"
+# cookie.path = "/"
+# agent.cookie_jar.add!(cookie)
 
-cookie = Mechanize::Cookie.new("_l_g_", "Ug%3D%3D")
-cookie.domain = ".tmall.com"
-cookie.path = "/"
-agent.cookie_jar.add!(cookie)
+# cookie = Mechanize::Cookie.new("_l_g_", "Ug%3D%3D")
+# cookie.domain = ".tmall.com"
+# cookie.path = "/"
+# agent.cookie_jar.add!(cookie)
 
-cookie = Mechanize::Cookie.new("_med", "dw:1440&dh:900&pw:1440&ph:900&ist:0")
-cookie.domain = ".tmall.com"
-cookie.path = "/"
-agent.cookie_jar.add!(cookie)
+# cookie = Mechanize::Cookie.new("_med", "dw:1440&dh:900&pw:1440&ph:900&ist:0")
+# cookie.domain = ".tmall.com"
+# cookie.path = "/"
+# agent.cookie_jar.add!(cookie)
 
-cookie = Mechanize::Cookie.new("_nk_", "realwol")
-cookie.domain = ".tmall.com"
-cookie.path = "/"
-agent.cookie_jar.add!(cookie)
+# cookie = Mechanize::Cookie.new("_nk_", "realwol")
+# cookie.domain = ".tmall.com"
+# cookie.path = "/"
+# agent.cookie_jar.add!(cookie)
 
-cookie = Mechanize::Cookie.new("_tb_token_", "765343e630ee3")
-cookie.domain = ".tmall.com"
-cookie.path = "/"
-agent.cookie_jar.add!(cookie)
+# cookie = Mechanize::Cookie.new("_tb_token_", "765343e630ee3")
+# cookie.domain = ".tmall.com"
+# cookie.path = "/"
+# agent.cookie_jar.add!(cookie)
 
-cookie = Mechanize::Cookie.new("cna", "b91vDALZiDECASQuwCMFpCOV")
-cookie.domain = ".tmall.com"
-cookie.path = "/"
-agent.cookie_jar.add!(cookie)
+# cookie = Mechanize::Cookie.new("cna", "b91vDALZiDECASQuwCMFpCOV")
+# cookie.domain = ".tmall.com"
+# cookie.path = "/"
+# agent.cookie_jar.add!(cookie)
 
-cookie = Mechanize::Cookie.new("cookie2", "1d457483cd84455c2843552d5e7df0dd")
-cookie.domain = ".tmall.com"
-cookie.path = "/"
-agent.cookie_jar.add!(cookie)
+# cookie = Mechanize::Cookie.new("cookie2", "1d457483cd84455c2843552d5e7df0dd")
+# cookie.domain = ".tmall.com"
+# cookie.path = "/"
+# agent.cookie_jar.add!(cookie)
 
-  # page = Nokogiri::HTML(open(link.link, 'User-Agent' => agent, :allow_redirections => :all ))
-  page = agent.get url
-  binding.pry
+#   # page = Nokogiri::HTML(open(link.link, 'User-Agent' => agent, :allow_redirections => :all ))
+#   page = agent.get url
+#   binding.pry
    
-  if page.title == '上天猫，就够了'
-    puts '***********************'
-    puts '*                     *'
-    puts '* behind the wall now *'
-    puts '*                     *'
-    puts '***********************'
-    return
-  else
-    a = page.at('#J_ItemList')
-    if a.nil?
-      # next uri
-      if (page.at('.ui-page-next') && page.at('.ui-page-next').attributes["href"])
-        next_uri = page.at('.ui-page-next').attributes["href"].value
-      else
-        next_uri = ''
-      end
+#   if page.title == '上天猫，就够了'
+#     puts '***********************'
+#     puts '*                     *'
+#     puts '* behind the wall now *'
+#     puts '*                     *'
+#     puts '***********************'
+#     return
+#   else
+#     a = page.at('#J_ItemList')
+#     if a.nil?
+#       # next uri
+#       if (page.at('.ui-page-next') && page.at('.ui-page-next').attributes["href"])
+#         next_uri = page.at('.ui-page-next').attributes["href"].value
+#       else
+#         next_uri = ''
+#       end
 
-      uri = link.link
-      unless next_uri.blank?
-        unless next_uri == ''
-          new_url = 'https://list.tmall.com/search_product.htm' + next_uri
-          puts new_url
-          if ShopLink.where(link: new_url).count > 0
-            puts 'old next url'
-          else
-            ShopLink.create(shop_id_string: link.shop_id_string, link: new_url, user: link.user, status: 'false', shop_id: link.shop_id, link_from: link.link_from, link_retry: true)
-          end
-        end
-      end
-      return
-    else
-      a = a.children
-    end
-  end
+#       uri = link.link
+#       unless next_uri.blank?
+#         unless next_uri == ''
+#           new_url = 'https://list.tmall.com/search_product.htm' + next_uri
+#           puts new_url
+#           if ShopLink.where(link: new_url).count > 0
+#             puts 'old next url'
+#           else
+#             ShopLink.create(shop_id_string: link.shop_id_string, link: new_url, user: link.user, status: 'false', shop_id: link.shop_id, link_from: link.link_from, link_retry: true)
+#           end
+#         end
+#       end
+#       return
+#     else
+#       a = a.children
+#     end
+#   end
 
-  puts page.title
+#   puts page.title
 
-  link_hash = {}
-  links_array = []
-  next_uri = ''
-  1.step(a.count - 2, 2) do |i|
-    if a[i].at('a.productImg').nil?
-      puts "ad #{i}"
-    else
-      if filter_product(a[i], link.shop_id)
-        # todo
-        puts "not in shop #{i}"
-      else
-        link_hash[:address] = "https://" + a[i].at('a.productImg').attributes["href"].value[2..-1]
-        product_link_start = link_hash[:address].index('id') + 3
-        product_link_end = link_hash[:address][product_link_start..-1].index('&') - 1 + product_link_start
+#   link_hash = {}
+#   links_array = []
+#   next_uri = ''
+#   1.step(a.count - 2, 2) do |i|
+#     if a[i].at('a.productImg').nil?
+#       puts "ad #{i}"
+#     else
+#       if filter_product(a[i], link.shop_id)
+#         # todo
+#         puts "not in shop #{i}"
+#       else
+#         link_hash[:address] = "https://" + a[i].at('a.productImg').attributes["href"].value[2..-1]
+#         product_link_start = link_hash[:address].index('id') + 3
+#         product_link_end = link_hash[:address][product_link_start..-1].index('&') - 1 + product_link_start
 
-        product_link_id = link_hash[:address][product_link_start..product_link_end]
-        # stop dup product link
-        unless TmallLink.where(product_link_id: product_link_id).first
-          link_hash[:address] = "http://detail.tmall.com/item.htm?id=" + product_link_id.to_s
-          link_hash[:product_link_id] = product_link_id
-          link_hash[:user_id] = link.user_id
-          link_hash[:status]  = 'false'
-          link_hash[:shop_id] = link.shop_id
-          links_array << link_hash.dup
-        end
-      end
-    end
-  end
+#         product_link_id = link_hash[:address][product_link_start..product_link_end]
+#         # stop dup product link
+#         unless TmallLink.where(product_link_id: product_link_id).first
+#           link_hash[:address] = "http://detail.tmall.com/item.htm?id=" + product_link_id.to_s
+#           link_hash[:product_link_id] = product_link_id
+#           link_hash[:user_id] = link.user_id
+#           link_hash[:status]  = 'false'
+#           link_hash[:shop_id] = link.shop_id
+#           links_array << link_hash.dup
+#         end
+#       end
+#     end
+#   end
   
-  # next uri
-  if (page.at('.ui-page-next') && page.at('.ui-page-next').attributes["href"])
-    next_uri = page.at('.ui-page-next').attributes["href"].value
-  else
-    next_uri = ''
-  end
+#   # next uri
+#   if (page.at('.ui-page-next') && page.at('.ui-page-next').attributes["href"])
+#     next_uri = page.at('.ui-page-next').attributes["href"].value
+#   else
+#     next_uri = ''
+#   end
 
-  uri = link.link
-  unless next_uri.blank?
-    unless next_uri == ''
-      new_url = 'https://list.tmall.com/search_product.htm' + next_uri
-      puts new_url
-      if ShopLink.where(link: new_url).count > 0
-        puts 'old next url'
-      else
-        ShopLink.create(shop_id_string: link.shop_id_string, link: new_url, user: link.user, status: 'false', shop_id: link.shop_id, link_from: link.link_from)
-      end
-    end
-  end
-  link.update_attributes(status: true, link_retry: false)
+#   uri = link.link
+#   unless next_uri.blank?
+#     unless next_uri == ''
+#       new_url = 'https://list.tmall.com/search_product.htm' + next_uri
+#       puts new_url
+#       if ShopLink.where(link: new_url).count > 0
+#         puts 'old next url'
+#       else
+#         ShopLink.create(shop_id_string: link.shop_id_string, link: new_url, user: link.user, status: 'false', shop_id: link.shop_id, link_from: link.link_from)
+#       end
+#     end
+#   end
+#   link.update_attributes(status: true, link_retry: false)
   
-  TmallLink.create(links_array)
-end
+#   TmallLink.create(links_array)
+# end
 
 def check_old_shop_links
   2.times do
@@ -202,7 +202,7 @@ def grasp_search_link link
   cookie.path = "/"
   agent.cookie_jar.add!(cookie)
 
-  cookie = Mechanize::Cookie.new("uc1", "cookie15=UtASsssmOIJ0bQ%3D%3D&existShop=false")
+  cookie = Mechanize::Cookie.new("uc1", "cookie15=UIHiLt3xD8xYTw%3D%3D&existShop=false")
   cookie.domain = ".tmall.com"
   cookie.path = "/"
   agent.cookie_jar.add!(cookie)
@@ -227,7 +227,7 @@ def grasp_search_link link
   cookie.path = "/"
   agent.cookie_jar.add!(cookie)
 
-  cookie = Mechanize::Cookie.new("_tb_token_", "9SZpBwGXdhjR")
+  cookie = Mechanize::Cookie.new("_tb_token_", "e9bb6de8133e6")
   cookie.domain = ".tmall.com"
   cookie.path = "/"
   agent.cookie_jar.add!(cookie)
@@ -238,7 +238,7 @@ def grasp_search_link link
   cookie.path = "/"
   agent.cookie_jar.add!(cookie)
 
-  cookie = Mechanize::Cookie.new("cookie2", "cfadeba8f7958bdd216ed401a18a432e")
+  cookie = Mechanize::Cookie.new("cookie2", "312dbdf9b1ceb76f8ab20a987def2506")
   cookie.domain = ".tmall.com"
   cookie.path = "/"
   agent.cookie_jar.add!(cookie)
@@ -435,7 +435,7 @@ def filter_search_product product_html, link
 end
 
 def check_search_links
-  50.times do
+  100.times do
     sleep rand(20..25)
     link = get_search_link
     puts link.id

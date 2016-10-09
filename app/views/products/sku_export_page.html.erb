@@ -1,0 +1,50 @@
+<%= flash[:notice] %>
+<h2>导出选项：</h2>
+<%= form_tag(sku_export_products_products_path, method:'post') do%>
+  <label>选择国家：</label>
+  <select name='language' id='select_language'>
+    <option value='china'>请选择国家</option>
+    <option value='america'>美国</option>
+    <option value='british'>英国</option>
+    <option value='germany'>德国</option>
+    <option value='france'>法国</option>
+    <option value='spain'>西班牙</option>
+    <option value='canada'>加拿大</option>
+    <option value='italy'>意大利</option>
+  </select><br/>
+  <%= text_area_tag 'sku', nil, rows:20, cols:50 %><br/>
+  <%= button_tag '导出', format:'xls' %>
+<% end %>
+<%= javascript_tag do%>
+$(function(){
+  var export_language = "<%=cookies[:export_language]%>";
+  var export_type = "<%=cookies[:export_type]%>";
+  $('#select_language option[value="<%=cookies[:export_language]%>"]').attr("selected",true);
+  $('#export_type option[value="<%=cookies[:export_type]%>"]').attr("selected",true);
+});
+<%end%>
+
+<script type="text/javascript">
+  $('#product_page .productTypeClose1').click(function(){
+    $('#product_page #productTypeDiv1').css('display','none');
+    $('#product_page #productTypeHistory1').find('.selectedLevel2Value1').remove();
+    $('#productTypeDivLevel11').html("<%=raw j render 'products/level2_div_1' %>");
+  });
+
+  $('#product_page .productTypeCancel1').click(function(){
+    $('#product_page #product_select_value1').attr('value','');
+    $('#product_page #productTypeText1').val('');
+  });
+
+  $('#product_page #productTypeText1').click(function(){
+    $(this).val('');
+    var left = $(this).offset().left;
+    var top = $(this).offset().top;
+    var height = $(this).css('height');
+    $('#product_page #productTypeDiv1').css('left', left);
+    $('#product_page #productTypeDiv1').css('top', top);
+    $('#product_page #productTypeDiv1').css('margin-top', height);
+    $('#product_page #productTypeDiv1').fadeIn();
+    $('#product_page #productTypeDivLevel11').css('display','inline');
+  });
+</script>
