@@ -4,6 +4,7 @@
   父权限：<%= select_tag 'parent_id', options_from_collection_for_select(AuthList.first_level_auth, 'id', 'name'), include_blank: true %>
   权限链接：<%= text_field_tag 'auth_url' %>
   备注：<%= text_field_tag 'backup' %>
+  <%= hidden_field_tag 'auth_from', 0 %>
   <%= submit_tag '确定' %>
 <% end %>
 <hr/>

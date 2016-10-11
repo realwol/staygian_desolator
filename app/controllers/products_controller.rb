@@ -308,7 +308,6 @@ class ProductsController < ApplicationController
     @products = Product.where("sku in (?) ", sku_array.map(&:strip))
     cookies[:export_language] = params[:language]
     cookies[:export_type] = params[:export_type]
-    binding.pry
     request.format = 'xls'
     filename = "#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}_export_data.xls"
     respond_to do |f|
@@ -317,7 +316,6 @@ class ProductsController < ApplicationController
   end
 
   def export_page
-    
   end
 
   def export_products
@@ -619,7 +617,7 @@ class ProductsController < ApplicationController
             if attribute.is_locked
               attributes_translation_history_id = params["attribte_options"].values[index]
             else
-              attributes_translation_history_id = AttributesTranslationHistory.where(attribute_name: params["attribte_options"].values[index]).first.try(:id)
+              attributes_translation_history_id = AttributesTranslationHistory.find_by(attribute_name: params["attribte_options"].values[index]).try(:id)
             end
             product_attribute.update_attributes(attributes_translation_history_id: attributes_translation_history_id)
           else
@@ -629,7 +627,7 @@ class ProductsController < ApplicationController
             if attribute.is_locked
               customize_attributes_hash[:attributes_translation_history_id] = params["attribte_options"].values[index]
             else
-              customize_attributes_hash[:attributes_translation_history_id] = AttributesTranslationHistory.where(attribute_name: params["attribte_options"].values[index]).first.try(:id)
+              customize_attributes_hash[:attributes_translation_history_id] = AttributesTranslationHistory.find_by(attribute_name: params["attribte_options"].values[index]).try(:id)
             end
             customize_attributes_array << customize_attributes_hash.dup
           end
@@ -690,11 +688,11 @@ class ProductsController < ApplicationController
             variable_size = param_variable["size"]
             variable_color = param_variable["color"]
 
-            if VariableTranslateHistory.where(word: variable_size, variable_from: 'size').count < 1
+            if VariableTranslateHistory.where(word: variable_size, variable_from: 'size').pluck(:id).count < 1
               VariableTranslateHistory.create(word: variable_size, variable_from: 'size', user: @product.user)
             end
 
-            if VariableTranslateHistory.where(word: variable_color, variable_from: 'color').count < 1
+            if VariableTranslateHistory.where(word: variable_color, variable_from: 'color').pluck(:id).count < 1
               VariableTranslateHistory.create(word: variable_color, variable_from: 'color', user: @product.user)
             end
           end

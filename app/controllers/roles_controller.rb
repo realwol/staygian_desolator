@@ -47,9 +47,9 @@ class RolesController < ApplicationController
   end
 
   def create_auth
-    AuthList.create(name: params[:name], parent_id: params[:parent_id], backup: params[:backup], auth_url: params[:auth_url], auth_from: params[:auth_from])
+    @auth_from = params[:auth_from].present? ? params[:auth_from].present? : 0
+    AuthList.create(name: params[:name], parent_id: params[:parent_id], backup: params[:backup], auth_url: params[:auth_url], auth_from: @auth_from)
     
-    @auth_from = params[:auth_from]
     @auths = AuthList.valid_auth
     @order_auths = AuthList.valid_auth.from_order
   end

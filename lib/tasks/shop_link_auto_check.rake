@@ -178,6 +178,7 @@ end
 # end
 
 def check_old_shop_links
+  sleep rand(5..10)
   2.times do
     sleep rand(15..20)
     shop_link = get_first_shop_link
