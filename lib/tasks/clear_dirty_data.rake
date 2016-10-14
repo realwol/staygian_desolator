@@ -1,4 +1,16 @@
 namespace :clear_dirty_data do
+  desc 'clear shop id'
+  task :clear_shop_id => :environment do
+    Shop.find_in_batches do |shops|
+      shops.each do |shop|
+        flag = shop.shop_id.index('&')
+        if flag.present?
+          shop.update_attributes(shop_id: shop.shop_id[0..flag-1])
+        end
+      end
+    end
+  end
+
   desc 'gsub brackets'
   task :gsub_brackets => :environment do
     ProductInfoTranslation.find_in_batches do |pp|

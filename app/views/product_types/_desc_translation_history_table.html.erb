@@ -42,7 +42,12 @@
   <% end %>
 </table>
 
-<%= paginate @descriptions, remote: true %>
+<%= paginate @descriptions, remote: true, outer_window: 4, left: 3, right: 5 %>
+
+<%= form_tag(switch_description_translation_history_page_product_types_path(table_id: @table_id), remote: true, method: :get) do %>
+  <%= text_field_tag 'page' %>
+  <%= submit_tag '跳转' %>
+<% end %>
 
 <script type="text/javascript">
   $('.saveTranslation').unbind('click');

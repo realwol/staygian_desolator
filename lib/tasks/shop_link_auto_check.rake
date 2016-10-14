@@ -19,14 +19,14 @@ def get_first_shop_link
   end
 end
 
-def filter_product product_html, shop_id
-  if shop_id.present? && product_html.present?
-    shop = Shop.find(shop_id)
-    product_html.at('a.productShop-name').attributes['href'].value.index(shop.shop_id).nil?
-  else
-    false
-  end
-end
+# def filter_product product_html, shop_id
+#   if shop_id.present? && product_html.present?
+#     shop = Shop.find(shop_id)
+#     product_html.at('a.productShop-name').attributes['href'].value.index(shop.shop_id).nil?
+#   else
+#     false
+#   end
+# end
 
 # def grasp_shop link
 #   # OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
@@ -203,7 +203,12 @@ def grasp_search_link link
   cookie.path = "/"
   agent.cookie_jar.add!(cookie)
 
-  cookie = Mechanize::Cookie.new("uc1", "cookie15=UIHiLt3xD8xYTw%3D%3D&existShop=false")
+  cookie = Mechanize::Cookie.new("uc1", "cookie15=V32FPkk%2Fw0dUvg%3D%3D&existShop=false")
+  cookie.domain = ".tmall.com"
+  cookie.path = "/"
+  agent.cookie_jar.add!(cookie)
+
+  cookie = Mechanize::Cookie.new("tt", "login.tmall.com")
   cookie.domain = ".tmall.com"
   cookie.path = "/"
   agent.cookie_jar.add!(cookie)
@@ -240,6 +245,36 @@ def grasp_search_link link
   agent.cookie_jar.add!(cookie)
 
   cookie = Mechanize::Cookie.new("cookie2", "312dbdf9b1ceb76f8ab20a987def2506")
+  cookie.domain = ".tmall.com"
+  cookie.path = "/"
+  agent.cookie_jar.add!(cookie)
+
+  cookie = Mechanize::Cookie.new("t", "106c27ff1c8c8e8f5ff5673474978132")
+  cookie.domain = ".tmall.com"
+  cookie.path = "/"
+  agent.cookie_jar.add!(cookie)
+
+  cookie = Mechanize::Cookie.new("skt", "8740f782262c4354")
+  cookie.domain = ".tmall.com"
+  cookie.path = "/"
+  agent.cookie_jar.add!(cookie)
+
+  cookie = Mechanize::Cookie.new("res", "scroll%3A1399*5855-client%3A1399*303-offset%3A1399*5855-screen%3A1440*900")
+  cookie.domain = ".tmall.com"
+  cookie.path = "/"
+  agent.cookie_jar.add!(cookie)
+
+  cookie = Mechanize::Cookie.new("l", "AlZW-BzGQB-ErkFSvyml1gTOJgZY85ox")
+  cookie.domain = ".tmall.com"
+  cookie.path = "/"
+  agent.cookie_jar.add!(cookie)
+
+  cookie = Mechanize::Cookie.new("uss", "W8t0uctd5%2FO6dSD1ORW5ekmju%2FNAI9DWNzFKZYAi5%2B0qdVmE0rYpYP1%2Fjw%3D%3D")
+  cookie.domain = ".tmall.com"
+  cookie.path = "/"
+  agent.cookie_jar.add!(cookie)
+
+  cookie = Mechanize::Cookie.new("unb", "910047907")
   cookie.domain = ".tmall.com"
   cookie.path = "/"
   agent.cookie_jar.add!(cookie)
@@ -423,7 +458,10 @@ end
 
 def get_shop_id html
   href_string = html.at('a.productShop-name').attributes['href'].value
-  href_string[href_string.index('user_number_id=')+15..-1]
+  shop_id_start = href_string.index('user_number_id=')+15
+  shop_id_end = href_string[shop_id_start..-1].index('&') - 1
+
+  href_string[shop_id_start..shop_id_start+shop_id_end]
 end
 
 def filter_search_product product_html, link
@@ -436,7 +474,7 @@ def filter_search_product product_html, link
 end
 
 def check_search_links
-  100.times do
+  50.times do
     sleep rand(20..25)
     link = get_search_link
     puts link.id
@@ -445,8 +483,8 @@ def check_search_links
 end
 
 def get_search_link
-  # SearchLink.where(user_id: 43).where(check_status: false).first
   SearchLink.where(check_status: false).first
+  # SearchLink.where(id: 6031).where(check_status: false).first
 end
 
 
