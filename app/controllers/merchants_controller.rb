@@ -58,7 +58,7 @@ class MerchantsController < ApplicationController
         merchant_shipment_cost = m.shipment_cost.to_f
         symbol_count = 0
         m.get_merchant_products.each do |p|
-            if p.inventory != 0
+            # if p.inventory != 0
               if p.read_attribute("#{country}_price_change")
                 if p.product_id.present?
                   product = Product.find(p.product_id)
@@ -86,7 +86,7 @@ class MerchantsController < ApplicationController
                   end
                 end
               end
-            end
+            # end
         end
         symbol_count = true
         file.close
@@ -128,7 +128,7 @@ class MerchantsController < ApplicationController
       merchant_shipment_cost = m.shipment_cost.to_f
       symbol_count = 0
       m.get_merchant_products.each do |p|
-        if p.inventory != 0
+        # if p.inventory != 0
           if p.read_attribute("#{country}_price_change")
             product = Product.find(p.product_id) if p.product_id.present?
             if symbol_count ==0
@@ -146,7 +146,7 @@ class MerchantsController < ApplicationController
               end
             end
           end
-        end
+        # end
       end
       symbol_count = 0
       file.close

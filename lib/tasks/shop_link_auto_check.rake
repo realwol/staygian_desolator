@@ -474,7 +474,7 @@ def filter_search_product product_html, link
 end
 
 def check_search_links
-  50.times do
+  100.times do
     sleep rand(20..25)
     link = get_search_link
     puts link.id
