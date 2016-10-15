@@ -244,7 +244,7 @@ def grasp_search_link link
   cookie.path = "/"
   agent.cookie_jar.add!(cookie)
 
-  cookie = Mechanize::Cookie.new("cookie2", "312dbdf9b1ceb76f8ab20a987def2506")
+  cookie = Mechanize::Cookie.new("cookie2", "57d6d173757efe20f65a80cbf56a3f3f")
   cookie.domain = ".tmall.com"
   cookie.path = "/"
   agent.cookie_jar.add!(cookie)
@@ -254,7 +254,7 @@ def grasp_search_link link
   cookie.path = "/"
   agent.cookie_jar.add!(cookie)
 
-  cookie = Mechanize::Cookie.new("skt", "8740f782262c4354")
+  cookie = Mechanize::Cookie.new("skt", "35e9c9577a852338")
   cookie.domain = ".tmall.com"
   cookie.path = "/"
   agent.cookie_jar.add!(cookie)
@@ -264,7 +264,7 @@ def grasp_search_link link
   cookie.path = "/"
   agent.cookie_jar.add!(cookie)
 
-  cookie = Mechanize::Cookie.new("l", "AlZW-BzGQB-ErkFSvyml1gTOJgZY85ox")
+  cookie = Mechanize::Cookie.new("l", "And3HUkbsXCNRQAV9lJbd-L2h2HBNkua")
   cookie.domain = ".tmall.com"
   cookie.path = "/"
   agent.cookie_jar.add!(cookie)
@@ -274,10 +274,15 @@ def grasp_search_link link
   cookie.path = "/"
   agent.cookie_jar.add!(cookie)
 
-  cookie = Mechanize::Cookie.new("unb", "910047907")
+  cookie = Mechanize::Cookie.new("isg", "AjEx7BV3zcHAHG5WgbhGQAWxQLsASqWQcEUGohNGJ_gTOlGMW261YN_YKnmm")
   cookie.domain = ".tmall.com"
   cookie.path = "/"
   agent.cookie_jar.add!(cookie)
+
+  # cookie = Mechanize::Cookie.new("unb", "910047907")
+  # cookie.domain = ".tmall.com"
+  # cookie.path = "/"
+  # agent.cookie_jar.add!(cookie)
 
   page = agent.get link.link
 
