@@ -488,8 +488,8 @@ def check_search_links
 end
 
 def get_search_link
-  SearchLink.where(check_status: false).first
-  # SearchLink.where(id: 6031).where(check_status: false).first
+  # SearchLink.where(check_status: false).first
+  SearchLink.where(user_id: 94).where(check_status: false).first
 end
 
 

@@ -608,34 +608,36 @@ class ProductsController < ApplicationController
         end
         # @product.save_attributes
 
-        @product_type_attributes = ProductAttribute.where(product_type_id: @product.product_type_id)
-        customize_attributes_hash = {}
-        customize_attributes_array = []
-        @product_type_attributes.each_with_index do |attribute, index|
-          product_attribute = @product.product_customize_attributes_relations.where(attribute_name: attribute.attribute_name).last
-          if product_attribute.present?
-            if attribute.is_locked
-              attributes_translation_history_id = params["attribte_options"].values[index]
+        # save custome attributes
+        if params["attribte_options"].present?
+          @product_type_attributes = ProductAttribute.where(product_type_id: @product.product_type_id)
+          customize_attributes_hash = {}
+          customize_attributes_array = []
+          @product_type_attributes.each_with_index do |attribute, index|
+            product_attribute = @product.product_customize_attributes_relations.where(attribute_name: attribute.attribute_name).last
+            if product_attribute.present?
+              if attribute.is_locked
+                attributes_translation_history_id = params["attribte_options"].values[index]
+              else
+                attributes_translation_history_id = AttributesTranslationHistory.find_by(attribute_name: params["attribte_options"].values[index]).try(:id)
+              end
+              product_attribute.update_attributes(attributes_translation_history_id: attributes_translation_history_id)
             else
-              attributes_translation_history_id = AttributesTranslationHistory.find_by(attribute_name: params["attribte_options"].values[index]).try(:id)
+              customize_attributes_hash[:product_type_id] = @product.product_type_id
+              customize_attributes_hash[:product_id] = @product.id
+              customize_attributes_hash[:attribute_name] = attribute.attribute_name
+              if attribute.is_locked
+                customize_attributes_hash[:attributes_translation_history_id] = params["attribte_options"].values[index]
+              else
+                customize_attributes_hash[:attributes_translation_history_id] = AttributesTranslationHistory.find_by(attribute_name: params["attribte_options"].values[index]).try(:id)
+              end
+              customize_attributes_array << customize_attributes_hash.dup
             end
-            product_attribute.update_attributes(attributes_translation_history_id: attributes_translation_history_id)
-          else
-            customize_attributes_hash[:product_type_id] = @product.product_type_id
-            customize_attributes_hash[:product_id] = @product.id
-            customize_attributes_hash[:attribute_name] = attribute.attribute_name
-            if attribute.is_locked
-              customize_attributes_hash[:attributes_translation_history_id] = params["attribte_options"].values[index]
-            else
-              customize_attributes_hash[:attributes_translation_history_id] = AttributesTranslationHistory.find_by(attribute_name: params["attribte_options"].values[index]).try(:id)
-            end
-            customize_attributes_array << customize_attributes_hash.dup
           end
+          ProductCustomizeAttributesRelation.create(customize_attributes_array) if customize_attributes_array.present?
         end
 
-        ProductCustomizeAttributesRelation.create(customize_attributes_array) if customize_attributes_array.present?
         product_images_array = [@product.images1, @product.images2, @product.images3, @product.images4, @product.images5, @product.images6, @product.images7, @product.images8, @product.images9, @product.images10, @product.images11, @product.images12, @product.images13, @product.images14, @product.images15, @product.images16, @product.images17, @product.images18, @product.images19, @product.images20, @product.images21, @product.images22, @product.images23, @product.images24, @product.images25, @product.images26, @product.images27, @product.images28, @product.images29, @product.images30]
-
         # Tobe cut
         if params[:cut_image_urls][2..-1]
           cut_image_urls = params[:cut_image_urls][2..-1].split('|')
