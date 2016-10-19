@@ -113,8 +113,8 @@ class MerchantsController < ApplicationController
 
   def export_account
     account = Account.find(params[:id])
-
-    folder = "public/export/#{account.name}#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}/"
+    account_name = account.name.gsub(' ', '')
+    folder = "public/export/#{account_name}#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}/"
 
     # create files
     system("mkdir #{folder}")
@@ -154,7 +154,7 @@ class MerchantsController < ApplicationController
       file.close
     end
 
-    zipfile_name = "#{folder}#{account.name}-#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}.zip"
+    zipfile_name = "#{folder}#{account_name}-#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}.zip"
     Zip::File.open(zipfile_name, Zip::File::CREATE) do |zipfile|
       input_filenames.each do |filename|
         # Two arguments:
