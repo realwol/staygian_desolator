@@ -5,7 +5,11 @@
       <th>操作</th>
     </tr>
     <% @accounts.each do |account| %>
-      <tr>
+      <% if account.removed? %>
+        <tr style="background:#8c8e86" >
+      <% else %>
+        <tr>
+      <% end %>
         <td>
           <%= text_field_tag '', account.name, class:'account_name' %>
           <%= button_tag '改名', class:'update_account_name', "data-account-id"=> account.id %>
