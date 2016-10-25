@@ -9,7 +9,11 @@
       <td>操作</td>
     </tr>
     <% @merchants.order('is_removed').each do |m| %>
-      <tr>
+      <% if m.removed? %>
+        <tr style="background:#8c8e86" >
+      <% else %>
+        <tr>
+      <% end %>
         <td><%= m.shop_name %></td>
         <td><%= m.merchant_country_name %></td>
         <% if m.status %>
