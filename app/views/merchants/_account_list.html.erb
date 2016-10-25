@@ -1,5 +1,5 @@
 <% if @accounts.present? %>
-  <table class="table table-bordered" >
+  <table class="table table-bordered table-striped" >
     <tr>
       <th>账号名称</th>
       <th>操作</th>
@@ -13,14 +13,14 @@
         <td>
           <%= link_to '查看', merchants_path(account_id: account.id) %>
           <%= link_to '导出本账户', export_account_merchants_path(id: account.id) %>
-          <%  %>
+          <% unless account.removed? %>
+            <%= link_to '转到删除', clean_account_merchant_path(account), remote: true, method: :post %>
+          <% end %>
           <%= select_tag 'select_responser', options_from_collection_for_select(User.all, 'id', 'username', account.user_id), class:'select_responser', "data-account-id"=> account.id %>
         </td>
       </tr>
     <% end %>
   </table>
-<% else %>
-  目前无可用帐号！
 <% end %>
 
 <script type="text/javascript">

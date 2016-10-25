@@ -8,7 +8,7 @@
       <td>运费(此处为对应国家货币)</td>
       <td>操作</td>
     </tr>
-    <% @merchants.each do |m| %>
+    <% @merchants.order('is_removed').each do |m| %>
       <tr>
         <td><%= m.shop_name %></td>
         <td><%= m.merchant_country_name %></td>
@@ -22,6 +22,9 @@
         <td>
           <!-- <button class="bind-products" >绑定产品</button> -->
           <button class="stop-merchant" data-merchant-id="<%= m.id %>" >停用</button>
+          <% unless m.removed? %>
+            <%= link_to '转到删除', clean_merchant_merchant_path(m), remote: true, method: :post %>
+          <% end %>
           <%= link_to '编辑', edit_merchant_path(m) %>
           <button class="remove-merchant" data-merchant-id="<%= m.id %>" >删除</button>
         </td>

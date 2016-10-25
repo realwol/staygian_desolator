@@ -1,6 +1,17 @@
 class MerchantsController < ApplicationController
   before_action :set_merchant, only: [:edit, :update, :stop_merchant, :destroy, :add_merchant_product, :update_shipment_cost, :get_merchant_skus]
 
+  def clean_account
+    account = Account.find(params[:id])
+    account.merchants.update_all(is_removed: true)
+    account.update_attributes(is_removed: true)
+  end
+
+  def clean_merchant
+    merchant = Merchant.find(params[:id])
+    merchant.update_attributes(is_removed: true)
+  end
+
   def update_account_name
     new_name = params[:new_name]
     account_id = params[:account_id]
@@ -12,7 +23,8 @@ class MerchantsController < ApplicationController
   end
 
   def account_list
-    @accounts = current_user.valid_account
+    @accounts = current_user.valid_account.order('is_removed')
+    # @removed_accounts = current_user.removed_accounts
   end
 
   def create_account

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160728141507) do
+ActiveRecord::Schema.define(version: 20161025144932) do
 
   create_table "accounts", force: :cascade do |t|
     t.string   "name",       limit: 255
@@ -19,8 +19,9 @@ ActiveRecord::Schema.define(version: 20160728141507) do
     t.integer  "responser",  limit: 4
     t.string   "platform",   limit: 255
     t.boolean  "status",     limit: 1,   default: true
-    t.datetime "created_at",                            null: false
-    t.datetime "updated_at",                            null: false
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
+    t.boolean  "is_removed", limit: 1,   default: false
   end
 
   add_index "accounts", ["user_id"], name: "index_accounts_on_user_id", using: :btree
@@ -202,12 +203,13 @@ ActiveRecord::Schema.define(version: 20160728141507) do
     t.string   "merchant_seller_id",         limit: 255
     t.string   "merchant_marketplace_id",    limit: 255
     t.string   "merchant_api_address",       limit: 255
-    t.datetime "created_at",                                            null: false
-    t.datetime "updated_at",                                            null: false
+    t.datetime "created_at",                                             null: false
+    t.datetime "updated_at",                                             null: false
     t.boolean  "status",                     limit: 1,   default: true
     t.float    "shipment_cost",              limit: 24
     t.boolean  "update_flag",                limit: 1
     t.datetime "last_amazon_datetime"
+    t.boolean  "is_removed",                 limit: 1,   default: false
   end
 
   create_table "mws_upload_histories", force: :cascade do |t|
@@ -226,6 +228,7 @@ ActiveRecord::Schema.define(version: 20160728141507) do
     t.datetime "paid_date"
     t.string   "principal_currency",                     limit: 255
     t.float    "principal_amount",                       limit: 24
+    t.float    "principal_rmb",                          limit: 24
     t.string   "tax_currency",                           limit: 255
     t.float    "tax_amount",                             limit: 24
     t.string   "gift_wrap_currency",                     limit: 255
@@ -234,10 +237,12 @@ ActiveRecord::Schema.define(version: 20160728141507) do
     t.float    "gift_wrap_tax_amount",                   limit: 24
     t.string   "shipping_charge_currency",               limit: 255
     t.float    "shipping_charge_amount",                 limit: 24
+    t.float    "shipping_charge_rmb",                    limit: 24
     t.string   "shipping_tax_currency",                  limit: 255
     t.float    "shipping_tax_amount",                    limit: 24
     t.string   "commission_currency",                    limit: 255
     t.float    "commission_amount",                      limit: 24
+    t.float    "commission_rmb",                         limit: 24
     t.string   "fixed_closing_fee_currency",             limit: 255
     t.float    "fixed_closing_fee_amount",               limit: 24
     t.string   "gift_wrap_commission_currency",          limit: 255
@@ -253,12 +258,14 @@ ActiveRecord::Schema.define(version: 20160728141507) do
     t.string   "product_id",                             limit: 255
     t.string   "user_id",                                limit: 255
     t.string   "merchant_id",                            limit: 255
+    t.string   "merchant_country_code",                  limit: 255
+    t.integer  "account_id",                             limit: 4
     t.string   "vendor_id",                              limit: 255
     t.integer  "buyer_id",                               limit: 4
     t.datetime "posted_date"
     t.string   "marketplace_name",                       limit: 255
-    t.datetime "created_at",                                                               null: false
-    t.datetime "updated_at",                                                               null: false
+    t.datetime "created_at",                                                                 null: false
+    t.datetime "updated_at",                                                                 null: false
     t.string   "title",                                  limit: 255
     t.string   "asin",                                   limit: 255
     t.string   "condition_note",                         limit: 255
@@ -275,18 +282,20 @@ ActiveRecord::Schema.define(version: 20160728141507) do
     t.string   "purchase_tracking_number",               limit: 255
     t.string   "shipping_order_number",                  limit: 255
     t.string   "shipping_tracking_number",               limit: 255
-    t.integer  "shipping_tracking_number_update_status", limit: 4,   default: 1
-    t.string   "order_item_ship_status",                 limit: 255, default: "Unupdated"
+    t.integer  "shipping_tracking_number_update_status", limit: 4,     default: 1
+    t.string   "order_item_ship_status",                 limit: 255,   default: "Unupdated"
     t.string   "backup",                                 limit: 255
     t.string   "refund_currency",                        limit: 255
     t.float    "refund_amount",                          limit: 24
+    t.float    "refund_rmb",                             limit: 24
     t.datetime "first_finish_time"
     t.datetime "to_problem_date"
     t.integer  "reship_order_item_id",                   limit: 4
     t.string   "buyer_country_code",                     limit: 255
     t.string   "flag_shipping_status",                   limit: 255
-    t.string   "origin_address",                         limit: 255
+    t.text     "origin_address",                         limit: 65535
     t.float    "shipping_cost",                          limit: 24
+    t.float    "all_income",                             limit: 24
   end
 
   create_table "orders", force: :cascade do |t|
@@ -317,6 +326,7 @@ ActiveRecord::Schema.define(version: 20160728141507) do
     t.string   "seller_id",                       limit: 255
     t.string   "buyer_id",                        limit: 255
     t.string   "merchant_id",                     limit: 255
+    t.string   "merchant_country_code",           limit: 255
     t.datetime "created_at",                                                  null: false
     t.datetime "updated_at",                                                  null: false
     t.boolean  "is_item_created",                 limit: 1,   default: false

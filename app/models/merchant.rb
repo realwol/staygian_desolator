@@ -11,4 +11,8 @@ class Merchant < ActiveRecord::Base
   def get_merchant_products
     ProductBasicInfo.where("sku in (?)", merchant_sku_relations.select(:sku).map(&:sku))
   end
+
+  def removed?
+    !!self.is_removed
+  end
 end
