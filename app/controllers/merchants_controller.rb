@@ -5,11 +5,31 @@ class MerchantsController < ApplicationController
     account = Account.find(params[:id])
     account.merchants.update_all(is_removed: true)
     account.update_attributes(is_removed: true)
+
+    account.merchants.each do |merchant|
+      merchant.orders.order_in_forty_days.each do |order|
+        puts "order id #{order.id}"
+        refund_amount = order.amount + order.order_items.sum(:shipping_charge_amount).to_f
+        RefundList.create(refund_date: Time.now, refund_type: 1, order_id: order.id, refund_amount: refund_amount, currency: order.currency, backup: params[:backup_info], buyer_memo: params[:buyer_memo], refund_reason: params[:refund_reason])
+        order.update_attributes(order_ship_status: 'Refund')
+        order.order_items.each do |item|
+          item.update_attributes(order_item_ship_status: 'Refund', refund_amount: (item.principal_amount + item.shipping_charge_amount), refund_currency: item.principal_currency, refund_rmb: (item.principal_rmb+item.shipping_charge_rmb))
+        end
+      end
+    end
   end
 
   def clean_merchant
     merchant = Merchant.find(params[:id])
     merchant.update_attributes(is_removed: true)
+    merchant.orders.order_in_forty_days.each do |order|
+      refund_amount = order.amount + order.order_items.sum(:shipping_charge_amount).to_f
+      RefundList.create(refund_date: Time.now, refund_type: 1, order_id: order.id, refund_amount: refund_amount, currency: order.currency, backup: params[:backup_info], buyer_memo: params[:buyer_memo], refund_reason: params[:refund_reason])
+      order.update_attributes(order_ship_status: 'Refund')
+      order.order_items.each do |item|
+        item.update_attributes(order_item_ship_status: 'Refund', refund_amount: (item.principal_amount + item.shipping_charge_amount), refund_currency: item.principal_currency, refund_rmb: (item.principal_rmb+item.shipping_charge_rmb))
+      end
+    end
   end
 
   def update_account_name
