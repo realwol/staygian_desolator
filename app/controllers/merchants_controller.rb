@@ -13,7 +13,7 @@ class MerchantsController < ApplicationController
         RefundList.create(refund_date: Time.now, refund_type: 1, order_id: order.id, refund_amount: refund_amount, currency: order.currency, backup: params[:backup_info], buyer_memo: params[:buyer_memo], refund_reason: params[:refund_reason])
         order.update_attributes(order_ship_status: 'Refund')
         order.order_items.each do |item|
-          item.update_attributes(order_item_ship_status: 'Refund', refund_amount: (item.principal_amount + item.shipping_charge_amount), refund_currency: item.principal_currency, refund_rmb: (item.principal_rmb+item.shipping_charge_rmb))
+          item.update_attributes(commission_amount: 0, commission_rmb: 0, order_item_ship_status: 'Refund', refund_amount: (item.principal_amount + item.shipping_charge_amount), refund_currency: item.principal_currency, refund_rmb: (item.principal_rmb+item.shipping_charge_rmb))
         end
       end
     end
@@ -27,7 +27,7 @@ class MerchantsController < ApplicationController
       RefundList.create(refund_date: Time.now, refund_type: 1, order_id: order.id, refund_amount: refund_amount, currency: order.currency, backup: params[:backup_info], buyer_memo: params[:buyer_memo], refund_reason: params[:refund_reason])
       order.update_attributes(order_ship_status: 'Refund')
       order.order_items.each do |item|
-        item.update_attributes(order_item_ship_status: 'Refund', refund_amount: (item.principal_amount + item.shipping_charge_amount), refund_currency: item.principal_currency, refund_rmb: (item.principal_rmb+item.shipping_charge_rmb))
+        item.update_attributes(commission_amount: 0, commission_rmb: 0, order_item_ship_status: 'Refund', refund_amount: (item.principal_amount + item.shipping_charge_amount), refund_currency: item.principal_currency, refund_rmb: (item.principal_rmb+item.shipping_charge_rmb))
       end
     end
   end
