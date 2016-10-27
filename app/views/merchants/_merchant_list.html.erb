@@ -27,7 +27,7 @@
           <!-- <button class="bind-products" >绑定产品</button> -->
           <button class="stop-merchant" data-merchant-id="<%= m.id %>" >停用</button>
           <% unless m.removed? %>
-            <%= link_to '转到删除', clean_merchant_merchant_path(m), remote: true, method: :post %>
+            <%= link_to '转到删除', clean_merchant_merchant_path(m), remote: true, method: :post, data: {confirm: '确定要删除吗?'} %>
           <% end %>
           <%= link_to '编辑', edit_merchant_path(m) %>
           <button class="remove-merchant" data-merchant-id="<%= m.id %>" >删除</button>
