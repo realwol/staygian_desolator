@@ -18,7 +18,7 @@
           <%= link_to '查看', merchants_path(account_id: account.id) %>
           <%= link_to '导出本账户', export_account_merchants_path(id: account.id) %>
           <% unless account.removed? %>
-            <%= link_to '转到删除', "#", remote: true, method: :post, data: {confirm: '确定要删除吗?'} %>
+            <%= link_to '转到删除', clean_account_merchant_path(account), remote: true, method: :post, data: {confirm: '确定要删除吗？'} %>
           <% end %>
           <%= select_tag 'select_responser', options_from_collection_for_select(User.all, 'id', 'username', account.user_id), class:'select_responser', "data-account-id"=> account.id %>
         </td>
