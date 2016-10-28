@@ -25,6 +25,7 @@ Rails.application.routes.draw do
       post 'update_shipment_cost'
       post 'clean_account'
       post 'clean_merchant'
+      post 'add_account_backup'
       delete 'remove_merchant_binding_sku'
     end
 

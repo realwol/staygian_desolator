@@ -1,6 +1,11 @@
 class MerchantsController < ApplicationController
   before_action :set_merchant, only: [:edit, :update, :stop_merchant, :destroy, :add_merchant_product, :update_shipment_cost, :get_merchant_skus]
 
+  def add_account_backup
+    account = Account.find_by(id: params[:id])
+    account.update_attributes(backup: params[:backup]) if account.present?
+  end
+
   def clean_account
     account = Account.find(params[:id])
     account.merchants.update_all(is_removed: true)

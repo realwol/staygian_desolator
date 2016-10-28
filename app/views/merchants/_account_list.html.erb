@@ -2,6 +2,7 @@
   <table class="table table-bordered table-striped" >
     <tr>
       <th>账号名称</th>
+      <th>备注</th>
       <th>操作</th>
     </tr>
     <% @accounts.each do |account| %>
@@ -13,6 +14,12 @@
         <td>
           <%= text_field_tag '', account.name, class:'account_name' %>
           <%= button_tag '改名', class:'update_account_name', "data-account-id"=> account.id %>
+        </td>
+        <td>
+          <%= form_tag add_account_backup_merchant_path(account), remote:true, method: :post do %>
+            <%= text_field_tag 'backup', account.backup %>
+            <%= submit_tag '备注' %>
+          <% end %>
         </td>
         <td>
           <%= link_to '查看', merchants_path(account_id: account.id) %>

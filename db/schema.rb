@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161025144932) do
+ActiveRecord::Schema.define(version: 20161028170808) do
 
   create_table "accounts", force: :cascade do |t|
     t.string   "name",       limit: 255
@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 20161025144932) do
     t.datetime "created_at",                             null: false
     t.datetime "updated_at",                             null: false
     t.boolean  "is_removed", limit: 1,   default: false
+    t.string   "backup",     limit: 255
   end
 
   add_index "accounts", ["user_id"], name: "index_accounts_on_user_id", using: :btree
@@ -134,9 +135,9 @@ ActiveRecord::Schema.define(version: 20161025144932) do
     t.text     "france",       limit: 65535
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false
+    t.integer  "usage_count",  limit: 4
     t.boolean  "is_whole",     limit: 1
     t.boolean  "is_auto_save", limit: 1
-    t.integer  "usage_count",  limit: 4
   end
 
   create_table "financial_turnovers", force: :cascade do |t|
@@ -264,8 +265,8 @@ ActiveRecord::Schema.define(version: 20161025144932) do
     t.integer  "buyer_id",                               limit: 4
     t.datetime "posted_date"
     t.string   "marketplace_name",                       limit: 255
-    t.datetime "created_at",                                                               null: false
-    t.datetime "updated_at",                                                               null: false
+    t.datetime "created_at",                                                                 null: false
+    t.datetime "updated_at",                                                                 null: false
     t.string   "title",                                  limit: 255
     t.string   "asin",                                   limit: 255
     t.string   "condition_note",                         limit: 255
@@ -282,8 +283,8 @@ ActiveRecord::Schema.define(version: 20161025144932) do
     t.string   "purchase_tracking_number",               limit: 255
     t.string   "shipping_order_number",                  limit: 255
     t.string   "shipping_tracking_number",               limit: 255
-    t.integer  "shipping_tracking_number_update_status", limit: 4,   default: 1
-    t.string   "order_item_ship_status",                 limit: 255, default: "Unupdated"
+    t.integer  "shipping_tracking_number_update_status", limit: 4,     default: 1
+    t.string   "order_item_ship_status",                 limit: 255,   default: "Unupdated"
     t.string   "backup",                                 limit: 255
     t.string   "refund_currency",                        limit: 255
     t.float    "refund_amount",                          limit: 24
@@ -293,7 +294,7 @@ ActiveRecord::Schema.define(version: 20161025144932) do
     t.integer  "reship_order_item_id",                   limit: 4
     t.string   "buyer_country_code",                     limit: 255
     t.string   "flag_shipping_status",                   limit: 255
-    t.string   "origin_address",                         limit: 255
+    t.text     "origin_address",                         limit: 65535
     t.float    "shipping_cost",                          limit: 24
     t.float    "all_income",                             limit: 24
   end
@@ -329,9 +330,9 @@ ActiveRecord::Schema.define(version: 20161025144932) do
     t.string   "merchant_country_code",           limit: 255
     t.datetime "created_at",                                                  null: false
     t.datetime "updated_at",                                                  null: false
-    t.string   "contact_email",                   limit: 255
     t.boolean  "is_item_created",                 limit: 1,   default: false
     t.datetime "last_request_time"
+    t.string   "contact_email",                   limit: 255
     t.string   "country_code",                    limit: 255
     t.string   "backup",                          limit: 255
     t.string   "image",                           limit: 255
@@ -541,9 +542,9 @@ ActiveRecord::Schema.define(version: 20161025144932) do
     t.text     "avatar_img_url2",    limit: 65535
     t.integer  "stock",              limit: 4
     t.string   "auto_flag",          limit: 255,   default: "0"
-    t.boolean  "product_check_flag", limit: 1,     default: false
     t.boolean  "is_separate",        limit: 1,     default: false
     t.string   "search_link_id",     limit: 255
+    t.boolean  "product_check_flag", limit: 1,     default: false
     t.text     "avatar3",            limit: 65535
     t.text     "avatar4",            limit: 65535
     t.text     "avatar5",            limit: 65535
@@ -707,8 +708,8 @@ ActiveRecord::Schema.define(version: 20161025144932) do
     t.string   "product_link_id", limit: 255
     t.datetime "deleted_at"
     t.boolean  "auto_update",     limit: 1
-    t.boolean  "link_check_flag", limit: 1,     default: false
     t.string   "search_link_id",  limit: 255
+    t.boolean  "link_check_flag", limit: 1,     default: false
   end
 
   add_index "tmall_links", ["user_id"], name: "index_tmall_links_on_user_id", using: :btree
