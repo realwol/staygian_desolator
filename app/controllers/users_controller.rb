@@ -89,6 +89,10 @@ class UsersController < ApplicationController
                                                      from products
                                                      where user_id in #{all_rank_user_string} and update_status = 1 and on_sale = 1 and auto_flag != 13 and shield_type = 0
                                                      group by user_id order by user_count desc")
+
+    flag_product = Product.find_by(product_check_flag: true)
+    @current_updated_product_count = Product.where("id < ?", flag_product.id).count
+    @all_updated_products_count =  Product.all.count
   end
 
   def show_little_brothers
