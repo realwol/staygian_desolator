@@ -42,6 +42,7 @@ class Product < ActiveRecord::Base
   scope :yestoday_product, ->{where("first_updated_time < '#{Time.now.end_of_day.days_ago(1).strftime('%Y-%m-%d %H:%M:%S')}' and first_updated_time > ''#{Time.now.beginning_of_day.days_ago(1).strftime('%Y-%m-%d %H:%M:%S')}'' ")}
   scope :month_product, ->{where("first_updated_time < '#{Time.now.end_of_day.days_ago(1).strftime('%Y-%m-%d %H:%M:%S')}' and first_updated_time > ''#{Time.now.beginning_of_day.days_ago(30).strftime('%Y-%m-%d %H:%M:%S')}'' ")}
   # scope :not_off_sale, ->{where(on_sale:true)}
+  scope :need_update, ->{where("(update_status = 1 and on_sale = 1 and shield_type = 0 and auto_flag != 13) or (on_sale = 0 and shield_type = 0) or (auto_flag = 14) ")}
 
   before_create :save_sku
 
