@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   # around_filter :record_memory if Rails.env.production?
   around_filter :log_rss if Rails.env.production?
-  before_action :curfew_in_work
+  # before_action :curfew_in_work
 
   def curfew_in_work
     if Rails.env == 'production' && current_user.present? && !current_user.is_dd?
