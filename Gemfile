@@ -17,6 +17,7 @@ group :development, :test do
   gem 'spring', '~> 1.5.0'
   gem 'pry'
   gem 'pry-nav'
+  gem 'rb-readline'
   gem 'rspec-rails', '~> 3.0.0'
   gem 'rubycritic', '~> 2.9', '>= 2.9.2'
 end

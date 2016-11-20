@@ -109,6 +109,8 @@ Rails.application.routes.draw do
       get 'update_price'
       get 'change_product_type'
       get 'sku_export_page'
+      get 'personal_export_page'
+      post 'personal_export_products'
       post 'sku_export_products'
       post 'search_by_condition'
       post 'save_search_link'

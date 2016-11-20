@@ -303,6 +303,61 @@ class ProductsController < ApplicationController
     
   end
 
+  def personal_export_page
+  end
+
+  def personal_export_products
+    puts '======================'
+    puts 'I am in personal exporting now!'
+    puts Time.now
+    max_number = params[:max_number].to_i
+    max_number = 6000 if (max_number > 2000 || max_number < 0 || max_number == 0)
+
+    params[:export_type] = params[:product][:product_type_id]
+    unless params[:export_type].present?
+      redirect_to export_page_products_url, notice:'分类必须存在！'
+    end
+    start_sku = params[:start_sku]
+    choose_product_type = ProductType.find(params[:export_type].to_i)
+    product_type_combo = [choose_product_type]
+    product_type_combo << choose_product_type.all_children
+    product_type_combo.flatten!
+
+    all_products = current_user.valid_products
+    # all_products = Product.all
+
+    if start_sku.blank?
+      @products = all_products.where(product_type: product_type_combo).order('first_updated_time').limit(max_number)
+    else
+      start_product = all_products.where(sku:start_sku).last
+
+      unless start_product
+        redirect_to export_page_products_url, notice:'Sku错误'
+        return
+      end
+
+      start_product_type = start_product.try(:product_type)
+      unless start_product_type.present?
+        redirect_to export_page_products_url, notice:'Sku对应产品无分类！'
+        return
+      end
+      if (choose_product_type != start_product_type) && (choose_product_type.all_children.index(start_product_type).nil?)
+      # unless start_product.try(:product_type) == params[:export_type].to_i
+        redirect_to export_page_products_url, notice:'Sku与所选分类不匹配'
+        return
+      end
+      @products = all_products.where(product_type: product_type_combo).where("first_updated_time > ? and on_sale = 1", start_product.first_updated_time).order('first_updated_time').limit(max_number)
+      # @products = current_user.valid_products.where("first_updated_time > ? and on_sale = 1", start_product.first_updated_time).where(product_type: product_type_combo).order('id').limit(max_number)
+    end
+    cookies[:export_language] = params[:language]
+    cookies[:export_type] = params[:export_type]
+    request.format = 'xls'
+    filename = "#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}_export_data.xls"
+    respond_to do |f|
+      f.xls {send_data @products.to_csv(params[:language], params[:max_number], col_sep: "\t"), filename: filename }
+    end
+  end
+
   def sku_export_products
     sku_array = params[:sku].split("\n")
     @products = Product.where("sku in (?) ", sku_array.map(&:strip))
@@ -311,7 +366,7 @@ class ProductsController < ApplicationController
     request.format = 'xls'
     filename = "#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}_export_data.xls"
     respond_to do |f|
-      f.xls {send_data @products.to_csv(params[:language], params[:max_number], col_sep: "\t"), filename: filename }
+      f.xls {send_data @products.to_csv(params[:language], params[:max_number], {col_sep: "\t"}, params[:export_all]), filename: filename }
     end
   end
 

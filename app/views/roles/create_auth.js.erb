@@ -1,4 +1,4 @@
-<% if @auth_from.to_i == 1 %>
+<% if @auth_from == '1' %>
   $('#order_role_list_div').html("<%= raw j render 'roles/order_role_list' %>");
 <% else %>
   $('#role_list_div').html("<%= raw j render 'roles/role_list' %>");

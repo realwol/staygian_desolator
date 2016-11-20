@@ -210,6 +210,7 @@ GEM
       thor (>= 0.18.1, < 2.0)
     rainbow (2.1.0)
     rake (10.4.2)
+    rb-readline (0.5.3)
     rdoc (4.2.0)
       json (~> 1.4)
     reek (4.1.0)
@@ -338,6 +339,7 @@ DEPENDENCIES
   puma
   qiniu
   rails (= 4.2.0)
+  rb-readline
   rspec-rails (~> 3.0.0)
   rubycritic (~> 2.9, >= 2.9.2)
   rubyzip

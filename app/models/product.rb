@@ -200,7 +200,7 @@ class Product < ActiveRecord::Base
     profit_rate
   end
 
-  def self.to_csv(language, max_limit, options={})
+  def self.to_csv(language, max_limit, options={}, export_type=nil)
     cash_rate = CashRate.last.try(language.to_sym).to_f
     # Custome the xls columns and languages
     xls_column_names = %w(item_sku item_name external_product_id external_product_id_type feed_product_type brand_name manufacture
@@ -222,7 +222,12 @@ class Product < ActiveRecord::Base
     CSV.generate(options) do |csv|
       csv << xls_column_names
       # csv_line_count ＝ csv_line_count ＋ 1
-      all.onsale.un_shield.updated.not_auto_removed.each do |product|
+      if export_type == 'normal'
+        product_base = all.onsale.un_shield.updated.not_auto_removed
+      else
+        product_base = all
+      end
+      product_base.each do |product|
           puts "#{product.sku} | csv_line_count #{csv_line_count}"
           product_variable_count = product.variables.count
           break if max_limit.to_i < (csv_line_count + product_variable_count + 1)
