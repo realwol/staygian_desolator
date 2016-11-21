@@ -18,6 +18,7 @@ group :development, :test do
   gem 'pry'
   gem 'pry-nav'
   gem 'rspec-rails', '~> 3.0.0'
+  gem 'rb-readline'
 end
 
 gem "paranoia", "~> 2.0" # https://github.com/radar/paranoia
