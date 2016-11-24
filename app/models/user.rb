@@ -34,6 +34,10 @@ class User < ActiveRecord::Base
     self.accounts.removed
   end
 
+  def has_manage_auth?
+    !![1,39].include?(self.id)
+  end
+
   def self.get_all_group_charger
     User.not_lzyg.group_charger
   end

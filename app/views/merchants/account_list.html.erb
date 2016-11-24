@@ -6,7 +6,9 @@
   <%= render 'account_list' %>
 </div>
 <hr/>
-<%= form_tag(create_account_merchants_path, remote:true) do %>
-  账号名称：<%= text_field_tag 'name' %>
-  <%= submit_tag '创建' %>
+<% if @user_manage_auth %>
+  <%= form_tag(create_account_merchants_path, remote:true) do %>
+    账号名称：<%= text_field_tag 'name' %>
+    <%= submit_tag '创建' %>
+  <% end %>
 <% end %>

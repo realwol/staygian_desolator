@@ -49,6 +49,7 @@ class MerchantsController < ApplicationController
 
   def account_list
     @accounts = current_user.valid_account.order('is_removed')
+    @user_manage_auth = current_user.has_manage_auth?
     # @removed_accounts = current_user.removed_accounts
   end
 
