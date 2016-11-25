@@ -157,7 +157,7 @@ class MerchantsController < ApplicationController
     # create files
     system("mkdir #{folder}")
     input_filenames = []
-    account.merchants.each do |m|
+    account.merchants.not_removed.each do |m|
       file_name = "#{m.shop_name}.txt"
       input_filenames << file_name
       file = File.open("#{folder}/#{file_name}", 'a+')
