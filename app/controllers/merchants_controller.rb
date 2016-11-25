@@ -172,17 +172,17 @@ class MerchantsController < ApplicationController
             if symbol_count ==0
               country_price = p.read_attribute(country).present? ? p.read_attribute(country) : 0
               if product.present? && product.stock_should_zero?
-                file.puts("\"#{p.sku}\"\t#{(country_price - merchant_shipment_cost).to_i}\t\t\t0\t\n")
+                file.puts("\"#{p.sku.strip}\"\t#{(country_price - merchant_shipment_cost).to_i}\t\t\t0\t\n")
               else
-                file.puts("\"#{p.sku}\"\t#{(country_price - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+                file.puts("\"#{p.sku.strip}\"\t#{(country_price - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
               end
               symbol_count = 1
             else
               country_price = p.read_attribute(country).present? ? p.read_attribute(country) : 0
               if product.present? && product.stock_should_zero?
-                file.puts("#{p.sku}\t#{(country_price - merchant_shipment_cost).to_i}\t\t\t0\t\n")
+                file.puts("#{p.sku.strip}\t#{(country_price - merchant_shipment_cost).to_i}\t\t\t0\t\n")
               else
-                file.puts("#{p.sku}\t#{(country_price - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+                file.puts("#{p.sku.strip}\t#{(country_price - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
               end
             end
           end
