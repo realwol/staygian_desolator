@@ -85,7 +85,7 @@ class MerchantsController < ApplicationController
       # create files
       system("mkdir #{folder}")
       input_filenames = []
-      account.merchants.each do |m|
+      account.merchants.not_removed.each do |m|
         puts "export merchant #{m.id}"
         file_name = "#{m.shop_name}.txt"
         input_filenames << file_name
@@ -102,25 +102,25 @@ class MerchantsController < ApplicationController
                   product = Product.find(p.product_id)
                   if product.stock_should_zero?
                     if symbol_count
-                      file.puts("\"#{p.sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t0\t\n")
+                      file.puts("\"#{p.sku.strip}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t0\t\n")
                       symbol_count = false
                     else
-                      file.puts("#{p.sku}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t0\t\n")
+                      file.puts("#{p.sku.strip}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t0\t\n")
                     end
                   else
                     if symbol_count
-                      file.puts("\"#{p.sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+                      file.puts("\"#{p.sku.strip}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
                       symbol_count = false
                     else
-                      file.puts("#{p.sku}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+                      file.puts("#{p.sku.strip}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
                     end
                   end
                 else
                   if symbol_count
-                    file.puts("\"#{p.sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+                    file.puts("\"#{p.sku.strip}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
                     symbol_count = false
                   else
-                    file.puts("#{p.sku}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+                    file.puts("#{p.sku.strip}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
                   end
                 end
               end

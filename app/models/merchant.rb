@@ -5,6 +5,8 @@ class Merchant < ActiveRecord::Base
   has_many :merchant_sku_relations
   has_many :orders
 
+  scope :not_removed, -> {where(is_removed: false)}
+
   def reset_all_sku_price
     ProductBasicInfo.where("sku in (?)", merchant_sku_relations.select(:sku).map(&:sku)).update_all("#{self.merchant_country_name}_price_change".to_sym => true)
   end
