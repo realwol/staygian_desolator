@@ -13,8 +13,11 @@ namespace :gen_data do
 
   desc 'gen new sku in product base info'
   task :gen_new_sku_to_product_base_info => :environment do
-    ProductBasicInfo.find_each do |p|
-      sku
+    ProductBasicInfo.find_each do |info|
+      product = Product.find(info.product_id)
+      sku1 = info.sku.gsub(product.sku, product.sku1)
+      info.update_attributes(sku1: sku1)
+      puts info.id
     end
   end
 end
