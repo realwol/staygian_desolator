@@ -8,6 +8,7 @@
         <th>产品类型</th>
         <th>产品题目<span style='color:red;'>(红色为未翻译完成)</span></th>
         <th>SKU</th>
+        <th>副SKU</th>
         <th>产品号码</th>
         <th>第一次上传时间</th>
         <th>创建者</th>
@@ -25,6 +26,7 @@
             <td style="color:red;"><%= product.title %></td>
           <% end %>
           <td><%= product.sku %></td>
+          <td><%= product.sku1 %></td>
           <td><%= product.product_number %></td>
           <td><%= (product.try(:first_updated_time) + 7.hours + 56.minutes).strftime("%Y-%m-%d %H:%M") if product.first_updated_time.present? %></td>
           <td><%= product.get_unscope_user.try(:username) %></td>

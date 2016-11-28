@@ -10,4 +10,11 @@ namespace :gen_data do
       end
     end
   end
+
+  desc 'gen new sku in product base info'
+  task :gen_new_sku_to_product_base_info => :environment do
+    ProductBasicInfo.find_each do |p|
+      sku
+    end
+  end
 end

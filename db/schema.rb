@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161127161457) do
+ActiveRecord::Schema.define(version: 20161128084948) do
 
   create_table "accounts", force: :cascade do |t|
     t.string   "name",       limit: 255
@@ -353,6 +353,7 @@ ActiveRecord::Schema.define(version: 20161127161457) do
 
   create_table "product_basic_infos", force: :cascade do |t|
     t.string   "sku",                  limit: 255
+    t.string   "sku1",                 limit: 255
     t.float    "price",                limit: 24
     t.integer  "inventory",            limit: 4
     t.integer  "product_id",           limit: 4
