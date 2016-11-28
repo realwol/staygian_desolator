@@ -249,7 +249,7 @@ class ProductsController < ApplicationController
     # end
 
     unless sku_value.empty?
-      search_query << "sku like '%#{sku_value}%'"
+      search_query << "(sku like '%#{sku_value}%' or sku1 like '%#{sku_value}%')"
     end
 
     case @action_from
@@ -360,7 +360,8 @@ class ProductsController < ApplicationController
 
   def sku_export_products
     sku_array = params[:sku].split("\n")
-    @products = Product.where("sku in (?) ", sku_array.map(&:strip))
+    sku_array_strip = sku_array.map(&:strip)
+    @products = Product.where("sku in (?) or sku1 in (?) ", sku_array_strip, sku_array_strip)
     cookies[:export_language] = params[:language]
     cookies[:export_type] = params[:export_type]
     request.format = 'xls'

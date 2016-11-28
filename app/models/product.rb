@@ -236,7 +236,7 @@ class Product < ActiveRecord::Base
           # 父产品
           xls_column_values = []
           # item_sku
-          product_sku_striped = product.sku[0..35].lstrip
+          product_sku_striped = product.sku1[0..35].lstrip
           xls_column_values << product_sku_striped
           product_translation = Product.choose_language(language, product)
           # item_name
@@ -496,13 +496,13 @@ class Product < ActiveRecord::Base
             if v.color.present? && v.size.present?
               v_color = VariableTranslateHistory.where(word: v.color, variable_from:'color').first
               v_size = VariableTranslateHistory.where(word: v.size, variable_from:'size').first
-              variable_sku = "#{product.sku}-#{v_color.try(:en)}#{v_size.try(:en)}"[0..35].lstrip
+              variable_sku = "#{product.sku1}-#{v_color.try(:en)}#{v_size.try(:en)}"[0..35].lstrip
               xls_column_values << variable_sku
             elsif v.color.present?
               if v_variable_info_translation
                 v_color = VariableTranslateHistory.where(word: v.color, variable_from:'color').first
                 v_size = ""
-                variable_sku = "#{product.sku}-#{v_color.try(:en)}"[0..35].lstrip
+                variable_sku = "#{product.sku1}-#{v_color.try(:en)}"[0..35].lstrip
                 xls_column_values << variable_sku
               else
                 variable_sku = "这个变体没有翻译，请重新翻译"
@@ -511,7 +511,7 @@ class Product < ActiveRecord::Base
             elsif v.size.present?
               if v_variable_info_translation
                 v_size = VariableTranslateHistory.where(word: v.size, variable_from:'size').first
-                variable_sku = "#{product.sku}-#{v_size.try(:en)}"[0..35].lstrip
+                variable_sku = "#{product.sku1}-#{v_size.try(:en)}"[0..35].lstrip
                 xls_column_values << variable_sku
               else
                 variable_sku = "这个变体没有翻译，请重新翻译"
@@ -726,7 +726,7 @@ class Product < ActiveRecord::Base
 
             xls_column_values << ""
             xls_column_values << "Child"
-            xls_column_values << product.sku
+            xls_column_values << product.sku1
             xls_column_values << "Variation"
             xls_column_values << variation_theme
 

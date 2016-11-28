@@ -12,7 +12,8 @@ class Merchant < ActiveRecord::Base
   end
 
   def get_merchant_products
-    ProductBasicInfo.where("sku in (?)", merchant_sku_relations.select(:sku).map(&:sku))
+    sku_array = merchant_sku_relations.select(:sku).map(&:sku)
+    ProductBasicInfo.where("sku in (?) or sku1 in (?)", sku_array, sku_array)
   end
 
   def removed?
