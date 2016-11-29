@@ -5,7 +5,7 @@ module QiniuUploadHelper
 
     # upload image from client
     def self.upload_from_client(path)
-			key = Time.now.to_i.to_s + SecureRandom.hex(10)
+			key = SecureRandom.hex(10)
 			put_policy = Qiniu::Auth::PutPolicy.new('amazonclient', key, '31536000', '')
 
 			uptoken = Qiniu::Auth.generate_uptoken put_policy
@@ -33,7 +33,7 @@ module QiniuUploadHelper
 				  c.resize '1001x1001'
 				end
 			end
-			key = Time.now.to_i.to_s + SecureRandom.hex(10)
+			key = SecureRandom.hex(10)
 			put_policy = Qiniu::Auth::PutPolicy.new('amazonnew', key, '31536000', '')
 
 			uptoken = Qiniu::Auth.generate_uptoken put_policy
@@ -58,7 +58,7 @@ module QiniuUploadHelper
 				end
 			end
 
-      key = Time.now.to_i.to_s + SecureRandom.hex(10)
+      key = SecureRandom.hex(10)
 			put_policy = Qiniu::Auth::PutPolicy.new('amazonupdate', key, '31536000', '')
 			uptoken = Qiniu::Auth.generate_uptoken put_policy
 			code, result, response_headers = Qiniu::Storage.upload_with_put_policy(put_policy, image.path, key,'')
