@@ -23,7 +23,7 @@
         </td>
         <td>
           <%= link_to '查看', merchants_path(account_id: account.id) %>
-          <%= link_to '导出本账户', export_account_merchants_path(id: account.id) %>
+          <%= link_to '导出本账户', export_account_merchants_path(id: account.id), data: { no_turbolink: true }%>
           <% unless account.removed? %>
             <%= link_to '转到删除', clean_account_merchant_path(account), remote: true, method: :post, data: {confirm: '确定要删除吗？'} %>
           <% end %>

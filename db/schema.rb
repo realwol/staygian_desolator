@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161128084948) do
+ActiveRecord::Schema.define(version: 20161129145329) do
 
   create_table "accounts", force: :cascade do |t|
     t.string   "name",       limit: 255
@@ -378,6 +378,7 @@ ActiveRecord::Schema.define(version: 20161128084948) do
 
   add_index "product_basic_infos", ["product_id"], name: "index_product_basic_infos_on_product_id", using: :btree
   add_index "product_basic_infos", ["sku"], name: "index_product_basic_infos_on_sku", using: :btree
+  add_index "product_basic_infos", ["sku1"], name: "index_product_basic_infos_on_sku1", using: :btree
   add_index "product_basic_infos", ["variable_id"], name: "index_product_basic_infos_on_variable_id", using: :btree
 
   create_table "product_customize_attributes_relations", force: :cascade do |t|

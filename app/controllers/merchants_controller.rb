@@ -95,32 +95,66 @@ class MerchantsController < ApplicationController
         country = m.merchant_country_name
         merchant_shipment_cost = m.shipment_cost.to_f
         symbol_count = 0
-        m.get_merchant_products.each do |p|
+        old_sku_products, new_sku_products = m.get_merchant_products true
+        old_sku_products.each do |p|
             # if p.inventory != 0
               if p.read_attribute("#{country}_price_change")
                 if p.product_id.present?
                   product = Product.find(p.product_id)
+                  p_sku = p.sku.strip
                   if product.stock_should_zero?
                     if symbol_count
-                      file.puts("\"#{p.sku.strip}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t0\t\n")
+                      file.puts("\"#{p_sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t0\t\n")
                       symbol_count = false
                     else
-                      file.puts("#{p.sku.strip}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t0\t\n")
+                      file.puts("#{p_sku}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t0\t\n")
                     end
                   else
                     if symbol_count
-                      file.puts("\"#{p.sku.strip}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+                      file.puts("\"#{p_sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
                       symbol_count = false
                     else
-                      file.puts("#{p.sku.strip}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+                      file.puts("#{p_sku}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
                     end
                   end
                 else
                   if symbol_count
-                    file.puts("\"#{p.sku.strip}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+                    file.puts("\"#{p_sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
                     symbol_count = false
                   else
-                    file.puts("#{p.sku.strip}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+                    file.puts("#{p_sku}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+                  end
+                end
+              end
+            # end
+        end
+        new_sku_products.each do |p|
+            # if p.inventory != 0
+              if p.read_attribute("#{country}_price_change")
+                if p.product_id.present?
+                  product = Product.find(p.product_id)
+                  p_sku = p.sku1.strip
+                  if product.stock_should_zero?
+                    if symbol_count
+                      file.puts("\"#{p_sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t0\t\n")
+                      symbol_count = false
+                    else
+                      file.puts("#{p_sku}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t0\t\n")
+                    end
+                  else
+                    if symbol_count
+                      file.puts("\"#{p_sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+                      symbol_count = false
+                    else
+                      file.puts("#{p_sku}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+                    end
+                  end
+                else
+                  if symbol_count
+                    file.puts("\"#{p_sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+                    symbol_count = false
+                  else
+                    file.puts("#{p_sku}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
                   end
                 end
               end
@@ -150,6 +184,7 @@ class MerchantsController < ApplicationController
   end
 
   def export_account
+    start_time = Time.now
     account = Account.find(params[:id])
     account_name = account.name.gsub(' ', '')
     folder = "public/export/#{account_name}#{Time.now.strftime('%Y-%m-%d-%H-%M-%S')}/"
@@ -165,28 +200,74 @@ class MerchantsController < ApplicationController
       country = m.merchant_country_name
       merchant_shipment_cost = m.shipment_cost.to_f
       symbol_count = 0
-      m.get_merchant_products.each do |p|
-        # if p.inventory != 0
-          if p.read_attribute("#{country}_price_change")
-            product = Product.find(p.product_id) if p.product_id.present?
-            if symbol_count ==0
-              country_price = p.read_attribute(country).present? ? p.read_attribute(country) : 0
-              if product.present? && product.stock_should_zero?
-                file.puts("\"#{p.sku.strip}\"\t#{(country_price - merchant_shipment_cost).to_i}\t\t\t0\t\n")
-              else
-                file.puts("\"#{p.sku.strip}\"\t#{(country_price - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+      old_sku_products, new_sku_products = m.get_merchant_products true
+      if old_sku_products.present?
+        old_prev_product = nil
+        old_sku_products.each do |p|
+          # if p.inventory != 0
+            if p.read_attribute("#{country}_price_change")
+              if p.product_id.present?
+                if p.product_id == old_prev_product.try(:id)
+                  product = old_prev_product
+                else
+                  product = Product.find(p.product_id)
+                  old_prev_product = product
+                end
               end
-              symbol_count = 1
-            else
-              country_price = p.read_attribute(country).present? ? p.read_attribute(country) : 0
-              if product.present? && product.stock_should_zero?
-                file.puts("#{p.sku.strip}\t#{(country_price - merchant_shipment_cost).to_i}\t\t\t0\t\n")
+              p_sku = p.sku.strip
+              if symbol_count ==0
+                country_price = p.read_attribute(country).present? ? p.read_attribute(country) : 0
+                if product.present? && product.stock_should_zero?
+                  file.puts("\"#{p_sku}\"\t#{(country_price - merchant_shipment_cost).to_i}\t\t\t0\t\n")
+                else
+                  file.puts("\"#{p_sku}\"\t#{(country_price - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+                end
+                symbol_count = 1
               else
-                file.puts("#{p.sku.strip}\t#{(country_price - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+                country_price = p.read_attribute(country).present? ? p.read_attribute(country) : 0
+                if product.present? && product.stock_should_zero?
+                  file.puts("#{p_sku}\t#{(country_price - merchant_shipment_cost).to_i}\t\t\t0\t\n")
+                else
+                  file.puts("#{p_sku}\t#{(country_price - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+                end
               end
             end
-          end
-        # end
+          # end
+        end
+      end
+
+      if new_sku_products.present?
+        new_sku_products.each do |p|
+          # if p.inventory != 0
+          new_prev_product = nil
+            if p.read_attribute("#{country}_price_change")
+              if p.product_id.present?
+                if new_prev_product.try(:id) == p.product_id
+                  product = new_prev_product
+                else
+                  product = Product.find(p.product_id)
+                  new_prev_product = product
+                end
+              end
+              p_sku = p.sku1.strip
+              if symbol_count ==0
+                country_price = p.read_attribute(country).present? ? p.read_attribute(country) : 0
+                if product.present? && product.stock_should_zero?
+                  file.puts("\"#{p_sku}\"\t#{(country_price - merchant_shipment_cost).to_i}\t\t\t0\t\n")
+                else
+                  file.puts("\"#{p_sku}\"\t#{(country_price - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+                end
+                symbol_count = 1
+              else
+                country_price = p.read_attribute(country).present? ? p.read_attribute(country) : 0
+                if product.present? && product.stock_should_zero?
+                  file.puts("#{p_sku}\t#{(country_price - merchant_shipment_cost).to_i}\t\t\t0\t\n")
+                else
+                  file.puts("#{p_sku}\t#{(country_price - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+                end
+              end
+            end
+        end
       end
       symbol_count = 0
       file.close
@@ -202,6 +283,7 @@ class MerchantsController < ApplicationController
       end
       # zipfile.get_output_stream("myFile") { |os| os.write "myFile contains just this" }
     end
+    puts Time.now - start_time
     send_file zipfile_name, :type=> 'application/text', :x_sendfile=>true
   end
 
