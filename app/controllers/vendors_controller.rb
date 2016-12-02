@@ -15,7 +15,8 @@ class VendorsController < ApplicationController
       brand = Brand.find_by(name: brand_name)
       @vendors = @vendors.where(brand_id: brand.try(:id))
     end
-    @vendors.order(:brand_id).page params[:page]
+
+    @vendors = @vendors.order(:brand_id).page params[:page]
   end
 
   def update_vendor_info
