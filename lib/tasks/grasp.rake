@@ -225,6 +225,13 @@ def grasp_product tmall_link
       return false
     end
   end
+
+  # while @product.sku1.nil?
+    size = rand(5..8)
+    sku1 = (('a'..'z').to_a + (1..9).to_a).shuffle.sample(size).join
+    @product.sku1 = sku1
+  # end
+
   @product.save
   @product.reload
 
