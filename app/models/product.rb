@@ -426,18 +426,18 @@ class Product < ActiveRecord::Base
               images_url[index] = ''
             end
           end
-          xls_column_values << convert_image_url images_url[0]
+          xls_column_values << Product.convert_image_url(images_url[0])
           # else
             # xls_column_values << ""
           # end
-          xls_column_values << convert_image_url images_url[1]
-          xls_column_values << convert_image_url images_url[2]
-          xls_column_values << convert_image_url images_url[3]
-          xls_column_values << convert_image_url images_url[4]
-          xls_column_values << convert_image_url images_url[5]
-          xls_column_values << convert_image_url images_url[6]
-          xls_column_values << convert_image_url images_url[7]
-          xls_column_values << convert_image_url images_url[8]
+          xls_column_values << Product.convert_image_url(images_url[1])
+          xls_column_values << Product.convert_image_url(images_url[2])
+          xls_column_values << Product.convert_image_url(images_url[3])
+          xls_column_values << Product.convert_image_url(images_url[4])
+          xls_column_values << Product.convert_image_url(images_url[5])
+          xls_column_values << Product.convert_image_url(images_url[6])
+          xls_column_values << Product.convert_image_url(images_url[7])
+          xls_column_values << Product.convert_image_url(images_url[8])
 
           # is separate
           if product.is_separate
@@ -714,15 +714,15 @@ class Product < ActiveRecord::Base
                 v_images_url[index] = ''
               end
             end
-            xls_column_values << convert_image_url v_images_url[0]
-            xls_column_values << convert_image_url v_images_url[1]
-            xls_column_values << convert_image_url v_images_url[2]
-            xls_column_values << convert_image_url v_images_url[3]
-            xls_column_values << convert_image_url v_images_url[4]
-            xls_column_values << convert_image_url v_images_url[5]
-            xls_column_values << convert_image_url v_images_url[6]
-            xls_column_values << convert_image_url v_images_url[7]
-            xls_column_values << convert_image_url v_images_url[8]
+            xls_column_values << Product.convert_image_url(v_images_url[0])
+            xls_column_values << Product.convert_image_url(v_images_url[1])
+            xls_column_values << Product.convert_image_url(v_images_url[2])
+            xls_column_values << Product.convert_image_url(v_images_url[3])
+            xls_column_values << Product.convert_image_url(v_images_url[4])
+            xls_column_values << Product.convert_image_url(v_images_url[5])
+            xls_column_values << Product.convert_image_url(v_images_url[6])
+            xls_column_values << Product.convert_image_url(v_images_url[7])
+            xls_column_values << Product.convert_image_url(v_images_url[8])
 
             xls_column_values << ""
             xls_column_values << "Child"
@@ -967,17 +967,19 @@ class Product < ActiveRecord::Base
     save
   end
 
-  private
-
-  def convert_image_url image_url
-    if image_url.include? 'updateclient.diewei2016.com'
-      image_url.gsub('updateclient.diewei2016.com', 'mduc.mengdongwuzhi.com')
-    elsif image_url.include? 'image.diewei2016.com'
-      image_url.gsub('image.diewei2016.com', 'mdi.mengdongwuzhi.com')
-    elsif image_url.include? ''
-      image_url.gsub('updateimage.diewei2016.com', 'mdui.mengdongwuzhi.com')
+  def self.convert_image_url image_url
+    if image_url.present?
+      if image_url.include? 'updateclient.diewei2016.com'
+        image_url.gsub('updateclient.diewei2016.com', 'mduc.mengdongwuzhi.com')
+      elsif image_url.include? 'updateimage.diewei2016.com'
+        image_url.gsub('updateimage.diewei2016.com', 'mdui.mengdongwuzhi.com')
+      elsif image_url.include? 'image.diewei2016.com'
+        image_url.gsub('image.diewei2016.com', 'mdi.mengdongwuzhi.com')
+      end
     end
   end
+
+  private
 
   def save_sku
     # get the last product's sku then add one on it
