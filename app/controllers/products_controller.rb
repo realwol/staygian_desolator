@@ -329,8 +329,8 @@ class ProductsController < ApplicationController
     if start_sku.blank?
       @products = all_products.where(product_type: product_type_combo).order('first_updated_time').limit(max_number)
     else
-      start_product1 = all_products.find_by(sku: start_sku)
-      start_product2 = all_products.find_by(sku1: start_sku)
+      start_product1 = all_products.where(sku: start_sku).first
+      start_product2 = all_products.where(sku1: start_sku).first
       start_product = start_product1.present? ? start_product1 : start_product2
 
       unless start_product

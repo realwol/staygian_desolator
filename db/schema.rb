@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161129145329) do
+ActiveRecord::Schema.define(version: 20161205165737) do
 
   create_table "accounts", force: :cascade do |t|
     t.string   "name",       limit: 255
@@ -849,6 +849,7 @@ ActiveRecord::Schema.define(version: 20161129145329) do
 
   create_table "vendors", force: :cascade do |t|
     t.string   "name",             limit: 255
+    t.integer  "user_id",          limit: 4
     t.boolean  "status",           limit: 1,     default: true
     t.integer  "brand_id",         limit: 4
     t.string   "shop_id",          limit: 255
@@ -857,6 +858,7 @@ ActiveRecord::Schema.define(version: 20161129145329) do
     t.text     "backup",           limit: 65535
     t.datetime "created_at",                                    null: false
     t.datetime "updated_at",                                    null: false
+    t.string   "products_percent", limit: 255
   end
 
   add_index "vendors", ["brand_id"], name: "index_vendors_on_brand_id", using: :btree

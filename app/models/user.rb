@@ -14,6 +14,7 @@ class User < ActiveRecord::Base
   has_many :variable_translate_histories
   has_many :merchants
   has_many :accounts
+  has_many :vendors
 
   has_many :little_brothers, class_name: 'User', foreign_key: 'manager'
   has_many :team_members, class_name: 'User', foreign_key: 'leader_id'

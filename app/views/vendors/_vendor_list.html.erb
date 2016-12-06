@@ -5,6 +5,8 @@
       <th>品牌</th>
       <th>供应商</th>
       <th>店铺名称</th>
+      <th>管理员</th>
+      <th>管理员产品比</th>
       <th>采购地址</th>
       <th>联系方式</th>
       <th>备注</th>
@@ -18,6 +20,8 @@
         <td><%= vendor.brand.try(:name) %></td>
         <td><%= text_field_tag '', vendor.name, class:'vender_name' %></td>
         <td><%= vendor.shop.try(:name) %></td>
+        <td><%= vendor.try(:user).try(:username) %></td>
+        <td><%= vendor.products_percent %></td>
         <td><%= text_field_tag '', vendor.purchase_address, class:'vendor_purchase_address' %></td>
         <td><%= text_field_tag '', vendor.contact, class:'vendor_contact' %></td>
         <td><%= text_area_tag '', vendor.backup, class:'vendor_backup' %></td>
