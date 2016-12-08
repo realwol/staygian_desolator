@@ -20,7 +20,13 @@
         <td><%= vendor.brand.try(:name) %></td>
         <td><%= text_field_tag '', vendor.name, class:'vender_name' %></td>
         <td><%= vendor.shop.try(:name) %></td>
-        <td><%= vendor.try(:user).try(:username) %></td>
+        <td>
+          <% if vendor.try(:user).try(:username).present? %>
+            <%= vendor.try(:user).try(:username) %>
+          <% else %>
+            <%= select_tag 'vendor_charger', options_from_collection_for_select(User.all, 'id', 'username'), include_blank: true, "data-shop-id"=> vendor.shop_id, "data-brand-id"=> vendor.brand_id %>
+          <% end %>
+        </td>
         <td><%= vendor.products_percent %></td>
         <td><%= text_field_tag '', vendor.purchase_address, class:'vendor_purchase_address' %></td>
         <td><%= text_field_tag '', vendor.contact, class:'vendor_contact' %></td>
@@ -32,6 +38,18 @@
 </table>
 <%= paginate @vendors %>
 <script type="text/javascript">
+  $('#vendor_charger').change(function(){
+    var selected_id = $(this).val();
+    var shop_id = $(this).data("shop-id");
+    var brand_id = $(this).data("brand-id")
+    $.ajax({
+      url: '/shops/change_shop_charger',
+      type: 'post',
+      data: {selected_id: selected_id, shop_id: shop_id, brand_id: brand_id},
+      success: function(){}
+    })
+  });
+
   $('.update_vendor').click(function(){
     if (!confirm('确定要更新供应商信息吗？')){
       return false;

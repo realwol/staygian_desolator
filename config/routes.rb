@@ -79,6 +79,7 @@ Rails.application.routes.draw do
       delete 'stop_and_delete'
     end
     collection do
+      post 'change_shop_charger'
       post 'search'
     end
   end

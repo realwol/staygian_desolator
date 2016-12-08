@@ -169,7 +169,7 @@ class User < ActiveRecord::Base
   end
 
   def is_search_link_valid? link
-    !!self.search_links.index(link)
+    !!(self.search_links.index(link) || self.is_dd? )
   end
 
   def has_auth? auth

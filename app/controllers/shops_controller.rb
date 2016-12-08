@@ -1,6 +1,14 @@
 class ShopsController < ApplicationController
 	before_action :set_shop, only: [:edit, :update, :destroy, :shield, :recover, :add_back_up]
 
+	def change_shop_charger
+		user_id = params[:selected_id]
+		shop_id = params[:shop_id]
+		brand_id = params[:brand_id]
+		selected_products = Product.where(shop_id: shop_id, brand_id: brand_id)
+		selected_products.update_all(user_id: user_id) if selected_products.present?
+	end
+
 	def stop_and_delete
 		search_link = SearchLink.find(params[:id])
 
