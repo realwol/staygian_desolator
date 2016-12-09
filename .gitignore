@@ -17,6 +17,5 @@
 public/*
 /config/schedule.rb
 public/assets/
-/config/deploy.rb
 /db/schema.rb
 /config/thin.yml
