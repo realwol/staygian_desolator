@@ -22,6 +22,33 @@ namespace :gen_data do
     end
   end
 
+  desc 're gen new sku in product base info'
+  task re_gen_product_base_info: :environment do
+    ProductBasicInfo.where("id > 115722").each do |info|
+      if info.sku.present? && info.sku.try(:size) == 36 && info.sku.try(:size) != info.sku1.try(:size)
+        puts info.id
+        if info.variable.present?
+          sku1 = gen_sku info.variable, info.product.sku1
+          info.update_attributes(sku1: sku1)
+        end
+      end
+    end
+  end
+
+def gen_sku variable, origin_sku
+    if variable.color.present? && variable.size.present?
+      v_color = VariableTranslateHistory.where(word: variable.color, variable_from:'color').first
+      v_size = VariableTranslateHistory.where(word: variable.size, variable_from:'size').first
+      sku = "#{origin_sku}-#{v_color.try(:en)}#{v_size.try(:en)}"[0..35].lstrip
+    elsif variable.color.present?
+      v_color = VariableTranslateHistory.where(word: variable.color, variable_from:'color').first
+      sku = "#{origin_sku}-#{v_color.try(:en)}"[0..35].lstrip
+    elsif variable.size.present?
+      v_size = VariableTranslateHistory.where(word: variable.size, variable_from:'size').first
+      sku = "#{origin_sku}-#{v_size.try(:en)}"[0..35].lstrip
+    end
+    sku
+end
   desc 'merge redundancy shop'
   task merge: :environment do
     Shop.where(status: 1).each do |shop|
