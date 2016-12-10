@@ -24,7 +24,7 @@ namespace :gen_data do
 
   desc 're gen new sku in product base info'
   task re_gen_product_base_info: :environment do
-    ProductBasicInfo.where("id > 115722").each do |info|
+    ProductBasicInfo.where("id > 219802").each do |info|
       if info.sku.present? && info.sku.try(:size) == 36 && info.sku.try(:size) != info.sku1.try(:size)
         puts info.id
         if info.variable.present?
