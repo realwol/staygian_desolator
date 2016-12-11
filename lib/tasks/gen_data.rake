@@ -1,4 +1,23 @@
 namespace :gen_data do
+  desc 'gen product id for merchant sku relation'
+  task gen_product_id_for_merchant_sku_relation: :environment do
+    MerchantSkuRelation.where(product_id: nil).find_each do |r|
+      puts r.id
+      r_sku = r.sku
+      if r_sku.present?
+        index = r_sku.index('-')
+        if index.present?
+          sku_part = r_sku[0..index-1]
+        else
+          sku_part = r_sku
+        end
+        product = Product.select(:id).where(sku: sku_part).first
+        product = Product.select(:id).where(sku1: sku_part).first unless product.present?
+        r.update_column(product_id product.id) if product.present?
+      end
+    end
+  end
+
   desc 'gen new sku'
   task :gen_new_sku_to_product => :environment do
     Product.where(sku1:nil).find_each do |p|
@@ -37,14 +56,14 @@ namespace :gen_data do
 
 def gen_sku variable, origin_sku
     if variable.color.present? && variable.size.present?
-      v_color = VariableTranslateHistory.where(word: variable.color, variable_from:'color').first
-      v_size = VariableTranslateHistory.where(word: variable.size, variable_from:'size').first
+      v_color = VariableTranslateHistory.select(:en).where(word: variable.color, variable_from:'color').first
+      v_size = VariableTranslateHistory.select(:en).where(word: variable.size, variable_from:'size').first
       sku = "#{origin_sku}-#{v_color.try(:en)}#{v_size.try(:en)}"[0..35].lstrip
     elsif variable.color.present?
-      v_color = VariableTranslateHistory.where(word: variable.color, variable_from:'color').first
+      v_color = VariableTranslateHistory.select(:en).where(word: variable.color, variable_from:'color').first
       sku = "#{origin_sku}-#{v_color.try(:en)}"[0..35].lstrip
     elsif variable.size.present?
-      v_size = VariableTranslateHistory.where(word: variable.size, variable_from:'size').first
+      v_size = VariableTranslateHistory.select(:en).where(word: variable.size, variable_from:'size').first
       sku = "#{origin_sku}-#{v_size.try(:en)}"[0..35].lstrip
     end
     sku

@@ -289,6 +289,24 @@ class User < ActiveRecord::Base
     end
   end
 
+  def valid_vendors
+    vendor_base = Vendor.valid_vendor
+    if self.is_dd?
+      vendor_base
+    else
+      current_user = self
+      count_children = current_user.team_members.to_a
+      all_valid_vendors = current_user.vendors.pluck(:id)
+
+      while count_children.count > 0
+        current_user = count_children.pop
+        all_valid_vendors = all_valid_vendors << current_user.vendors.pluck(:id)
+      end
+      all_valid_vendors.flatten!
+      Vendor.where(id: all_valid_vendors)
+    end
+  end
+
   def today_products
     self.products.where('first_updated_time > ? and first_updated_time < ?', Time.now.beginning_of_day, Time.now.end_of_day).onsale
   end

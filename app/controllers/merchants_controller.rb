@@ -215,12 +215,13 @@ class MerchantsController < ApplicationController
                 end
               end
               p_sku = p.sku.strip
+              p_inventory = p.inventory > 100 ? 100 : p.inventory
               if symbol_count ==0
                 country_price = p.read_attribute(country).present? ? p.read_attribute(country) : 0
                 if product.present? && product.stock_should_zero?
                   file.puts("\"#{p_sku}\"\t#{(country_price - merchant_shipment_cost).to_i}\t\t\t0\t\n")
                 else
-                  file.puts("\"#{p_sku}\"\t#{(country_price - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+                  file.puts("\"#{p_sku}\"\t#{(country_price - merchant_shipment_cost).to_i}\t\t\t#{p_inventory}\t\n")
                 end
                 symbol_count = 1
               else
@@ -228,7 +229,7 @@ class MerchantsController < ApplicationController
                 if product.present? && product.stock_should_zero?
                   file.puts("#{p_sku}\t#{(country_price - merchant_shipment_cost).to_i}\t\t\t0\t\n")
                 else
-                  file.puts("#{p_sku}\t#{(country_price - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+                  file.puts("#{p_sku}\t#{(country_price - merchant_shipment_cost).to_i}\t\t\t#{p_inventory}\t\n")
                 end
               end
             end
@@ -352,11 +353,17 @@ class MerchantsController < ApplicationController
     pre_sku = 'FLAGNIL'
     product_sku_array = product_sku.split("\n")
     product_sku_array.each do |sku|
-      sku_part = sku[0..7]
+      index = sku.index('-')
+      if index.present?
+        sku_part = sku[0..index-1]
+      else
+        sku_part = sku
+      end
       if pre_product != 'FLAGNIL' && pre_sku == sku_part
         product = pre_product
       else
         product = Product.find_by(sku: sku_part)
+        product = Product.where(sku1: sku_part).first unless product.present?
         pre_product = product
         pre_sku = sku_part
       end

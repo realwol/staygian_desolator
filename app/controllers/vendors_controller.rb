@@ -25,7 +25,7 @@ class VendorsController < ApplicationController
   end
 
   def index
-    @vendors = Vendor.valid_vendor.order(:brand_id).page params[:page]
+    @vendors = current_user.valid_vendors.order(:brand_id).page params[:page]
   end
 
   def show
