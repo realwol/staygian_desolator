@@ -1,7 +1,7 @@
 namespace :gen_data do
   desc 'gen product id for merchant sku relation'
   task gen_product_id_for_merchant_sku_relation: :environment do
-    MerchantSkuRelation.where(product_id: nil).find_each do |r|
+    MerchantSkuRelation.where(product_id: nil).where("id > 11389724").find_each do |r|
       puts r.id
       r_sku = r.sku
       if r_sku.present?
@@ -13,7 +13,7 @@ namespace :gen_data do
         end
         product = Product.select(:id).where(sku: sku_part).first
         product = Product.select(:id).where(sku1: sku_part).first unless product.present?
-        r.update_column(product_id product.id) if product.present?
+        r.update_column(product_id: product.id) if product.present?
       end
     end
   end

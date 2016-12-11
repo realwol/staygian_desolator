@@ -102,6 +102,7 @@ class MerchantsController < ApplicationController
                 if p.product_id.present?
                   product = Product.find(p.product_id)
                   p_sku = p.sku.strip
+                  p_inventory = p.inventory > 100 ? 100 : p.inventory
                   if product.stock_should_zero?
                     if symbol_count
                       file.puts("\"#{p_sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t0\t\n")
@@ -111,18 +112,18 @@ class MerchantsController < ApplicationController
                     end
                   else
                     if symbol_count
-                      file.puts("\"#{p_sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+                      file.puts("\"#{p_sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p_inventory}\t\n")
                       symbol_count = false
                     else
-                      file.puts("#{p_sku}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+                      file.puts("#{p_sku}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p_inventory}\t\n")
                     end
                   end
                 else
                   if symbol_count
-                    file.puts("\"#{p_sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+                    file.puts("\"#{p_sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p_inventory}\t\n")
                     symbol_count = false
                   else
-                    file.puts("#{p_sku}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+                    file.puts("#{p_sku}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p_inventory}\t\n")
                   end
                 end
               end
@@ -143,18 +144,18 @@ class MerchantsController < ApplicationController
                     end
                   else
                     if symbol_count
-                      file.puts("\"#{p_sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+                      file.puts("\"#{p_sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p_inventory}\t\n")
                       symbol_count = false
                     else
-                      file.puts("#{p_sku}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+                      file.puts("#{p_sku}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p_inventory}\t\n")
                     end
                   end
                 else
                   if symbol_count
-                    file.puts("\"#{p_sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+                    file.puts("\"#{p_sku}\"\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p_inventory}\t\n")
                     symbol_count = false
                   else
-                    file.puts("#{p_sku}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+                    file.puts("#{p_sku}\t#{(p.read_attribute(country) - merchant_shipment_cost).to_i}\t\t\t#{p_inventory}\t\n")
                   end
                 end
               end
@@ -251,12 +252,13 @@ class MerchantsController < ApplicationController
                 end
               end
               p_sku = p.sku1.strip
+              p_inventory = p.inventory > 100 ? 100 : p.inventory
               if symbol_count ==0
                 country_price = p.read_attribute(country).present? ? p.read_attribute(country) : 0
                 if product.present? && product.stock_should_zero?
                   file.puts("\"#{p_sku}\"\t#{(country_price - merchant_shipment_cost).to_i}\t\t\t0\t\n")
                 else
-                  file.puts("\"#{p_sku}\"\t#{(country_price - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+                  file.puts("\"#{p_sku}\"\t#{(country_price - merchant_shipment_cost).to_i}\t\t\t#{p_inventory}\t\n")
                 end
                 symbol_count = 1
               else
@@ -264,7 +266,7 @@ class MerchantsController < ApplicationController
                 if product.present? && product.stock_should_zero?
                   file.puts("#{p_sku}\t#{(country_price - merchant_shipment_cost).to_i}\t\t\t0\t\n")
                 else
-                  file.puts("#{p_sku}\t#{(country_price - merchant_shipment_cost).to_i}\t\t\t#{p.inventory}\t\n")
+                  file.puts("#{p_sku}\t#{(country_price - merchant_shipment_cost).to_i}\t\t\t#{p_inventory}\t\n")
                 end
               end
             end
