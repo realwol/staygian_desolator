@@ -17,8 +17,8 @@ class Merchant < ActiveRecord::Base
       if a.first == 'M'
         old_sku_array << a
       else
-        offset = 8 - a.index('-').to_i
-        new_sku_array << a[0..35-offset]
+        # offset = 8 - a.index('-').to_i
+        new_sku_array << a[0..35]
       end
     end
     if return_type
