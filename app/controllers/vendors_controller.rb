@@ -1,5 +1,5 @@
 class VendorsController < ApplicationController
-  before_action :set_vendor, only: [:show, :edit, :update, :destroy, :update_vendor_info]
+  before_action :set_vendor, only: [:show, :edit, :update, :destroy, :update_vendor_info, :remove_vendor_info]
 
   def search_by_condition
     shop_name = params[:shop_name]
@@ -21,6 +21,11 @@ class VendorsController < ApplicationController
 
   def update_vendor_info
     @vendor.update_attributes(vendor_update_params)
+    render json:true
+  end
+
+  def remove_vendor_info
+    @vendor.update_attributes(status: false)
     render json:true
   end
 

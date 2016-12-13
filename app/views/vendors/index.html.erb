@@ -1,4 +1,4 @@
-<h4>供应商列表</h4>
+<h4>供应商列表 (<%= @vendors.size %>个)</h4>
 <hr/>
 <%= form_tag(search_by_condition_vendors_path, remote: true) do %>
   <%= text_field_tag 'brand_name', nil, placeholder:'品牌名称' %>

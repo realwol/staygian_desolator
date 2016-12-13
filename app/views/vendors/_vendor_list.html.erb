@@ -31,7 +31,10 @@
         <td><%= text_field_tag '', vendor.purchase_address, class:'vendor_purchase_address' %></td>
         <td><%= text_field_tag '', vendor.contact, class:'vendor_contact' %></td>
         <td><%= text_area_tag '', vendor.backup, class:'vendor_backup' %></td>
-        <td><%= button_tag '更新', class:'update_vendor', "data-vendor-id"=>vendor.id %></td>
+        <td>
+          <%= button_tag '更新', class:'update_vendor', "data-vendor-id"=>vendor.id %>
+          <%= button_tag '删除', class:'remove_vendor', "data-vendor-id"=>vendor.id %>
+        </td>
       </tr>
     <% end %>
   </tbody>
@@ -39,15 +42,16 @@
 <%= paginate @vendors %>
 <script type="text/javascript">
   $('#vendor_charger').change(function(){
+    alert(123);
     var selected_id = $(this).val();
     var shop_id = $(this).data("shop-id");
-    var brand_id = $(this).data("brand-id")
+    var brand_id = $(this).data("brand-id");
     $.ajax({
-      url: '/shops/change_shop_charger',
+      url: "/shops/change_shop_charger",
       type: 'post',
-      data: {selected_id: selected_id, shop_id: shop_id, brand_id: brand_id},
+      data: { selected_id: selected_id, shop_id: shop_id, brand_id: brand_id },
       success: function(){}
-    })
+    });
   });
 
   $('.update_vendor').click(function(){
@@ -64,6 +68,20 @@
       url: '/vendors/'+ vendor_id + '/update_vendor_info',
       type: 'post',
       data: { name: vender_name, purchase_address: vendor_purchase_address, contact: vendor_contact, backup: vendor_backup },
+      success: function(){
+        alert('操作成功！');
+      }
+    })
+  });
+
+  $('.remove_vendor').click(function(){
+    if (!confirm('确定要删除供应商信息吗？')){
+      return false;
+    }
+    var vendor_id = $(this).data('vendor-id');
+    $.ajax({
+      url: '/vendors/'+ vendor_id + '/remove_vendor_info',
+      type: 'delete',
       success: function(){
         alert('操作成功！');
       }

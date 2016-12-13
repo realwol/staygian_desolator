@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   resources :vendors do
     member do
       post 'update_vendor_info'
+      delete 'remove_vendor_info'
     end
     collection do
       post 'search_by_condition'
