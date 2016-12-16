@@ -11,6 +11,17 @@ namespace :clear_dirty_data do
     end
   end
 
+  desc 'gsub unknow space'
+  task gsub_unknow_space: :environment do
+    ProductInfoTranslation.where("id >313276").find_each do |p|
+      puts p.id
+      if p.e_detail.present? && p.e_detail.include?(" ")
+        p.e_detail.gsub! " ", ""
+        p.save
+      end
+    end
+  end
+
   desc 'gsub brackets'
   task :gsub_brackets => :environment do
     ProductInfoTranslation.find_in_batches do |pp|

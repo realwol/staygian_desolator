@@ -33,5 +33,7 @@ module AmazonTmall
       Devise::SessionsController.layout 'login'
     end
 
+    config.middleware.use ActiveRecord::ConnectionAdapters::ConnectionManagement
+
   end
 end
