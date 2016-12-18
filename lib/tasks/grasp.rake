@@ -27,6 +27,7 @@ def start
         puts Time.now - a
       end
     else
+      sleep 60
       puts "sleeping in #{Time.now}"
     end
 end

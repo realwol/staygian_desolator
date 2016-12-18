@@ -39,7 +39,7 @@ gem 'mechanize'
 gem 'qiniu'
 gem 'selenium-webdriver'
 gem 'cancancan'
-
+gem 'exception_notification'
 gem 'thin'
 gem 'iconv'
 gem 'mina'

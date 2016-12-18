@@ -95,7 +95,7 @@ class MerchantsController < ApplicationController
         country = m.merchant_country_name
         merchant_shipment_cost = m.shipment_cost.to_f
         symbol_count = 0
-        old_sku_products, new_sku_products = m.get_merchant_products true
+        old_sku_products, new_sku_products = m.get_merchant_products country
         old_sku_products.each do |p|
             # if p.inventory != 0
               if p.read_attribute("#{country}_price_change")
@@ -201,7 +201,9 @@ class MerchantsController < ApplicationController
       country = m.merchant_country_name
       merchant_shipment_cost = m.shipment_cost.to_f
       symbol_count = 0
-      old_sku_products, new_sku_products = m.get_merchant_products true
+      old_sku_products, new_sku_products = m.get_merchant_products country
+      # backup_products = Product.where(id: old_sku_products.pluck(:product_id).concat(new_sku_products.pluck(:product_id)))
+
       if old_sku_products.present?
         old_prev_product = nil
         old_sku_products.each do |p|
@@ -211,26 +213,27 @@ class MerchantsController < ApplicationController
                 if p.product_id == old_prev_product.try(:id)
                   product = old_prev_product
                 else
+                  puts 1
                   product = Product.find(p.product_id)
                   old_prev_product = product
                 end
-              end
-              p_sku = p.sku.strip
-              p_inventory = p.inventory > 100 ? 100 : p.inventory
-              if symbol_count ==0
-                country_price = p.read_attribute(country).present? ? p.read_attribute(country) : 0
-                if product.present? && product.stock_should_zero?
-                  file.puts("\"#{p_sku}\"\t#{(country_price - merchant_shipment_cost).to_i}\t\t\t0\t\n")
+                p_sku = p.sku.strip
+                p_inventory = p.inventory > 100 ? 100 : p.inventory
+                if symbol_count ==0
+                  country_price = p.read_attribute(country).present? ? p.read_attribute(country) : 0
+                  if product.present? && product.stock_should_zero?
+                    file.puts("\"#{p_sku}\"\t#{(country_price - merchant_shipment_cost).to_i}\t\t\t0\t\n")
+                  else
+                    file.puts("\"#{p_sku}\"\t#{(country_price - merchant_shipment_cost).to_i}\t\t\t#{p_inventory}\t\n")
+                  end
+                  symbol_count = 1
                 else
-                  file.puts("\"#{p_sku}\"\t#{(country_price - merchant_shipment_cost).to_i}\t\t\t#{p_inventory}\t\n")
-                end
-                symbol_count = 1
-              else
-                country_price = p.read_attribute(country).present? ? p.read_attribute(country) : 0
-                if product.present? && product.stock_should_zero?
-                  file.puts("#{p_sku}\t#{(country_price - merchant_shipment_cost).to_i}\t\t\t0\t\n")
-                else
-                  file.puts("#{p_sku}\t#{(country_price - merchant_shipment_cost).to_i}\t\t\t#{p_inventory}\t\n")
+                  country_price = p.read_attribute(country).present? ? p.read_attribute(country) : 0
+                  if product.present? && product.stock_should_zero?
+                    file.puts("#{p_sku}\t#{(country_price - merchant_shipment_cost).to_i}\t\t\t0\t\n")
+                  else
+                    file.puts("#{p_sku}\t#{(country_price - merchant_shipment_cost).to_i}\t\t\t#{p_inventory}\t\n")
+                  end
                 end
               end
             end
@@ -247,6 +250,7 @@ class MerchantsController < ApplicationController
                 if new_prev_product.try(:id) == p.product_id
                   product = new_prev_product
                 else
+                  puts 2
                   product = Product.find(p.product_id)
                   new_prev_product = product
                 end
@@ -286,7 +290,7 @@ class MerchantsController < ApplicationController
       end
       # zipfile.get_output_stream("myFile") { |os| os.write "myFile contains just this" }
     end
-    puts Time.now - start_time
+    puts '======================================', Time.now - start_time
     send_file zipfile_name, :type=> 'application/text', :x_sendfile=>true
   end
 
