@@ -183,6 +183,7 @@ Rails.application.routes.draw do
 
   resources :users do
     collection do
+      get 'error_test'
       get 'user_statistic'
       get 'replace_user_page'
       post 'create_new_user'
@@ -207,7 +208,6 @@ Rails.application.routes.draw do
       post 'delete_shipment_method_value'
     end
   end
-
   root 'products#index'
   
   # The priority is based upon order of creation: first created -> highest priority.

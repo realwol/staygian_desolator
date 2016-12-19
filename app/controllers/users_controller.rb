@@ -2,6 +2,9 @@ class UsersController < ApplicationController
   before_action :set_user, only: [ :remove_department_user, :show, :edit, :update, :destroy, :change_user_password, :user_setting, :reset_user_pwd, :admin_reset_user_pwd]
   before_action :authenticate_user!
 
+  def error_test
+    abcdef
+  end
   def replace_user_page
   end
 
