@@ -3,8 +3,9 @@ class UsersController < ApplicationController
   before_action :authenticate_user!
 
   def error_test
-    abcdef
+    absdfs
   end
+
   def replace_user_page
   end
 

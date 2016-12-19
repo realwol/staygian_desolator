@@ -41,6 +41,23 @@ module AmazonTmall
       config.action_mailer.raise_delivery_errors = false
       config.action_mailer.default charset: "utf-8"
 
+      # config.action_mailer.smtp_settings = {
+      #   address:              "smtp.qq.com",
+      #   port:                 465,
+      #   domain:               'qq.com',
+      #   user_name:            "838329367@qq.com",
+      #   password:             "irdaaarxgtefbdbh",
+      #   authentication:       :plain,
+      #   enable_starttls_auto: true
+      # }
+
+      # config.middleware.use ExceptionNotification::Rack,
+      #   :email => {
+      #     :email_prefix => "[Amazon]",
+      #     :sender_address => %{no-reply <notifier@amazon.com>},
+      #     :exception_recipients => %w{838329367@qq.com 361497565@qq.com realwol@gmail.com},
+      #   }
+
       config.action_mailer.smtp_settings = {
         address:              "smtp.gmail.com",
         port:                 587,
@@ -55,7 +72,7 @@ module AmazonTmall
         :email => {
           :email_prefix => "[Amazon]",
           :sender_address => %{no-reply <notifier@amazon.com>},
-          :exception_recipients => %w{838329367@qq.com},
+          :exception_recipients => %w{838329367@qq.com 361497565@qq.com},
         }
 
   end
