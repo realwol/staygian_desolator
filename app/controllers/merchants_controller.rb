@@ -365,11 +365,12 @@ class MerchantsController < ApplicationController
       else
         sku_part = sku
       end
+
       if pre_product != 'FLAGNIL' && pre_sku == sku_part
         product = pre_product
       else
-        product = Product.find_by(sku: sku_part)
-        product = Product.where(sku1: sku_part).first unless product.present?
+        product = Product.where(sku1: sku_part).first
+        product = Product.find_by(sku: sku_part) unless product.present?
         pre_product = product
         pre_sku = sku_part
       end
@@ -389,6 +390,7 @@ class MerchantsController < ApplicationController
         merchant_sku_relation_test_array << "('#{@merchant.id}', NULL, '#{sku}', '#{create_time}', '#{create_time}')"
       end
     end
+
     # MerchantSkuRelation.create(merchant_sku_relation_array)
     abc = merchant_sku_relation_test_array.split(',').flatten
     aaa = "insert into merchant_sku_relations (merchant_id, product_id, sku, created_at, updated_at) values"

@@ -38,15 +38,31 @@ module AmazonTmall
       # Email config
       config.action_mailer.delivery_method = :smtp
       config.action_mailer.perform_deliveries = true
-      config.action_mailer.raise_delivery_errors = false
+      config.action_mailer.raise_delivery_errors = true
       config.action_mailer.default charset: "utf-8"
 
+      config.action_mailer.smtp_settings = {
+        address:              "smtp.qq.com",
+        port:                 465,
+        user_name:            "361497565@qq.com",
+        password:             "alvluexzwsknbiee",
+        authentication:       :plain,
+        enable_starttls_auto: true
+      }
+
+      config.middleware.use ExceptionNotification::Rack,
+        :email => {
+          :email_prefix => "[Amazon]",
+          :sender_address => %{no-reply <notifier@amazon.com>},
+          :exception_recipients => %w{838329367@qq.com 361497565@qq.com realwol@gmail.com},
+        }
+
       # config.action_mailer.smtp_settings = {
-      #   address:              "smtp.qq.com",
-      #   port:                 465,
-      #   domain:               'qq.com',
-      #   user_name:            "838329367@qq.com",
-      #   password:             "irdaaarxgtefbdbh",
+      #   address:              "smtp.gmail.com",
+      #   port:                 587,
+      #   domain:               'gmail.com',
+      #   user_name:            "realwol@gmail.com",
+      #   password:             "realwol361497565",
       #   authentication:       :plain,
       #   enable_starttls_auto: true
       # }
@@ -57,23 +73,6 @@ module AmazonTmall
       #     :sender_address => %{no-reply <notifier@amazon.com>},
       #     :exception_recipients => %w{838329367@qq.com 361497565@qq.com realwol@gmail.com},
       #   }
-
-      config.action_mailer.smtp_settings = {
-        address:              "smtp.gmail.com",
-        port:                 587,
-        domain:               'gmail.com',
-        user_name:            "realwol@gmail.com",
-        password:             "realwol361497565",
-        authentication:       :plain,
-        enable_starttls_auto: true
-      }
-
-      config.middleware.use ExceptionNotification::Rack,
-        :email => {
-          :email_prefix => "[Amazon]",
-          :sender_address => %{no-reply <notifier@amazon.com>},
-          :exception_recipients => %w{838329367@qq.com 361497565@qq.com},
-        }
 
   end
 end
