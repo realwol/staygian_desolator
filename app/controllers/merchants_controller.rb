@@ -358,40 +358,57 @@ class MerchantsController < ApplicationController
     pre_product = ''
     pre_sku = 'FLAGNIL'
     product_sku_array = product_sku.split("\n")
+    old_base_sku_array, new_base_sku_array = [], []
     product_sku_array.each do |sku|
       index = sku.index('-')
       if index.present?
-        sku_part = sku[0..index-1]
+        new_base_sku_array << sku[0..index-1]
       else
-        sku_part = sku
+        if ('A'..'Z').to_a.include? sku.last
+          new_base_sku_array << sku[0..-2]
+        elsif 'M' == sku.first
+          old_base_sku_array << sku[0..index-1]
+        end
       end
+    end
+    # new_uniq_products_array = Product.uniq.where(sku1: new_base_sku_array).pluck(:id, :sku1)
+    # old_uniq_products_array = Product.uniq.where(sku: old_base_sku_array).pluck(:id, :sku)
+    all_uniq_products_hash = Hash[Product.uniq.where(sku1: new_base_sku_array).pluck(:sku1, :id) + Product.uniq.where(sku: old_base_sku_array).pluck(:sku, :id)]
 
-      if pre_product != 'FLAGNIL' && pre_sku == sku_part
-        product = pre_product
-      else
-        product = Product.where(sku1: sku_part).first
-        product = Product.find_by(sku: sku_part) unless product.present?
-        pre_product = product
-        pre_sku = sku_part
-      end
-      # if sku.present?
-      #   # unless MerchantSkuRelation.find_by(sku: sku, merchant_id: @merchant.id)
-      #     merchant_sku_hash = {}
-      #     merchant_sku_hash[:merchant_id] = @merchant.id
-      #     merchant_sku_hash[:sku] = sku
-      #     merchant_sku_hash[:product_id] = product.try(:id)
-      #     merchant_sku_relation_array << merchant_sku_hash
-      #   # end
+    # product_sku_array.each do |sku|
+      # index = sku.index('-')
+      # if index.present?
+      #   sku_part = sku[0..index-1]
+      # else
+      #   if ('A'..'Z').to_a.include? sku.last
+      #     sku_part = sku[0..-2]
+      #   else
+      #     sku_part = sku
+      #   end
       # end
+
+      # if pre_product != 'FLAGNIL' && pre_sku == sku_part
+      #   product = pre_product
+      # else
+      #   product = Product.where(sku1: sku_part).first
+      #   product = Product.find_by(sku: sku_part) unless product.present?
+      #   pre_product = product
+      #   pre_sku = sku_part
+      # end
+    product_sku_array.each do |sku|
+      base_sku = convert_to_base_sku sku
+      product_id = all_uniq_products_hash["#{base_sku}"]
       create_time = Time.now.strftime("%Y-%m-%d")
-      if product.present?
-        merchant_sku_relation_test_array << "('#{@merchant.id}', '#{product.try(:id)}', '#{sku}', '#{create_time}', '#{create_time}')"
+      if product_id.present?
+        merchant_sku_relation_test_array << "('#{@merchant.id}', '#{product_id}', '#{sku}', '#{create_time}', '#{create_time}')"
       else
         merchant_sku_relation_test_array << "('#{@merchant.id}', NULL, '#{sku}', '#{create_time}', '#{create_time}')"
       end
     end
 
+    puts merchant_sku_relation_test_array.count
     # MerchantSkuRelation.create(merchant_sku_relation_array)
+
     abc = merchant_sku_relation_test_array.split(',').flatten
     aaa = "insert into merchant_sku_relations (merchant_id, product_id, sku, created_at, updated_at) values"
     aaab = ''
@@ -415,6 +432,20 @@ class MerchantsController < ApplicationController
   end
 
   private
+
+  def convert_to_base_sku sku
+    index = sku.index('-')
+    if index.present?
+      sku[0..index-1]
+    else
+      if ('A'..'Z').to_a.include? sku.last
+        sku[0..-2]
+      elsif 'M' == sku.first
+        sku[0..index-1]
+      end
+    end
+  end
+
   def merchant_params
     params.permit(:shop_name, :merchant_plantform_name, :merchant_account, :merchant_country_name, :merchant_type, :merchant_aws_access_key_id, :merchant_secret_key, :merchant_seller_id, :merchant_marketplace_id, :merchant_api_address, :account_id)
   end

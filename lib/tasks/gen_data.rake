@@ -18,6 +18,24 @@ namespace :gen_data do
     end
   end
 
+  desc 'gen unformatting sku info'
+  task gen_unformatting_product: :environment do
+    MerchantSkuRelation.where(product_id: nil).where("id > 17937898").find_each do |r|
+      puts r.id
+      r_sku = r.sku
+      if r_sku.present?
+        if ('A'..'Z').to_a.include? r_sku.last
+          sku_part = r_sku[0..-2]
+        else
+          sku_part = r_sku
+        end
+        product = Product.select(:id).where(sku1: sku_part).first
+        product = Product.select(:id).where(sku: sku_part).first unless product.present?
+        r.update_attributes(product_id: product.id) if product.present?
+      end
+    end
+  end
+
   desc 'gen new sku'
   task :gen_new_sku_to_product => :environment do
     Product.where(sku1:nil).find_each do |p|
