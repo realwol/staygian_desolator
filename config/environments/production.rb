@@ -77,7 +77,8 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
-      # Email config
+  
+        # Email config
       config.action_mailer.delivery_method = :smtp
       config.action_mailer.perform_deliveries = true
       config.action_mailer.raise_delivery_errors = true
@@ -85,35 +86,28 @@ Rails.application.configure do
 
       config.action_mailer.smtp_settings = {
         address:              "smtp.qq.com",
-        port:                 465,
-        user_name:            "361497565@qq.com",
+        port:                 25,
+        user_name:            "361497565",
         password:             "alvluexzwsknbiee",
         authentication:       :plain,
         enable_starttls_auto: true
       }
 
-      config.middleware.use ExceptionNotification::Rack,
-        :email => {
-          :email_prefix => "[Amazon]",
-          :sender_address => %{no-reply <notifier@amazon.com>},
-          :exception_recipients => %w{838329367@qq.com 361497565@qq.com realwol@gmail.com},
-        }
-
       # config.action_mailer.smtp_settings = {
-      #   address:              "smtp.gmail.com",
-      #   port:                 587,
-      #   domain:               'gmail.com',
-      #   user_name:            "realwol@gmail.com",
-      #   password:             "realwol361497565",
+      #   address:              "smtp.163.com",
+      #   port:                 465,
+      #   user_name:            "15829399791@163.com",
+      #   password:             "123123ab",
       #   authentication:       :plain,
       #   enable_starttls_auto: true
       # }
 
-      # config.middleware.use ExceptionNotification::Rack,
-      #   :email => {
-      #     :email_prefix => "[Amazon]",
-      #     :sender_address => %{no-reply <notifier@amazon.com>},
-      #     :exception_recipients => %w{838329367@qq.com 361497565@qq.com realwol@gmail.com},
-      #   }
+      config.middleware.use ExceptionNotification::Rack,
+        :email => {
+          :email_prefix => "[Amazon]",
+          :sender_address => %{361497565@qq.com},
+          # :sender_address => %{no-reply<notifier@amazon.com>},
+          :exception_recipients => %w{838329367@qq.com realwol@gmail.com},
+        }
 
 end
