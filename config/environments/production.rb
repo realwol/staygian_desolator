@@ -107,7 +107,7 @@ Rails.application.configure do
           :email_prefix => "[Amazon]",
           :sender_address => %{361497565@qq.com},
           # :sender_address => %{no-reply<notifier@amazon.com>},
-          :exception_recipients => %w{838329367@qq.com realwol@gmail.com},
+          :exception_recipients => %w{838329367@qq.com},
         }
 
 end
