@@ -108,9 +108,13 @@ end
 
 desc 'Stop current version on the server.'
 task :stop => :environment do
-  queue "cd #{deploy_to}/#{current_path}"
-  queue 'pwd'
-  queue "bundle exec thin stop -C config/thin.yml"
+  queue "cd ~/god"
+  queue "pwd"
+  queue "god terminate"
+
+  # queue "cd #{deploy_to}/#{current_path}"
+  # queue 'pwd'
+  # queue "bundle exec thin stop -C config/thin.yml"
 end
 
 desc 'Start current version on the server.'
@@ -121,6 +125,7 @@ task :start => :environment do
   queue "mkdir public/export"
   queue 'pwd'
   queue "bundle exec thin start -C config/thin.yml"
+  queue "god -c ~/god/tmall.god"
 end
 
 # For help in making your deploy script, see the Mina documentation:
