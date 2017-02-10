@@ -6,7 +6,7 @@ namespace :new_product_check do
     a = Time.now
     shops = get_shop
     shops.each do |shop|
-      aa = TIme.now
+      aa = Time.now
       shop_links = shop.shop_links
       shop_links.each do |shop_link|
         unless check_page shop_link

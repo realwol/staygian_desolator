@@ -15,6 +15,7 @@ class User < ActiveRecord::Base
   has_many :merchants
   has_many :accounts
   has_many :vendors
+  has_many :product_types
 
   has_many :little_brothers, class_name: 'User', foreign_key: 'manager'
   has_many :team_members, class_name: 'User', foreign_key: 'leader_id'

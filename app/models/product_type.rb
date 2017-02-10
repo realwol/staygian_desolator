@@ -5,6 +5,7 @@ class ProductType < ActiveRecord::Base
   has_many :children_product_types, class_name: 'ProductType', foreign_key: 'father_node'
 
   belongs_to :father_product_type, class_name: 'ProductType', foreign_key: 'father_node'
+  belongs_to :user
 
   def has_product?
     Product.where(product_type_id: self.id).count > 0

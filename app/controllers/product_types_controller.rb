@@ -255,7 +255,7 @@ class ProductTypesController < ApplicationController
 
   def index
     @product_type_father_node = params[:father_node] || '0'
-    @product_types = ProductType.where(father_node: @product_type_father_node)
+    @product_types = selected_user.product_types.where(father_node: @product_type_father_node)
   end
 
   def show
@@ -281,7 +281,7 @@ class ProductTypesController < ApplicationController
       @flag = false
     else
       @flag = true
-      ProductType.create(name: params[:product_type_name], father_node: params[:father_node])
+      ProductType.create(name: params[:product_type_name], father_node: params[:father_node], user: current_user)
       @product_types = ProductType.where(father_node: params[:father_node])
       @product_type_father_node = params[:father_node] || '0'
     end
