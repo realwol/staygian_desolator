@@ -8,7 +8,7 @@ class ProductType < ActiveRecord::Base
   belongs_to :user
 
   def current_children_product_types user
-    children_product_types.where(user: user)
+    children_product_types.where(user_id: [nil, user.id, 1])
   end
 
   def has_product?

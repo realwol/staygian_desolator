@@ -18,19 +18,21 @@
           <% end %>
         </td>
         <td><%= check_box_tag 'is_final_type', "#{product_type.id}", product_type.is_final_type, class:'product-type-checkbox' %></td>
-        <td><%= if product_type.is_final_type
-                  link_to('编辑', edit_product_type_path(product_type))
-                else
-                  link_to('编辑', edit_product_type_path(product_type), onclick:'return false;')
-                end
-            %></td>
-        <td>
-          <% if product_type.is_final_type && !product_type.has_product? %>
-            <button class="product_type_delete" data-product-type-id="<%= product_type.id %>" >删除</button>
-          <% else %>
-            <button class="product_type_delete" data-product-type-id="<%= product_type.id %>" disabled >删除</button>
-          <% end %>
-        </td>
+        <% if current_user.is_dd? %>
+          <td><%= if product_type.is_final_type
+                    link_to('编辑', edit_product_type_path(product_type))
+                  else
+                    link_to('编辑', edit_product_type_path(product_type), onclick:'return false;')
+                  end
+              %></td>
+          <td>
+            <% if product_type.is_final_type && !product_type.has_product? %>
+              <button class="product_type_delete" data-product-type-id="<%= product_type.id %>" >删除</button>
+            <% else %>
+              <button class="product_type_delete" data-product-type-id="<%= product_type.id %>" disabled >删除</button>
+            <% end %>
+          </td>
+        <% end %>
       </tr>
     <% end %>
   </tbody>

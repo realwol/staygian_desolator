@@ -33,7 +33,7 @@ class User < ActiveRecord::Base
   scope :group_charger, -> {where("user_role_id = 2 or user_role_id = 9")}
 
   def get_current_product_types
-    ProductType.where(user_id: [nil, id])
+    ProductType.where(user_id: [nil, id, 1])
   end
 
   def removed_accounts
