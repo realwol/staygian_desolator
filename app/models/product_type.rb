@@ -19,7 +19,7 @@ class ProductType < ActiveRecord::Base
     self.where(is_final_type: true)
   end
 
-  def self.first_level_types
+  def self.first_level_types user
     self.where(father_node: 0, user_id: [nil, user.id, 1])
   end
 
