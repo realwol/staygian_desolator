@@ -1,4 +1,8 @@
-<h5>配送方式：<button id="addNewShipment" >添加</button> </h5>
+<h5>配送方式：
+  <% if current_user.is_dd? || @product_type.user_id.to_i == current_user.id %>
+    <button id="addNewShipment" >添加</button>
+  <% end %>
+</h5>
     <table class="table product-shipment-table">
       <tr style="display:none;">
           <td style="width:120px;">

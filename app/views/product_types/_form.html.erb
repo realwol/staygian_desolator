@@ -40,7 +40,11 @@
     <%= render 'product_type_types' %>
     <hr/>
 
-    <h5>属性设置： <a class="addAttribute" >添加</a> </h5>
+    <h5>属性设置： 
+      <% if current_user.is_dd? || @product_type.user_id.to_i == current_user.id %>
+        <a class="addAttribute" >添加</a>
+      <% end %>
+    </h5>
     <div id="addAttributesTable" >
       <%= render 'product_attributes_type' %>
     </div>
