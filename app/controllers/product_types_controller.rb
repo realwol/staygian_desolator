@@ -283,7 +283,7 @@ class ProductTypesController < ApplicationController
     else
       @flag = true
       ProductType.create(name: params[:product_type_name], father_node: params[:father_node], user: current_user)
-      @product_types = ProductType.where(father_node: params[:father_node])
+      @product_types = ProductType.where(father_node: params[:father_node], user:current_user)
       @product_type_father_node = params[:father_node] || '0'
     end
   end
