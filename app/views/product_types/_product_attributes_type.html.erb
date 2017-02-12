@@ -43,8 +43,10 @@
           <td><%= text_field_tag 'attr_text_france', attribute_translation.try(:france), style:'width:80px;', class: 'attribute_value' %></td>
           <td><%= text_field_tag 'attr_text_spain', attribute_translation.try(:spain), style:'width:80px;', class: 'attribute_value' %></td>
           <td><%= text_field_tag 'attr_text_italy', attribute_translation.try(:italy), style:'width:80px;', class: 'attribute_value' %></td>
-          <td><a class='editAttribues' value=<%= attribute.id %> data-attribute-translation-id="<%= attribute_translation.id %>"  >保存</a></td>
-          <td><a class='removeAttribues' value=<%= attribute.id %> data-attribute-translation-id="<%= attribute_translation.id %>"  >删除</a></td>
+          <% if current_user.is_dd? || product_type.user_id.to_i == current_user.id %>
+            <td><a class='editAttribues' value=<%= attribute.id %> data-attribute-translation-id="<%= attribute_translation.id %>"  >保存</a></td>
+            <td><a class='removeAttribues' value=<%= attribute.id %> data-attribute-translation-id="<%= attribute_translation.id %>"  >删除</a></td>
+          <% end %>
         </tr>
         <% end %>
       <% end %>

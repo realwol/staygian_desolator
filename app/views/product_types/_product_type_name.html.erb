@@ -24,5 +24,7 @@
       <td> <%= text_field_tag 'name_italy', name_translation.italy, style:'width:80px;' %> </td>
     </tr>
 </table>
-  <%= button_tag '保存' %>
+  <% if current_user.is_dd? || product_type.user_id.to_i == current_user.id %>
+    <%= button_tag '保存' %>
+  <% end %>
 <% end %>

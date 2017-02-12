@@ -14,8 +14,13 @@
           <td><%= select_tag 'shipment_method_france', options_from_collection_for_select(@shipment_methods, 'id', 'name') %></td>
           <td><%= select_tag 'shipment_method_spain', options_from_collection_for_select(@shipment_methods, 'id', 'name') %></td>
           <td><%= select_tag 'shipment_method_italy', options_from_collection_for_select(@shipment_methods, 'id', 'name') %></td>
-          <td><%= submit_tag '更新', class:'tr-submit-tag' %></td>
-          <td><button class='new-remove-shipment-relation' >删除</button> </td>
+          <% if current_user.is_dd? || product_type.user_id.to_i == current_user.id %>
+            <td><%= submit_tag '更新', class:'tr-submit-tag' %></td>
+            <td><button class='new-remove-shipment-relation' >删除</button> </td>
+          <% else %>
+            <td></td>
+            <td></td>
+          <% end %>
       </tr>
       <tr>
         <% %w(重量 美国 加拿大 英国 德国 法国 西班牙 意大利 操作).each do |country| %>
@@ -45,8 +50,13 @@
           <td><%= select_tag 'shipment_method_france', options_from_collection_for_select(@shipment_methods, 'id', 'name', selected: shipment_translation_value.france) %></td>
           <td><%= select_tag 'shipment_method_spain', options_from_collection_for_select(@shipment_methods, 'id', 'name', selected: shipment_translation_value.spain) %></td>
           <td><%= select_tag 'shipment_method_italy', options_from_collection_for_select(@shipment_methods, 'id', 'name', selected: shipment_translation_value.italy) %></td>
-          <td><%= submit_tag '更新', class:'tr-submit-tag' %></td>
-          <td><button data-shipment-id="<%= product_shipment.try(:id) %>" class='remove-shipment-relation' >删除</button> </td>
+          <% if current_user.is_dd? || product_type.user_id.to_i == current_user.id %>
+            <td><%= submit_tag '更新', class:'tr-submit-tag' %></td>
+            <td><button data-shipment-id="<%= product_shipment.try(:id) %>" class='remove-shipment-relation' >删除</button> </td>
+          <% else %>
+            <td></td>
+            <td></td>
+          <% end %>
         </tr>
       <% end %>
       <% end %>

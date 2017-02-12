@@ -24,4 +24,6 @@
       <td><input type="text" style="width:100px;" class="salePrice" value=<%= price_translation_value.france %>></td>
   </tr>
 </table>
-<button id="savePrice" >保存价格</button>
+<% if current_user.is_dd? || product_type.user_id.to_i == current_user.id %>
+  <button id="savePrice" >保存价格</button>
+<% end %>

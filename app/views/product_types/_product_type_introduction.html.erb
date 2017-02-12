@@ -72,5 +72,7 @@
         <td><textarea cols="100" rows="3" class="introduction2TextArea" > <%= product_introductions[1].italy %> </textarea></td>
       </tr>
   </table>
-  <button id="saveIntroduction" >保存</button>
-<% end%>
+  <% if current_user.is_dd? || product_type.user_id.to_i == current_user.id %>
+    <button id="saveIntroduction" >保存</button>
+  <% end %>
+<% end %>

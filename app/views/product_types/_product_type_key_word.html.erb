@@ -25,5 +25,7 @@
         </tr>
       <% end %>
     </table>
-    <%= submit_tag '更新' %>
-  <% end%>
+    <% if current_user.is_dd? || product_type.user_id.to_i == current_user.id %>
+      <%= submit_tag '更新' %>
+    <% end %>
+  <% end %>
