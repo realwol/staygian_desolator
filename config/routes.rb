@@ -112,6 +112,7 @@ Rails.application.routes.draw do
       get 'change_product_type'
       get 'sku_export_page'
       get 'personal_export_page'
+      get 'new_product'
       post 'personal_export_products'
       post 'sku_export_products'
       post 'search_by_condition'

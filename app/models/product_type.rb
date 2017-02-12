@@ -7,6 +7,10 @@ class ProductType < ActiveRecord::Base
   belongs_to :father_product_type, class_name: 'ProductType', foreign_key: 'father_node'
   belongs_to :user
 
+  def current_children_product_types user
+    children_product_types.where(user: user)
+  end
+
   def has_product?
     Product.where(product_type_id: self.id).count > 0
   end
@@ -19,18 +23,18 @@ class ProductType < ActiveRecord::Base
     self.where(father_node: 0)
   end
 
-  def has_children?
-    self.children_product_types.count > 0
+  def has_children? user
+    self.current_children_product_types(user).count > 0
   end
 
-  def all_children
+  def all_children user
     current_product_type = self
-    count_children = current_product_type.children_product_types.to_a
+    count_children = current_product_type.children_product_types(user).to_a
     all_children = []
     
     while count_children.size > 0
       current_product_type = count_children.pop
-      current_product_type_children = current_product_type.children_product_types
+      current_product_type_children = current_product_type.children_product_types(user)
       if current_product_type_children.count > 0
         count_children << current_product_type_children
         count_children.flatten!

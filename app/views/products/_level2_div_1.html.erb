@@ -1,6 +1,6 @@
   <% @children_product_types ||= ProductType.first_level_types %>
   <% @children_product_types.each do |child| %>
-    <a href="#" class="level1Click1" data-product-type-id=<%= child.id %> data-product-type-children=<%= child.has_children? %> ><%= child.name %></a>
+    <a href="#" class="level1Click1" data-product-type-id=<%= child.id %> data-product-type-children=<%= child.has_children?(selected_user) %> ><%= child.name %></a>
   <% end %>
   <%= hidden_field_tag 'final_clicked1', '', "data-clicked-time"=>'false' %>
 

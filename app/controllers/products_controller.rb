@@ -2,6 +2,10 @@ class ProductsController < ApplicationController
   before_action :set_product, only: [:show, :edit, :update, :destroy, :shield_product, :presale_product, :offsale_product, :temp_offsale_product, :onsale_product, :edited_product, :translate_preview]
   before_action :authenticate_user!
 
+  def new_product
+    @product = Product.new
+  end
+
   def search_by_condition
     link_desc = params[:link_desc]
     @search_links = SearchLink.first_search_link.where("link_desc like '%#{link_desc}%'").page params[:page]
@@ -231,7 +235,7 @@ class ProductsController < ApplicationController
     search_query = []
     unless product_type.empty?
       ids_string = "(#{product_type},"
-      ProductType.find(product_type).all_children.map(&:id).each do |id|
+      ProductType.find(product_type).all_children(selected_user).map(&:id).each do |id|
         ids_string = ids_string + id.to_s + ','
       end
       ids_string = ids_string[0, ids_string.size-1] + ')'
@@ -320,7 +324,7 @@ class ProductsController < ApplicationController
     start_sku = params[:start_sku]
     choose_product_type = ProductType.find(params[:export_type].to_i)
     product_type_combo = [choose_product_type]
-    product_type_combo << choose_product_type.all_children
+    product_type_combo << choose_product_type.all_children(selected_user)
     product_type_combo.flatten!
 
     all_products = current_user.valid_products
@@ -343,7 +347,7 @@ class ProductsController < ApplicationController
         redirect_to export_page_products_url, notice:'Sku对应产品无分类！'
         return
       end
-      if (choose_product_type != start_product_type) && (choose_product_type.all_children.index(start_product_type).nil?)
+      if (choose_product_type != start_product_type) && (choose_product_type.all_children(selected_user).index(start_product_type).nil?)
       # unless start_product.try(:product_type) == params[:export_type].to_i
         redirect_to export_page_products_url, notice:'Sku与所选分类不匹配'
         return
@@ -391,7 +395,7 @@ class ProductsController < ApplicationController
     start_sku = params[:start_sku]
     choose_product_type = ProductType.find(params[:export_type].to_i)
     product_type_combo = [choose_product_type]
-    product_type_combo << choose_product_type.all_children
+    product_type_combo << choose_product_type.all_children(selected_user)
     product_type_combo.flatten!
 
     # all_products = current_user.valid_products
@@ -412,7 +416,7 @@ class ProductsController < ApplicationController
         redirect_to export_page_products_url, notice:'Sku对应产品无分类！'
         return
       end
-      if (choose_product_type != start_product_type) && (choose_product_type.all_children.index(start_product_type).nil?)
+      if (choose_product_type != start_product_type) && (choose_product_type.all_children(selected_user).index(start_product_type).nil?)
       # unless start_product.try(:product_type) == params[:export_type].to_i
         redirect_to export_page_products_url, notice:'Sku与所选分类不匹配'
         return

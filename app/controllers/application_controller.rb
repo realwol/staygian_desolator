@@ -6,6 +6,8 @@ class ApplicationController < ActionController::Base
   around_filter :log_rss if Rails.env.production?
   # before_action :curfew_in_work
 
+  helper_method :selected_user
+
   def curfew_in_work
     if Rails.env == 'production' && current_user.present? && !current_user.is_dd?
       render text: '系统正在维护，请稍后再试！', status: 404 unless time_in_curfew Time.now
@@ -20,7 +22,6 @@ class ApplicationController < ActionController::Base
 
   def selected_user
     @selected_user = (session[:selected_user_id].present? && User.where(id: session[:selected_user_id]).first.present?) ? User.where(id: session[:selected_user_id]).first : current_user
-
     @selected_user
   end
 

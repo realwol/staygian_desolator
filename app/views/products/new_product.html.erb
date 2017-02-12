@@ -1,0 +1,548 @@
+<%= form_for(@product) do |f| %>
+  <% if @product.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@product.errors.count, "error") %> prohibited this product from being saved:</h2>
+
+      <ul>
+      <% @product.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <label>源地址：</label>
+    <%= link_to "#{@product.origin_address}", "#{@product.origin_address}", :target => 'blank' %>
+    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+    <label>购买地址：</label>
+    <%= f.text_area :purchase_link, size:'60x1' %>
+  </div>
+  <div class="field">
+    <%= f.label "产品号:" %>
+    <%= f.text_field :product_number, size:20 %>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+    <%= f.label "品牌:" %>
+    <%= @product.brand.try(:name) %>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+    <%= f.label "生产商家:" %>
+    <%= f.text_field :producer %>  
+  </div>
+  <div class="field" id="product_page" >
+    <%
+      @template_type = '1' 
+      @product_type = @product.product_type
+    %>
+    <%= render '/products/product_type_select_template', locals:{ template_type: @template_type, product_type: @product_type} %>
+  </div>
+  <h5>
+    自定义属性：
+  <hr/>
+  </h5>
+  <div id="customeProductAttributes">
+    <%= render 'custome_product_attributes' %>
+  </div>
+  <hr/>
+  <div class="field">
+    <%= f.label '标题:' %>
+    <%= f.text_area :title, size:'60x1' %>
+  </div>
+  <hr/>
+  <div class="field">
+    <label>简介</label>
+    <%= f.text_area :desc1, size:'40x5' %>
+    <%= f.text_area :desc2, size:'40x5' %>
+    <%= f.text_area :desc3, size:'40x5' %>
+  </div>
+  <hr/>
+
+  <div class="field">
+    <%= f.label 'Images' %><br>
+    <% @product.valid_images.each_with_index do |img,index| %>
+      <div style="float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px; background: grey;">
+        <%= image_tag(img, style:'width:50px;', class:"product_image product_image_count", alt:'', "data-src"=>img) %>
+        <%= hidden_field_tag "product[images#{index+1}]", nil, class:'product_hidden_field_value', value:img %>
+      </div>
+    <% end %>
+
+    <% [@product.avatar_img_url, @product.avatar_img_url1, @product.avatar_img_url2, @product.avatar_img_url3, @product.avatar_img_url4, @product.avatar_img_url5].compact.each_with_index do |img,index| %>
+      <%if img.present?%>
+        <div style="float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px; background: grey;">
+          <%= image_tag(img, style:'width:50px;', class:"product_image product_image_count", alt:'', "data-src"=>img) %>
+          <%= hidden_field_tag "product[images#{@product.valid_images.size+index+1}]", nil, class:'avatar_url product_hidden_field_value', value:img %>
+        </div>
+      <% end %>
+    <% end %>
+
+    <div id="avatarImgDiv" style=" display:none; float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px; background: grey;">
+      <%= image_tag('', style:'width:50px; display:none;', class:" product_image_count", id:'myImg1', alt:'', "data-src"=>'') %>
+    </div>
+    <div id="avatarImgDiv1" style=" display:none; float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px; background: grey;">
+      <%= image_tag('', style:'width:50px; display:none;', class:" product_image_count", id:'myImg2', alt:'', "data-src"=>'') %>
+    </div>
+    <div id="avatarImgDiv2" style=" display:none; float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px; background: grey;">
+      <%= image_tag('', style:'width:50px; display:none;', class:" product_image_count", id:'myImg3', alt:'', "data-src"=>'') %>
+    </div>
+    <div id="avatarImgDiv3" style=" display:none; float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px; background: grey;">
+      <%= image_tag('', style:'width:50px; display:none;', class:" product_image_count", id:'myImg4', alt:'', "data-src"=>'') %>
+    </div>
+    <div id="avatarImgDiv4" style=" display:none; float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px; background: grey;">
+      <%= image_tag('', style:'width:50px; display:none;', class:" product_image_count", id:'myImg5', alt:'', "data-src"=>'') %>
+    </div>
+    <div id="avatarImgDiv5" style=" display:none; float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px; background: grey;">
+      <%= image_tag('', style:'width:50px; display:none;', class:" product_image_count", id:'myImg6', alt:'', "data-src"=>'') %>
+    </div>
+    <br/>
+    <%= hidden_field_tag 'cut_image_urls' %>
+    <%= f.label '图片裁剪方式' %>
+    <select name='product[image_cut_position]' id='cut_type'>
+      <option value='NorthWest' >左上</option>
+      <option value='NorthEast' >右上</option>
+      <option value='SouthEast' >右下</option>
+      <option value='SouthWest' >左下</option>
+    </select>
+    <%= label_tag '上传自定义图片' %>
+    <%= f.file_field :avatar, multiple: true %>
+  </div>
+  <div class="field">
+    <%= f.label '价格' %>
+    <%= f.text_field :price %>
+    <%= f.label '重量' %>
+    <%= f.text_field :product_weight %>
+    <% unless @product.variables.present? %>
+      <%= f.label '库存' %>
+      <%= f.text_field :stock %>
+    <% end %>
+  </div>
+
+  <div class="field">
+    <%= f.label '产品说明：' %><br>
+    <%= f.text_area :details, size:'50x20' %>
+  </div>
+
+  <div class="field" style='float:right; margin-top: -390px; margin-right:80px;' >
+    <%= image_tag @product.valid_images[0], style:'width:450px; height:350px; margin-bottom:10px;', id:'cut_review_image' %><br>
+    实时：X:<%= text_field_tag 'x_pos_hidden', nil,  id:'x_pos_hidden' %>
+    Y:<%= text_field_tag 'y_pos_hidden', nil,  id:'y_pos_hidden' %><br/>
+    保存：X:<%= text_field_tag 'product[image_cut_x]', nil,  id:'x_pos' %>
+    Y:<%= text_field_tag 'product[image_cut_y]', nil,  id:'y_pos' %>
+  </div>
+
+  <hr/>
+  <h3>Editing Variables</h3>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th><%= check_box_tag 'check_all' %></th>
+          <th>图片(鼠标置于图片上预览大图,左键双击删除同类图片)</th>
+          <th><%= '颜色' %>&nbsp&nbsp<button id="changeAttributeName" >改名</button></th>
+          <th><%= '尺寸' %></th>
+          <th><%= '价格' %></th>
+          <th><%= '重量' %></th>
+          <th><%= '库存' %></th>
+          <th><%= '描述' %></th>
+          <th><%= '操作' %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% pre_color = nil; count = 0; %>
+        <% @product.variables.each_with_index do |v,v_index| %>
+          <%if ((!pre_color) || (pre_color == v.color))
+            else
+              count = count + 1
+            end
+            pre_color = v.color%>
+
+          <tr>
+            <%= hidden_field_tag 'variable[][index]', nil, value:v.id, class:'hidden_tr_need_remove' %>
+            <td rowspan="2"><%= check_box_tag 'item' %></td>
+            <td rowspan="2" style="width:500px;">
+              <ul id="ul-sortable" style="list-style-type: none; margin: 0; padding: 0; width: 450px;">
+              <% v.valid_images.each_with_index do |img, vv_index| %>
+                <li class="ui-state-default" style="float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px;">
+                  <%= image_tag(img, style:'width:50px;', class:"variable_image image_#{count}_#{vv_index} ", "data-src"=>img, alt:'' ) %>
+                  <%= hidden_field_tag "variable[][image_url#{vv_index+1}]", nil, class:'hidden_field_value', value: img %>
+                </li>
+              <% end %>
+              <% [@product.avatar_img_url, @product.avatar_img_url1, @product.avatar_img_url2].compact.each_with_index do |img, vv_index| %>
+              <%if img.present?%>
+                <% vv_index = v.valid_images.size + vv_index %>
+                <li class="ui-state-default" style="float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px;">
+                  <%= image_tag(img, style:'width:50px;', class:"variable_image image_#{count}_#{vv_index} ", "data-src"=>img, alt:'' ) %>
+                  <%= hidden_field_tag "variable[][image_url#{v.valid_images.size+vv_index+1}]", nil, class:'avatar_url hidden_field_value', value:img %>
+                </li>
+              <% end %>
+              <% end %>
+              </ul>
+            </td>
+
+            <td><%= text_field_tag 'variable[][color]', nil, value: v.color, class:'variable_color', style:'width:150px;', "data-origin-color-value"=> v.color %></td>
+            <td><%= text_field_tag 'variable[][size]', nil, value:v.size, "data-origin-size" => v.size, class:'variable_size', style:'width:150px' %></td>
+            <td><%= text_field_tag 'variable[][price]', nil, value:v.price, class:'variable_price', style:'width:50px' %></td>
+            <td>
+              <% if v.weight.present? %>
+                <%= text_field_tag 'variable[][weight]', v.weight, style:'width:50px;', class:'variable_weight' %>
+              <% else %>
+                <%= text_field_tag 'variable[][weight]', @product.product_weight, style:'width:50px;', class:'variable_weight' %>
+              <% end %>
+            </td>
+            <td><%= text_field_tag 'variable[][stock]', nil, value:v.stock, style:'width:40px' %></td>
+            <td rowspan="2" ><%= text_area_tag 'variable[][desc]', v.desc, style:'height:100%;', class:'variable_desc' %></td>
+            <td rowspan="2" ><input type='button' class='remove_variable' value='Remove' data-variable-id="<%= v.id %>" /></td>
+          </tr>
+
+          <tr>
+            <td colspan="5">
+              <% if v.title.present? %>
+                <%= text_field_tag 'variable[][title]', nil, value: v.title, class:'variable_title', "data-color-value"=> v.color, style:'width:100%;' %>
+              <% else %>
+                <%= text_field_tag 'variable[][title]', nil, value: @product.title, class:'variable_title', "data-color-value"=> v.color, style:'width:100%;' %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+  <hr/>
+  <div class="actions">
+    拆分产品：<%= check_box_tag 'is_separate', nil, @product.is_separate %><br/>
+    <%= hidden_field_tag 'is_return' %>
+    <% if @product.auto_flag == '14' %>
+      <button><%= link_to '上架', onsale_product_product_path(@product), data: { confirm: '确认上架?' } %></button>
+      <button><%= link_to '删除', @product, method: :delete, data: { confirm: '确认删除?' } %></button>
+    <% else %>
+      <button id="formSubmit" >上传</button>
+      <button id="formSubmitReturn" >上传并返回本页面</button>
+    <% end %>
+  </div>
+<% end %>
+<div>
+  <img id="imagePreview" src="" alt="123" style=" border:0.5px solid; width:500px; height:500px; position:fixed; left:63%; top:10%; display:none;">
+</div>
+
+<script type="text/javascript">
+  
+  $('.variable_image').mouseover(function(){
+    var img_src = $(this).attr('src');
+    $('#imagePreview').attr('src',img_src);
+    $('#imagePreview').css('display','inline');
+  });
+
+  $('.variable_image').mouseout(function(){
+    $('#imagePreview').attr('src','');
+    $('#imagePreview').css('display','none');
+  })
+
+  $('#product_product_weight').change(function(){
+    var weight_value = $(this).val();
+    $('.variable_weight').each(function(){
+      $(this).val(weight_value);
+    });
+    return false;
+  });
+
+  $('#product_desc3').change(function(){
+    var desc_value = $(this).val();
+    $('.variable_desc').each(function(){
+      $(this).val(desc_value);
+    });
+  });
+
+  $('.variable_desc').change(function(){
+    var price_value = $(this).val();
+    var size_value = $(this).parents('tr').find('.variable_size').val();
+    $('.variable_desc').each(function(){
+      if (size_value == $(this).parents('tr').find('.variable_size').val() && '' != $(this).parents('tr').find('.variable_size').val()) {
+        $(this).val(price_value);
+      }
+    });
+    return false;
+  });
+
+  $('.variable_price').change(function(){
+    var price_value = $(this).val();
+    var size_value = $(this).parents('tr').find('.variable_size').val();
+    $('.variable_price').each(function(){
+      if (size_value == $(this).parents('tr').find('.variable_size').val() && '' != $(this).parents('tr').find('.variable_size').val()) {
+        $(this).val(price_value);
+      }
+    });
+    return false;
+  });
+
+  $('.variable_weight').change(function(){
+    var weight_value = $(this).val();
+    var size_value = $(this).parents('tr').find('.variable_size').val();
+    $('.variable_weight').each(function(){
+      if (size_value == $(this).parents('tr').find('.variable_size').val() && '' != $(this).parents('tr').find('.variable_size').val()) {
+        $(this).val(weight_value);
+      }
+    });
+    return false;
+  });
+
+  $('.variable_color').change(function(){
+    var origin_color_value = $(this).data('origin-color-value');
+    var color_value = $(this).val();
+    $('.variable_color').each(function(){
+      if (origin_color_value == $(this).data('origin-color-value')) {
+        $(this).val(color_value);
+      }
+    });
+    return false;
+  });
+
+  $('.variable_title').change(function(){
+    var origin_color_value = $(this).data('color-value');
+    var vtitle_value = $(this).val();
+    $('.variable_title').each(function(){
+      if (origin_color_value == $(this).data('color-value')) {
+        $(this).val(vtitle_value);
+      }
+    });
+    return false;
+  });
+
+  $('#product_title').change(function(){
+    var title_value = $(this).val();
+    $('.variable_title').each(function(){
+      $(this).val(title_value);
+    });
+    return false;
+  })
+
+  $('.variable_size').change(function(){
+    var size_value = $(this).val();
+    var origin_size_value = $(this).data('origin-size');
+    $('.variable_size').each(function(){
+      if (origin_size_value == $(this).data('origin-size') && '' != $(this).data('origin-size')) {
+        $(this).val(size_value);
+      }
+    });
+    return false;
+  });
+
+  $('#changeAttributeName').click(function(){
+    var current_color = 'HelloWrold';
+    var change_name_int = 65;
+    $('.variable_color').each(function(){
+      if (current_color == 'HelloWrold' || current_color == $(this).val()) {
+        current_color = $(this).val();
+        $(this).val(String.fromCharCode(change_name_int));
+      } else {
+        change_name_int = change_name_int + 1;
+        current_color = $(this).val();
+        $(this).val(String.fromCharCode(change_name_int));
+      }
+    });
+    return false;
+  });
+
+  $('#formSubmit').click(function(){
+    if ($('#product_product_weight').val() == '') {
+      alert('产品重量不能为空！');
+      return false;
+    }
+    $('form').submit();
+  });
+  $('#formSubmitReturn').click(function(){
+    if ($('#product_product_weight').val() == '') {
+      alert('产品重量不能为空！');
+      return false;
+    }
+    $('#is_return').val('on');
+    $('form').submit();
+  });
+
+  $('#product_avatar').change(function(){
+    // $('upload_custome_image').form.submit.click();
+        if (this.files && this.files[0]) {
+            var reader0 = new FileReader();
+            reader0.onload = imageIsLoaded;
+            reader0.readAsDataURL(this.files[0]);
+        }
+        if (this.files && this.files[1]) {
+            var reader1 = new FileReader();
+            reader1.onload = imageIsLoaded1;
+            reader1.readAsDataURL(this.files[1]);
+        }
+        if (this.files && this.files[2]) {
+            var reader2 = new FileReader();
+            reader2.onload = imageIsLoaded2;
+            reader2.readAsDataURL(this.files[2]);
+        }
+        if (this.files && this.files[3]) {
+            var reader3 = new FileReader();
+            reader3.onload = imageIsLoaded3;
+            reader3.readAsDataURL(this.files[3]);
+        }
+        if (this.files && this.files[4]) {
+            var reader4 = new FileReader();
+            reader4.onload = imageIsLoaded4;
+            reader4.readAsDataURL(this.files[4]);
+        }
+        if (this.files && this.files[5]) {
+            var reader5 = new FileReader();
+            reader5.onload = imageIsLoaded5;
+            reader5.readAsDataURL(this.files[5]);
+        }
+    // alert($(this).val());
+    // alert(this.files[0]);
+    // var uploadPath = $(this).val();
+    // var uploadFile = this.files[0];
+    // $.ajax({
+    //   url: '/products/custome_upload_image',
+    //   data: {upload_path: uploadPath, upload_file: uploadFile},
+    //   type: 'post',
+    //   success: function(data){
+    //     alert(data);
+    //   }
+    // })
+  });
+
+  function imageIsLoaded(e) {
+    $('#avatarImgDiv').css('display','inline');
+    $('#myImg1').attr('src', e.target.result);
+    $('#myImg1').css('display','inline');
+  };
+
+  function imageIsLoaded1(e) {
+    $('#avatarImgDiv1').css('display','inline');
+    $('#myImg2').attr('src', e.target.result);
+    $('#myImg2').css('display','inline');
+  };
+
+  function imageIsLoaded2(e) {
+    $('#avatarImgDiv2').css('display','inline');
+    $('#myImg3').attr('src', e.target.result);
+    $('#myImg3').css('display','inline');
+  };
+
+  function imageIsLoaded3(e) {
+    $('#avatarImgDiv3').css('display','inline');
+    $('#myImg4').attr('src', e.target.result);
+    $('#myImg4').css('display','inline');
+  };
+
+  function imageIsLoaded4(e) {
+    $('#avatarImgDiv4').css('display','inline');
+    $('#myImg5').attr('src', e.target.result);
+    $('#myImg5').css('display','inline');
+  };
+
+  function imageIsLoaded5(e) {
+    $('#avatarImgDiv5').css('display','inline');
+    $('#myImg6').attr('src', e.target.result);
+    $('#myImg6').css('display','inline');
+  };
+  // $('form#upload_custome_image').submit(function(){
+  //   var valuesToSubmit = $(this).serialize();
+  //   alert(valuesToSubmit);
+  // });
+
+  $('.productTypeOKClick').click(function(){
+    var product_type_id = $("#product_select_value1").val();
+    var product_id = "<%= @product.id %>";
+
+    $.ajax({
+      url: '/products/update_attributes_div',
+      type: 'POST',
+      data: {product_type_id: product_type_id, product_id: product_id},
+      success: function(){
+
+      }
+    })
+  });
+
+  $('.product_image').dblclick(function(){
+    var flag = $(this).attr("src");
+    if(flag == ''){
+      var src = $(this).data("src");
+      $(this).attr('src', src);
+      $(this).addClass('product_image_count');
+      $(this).next('.product_hidden_field_value:first').attr('value', src);
+    }else{
+      $(this).attr('src','');
+      $(this).removeClass('product_image_count');
+      $(this).next('.product_hidden_field_value:first').attr('value', '');
+    }
+  });
+
+  $('.product_image').click(function(){
+      $(this).toggleClass('click_select');
+      $('#cut_review_image').attr('src', $(this).attr('src'));
+      var cut_images = '|';
+      $('.click_select').each( function(){
+        cut_images = cut_images + '|' + $(this).attr('src');
+      });
+      $('#cut_image_urls').attr('value', cut_images);
+  });
+
+  $('.variable_image').dblclick(function(){
+    var flag = $(this).attr("src");
+    var src = $(this).data("src");
+    var classString = $(this).attr('class');
+    var classNames = classString.split(" ");
+    var names = "."+classNames[1];
+    if(flag==''){
+      $(names).each(function(){
+        $(this).next('.hidden_field_value:first').attr('value', src);
+        $(this).attr('src',src);
+      })
+    }else{
+      $(names).each(function(){
+        $(this).next('.hidden_field_value:first').attr('value', '');
+        $(this).attr('src','');
+      })
+    }
+  });
+
+  $('#cut_review_image').mousemove(function(e){
+    var xx = e.pageX;
+    var yy = e.pageY;
+    var div_x = this.offsetLeft;
+    var div_y = this.offsetTop;
+    $('#x_pos_hidden').attr('value', (xx - div_x));
+    $('#y_pos_hidden').attr('value', (yy - div_y));
+  });
+
+  $('#cut_review_image').click(function(e){
+    var x = $('#x_pos_hidden').attr('value');
+    $('#x_pos').attr('value', x);
+    var y = $('#y_pos_hidden').attr('value');
+    $('#y_pos').attr('value', y);
+  })
+</script>
+
+
+<script type="text/javascript">
+  $('#product_page .productTypeClose1').click(function(){
+    $('#product_page #productTypeDiv1').css('display','none');
+    $('#product_page #productTypeHistory1').find('.selectedLevel2Value1').remove();
+    $('.productTypeOK1').css('display', 'none');
+    $.ajax({
+      url: '/product_types/get_children_product_types',
+      type: 'POST',
+      data: {template_type:'1'},
+      success: function(){
+
+      }
+    });
+  });
+
+  $('#product_page .productTypeCancel1').click(function(){
+    $('#product_page #product_select_value1').attr('value','');
+    $('#product_page #productTypeText1').val('');
+  });
+
+  $('#product_page #productTypeText1').click(function(){
+    $(this).val('');
+    var left = $(this).offset().left;
+    var top = $(this).offset().top;
+    var height = $(this).css('height');
+    $('#product_page #productTypeDiv1').css('left', left);
+    $('#product_page #productTypeDiv1').css('top', top);
+    $('#product_page #productTypeDiv1').css('margin-top', height);
+    $('#product_page #productTypeDiv1').fadeIn();
+    $('#product_page #productTypeDivLevel11').css('display','inline');
+  });
+</script>

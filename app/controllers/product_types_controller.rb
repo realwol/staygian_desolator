@@ -1,6 +1,7 @@
 class ProductTypesController < ApplicationController
   before_action :set_product_type, only: [:show, :edit, :update, :destroy, :update_product_type_attribute, :update_final_type, :update_key_words, :update_product_type_translation]
-  
+  before_action :authenticate_user!
+
   def search_des_translation
     desc_name = params[:desc_name]
     @descriptions = DescriptionTranslationHistory.where(" description like ? ", "%#{desc_name}%").order('usage_count desc').page(params[:page])
@@ -60,10 +61,10 @@ class ProductTypesController < ApplicationController
         if product_type.father_node == '0'
           @children_product_types = ProductType.where(father_node: '0')
         else
-          @children_product_types = ProductType.find(product_type.father_node).children_product_types
+          @children_product_types = ProductType.find(product_type.father_node).current_children_product_types(selected_user)
         end
       else
-        @children_product_types = ProductType.find(params[:product_type_id]).children_product_types
+        @children_product_types = ProductType.find(params[:product_type_id]).current_children_product_types(selected_user)
       end
     end
   end
@@ -91,7 +92,7 @@ class ProductTypesController < ApplicationController
 
   def update_final_type
     if params[:checked_or_not] == 'checked'
-      if @product_type.children_product_types.count < 1
+      if @product_type.children_product_types(selected_user).count < 1
         @product_type.update_attributes(is_final_type: true)
         render json: 3
       else
@@ -112,7 +113,7 @@ class ProductTypesController < ApplicationController
   def next_product_types_list
     product_type = ProductType.find(params[:id])
     @product_type_father_node = params[:id]
-    @product_types = product_type.children_product_types
+    @product_types = product_type.children_product_types(selected_user)
   end
 
   def update_type_introduction
@@ -255,7 +256,7 @@ class ProductTypesController < ApplicationController
 
   def index
     @product_type_father_node = params[:father_node] || '0'
-    @product_types = selected_user.product_types.where(father_node: @product_type_father_node)
+    @product_types = selected_user.get_current_product_types.where(father_node: @product_type_father_node)
   end
 
   def show
