@@ -20,7 +20,7 @@ class ProductType < ActiveRecord::Base
   end
 
   def self.first_level_types
-    self.where(father_node: 0)
+    self.where(father_node: 0, user_id: [nil, user.id, 1])
   end
 
   def has_children? user
