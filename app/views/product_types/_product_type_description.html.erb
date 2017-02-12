@@ -40,7 +40,7 @@
       <td><textarea cols="100" rows="5" name="descriptionTextArea7"> <%= product_type_description_translation_value.italy %> </textarea></td>
     </tr>
   </table>
-  <% if current_user.is_dd? || product_type.user_id.to_i == current_user.id %>
+  <% if current_user.is_dd? || @product_type.user_id.to_i == current_user.id %>
     <%= submit_tag '保存' %>
   <% end %>
 <% end %>

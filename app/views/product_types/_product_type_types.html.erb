@@ -29,6 +29,6 @@
     </tr>
   <% end %>
 </table>
-<% if current_user.is_dd? || product_type.user_id.to_i == current_user.id %>
+<% if current_user.is_dd? || @product_type.user_id.to_i == current_user.id %>
   <button id="saveTypeSetting" >保存</button>
 <% end %>

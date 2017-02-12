@@ -20,7 +20,7 @@
     </div>
 
     <div class="actions">
-      <% if current_user.is_dd? || product_type.user_id.to_i == current_user.id %>
+      <% if current_user.is_dd? || @product_type.user_id.to_i == current_user.id %>
         <%= f.submit '保存分类名' %>
       <% end %>
     </div>
