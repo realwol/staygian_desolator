@@ -6,6 +6,36 @@ class ProductsController < ApplicationController
     @product = Product.new
   end
 
+  def create_new_product
+    binding.pry
+    return
+    @product = Product.new(translate_status:false, update_status:false, on_sale:true, user_id: current_user.id)
+    @product.origin_address = product_params[:purchase_link]
+    @product.title = product_params[:title]
+    # @product.search_link_id = tmall_link.search_link_id
+  
+    @product.stock = product_params[:stock]
+    # @product.product_link_id = tmall_link.product_link_id
+
+    @product.product_number = product_params[:product_number]
+    @product.producer = product_params[:producer]
+    # @product.brand_id = Brand.find_by(name: brand_name).try(:id)
+    @product.details = product_params[:details]
+
+    size = rand(5..8)
+    sku1 = (('a'..'z').to_a + (1..9).to_a).shuffle.sample(size).join
+    @product.sku1 = sku1
+    respond_to do |format|
+      if @product.save
+        format.html { redirect_to root_path, notice: 'Product was successfully created.' }
+        format.json { render :show, status: :created, location: @product }
+      else
+        format.html { render :new }
+        format.json { render json: @product.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
   def search_by_condition
     link_desc = params[:link_desc]
     @search_links = SearchLink.first_search_link.where("link_desc like '%#{link_desc}%'").page params[:page]

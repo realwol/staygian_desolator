@@ -1,4 +1,4 @@
-<%= form_for(@product) do |f| %>
+<%= form_for(@product, url: create_new_product_products_path) do |f| %>
   <% if @product.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(@product.errors.count, "error") %> prohibited this product from being saved:</h2>
@@ -12,9 +12,6 @@
   <% end %>
 
   <div class="field">
-    <label>源地址：</label>
-    <%= link_to "#{@product.origin_address}", "#{@product.origin_address}", :target => 'blank' %>
-    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
     <label>购买地址：</label>
     <%= f.text_area :purchase_link, size:'60x1' %>
   </div>
@@ -22,21 +19,15 @@
     <%= f.label "产品号:" %>
     <%= f.text_field :product_number, size:20 %>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
     <%= f.label "品牌:" %>
-    <%= @product.brand.try(:name) %>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+    <%= text_field_tag :product_brand, nil, size:20 %>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
     <%= f.label "生产商家:" %>
     <%= f.text_field :producer %>  
   </div>
   <div class="field" id="product_page" >
-    <%
-      @template_type = '1' 
-      @product_type = @product.product_type
-    %>
+    <% @template_type = '1'; @product_type = @product.product_type %>
     <%= render '/products/product_type_select_template', locals:{ template_type: @template_type, product_type: @product_type} %>
   </div>
-  <h5>
-    自定义属性：
-  <hr/>
-  </h5>
+  <h5>自定义属性：<hr/></h5>
   <div id="customeProductAttributes">
     <%= render 'custome_product_attributes' %>
   </div>
@@ -72,24 +63,10 @@
       <% end %>
     <% end %>
 
-    <div id="avatarImgDiv" style=" display:none; float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px; background: grey;">
-      <%= image_tag('', style:'width:50px; display:none;', class:" product_image_count", id:'myImg1', alt:'', "data-src"=>'') %>
+    <div id="avatarImgDiv" class="avatarImgDiv" style=" display:none; float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px; background: grey;">
+      <%= image_tag('', style:'width:50px; display:none;', class:" product_image_count", class:'myImg', alt:'', "data-src"=>'') %>
     </div>
-    <div id="avatarImgDiv1" style=" display:none; float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px; background: grey;">
-      <%= image_tag('', style:'width:50px; display:none;', class:" product_image_count", id:'myImg2', alt:'', "data-src"=>'') %>
-    </div>
-    <div id="avatarImgDiv2" style=" display:none; float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px; background: grey;">
-      <%= image_tag('', style:'width:50px; display:none;', class:" product_image_count", id:'myImg3', alt:'', "data-src"=>'') %>
-    </div>
-    <div id="avatarImgDiv3" style=" display:none; float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px; background: grey;">
-      <%= image_tag('', style:'width:50px; display:none;', class:" product_image_count", id:'myImg4', alt:'', "data-src"=>'') %>
-    </div>
-    <div id="avatarImgDiv4" style=" display:none; float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px; background: grey;">
-      <%= image_tag('', style:'width:50px; display:none;', class:" product_image_count", id:'myImg5', alt:'', "data-src"=>'') %>
-    </div>
-    <div id="avatarImgDiv5" style=" display:none; float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px; background: grey;">
-      <%= image_tag('', style:'width:50px; display:none;', class:" product_image_count", id:'myImg6', alt:'', "data-src"=>'') %>
-    </div>
+
     <br/>
     <%= hidden_field_tag 'cut_image_urls' %>
     <%= f.label '图片裁剪方式' %>
@@ -127,7 +104,7 @@
   </div>
 
   <hr/>
-  <h3>Editing Variables</h3>
+  <h3>Editing Variables</h3><input type='button' class='add_variable' value='添加' />
     <table class="table table-bordered">
       <thead>
         <tr>
@@ -139,80 +116,39 @@
           <th><%= '重量' %></th>
           <th><%= '库存' %></th>
           <th><%= '描述' %></th>
-          <th><%= '操作' %></th>
         </tr>
       </thead>
       <tbody>
-        <% pre_color = nil; count = 0; %>
-        <% @product.variables.each_with_index do |v,v_index| %>
-          <%if ((!pre_color) || (pre_color == v.color))
-            else
-              count = count + 1
-            end
-            pre_color = v.color%>
-
-          <tr>
-            <%= hidden_field_tag 'variable[][index]', nil, value:v.id, class:'hidden_tr_need_remove' %>
-            <td rowspan="2"><%= check_box_tag 'item' %></td>
-            <td rowspan="2" style="width:500px;">
-              <ul id="ul-sortable" style="list-style-type: none; margin: 0; padding: 0; width: 450px;">
-              <% v.valid_images.each_with_index do |img, vv_index| %>
-                <li class="ui-state-default" style="float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px;">
-                  <%= image_tag(img, style:'width:50px;', class:"variable_image image_#{count}_#{vv_index} ", "data-src"=>img, alt:'' ) %>
-                  <%= hidden_field_tag "variable[][image_url#{vv_index+1}]", nil, class:'hidden_field_value', value: img %>
-                </li>
-              <% end %>
-              <% [@product.avatar_img_url, @product.avatar_img_url1, @product.avatar_img_url2].compact.each_with_index do |img, vv_index| %>
-              <%if img.present?%>
-                <% vv_index = v.valid_images.size + vv_index %>
-                <li class="ui-state-default" style="float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px;">
-                  <%= image_tag(img, style:'width:50px;', class:"variable_image image_#{count}_#{vv_index} ", "data-src"=>img, alt:'' ) %>
-                  <%= hidden_field_tag "variable[][image_url#{v.valid_images.size+vv_index+1}]", nil, class:'avatar_url hidden_field_value', value:img %>
-                </li>
-              <% end %>
-              <% end %>
-              </ul>
-            </td>
-
-            <td><%= text_field_tag 'variable[][color]', nil, value: v.color, class:'variable_color', style:'width:150px;', "data-origin-color-value"=> v.color %></td>
-            <td><%= text_field_tag 'variable[][size]', nil, value:v.size, "data-origin-size" => v.size, class:'variable_size', style:'width:150px' %></td>
-            <td><%= text_field_tag 'variable[][price]', nil, value:v.price, class:'variable_price', style:'width:50px' %></td>
-            <td>
-              <% if v.weight.present? %>
-                <%= text_field_tag 'variable[][weight]', v.weight, style:'width:50px;', class:'variable_weight' %>
-              <% else %>
-                <%= text_field_tag 'variable[][weight]', @product.product_weight, style:'width:50px;', class:'variable_weight' %>
-              <% end %>
-            </td>
-            <td><%= text_field_tag 'variable[][stock]', nil, value:v.stock, style:'width:40px' %></td>
-            <td rowspan="2" ><%= text_area_tag 'variable[][desc]', v.desc, style:'height:100%;', class:'variable_desc' %></td>
-            <td rowspan="2" ><input type='button' class='remove_variable' value='Remove' data-variable-id="<%= v.id %>" /></td>
-          </tr>
-
-          <tr>
-            <td colspan="5">
-              <% if v.title.present? %>
-                <%= text_field_tag 'variable[][title]', nil, value: v.title, class:'variable_title', "data-color-value"=> v.color, style:'width:100%;' %>
-              <% else %>
-                <%= text_field_tag 'variable[][title]', nil, value: @product.title, class:'variable_title', "data-color-value"=> v.color, style:'width:100%;' %>
-              <% end %>
-            </td>
-          </tr>
-        <% end %>
+        <tr id="tr-default" style="display:none;">
+          <%= hidden_field_tag 'variable[]', nil, class:'hidden_tr_need_remove' %>
+          <td rowspan="2"><%= check_box_tag 'item' %></td>
+          <td rowspan="2" style="width:500px;">
+            <div id="avatarVariableImgDiv" class="avatarVariableImgDiv defaultVariableImg" style=" display:none; float: left; width: 30px; height: 30px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px; background: grey;">
+              <%= image_tag('', style:'width:50px; display:none;', class:"product_image_count", class:'myVariableImg', alt:'', "data-src"=>'') %>
+            </div>
+          </td>
+          <td><%= text_field_tag 'variable[][color]', nil, class:'variable_color', style:'width:150px;', "data-origin-color-value"=> '' %></td>
+          <td><%= text_field_tag 'variable[][size]', nil, "data-origin-size" => '', class:'variable_size', style:'width:150px' %></td>
+          <td><%= text_field_tag 'variable[][price]', nil, class:'variable_price', style:'width:50px' %></td>
+          <td>
+            <%= text_field_tag 'variable[][weight]', nil, style:'width:50px;', class:'variable_weight' %>
+          </td>
+          <td><%= text_field_tag 'variable[][stock]', nil, style:'width:40px' %></td>
+          <td rowspan="2" ><%= text_area_tag 'variable[][desc]', nil, style:'height:100%;', class:'variable_desc' %></td>
+        </tr>
+        <tr id="tr-default-1" class="tr-default-1" style="display:none;">
+          <td colspan="5">
+            <%= text_field_tag 'variable[][title]', nil, class:'variable_title', "data-color-value"=>'', style:'width:100%;' %>
+          </td>
+        </tr>
       </tbody>
     </table>
-
   <hr/>
   <div class="actions">
     拆分产品：<%= check_box_tag 'is_separate', nil, @product.is_separate %><br/>
     <%= hidden_field_tag 'is_return' %>
-    <% if @product.auto_flag == '14' %>
-      <button><%= link_to '上架', onsale_product_product_path(@product), data: { confirm: '确认上架?' } %></button>
-      <button><%= link_to '删除', @product, method: :delete, data: { confirm: '确认删除?' } %></button>
-    <% else %>
-      <button id="formSubmit" >上传</button>
-      <button id="formSubmitReturn" >上传并返回本页面</button>
-    <% end %>
+    <button id="formSubmit" >上传</button>
+    <button id="formSubmitReturn" >上传并返回本页面</button>
   </div>
 <% end %>
 <div>
@@ -220,6 +156,11 @@
 </div>
 
 <script type="text/javascript">
+
+  $('.add_variable').click(function(){
+    $('#tr-default-1').after($('#tr-default-1').clone().show());
+    $('#tr-default-1').after($('#tr-default').clone().show());
+  });
   
   $('.variable_image').mouseover(function(){
     var img_src = $(this).attr('src');
@@ -234,7 +175,7 @@
 
   $('#product_product_weight').change(function(){
     var weight_value = $(this).val();
-    $('.variable_weight').each(function(){
+    $('.variable_weight').each(function(){  
       $(this).val(weight_value);
     });
     return false;
@@ -385,59 +326,17 @@
             reader5.onload = imageIsLoaded5;
             reader5.readAsDataURL(this.files[5]);
         }
-    // alert($(this).val());
-    // alert(this.files[0]);
-    // var uploadPath = $(this).val();
-    // var uploadFile = this.files[0];
-    // $.ajax({
-    //   url: '/products/custome_upload_image',
-    //   data: {upload_path: uploadPath, upload_file: uploadFile},
-    //   type: 'post',
-    //   success: function(data){
-    //     alert(data);
-    //   }
-    // })
   });
 
   function imageIsLoaded(e) {
-    $('#avatarImgDiv').css('display','inline');
-    $('#myImg1').attr('src', e.target.result);
-    $('#myImg1').css('display','inline');
-  };
+    $('.avatarImgDiv:last').after($('#avatarImgDiv').clone().css('display','inline').attr("id", ''));
+    $('.myImg:last').attr('src', e.target.result);
+    $('.myImg:last').css('display','inline');
 
-  function imageIsLoaded1(e) {
-    $('#avatarImgDiv1').css('display','inline');
-    $('#myImg2').attr('src', e.target.result);
-    $('#myImg2').css('display','inline');
+    $('#avatarVariableImgDiv .myVariableImg').attr('src', e.target.result);
+    $('#avatarVariableImgDiv .myVariableImg').css('display','inline');
+    $('.defaultVariableImg').after($('#avatarVariableImgDiv').clone().css('display', 'inline').attr('id','').removeClass('defaultVariableImg'));
   };
-
-  function imageIsLoaded2(e) {
-    $('#avatarImgDiv2').css('display','inline');
-    $('#myImg3').attr('src', e.target.result);
-    $('#myImg3').css('display','inline');
-  };
-
-  function imageIsLoaded3(e) {
-    $('#avatarImgDiv3').css('display','inline');
-    $('#myImg4').attr('src', e.target.result);
-    $('#myImg4').css('display','inline');
-  };
-
-  function imageIsLoaded4(e) {
-    $('#avatarImgDiv4').css('display','inline');
-    $('#myImg5').attr('src', e.target.result);
-    $('#myImg5').css('display','inline');
-  };
-
-  function imageIsLoaded5(e) {
-    $('#avatarImgDiv5').css('display','inline');
-    $('#myImg6').attr('src', e.target.result);
-    $('#myImg6').css('display','inline');
-  };
-  // $('form#upload_custome_image').submit(function(){
-  //   var valuesToSubmit = $(this).serialize();
-  //   alert(valuesToSubmit);
-  // });
 
   $('.productTypeOKClick').click(function(){
     var product_type_id = $("#product_select_value1").val();
@@ -447,9 +346,7 @@
       url: '/products/update_attributes_div',
       type: 'POST',
       data: {product_type_id: product_type_id, product_id: product_id},
-      success: function(){
-
-      }
+      success: function(){}
     })
   });
 
