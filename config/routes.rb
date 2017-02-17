@@ -135,6 +135,7 @@ Rails.application.routes.draw do
     end
 
     member do
+      get 'new_product_wv'
       get 'regrasp_product'
       get 'translate_preview'
       get 'shield_product'
@@ -143,6 +144,7 @@ Rails.application.routes.draw do
       get 'offsale_product'
       get 'onsale_product'
       get 'temp_offsale_product'
+      patch 'create_new_product_wv'
       post 'update_separate_product'
     end
   end

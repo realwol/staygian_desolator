@@ -1,5 +1,5 @@
 class ProductsController < ApplicationController
-  before_action :set_product, only: [:show, :edit, :update, :destroy, :shield_product, :presale_product, :offsale_product, :temp_offsale_product, :onsale_product, :edited_product, :translate_preview]
+  before_action :set_product, only: [:create_new_product_wv, :new_product_wv, :show, :edit, :update, :destroy, :shield_product, :presale_product, :offsale_product, :temp_offsale_product, :onsale_product, :edited_product, :translate_preview]
   before_action :authenticate_user!
 
   def new_product
@@ -7,9 +7,52 @@ class ProductsController < ApplicationController
   end
 
   def create_new_product
-    binding.pry
-    return
     @product = Product.new(translate_status:false, update_status:false, on_sale:true, user_id: current_user.id)
+
+    if params[:product][:avatar].present?
+      flag = [false, false, false, false, false, false]
+      if params[:product][:avatar][1].present?
+        params[:product][:avatar1] = params[:product][:avatar][1]
+        flag[1] = true
+      end
+     if params[:product][:avatar][2].present?
+        params[:product][:avatar2] = params[:product][:avatar][2]
+        flag[2] = true
+      end
+     if params[:product][:avatar][3].present?
+        params[:product][:avatar3] = params[:product][:avatar][3]
+        flag[3] = true
+      end
+     if params[:product][:avatar][4].present?
+        params[:product][:avatar4] = params[:product][:avatar][4]
+        flag[4] = true
+      end
+     if params[:product][:avatar][5].present?
+        params[:product][:avatar5] = params[:product][:avatar][5]
+        flag[5] = true
+      end
+     if params[:product][:avatar][0].present?
+        params[:product][:avatar] = params[:product][:avatar][0]
+        flag[0] = true
+      end
+    else
+      params[:product][:avatar], params[:product][:avatar1], params[:product][:avatar2], params[:product][:avatar3], params[:product][:avatar4], params[:product][:avatar5] = '', '', '', '', '', ''
+    end
+
+    # set product separate
+    if params[:is_separate] == 'on'
+      @product.is_separate = true
+      params[:is_separate] = true
+    else
+      @product.is_separate = false
+      params[:is_separate] = false
+    end
+
+    # clear all products images before create
+    @product.images1 = @product.images2 =@product.images3 = @product.images4 = @product.images5 = @product.images6 = @product.images7 = @product.images8 = @product.images9 = @product.images10 = nil
+    @product.images11 = @product.images12 =@product.images13 = @product.images14 = @product.images15 = @product.images16 = @product.images17 = @product.images18 = @product.images19 = @product.images20 = nil
+    @product.images21 = @product.images22 =@product.images23 = @product.images24 = @product.images25 = @product.images26 = @product.images27 = @product.images28 = @product.images29 = @product.images30 = nil
+
     @product.origin_address = product_params[:purchase_link]
     @product.title = product_params[:title]
     # @product.search_link_id = tmall_link.search_link_id
@@ -26,15 +69,103 @@ class ProductsController < ApplicationController
     sku1 = (('a'..'z').to_a + (1..9).to_a).shuffle.sample(size).join
     @product.sku1 = sku1
     respond_to do |format|
+      @product.shield_type = 0
+      @product.on_sale = true
+      @product.update_status = true
+      product_params["desc1"].gsub!(/[，、]/, ',')
+      product_params["desc2"].gsub!(/[，、]/, ',')
+      product_params["desc3"].gsub!(/[，、]/, ',')
+      if @product.update(product_params)
+        if @product.first_updated_time.present?
+          @product.update_attributes(update_status:true)
+        else
+          @product.update_attributes(update_status:true, first_updated_time: Time.now)
+        end
+        # @product.save_attributes
+
+        # save custome attributes
+        if params["attribte_options"].present?
+          @product_type_attributes = ProductAttribute.where(product_type_id: @product.product_type_id)
+          customize_attributes_hash = {}
+          customize_attributes_array = []
+          @product_type_attributes.each_with_index do |attribute, index|
+            product_attribute = @product.product_customize_attributes_relations.where(attribute_name: attribute.attribute_name).last
+            if product_attribute.present?
+              if attribute.is_locked
+                attributes_translation_history_id = params["attribte_options"].values[index]
+              else
+                attributes_translation_history_id = AttributesTranslationHistory.find_by(attribute_name: params["attribte_options"].values[index]).try(:id)
+              end
+              product_attribute.update_attributes(attributes_translation_history_id: attributes_translation_history_id)
+            else
+              customize_attributes_hash[:product_type_id] = @product.product_type_id
+              customize_attributes_hash[:product_id] = @product.id
+              customize_attributes_hash[:attribute_name] = attribute.attribute_name
+              if attribute.is_locked
+                customize_attributes_hash[:attributes_translation_history_id] = params["attribte_options"].values[index]
+              else
+                customize_attributes_hash[:attributes_translation_history_id] = AttributesTranslationHistory.find_by(attribute_name: params["attribte_options"].values[index]).try(:id)
+              end
+              customize_attributes_array << customize_attributes_hash.dup
+            end
+          end
+          ProductCustomizeAttributesRelation.create(customize_attributes_array) if customize_attributes_array.present?
+        end
+
+        product_images_array = [@product.images1, @product.images2, @product.images3, @product.images4, @product.images5, @product.images6, @product.images7, @product.images8, @product.images9, @product.images10, @product.images11, @product.images12, @product.images13, @product.images14, @product.images15, @product.images16, @product.images17, @product.images18, @product.images19, @product.images20, @product.images21, @product.images22, @product.images23, @product.images24, @product.images25, @product.images26, @product.images27, @product.images28, @product.images29, @product.images30]
+        avatar_urls = []
+        if params[:product][:avatar].present?
+          @product.avatar_img_url, @product.avatar_img_url1, @product.avatar_img_url2, @product.avatar_img_url3, @product.avatar_img_url4, @product.avatar_img_url5 = nil
+          [@product.avatar.try(:url), @product.avatar1.try(:url), @product.avatar2.try(:url), @product.avatar3.try(:url), @product.avatar4.try(:url), @product.avatar5.try(:url)].each_with_index do |img_url, index|
+            if img_url.present?
+              puts 'image upload'
+              avatar_urls << QiniuUploadHelper::QiNiu.upload_from_client(Rails.root.join('public' "#{img_url}")) if flag[index]
+              sleep 1 # keep the upload the right result
+            end
+          end
+          @product.avatar_img_url = avatar_urls[0]
+          @product.avatar_img_url1 = avatar_urls[1]
+          @product.avatar_img_url2 = avatar_urls[2]
+          @product.avatar_img_url3 = avatar_urls[3]
+          @product.avatar_img_url4 = avatar_urls[4]
+          @product.avatar_img_url5 = avatar_urls[5]
+          @product.avatar = @product.avatar1 = @product.avatar2 = @product.avatar3 = @product.avatar4 = @product.avatar5 = nil
+        else
+          @product.avatar_img_url, @product.avatar_img_url1, @product.avatar_img_url2, @product.avatar_img_url3, @product.avatar_img_url4, @product.avatar_img_url5 = nil
+          @product.avatar = @product.avatar1 = @product.avatar2 = @product.avatar3 = @product.avatar4 = @product.avatar5 = nil
+        end
+        @product.translate_status = false
+
       if @product.save
-        format.html { redirect_to root_path, notice: 'Product was successfully created.' }
-        format.json { render :show, status: :created, location: @product }
-      else
-        format.html { render :new }
-        format.json { render json: @product.errors, status: :unprocessable_entity }
+        format.html { redirect_to new_product_wv_product_path(@product), notice: 'Product was successfully updated.' }
+      end
       end
     end
   end
+
+  def new_product_wv
+  end
+
+  def create_new_product_wv
+        if params["variable"].present?
+          # @product.variables.create(variable_params.delete_if{|i| i.blank?}[1..-1])
+          Variable.create_product_variable(params["variable"], @product)
+          params["variable"].each do |param_variable|
+            variable_size = param_variable["size"]
+            variable_color = param_variable["color"]
+
+            if VariableTranslateHistory.where(word: variable_size, variable_from: 'size').select(:id).pluck(:id).count < 1
+              VariableTranslateHistory.create(word: variable_size, variable_from: 'size', user: @product.user)
+            end
+
+            if VariableTranslateHistory.where(word: variable_color, variable_from: 'color').select(:id).pluck(:id).count < 1
+              VariableTranslateHistory.create(word: variable_color, variable_from: 'color', user: @product.user)
+            end
+          end
+        end
+    redirect_to edit_product_path(@product)
+  end
+
 
   def search_by_condition
     link_desc = params[:link_desc]
@@ -863,6 +994,16 @@ class ProductsController < ApplicationController
                                       :shield_type, :shop_id, :shield_untill, :presale_date, :strap_type, :lining_description, :shoe_width,
                                       :platform_height, :shaft_diameter, :shaft_height, :leather_type, :style_name, :department_name, :purchase_link,
                                       :product_weight, :editing_backup, :avatar, :avatar1, :avatar2, :avatar3, :avatar4, :avatar5, :stock)
+    end
+
+    def variable_params
+      params.require(:variable).each do |variable|
+        next if variable.blank?
+        variable.permit(:color, :size, :weight, :desc, :stock, :title, :price, :images1, :images2, :images3, :images4, :images5,
+                                      :images6, :images7, :images8, :images9, :images10, :images11, :images12, :images13, :images14, :images15,
+                                      :images16, :images17, :images18, :images19, :images20, :images21, :images22, :images23, :images24, :images25,
+                                      :images26, :images27, :images28, :images29, :images30)
+      end
     end
 
     def avaliable? link

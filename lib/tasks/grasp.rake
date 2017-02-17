@@ -128,7 +128,7 @@ def grasp_product tmall_link
   end
 
   details_after_filter = []
-  filter_word_list = ProductDetailForbiddenList.all.map(&:word).uniq
+  filter_word_list = ProductDetailForbiddenList.select(:word).uniq.map(&:word)
   @details.each do |detail|
     if detail.index(':').nil?
       end_count = detail.length

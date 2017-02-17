@@ -20,6 +20,23 @@ class Variable < ActiveRecord::Base
   	@valid_images
   end
 
+  def self.create_product_variable(options, product)
+    variable_array = []
+    options.delete_if{|i| i.blank?}[1..-1].each do |variable|
+      variable_hash = {}
+      variable_hash[:color] = variable[:color]
+      variable_hash[:size] = variable[:size]
+      variable_hash[:weight] = variable[:weight]
+      variable_hash[:desc] = variable[:desc]
+      variable_hash[:title] = variable[:title]
+      variable_hash[:image_url1] = variable[:image_url1]
+      variable_hash[:image_url2] = variable[:image_url2]
+      variable_hash[:image_url3] = variable[:image_url3]
+      variable_array << variable_hash
+    end
+    product.variables.create(variable_array)
+  end
+
   def self.update_product_variable(options, product)
     return if options.blank?
     variables = product.variables
