@@ -1,6 +1,5 @@
 <% @result = @result || {} %>
 <%= form_tag(search_products_path, method:'get') do %>
-  
   <% @template_type = '0' %>
   <%= render 'products/product_type_select_template' %>
 
@@ -12,6 +11,11 @@
   <%= text_field_tag 'sku_value', nil, value: @result[:sku] %>
   <%= hidden_field_tag 'action_from', value= @action_from %>
   <%= button_tag '搜索' %>
+<% end %>
+
+<%= form_tag(build_product_products_path, method:'post') do %>
+  <span>变体个数：</span><%= text_field_tag 'variable_sum' %>
+  <%= submit_tag '新建产品' %>
 <% end %>
 <hr/>
 

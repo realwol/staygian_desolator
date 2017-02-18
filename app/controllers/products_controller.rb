@@ -2,6 +2,14 @@ class ProductsController < ApplicationController
   before_action :set_product, only: [:create_new_product_wv, :new_product_wv, :show, :edit, :update, :destroy, :shield_product, :presale_product, :offsale_product, :temp_offsale_product, :onsale_product, :edited_product, :translate_preview]
   before_action :authenticate_user!
 
+  def build_product
+    v_sum = params[:variable_sum]
+    new_product = current_user.products.create(translate_status:false, update_status:false, on_sale:true)
+    new_product.variables.create(Array.new(v_sum.to_i) { Hash.new })
+
+    redirect_to edit_product_path(new_product)
+  end
+
   def new_product
     @product = Product.new
   end
