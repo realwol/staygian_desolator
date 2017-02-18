@@ -123,12 +123,12 @@ class ProductsController < ApplicationController
               sleep 1 # keep the upload the right result
             end
           end
-          @product.avatar_img_url = avatar_urls[0]
-          @product.avatar_img_url1 = avatar_urls[1]
-          @product.avatar_img_url2 = avatar_urls[2]
-          @product.avatar_img_url3 = avatar_urls[3]
-          @product.avatar_img_url4 = avatar_urls[4]
-          @product.avatar_img_url5 = avatar_urls[5]
+          @product.images1 = avatar_urls[0]
+          @product.images2 = avatar_urls[1]
+          @product.images3 = avatar_urls[2]
+          @product.images4 = avatar_urls[3]
+          @product.images5 = avatar_urls[4]
+          @product.images6 = avatar_urls[5]
           @product.avatar = @product.avatar1 = @product.avatar2 = @product.avatar3 = @product.avatar4 = @product.avatar5 = nil
         else
           @product.avatar_img_url, @product.avatar_img_url1, @product.avatar_img_url2, @product.avatar_img_url3, @product.avatar_img_url4, @product.avatar_img_url5 = nil
@@ -147,23 +147,25 @@ class ProductsController < ApplicationController
   end
 
   def create_new_product_wv
-        if params["variable"].present?
-          # @product.variables.create(variable_params.delete_if{|i| i.blank?}[1..-1])
-          Variable.create_product_variable(params["variable"], @product)
-          params["variable"].each do |param_variable|
-            variable_size = param_variable["size"]
-            variable_color = param_variable["color"]
-
-            if VariableTranslateHistory.where(word: variable_size, variable_from: 'size').select(:id).pluck(:id).count < 1
-              VariableTranslateHistory.create(word: variable_size, variable_from: 'size', user: @product.user)
-            end
-
-            if VariableTranslateHistory.where(word: variable_color, variable_from: 'color').select(:id).pluck(:id).count < 1
-              VariableTranslateHistory.create(word: variable_color, variable_from: 'color', user: @product.user)
-            end
-          end
+    if params["variable"].present?
+      Variable.create_product_variable(params["variable"], @product)
+      params["variable"].each do |param_variable|
+        variable_size = param_variable["size"]
+        variable_color = param_variable["color"]
+        if VariableTranslateHistory.where(word: variable_size, variable_from: 'size').select(:id).pluck(:id).count < 1
+          VariableTranslateHistory.create(word: variable_size, variable_from: 'size', user: @product.user)
         end
-    redirect_to edit_product_path(@product)
+
+        if VariableTranslateHistory.where(word: variable_color, variable_from: 'color').select(:id).pluck(:id).count < 1
+          VariableTranslateHistory.create(word: variable_color, variable_from: 'color', user: @product.user)
+        end
+      end
+    end
+    if params[:is_return] == 'on'
+      format.html { redirect_to edit_product_path(@product) }
+    else
+      format.html { redirect_to un_updated_page_products_url }
+    end
   end
 
 

@@ -13,16 +13,13 @@
 
   <div class="field">
     <label>源地址：</label>
-    <%= link_to "#{@product.origin_address}", "#{@product.origin_address}", :target => 'blank' %>
-    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+    <%= f.text_area :origin_address, size:'60x1' %><br/>
     <label>购买地址：</label>
     <%= f.text_area :purchase_link, size:'60x1' %>
   </div>
   <div class="field">
     <%= f.label "产品号:" %>
     <%= f.text_field :product_number, size:20 %>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-    <%= f.label "品牌:" %>
-    <%= @product.brand.try(:name) %>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
     <%= f.label "生产商家:" %>
     <%= f.text_field :producer %>  
   </div>
@@ -55,7 +52,7 @@
   <hr/>
 
   <div class="field">
-    <%= f.label 'Images' %><br>
+    <h4>图片</h4>
     <% @product.valid_images.each_with_index do |img,index| %>
       <div style="float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px; background: grey;">
         <%= image_tag(img, style:'width:50px;', class:"product_image product_image_count", alt:'', "data-src"=>img) %>
@@ -134,8 +131,7 @@
       <button><%= link_to '上架', onsale_product_product_path(@product), data: { confirm: '确认上架?' } %></button>
       <button><%= link_to '删除', @product, method: :delete, data: { confirm: '确认删除?' } %></button>
     <% else %>
-      <button id="formSubmit" >上传</button>
-      <button id="formSubmitReturn" >上传并返回本页面</button>
+      <button id="formSubmitReturn" >上传</button>
     <% end %>
   </div>
 <% end %>
