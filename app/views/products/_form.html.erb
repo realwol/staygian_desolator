@@ -289,7 +289,7 @@
     var origin_color_value = $(this).data('origin-color-value');
     var color_value = $(this).val();
     $('.variable_color').each(function(){
-      if (origin_color_value == $(this).data('origin-color-value')) {
+      if (origin_color_value == $(this).data('origin-color-value') && '' != origin_color_value ) {
         $(this).val(color_value);
       }
     });
@@ -300,7 +300,7 @@
     var origin_color_value = $(this).data('color-value');
     var vtitle_value = $(this).val();
     $('.variable_title').each(function(){
-      if (origin_color_value == $(this).data('color-value')) {
+      if (origin_color_value == $(this).data('color-value') && '' != origin_color_value ) {
         $(this).val(vtitle_value);
       }
     });
