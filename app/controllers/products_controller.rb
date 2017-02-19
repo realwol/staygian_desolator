@@ -805,12 +805,26 @@ class ProductsController < ApplicationController
         params[:product][:avatar5] = params[:product][:avatar][5]
         flag[5] = true
       end
+     if params[:product][:avatar][6].present?
+        params[:product][:avatar6] = params[:product][:avatar][6]
+        flag[6] = true
+      end
+     if params[:product][:avatar][7].present?
+        params[:product][:avatar7] = params[:product][:avatar][7]
+        flag[7] = true
+      end
+     if params[:product][:avatar][8].present?
+        params[:product][:avatar8] = params[:product][:avatar][8]
+        flag[8] = true
+      end
      if params[:product][:avatar][0].present?
         params[:product][:avatar] = params[:product][:avatar][0]
         flag[0] = true
       end
     else
-      params[:product][:avatar], params[:product][:avatar1], params[:product][:avatar2], params[:product][:avatar3], params[:product][:avatar4], params[:product][:avatar5] = '', '', '', '', '', ''
+      params[:product][:avatar], params[:product][:avatar1], params[:product][:avatar2], params[:product][:avatar3],
+      params[:product][:avatar4], params[:product][:avatar5], params[:product][:avatar6],  params[:product][:avatar7],
+      params[:product][:avatar8] = '', '', '', '', '', '', '', '', ''
     end
 
     # set product separate
@@ -896,8 +910,10 @@ class ProductsController < ApplicationController
 
         avatar_urls = []
         if params[:product][:avatar].present?
-          @product.avatar_img_url, @product.avatar_img_url1, @product.avatar_img_url2, @product.avatar_img_url3, @product.avatar_img_url4, @product.avatar_img_url5 = nil
-          [@product.avatar.try(:url), @product.avatar1.try(:url), @product.avatar2.try(:url), @product.avatar3.try(:url), @product.avatar4.try(:url), @product.avatar5.try(:url)].each_with_index do |img_url, index|
+          @product.avatar_img_url, @product.avatar_img_url1, @product.avatar_img_url2, @product.avatar_img_url3, @product.avatar_img_url4,
+          @product.avatar_img_url5, @product.avatar_img_url6, @product.avatar_img_url7, @product.avatar_img_url8 = nil
+          [@product.avatar.try(:url), @product.avatar1.try(:url), @product.avatar2.try(:url), @product.avatar3.try(:url), @product.avatar4.try(:url),
+           @product.avatar5.try(:url), @product.avatar6.try(:url), @product.avatar7.try(:url), @product.avatar8.try(:url)].each_with_index do |img_url, index|
             if img_url.present?
               puts 'image upload'
               avatar_urls << QiniuUploadHelper::QiNiu.upload_from_client(Rails.root.join('public' "#{img_url}")) if flag[index]
@@ -910,10 +926,16 @@ class ProductsController < ApplicationController
           @product.avatar_img_url3 = avatar_urls[3]
           @product.avatar_img_url4 = avatar_urls[4]
           @product.avatar_img_url5 = avatar_urls[5]
-          @product.avatar = @product.avatar1 = @product.avatar2 = @product.avatar3 = @product.avatar4 = @product.avatar5 = nil
+          @product.avatar_img_url6 = avatar_urls[6]
+          @product.avatar_img_url7 = avatar_urls[7]
+          @product.avatar_img_url8 = avatar_urls[8]
+          @product.avatar = @product.avatar1 = @product.avatar2 = @product.avatar3 = @product.avatar4 =
+          @product.avatar5 = @product.avatar6 = @product.avatar7 = @product.avatar8 = nil
         else
-          @product.avatar_img_url, @product.avatar_img_url1, @product.avatar_img_url2, @product.avatar_img_url3, @product.avatar_img_url4, @product.avatar_img_url5 = nil
-          @product.avatar = @product.avatar1 = @product.avatar2 = @product.avatar3 = @product.avatar4 = @product.avatar5 = nil
+          @product.avatar_img_url, @product.avatar_img_url1, @product.avatar_img_url2, @product.avatar_img_url3, @product.avatar_img_url4,
+          @product.avatar_img_url5, @product.avatar_img_url6, @product.avatar_img_url7, @product.avatar_img_url8 = nil
+          @product.avatar = @product.avatar1 = @product.avatar2 = @product.avatar3 = @product.avatar4 =
+          @product.avatar5 = @product.avatar6 = @product.avatar7 = @product.avatar8 = nil
         end
         @product.translate_status = false
         @product.save
