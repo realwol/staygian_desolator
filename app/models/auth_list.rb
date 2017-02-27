@@ -1,6 +1,6 @@
 class AuthList < ActiveRecord::Base
   belongs_to :parent_auth, class_name: 'AuthList', foreign_key: 'parent_id'
-  belongs_to :role
+  has_many :roles, through: :role_auth_relations, dependent: :delete_all
 
   scope :first_level_auth, -> {where(status: 1).where(parent_id: nil).where(auth_from: 0).order("id")}
   scope :order_first_level_auth, -> {where(status: 1).where(parent_id: nil).where(auth_from: 1).order("id")}
