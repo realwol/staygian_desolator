@@ -63,7 +63,7 @@
       </div>
     <% end %>
 
-    <% [@product.avatar_img_url, @product.avatar_img_url1, @product.avatar_img_url2, @product.avatar_img_url3, @product.avatar_img_url4, @product.avatar_img_url5].compact.each_with_index do |img,index| %>
+    <% [@product.avatar_img_url, @product.avatar_img_url1, @product.avatar_img_url2, @product.avatar_img_url3, @product.avatar_img_url4, @product.avatar_img_url5, @product.avatar_img_url6, @product.avatar_img_url7, @product.avatar_img_url8].compact.each_with_index do |img,index| %>
       <%if img.present?%>
         <div style="float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px; background: grey;">
           <%= image_tag(img, style:'width:50px;', class:"product_image product_image_count", alt:'', "data-src"=>img) %>
@@ -89,6 +89,15 @@
     </div>
     <div id="avatarImgDiv5" style=" display:none; float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px; background: grey;">
       <%= image_tag('', style:'width:50px; display:none;', class:" product_image_count", id:'myImg6', alt:'', "data-src"=>'') %>
+    </div>
+    <div id="avatarImgDiv6" style=" display:none; float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px; background: grey;">
+      <%= image_tag('', style:'width:50px; display:none;', class:" product_image_count", id:'myImg7', alt:'', "data-src"=>'') %>
+    </div>
+    <div id="avatarImgDiv7" style=" display:none; float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px; background: grey;">
+      <%= image_tag('', style:'width:50px; display:none;', class:" product_image_count", id:'myImg8', alt:'', "data-src"=>'') %>
+    </div>
+    <div id="avatarImgDiv8" style=" display:none; float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px; background: grey;">
+      <%= image_tag('', style:'width:50px; display:none;', class:" product_image_count", id:'myImg9', alt:'', "data-src"=>'') %>
     </div>
     <br/>
     <%= hidden_field_tag 'cut_image_urls' %>
@@ -150,7 +159,6 @@
               count = count + 1
             end
             pre_color = v.color%>
-
           <tr>
             <%= hidden_field_tag 'variable[][index]', nil, value:v.id, class:'hidden_tr_need_remove' %>
             <td rowspan="2"><%= check_box_tag 'item' %></td>
@@ -162,14 +170,20 @@
                   <%= hidden_field_tag "variable[][image_url#{vv_index+1}]", nil, class:'hidden_field_value', value: img %>
                 </li>
               <% end %>
-              <% [@product.avatar_img_url, @product.avatar_img_url1, @product.avatar_img_url2].compact.each_with_index do |img, vv_index| %>
-              <%if img.present?%>
-                <% vv_index = v.valid_images.size + vv_index %>
-                <li class="ui-state-default" style="float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px;">
-                  <%= image_tag(img, style:'width:50px;', class:"variable_image image_#{count}_#{vv_index} ", "data-src"=>img, alt:'' ) %>
-                  <%= hidden_field_tag "variable[][image_url#{v.valid_images.size+vv_index+1}]", nil, class:'avatar_url hidden_field_value', value:img %>
-                </li>
-              <% end %>
+              <% variable_image_count = v.valid_images.size %>
+              <% [@product.avatar_img_url, @product.avatar_img_url1, @product.avatar_img_url2, @product.avatar_img_url3, @product.avatar_img_url4,
+                  @product.avatar_img_url5, @product.avatar_img_url6, @product.avatar_img_url7, @product.avatar_img_url8].compact.each_with_index do |img, vv_index| %>
+                  <% if variable_image_count + vv_index + 1 < 10 %>
+                    <%if img.present?%>
+                      <% vv_index = v.valid_images.size + vv_index %>
+                      <li class="ui-state-default" style="float: left; width: 50px; height: 50px; font-size: 4em; text-align: center; margin-left:1px; margin-top:1px;">
+                        <%= image_tag(img, style:'width:50px;', class:"variable_image image_#{count}_#{vv_index} ", "data-src"=>img, alt:'' ) %>
+                        <%= hidden_field_tag "variable[][image_url#{v.valid_images.size+vv_index+1}]", nil, class:'avatar_url hidden_field_value', value:img %>
+                      </li>
+                    <% end %>
+                  <% else %>
+                    <% break %>
+                  <% end %>
               <% end %>
               </ul>
             </td>
@@ -288,7 +302,7 @@
     var origin_color_value = $(this).data('origin-color-value');
     var color_value = $(this).val();
     $('.variable_color').each(function(){
-      if (origin_color_value == $(this).data('origin-color-value')) {
+      if (origin_color_value == $(this).data('origin-color-value') && '' != origin_color_value ) {
         $(this).val(color_value);
       }
     });
@@ -299,7 +313,7 @@
     var origin_color_value = $(this).data('color-value');
     var vtitle_value = $(this).val();
     $('.variable_title').each(function(){
-      if (origin_color_value == $(this).data('color-value')) {
+      if (origin_color_value == $(this).data('color-value') && '' != origin_color_value ) {
         $(this).val(vtitle_value);
       }
     });
@@ -389,6 +403,21 @@
             reader5.onload = imageIsLoaded5;
             reader5.readAsDataURL(this.files[5]);
         }
+        if (this.files && this.files[6]) {
+            var reader6 = new FileReader();
+            reader6.onload = imageIsLoaded6;
+            reader6.readAsDataURL(this.files[6]);
+        }
+        if (this.files && this.files[7]) {
+            var reader7 = new FileReader();
+            reader7.onload = imageIsLoaded7;
+            reader7.readAsDataURL(this.files[7]);
+        }
+        if (this.files && this.files[8]) {
+            var reader8 = new FileReader();
+            reader8.onload = imageIsLoaded8;
+            reader8.readAsDataURL(this.files[8]);
+        }
     // alert($(this).val());
     // alert(this.files[0]);
     // var uploadPath = $(this).val();
@@ -438,6 +467,21 @@
     $('#myImg6').attr('src', e.target.result);
     $('#myImg6').css('display','inline');
   };
+  function imageIsLoaded6(e) {
+    $('#avatarImgDiv6').css('display','inline');
+    $('#myImg7').attr('src', e.target.result);
+    $('#myImg7').css('display','inline');
+  };
+  function imageIsLoaded7(e) {
+    $('#avatarImgDiv7').css('display','inline');
+    $('#myImg8').attr('src', e.target.result);
+    $('#myImg8').css('display','inline');
+  };
+  function imageIsLoaded8(e) {
+    $('#avatarImgDiv8').css('display','inline');
+    $('#myImg9').attr('src', e.target.result);
+    $('#myImg9').css('display','inline');
+  };
   // $('form#upload_custome_image').submit(function(){
   //   var valuesToSubmit = $(this).serialize();
   //   alert(valuesToSubmit);
@@ -482,21 +526,31 @@
   });
 
   $('.variable_image').dblclick(function(){
+    var size_value = $(this).parents('tr').find('.variable_color').val();
     var flag = $(this).attr("src");
     var src = $(this).data("src");
+    var image_this = $(this);
     var classString = $(this).attr('class');
     var classNames = classString.split(" ");
     var names = "."+classNames[1];
     if(flag==''){
+      $(this).next('.hidden_field_value:first').attr('value', src);
+      $(this).attr('src',src);
       $(names).each(function(){
-        $(this).next('.hidden_field_value:first').attr('value', src);
-        $(this).attr('src',src);
-      })
+        if (size_value == $(this).parents('tr').find('.variable_color').val() && '' != $(this).parents('tr').find('.variable_color').val()) {
+          $(this).next('.hidden_field_value:first').attr('value', src);
+          $(this).attr('src',src);
+        }
+      });
     }else{
+      $(this).next('.hidden_field_value:first').attr('value', '');
+      $(this).attr('src','');
       $(names).each(function(){
-        $(this).next('.hidden_field_value:first').attr('value', '');
-        $(this).attr('src','');
-      })
+        if (size_value == $(this).parents('tr').find('.variable_color').val() && '' != $(this).parents('tr').find('.variable_color').val()) {
+          $(this).next('.hidden_field_value:first').attr('value', '');
+          $(this).attr('src','');
+        }
+      });
     }
   });
 
