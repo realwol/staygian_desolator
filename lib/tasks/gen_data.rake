@@ -1,4 +1,14 @@
 namespace :gen_data do
+  desc 'gen sku1 for which do not have'
+  task gen_sku1: :environment do
+    Product.where(sku1: nil).each do |p|
+      size = rand(5..8)
+      sku1 = (('a'..'z').to_a + (1..9).to_a).shuffle.sample(size).join
+      p.update_attributes(sku1: sku1)
+      puts p.id
+    end
+  end
+
   desc 'gen product id for merchant sku relation'
   task gen_product_id_for_merchant_sku_relation: :environment do
     MerchantSkuRelation.where(product_id: nil).where("id > 11389724").find_each do |r|

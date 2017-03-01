@@ -4,7 +4,9 @@ class ProductsController < ApplicationController
 
   def build_product
     v_sum = params[:variable_sum]
-    new_product = current_user.products.create(translate_status:false, update_status:false, on_sale:true)
+    size = rand(5..8)
+    sku1 = (('a'..'z').to_a + (1..9).to_a).shuffle.sample(size).join
+    new_product = current_user.products.create(translate_status:false, update_status:false, on_sale:true, sku1: sku1)
     new_product.variables.create(Array.new(v_sum.to_i) { Hash.new })
 
     redirect_to edit_product_path(new_product)

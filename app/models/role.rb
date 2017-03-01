@@ -1,7 +1,7 @@
 class Role < ActiveRecord::Base
   has_many :users, class_name: 'User', foreign_key: 'user_role_id'
   has_many :role_auth_relations, dependent: :destroy
-  has_many :auth_lists, through: :role_auth_relations, dependent: :delete_all
+  has_many :auth_lists, through: :role_auth_relations, dependent: :destroy
 
   scope :valid_role, -> {where(status: 1)}
 
