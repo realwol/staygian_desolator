@@ -272,7 +272,7 @@ class ProductsController < ApplicationController
     else
       product_link_id = link[product_link_start..-1]
     end
-    product_tmall_link = Product.where.not(auto_flag: 13).where(product_link_id: product_link_id).first
+    product_tmall_link = Product.where.not(auto_flag: 13, shield_type: 6).where(product_link_id: product_link_id).first
 
     if product_tmall_link.present?
       # product_tmall_link.update_attributes(status: false)      
