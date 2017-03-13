@@ -71,6 +71,7 @@
   <% end %>
 
   <%= link_to '更改产品分类', change_product_type_products_path(product_id: @search_value.map(&:id)) %>
+  <%= link_to '淘汰', knockout_products_path(product_id: @search_value.map(&:id)), method: :post %>
 <% end %>
   
   <%= link_to '返回', root_path %>

@@ -2,6 +2,19 @@ class ProductsController < ApplicationController
   before_action :set_product, only: [:create_new_product_wv, :new_product_wv, :show, :edit, :update, :destroy, :shield_product, :presale_product, :offsale_product, :temp_offsale_product, :onsale_product, :edited_product, :translate_preview]
   before_action :authenticate_user!
 
+  def knockout_products
+    if selected_user.is_dd? || selected_user.can_user_see_all?
+      @products = Product.knockout.order('first_updated_time desc').page(params[:page])
+    else
+      @products = selected_user.knockout.order('first_updated_time desc').page(params[:page])
+    end
+  end
+
+  def knockout
+    Product.where(id: params[:product_id]).update_all(shield_type: 6)
+    redirect_to knockout_products_products_path
+  end
+
   def build_product
     v_sum = params[:variable_sum]
     size = rand(5..8)
