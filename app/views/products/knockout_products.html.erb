@@ -1,15 +1,17 @@
-<h5>淘汰产品列表: <%= @products.total_count %></h5>
-<p id="notice"><%= notice %></p>
+<h4>淘汰产品数目：<%= @products.total_count %></h4>
 
-<table class='table table-bordered' style="width:90%;">
+<table class='table table-bordered'>
   <thead>
     <tr>
-      <th>产品类型</th>
-      <th>产品标题</th>
-      <th>SKU</th>
-      <th>副SKU</th>
-      <th>产品号</th>
-      <th colspan="1">操作</th>
+      <th><%= '类型' %></th>
+      <th><%= '题目' %> <span style='color:red;'>(红色为未翻译完成)</span></th>
+      <th><%= 'Sku' %></th>
+      <th><%= '副Sku' %></th>
+      <th><%= '产品号' %></th>
+      <th><%= '创建者' %></th>
+      <th><%= '创建时间' %></th>
+      <th><%= '价格' %></th>
+      <th><%= '操作' %></th>
     </tr>
   </thead>
 
@@ -17,11 +19,26 @@
     <% @products.each do |product| %>
       <tr>
         <td><%= link_to product.product_type.name, product_type_path(product.product_type) if product.product_type%></td>
-        <td><%= product.title %></td>
+        <% if product.is_translated? %>
+          <td><%= product.title %></td>
+        <% else %>
+          <td style="color:red;"><%= product.title %></td>
+        <% end %>
         <td><%= product.sku %></td>
         <td><%= product.sku1 %></td>
         <td><%= product.product_number %></td>
+        <td><%= product.get_unscope_user.try(:username) %></td>
+        <td><%= (product.try(:first_updated_time) + 7.hours + 56.minutes).strftime("%Y-%m-%d %H:%M") if product.first_updated_time.present? %></td>
         <td>
+          <%= text_field_tag 'product_price', product.price, class:'product_price', size:5 %>
+          <%= button_tag '保存', class:'change_price', "data-link"=> update_price_products_path, 'data-product_id'=>product.id %>
+        </td>
+        <td>
+          <%= link_to '翻译预览', translate_preview_product_path(product) %>
+          <%= link_to '编辑', edit_product_path(product) %>
+          <%= link_to '屏蔽', shield_product_product_path(product), data:{ confirm: '确定屏蔽？'} %>
+          <%= link_to '删除', product, method: :delete, data: { confirm: '确认删除?' } %>
+          <a href="#" class="reGraspProduct" data-product-id="<%= product.id %>" >重新抓取</a>
         </td>
       </tr>
     <% end %>
@@ -29,6 +46,52 @@
 </table>
 <%= paginate @products %>
 
-<br>
+<hr/>
+<% link_to '待修改产品列表', un_updated_page_products_path %>
+<% link_to '屏蔽产品列表', shield_products_products_path %>
+<% link_to '预售产品列表', presaled_products_products_path %>
+<% link_to '下架产品列表', off_sale_products_products_path %>
+<b/>
+<br/>
+<% link_to '插入抓取链接', get_tmall_links_products_path %>
+<% link_to '导出', export_page_products_path %>
+<% link_to '设定汇率', cash_rates_path %>
+<% link_to '编辑运输方式', shipments_path %>
+<% link_to '产品分类管理', product_types_path %>
+<% link_to '未翻译变体管理', translate_variables_variables_path %>
 
-<%= link_to '返回', root_url %>
+<%= javascript_tag do %>
+  $('.change_price').click(function(){
+    var link = $(this).data("link");
+    var product_id = $(this).data("product_id");
+    var price = $(this).prev('.product_price').first().val();
+    $.get( link,{
+      product_id: product_id,
+      price: price
+    }).success(function(json){
+      if(json==1){
+        alert('s');
+      }else if(json==2){
+        alert('f');
+      }
+    });
+  })
+<% end -%>
+
+<script type="text/javascript">
+  $('.reGraspProduct').click(function(){
+    if (!confirm('确定重新抓取吗？')){
+      return false;
+    }
+    var productId = $(this).data('product-id');
+    var $this = $(this);
+    $.ajax({
+      url: '/products/'+ productId +'/regrasp_product',
+      type: 'get',
+      success: function(){
+        $this.parents('tr').remove();
+        alert('操作成功！');
+      }
+    })
+  })
+</script>

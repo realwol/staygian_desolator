@@ -11,7 +11,7 @@ class ProductsController < ApplicationController
   end
 
   def knockout
-    Product.where(id: params[:product_id]).update_all(shield_type: 6)
+    # Product.where(id: params[:product_id]).update_all(shield_type: 6)
     redirect_to knockout_products_products_path
   end
 
