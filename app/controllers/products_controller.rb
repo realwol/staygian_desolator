@@ -6,12 +6,12 @@ class ProductsController < ApplicationController
     if selected_user.is_dd? || selected_user.can_user_see_all?
       @products = Product.knockout.order('first_updated_time desc').page(params[:page])
     else
-      @products = selected_user.knockout.order('first_updated_time desc').page(params[:page])
+      @products = selected_user.knockout_products.order('first_updated_time desc').page(params[:page])
     end
   end
 
   def knockout
-    # Product.where(id: params[:product_id]).update_all(shield_type: 6)
+    Product.where(id: params[:product_id]).update_all(shield_type: 6)
     redirect_to knockout_products_products_path
   end
 
@@ -441,11 +441,11 @@ class ProductsController < ApplicationController
     unless sku_value.empty?
       search_query << "(sku like '%#{sku_value}%' or sku1 like '%#{sku_value}%')"
     end
-
     case @action_from
     when 'index'
       @result_button = 0
       @search_value = @products.updated.un_shield.onsale.where("#{search_query.join(' and ')}").order('first_updated_time desc').page(params[:page]).per(15)
+      @all_search_value = @products.updated.un_shield.onsale.where("#{search_query.join(' and ')}")
     when 'off_sale_products'
       @result_type = '下线产品'
       @result_button = 1

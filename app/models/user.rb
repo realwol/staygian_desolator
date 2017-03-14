@@ -32,6 +32,10 @@ class User < ActiveRecord::Base
   scope :seller, -> {where("leader_id != 1 and id != 1 and user_role_id = 3").not_lzyg}
   scope :group_charger, -> {where("user_role_id = 2 or user_role_id = 9")}
 
+  def knockout_products
+    valid_products.knockout
+  end
+
   def get_current_product_types
     ProductType.where(user_id: [nil, id, 1])
   end
