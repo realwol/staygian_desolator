@@ -3,6 +3,7 @@ class ProductsController < ApplicationController
   before_action :authenticate_user!
 
   def knockout_products
+    @action_from = 'knockout'
     if selected_user.is_dd? || selected_user.can_user_see_all?
       @products = Product.knockout.order('first_updated_time desc').page(params[:page])
     else
@@ -450,34 +451,47 @@ class ProductsController < ApplicationController
       @result_type = '下线产品'
       @result_button = 1
       @search_value = @products.offsale.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
+      @all_search_value = @products.offsale.where("#{search_query.join(' and ')}")
     when 'presaled_products'
       @result_type = '预售产品'
       @result_button = 2
       @search_value = @products.pre_saled.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
+      @all_search_value = @products.pre_saled.where("#{search_query.join(' and ')}")
     when 'shield_products'
       @result_type = '屏蔽产品'
       @result_button = 3
       @search_value = @products.shield.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
+      @all_search_value = @products.shield.where("#{search_query.join(' and ')}")
     when 'un_updated_page'
       @result_type = '未更新产品'
       @result_button = 4
       @search_value = @products.un_updated.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
+      @all_search_value = @products.un_updated.where("#{search_query.join(' and ')}")
     when 'temp_off_sale_products'
       @result_type = '临时下线产品'
       @result_button = 5
       @search_value = @products.temp_offsale.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
+      @all_search_value = @products.temp_offsale.where("#{search_query.join(' and ')}")
     when 'stand_by_products'
       @result_type = '待定产品'
       @result_button = 6
       @search_value = @products.auto_stand_by.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
+      @all_search_value = @products.auto_stand_by.where("#{search_query.join(' and ')}")
     when 'removed_products'
       @result_type = '删除产品'
       @result_button = 7
       @search_value = @products.auto_removed.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
+      @all_search_value = @products.auto_removed.where("#{search_query.join(' and ')}")
     when 'unchecked_products'
       @result_type = '待审核产品'
       @result_button = 8
       @search_value = @products.unchecked.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
+      @all_search_value = @products.unchecked.where("#{search_query.join(' and ')}")
+    when 'knockout'
+      @result_type = '淘汰产品'
+      @result_button = 9
+      @search_value = @products.knockout.where("#{search_query.join(' and ')}").order('id desc').page(params[:page]).per(15)
+      @all_search_value = @products.knockout.where("#{search_query.join(' and ')}")
     end
   end
 
