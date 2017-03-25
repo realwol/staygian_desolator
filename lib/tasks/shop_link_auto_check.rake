@@ -319,11 +319,17 @@ def filter_search_product product_html, link
 end
 
 def check_search_links
-  100.times do
-    sleep rand(20..25)
+  a, b = Time.now, Time.now
+  while (b - a) < 1800
+    sleep rand(5..10)
     link = get_search_link
-    puts link.id
-    grasp_search_link link if link.present?
+    if link.present?
+      grasp_search_link link 
+      puts link.id
+    else
+      puts "We are out of links!"
+    end
+    b = Time.now
   end
 end
 
