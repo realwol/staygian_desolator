@@ -95,9 +95,9 @@ class UsersController < ApplicationController
                                                      group by user_id order by user_count desc")
 
     flag_product = Product.find_by(product_check_flag: true)
-    all_need_update_product = Product.need_update
-    @current_updated_product_count = all_need_update_product.where("id < ?", flag_product.id).count
-    @all_updated_products_count =  all_need_update_product.count
+
+    @current_updated_product_count = Product.need_update.where("id < ?", flag_product.id).pluck(:id).size
+    @all_updated_products_count =  Product.need_update.pluck(:id).size
   end
 
   def show_little_brothers

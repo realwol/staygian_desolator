@@ -328,6 +328,7 @@ def check_search_links
       puts link.id
     else
       puts "We are out of links!"
+      return
     end
     b = Time.now
   end
