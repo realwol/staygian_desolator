@@ -11,7 +11,7 @@ namespace :gen_data do
 
   desc 'gen product id for merchant sku relation'
   task gen_product_id_for_merchant_sku_relation: :environment do
-    MerchantSkuRelation.where(product_id: nil).where("id > 11389724").find_each do |r|
+    MerchantSkuRelation.where(product_id: nil).where("id > 17731830").find_each do |r|
       puts r.id
       r_sku = r.sku
       if r_sku.present?
@@ -30,17 +30,17 @@ namespace :gen_data do
 
   desc 'gen unformatting sku info'
   task gen_unformatting_product: :environment do
-    MerchantSkuRelation.where(product_id: nil).where("id > 17937898").find_each do |r|
+    last_letter_array = ('A'..'Z').to_a
+    MerchantSkuRelation.where(product_id: nil).where("id > 17752351").find_each do |r|
       puts r.id
       r_sku = r.sku
       if r_sku.present?
-        if ('A'..'Z').to_a.include? r_sku.last
+        if last_letter_array.include? r_sku.last
           sku_part = r_sku[0..-2]
         else
           sku_part = r_sku
         end
-        product = Product.select(:id).where(sku1: sku_part).first
-        product = Product.select(:id).where(sku: sku_part).first unless product.present?
+        product = Product.select(:id).where("sku1 = ? or sku = ?", sku_part, sku_part).first
         r.update_attributes(product_id: product.id) if product.present?
       end
     end
