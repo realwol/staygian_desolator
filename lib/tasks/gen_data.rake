@@ -31,7 +31,7 @@ namespace :gen_data do
   desc 'gen unformatting sku info'
   task gen_unformatting_product: :environment do
     last_letter_array = ('A'..'Z').to_a
-    MerchantSkuRelation.where(product_id: nil).where("id > 17752351").find_each do |r|
+    MerchantSkuRelation.where(product_id: nil).where("id > 18188206").find_each do |r|
       puts r.id
       r_sku = r.sku
       if r_sku.present?
