@@ -94,9 +94,11 @@ class UsersController < ApplicationController
                                                      where user_id in #{all_rank_user_string} and update_status = 1 and on_sale = 1 and auto_flag != 13 and shield_type = 0
                                                      group by user_id order by user_count desc")
 
-    flag_product = Product.find_by(product_check_flag: true)
+    flag_product = Product.find_by(product_check_flag: 1)
+    flag_product_1 = Product.find_by(product_check_flag: 2)
 
     @current_updated_product_count = Product.need_update.where("id < ?", flag_product.id).pluck(:id).size
+    @current_updated_product_count_1 = Product.need_update.where("id > ?", flag_product_1.id).pluck(:id).size
     @all_updated_products_count =  Product.need_update.pluck(:id).size
   end
 
