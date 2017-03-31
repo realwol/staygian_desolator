@@ -31,8 +31,10 @@ namespace :gen_data do
   desc 'gen unformatting sku info'
   task gen_unformatting_product: :environment do
     last_letter_array = ('A'..'Z').to_a
-    MerchantSkuRelation.where(product_id: nil).where("id > 18188206").find_each do |r|
-      puts r.id
+    count = 0
+    a = Time.now
+    MerchantSkuRelation.where(product_id: nil).order("id desc").limit(100000).each do |r|
+      count = count + 1
       r_sku = r.sku
       if r_sku.present?
         if last_letter_array.include? r_sku.last
@@ -40,8 +42,14 @@ namespace :gen_data do
         else
           sku_part = r_sku
         end
-        product = Product.select(:id).where("sku1 = ? or sku = ?", sku_part, sku_part).first
+        product = Product.select(:id).where(sku1: sku_part).first
+        product = Product.select(:id).where(sku: sku_part).first unless product.present?
         r.update_attributes(product_id: product.id) if product.present?
+      end
+
+      if Time.now - a > 60
+        puts r.id, count
+        count, a = 0, Time.now
       end
     end
   end
