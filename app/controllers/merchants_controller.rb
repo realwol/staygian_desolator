@@ -364,12 +364,10 @@ class MerchantsController < ApplicationController
       if index.present?
         new_base_sku_array << sku[0..index-1]
       else
-        # error condition set
-        if 'M' == sku.first
+        if ('A'..'Z').to_a.include? sku.last
+          new_base_sku_array << sku[0..-2]
+        elsif 'M' == sku.first
           old_base_sku_array << sku[0..index-1]
-        else
-        # elsif (('A'..'Z').to_a + ('a'..'z').to_a).include? sku.last
-          new_base_sku_array << sku[0..-1]
         end
       end
     end

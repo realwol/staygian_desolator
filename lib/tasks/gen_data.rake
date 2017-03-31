@@ -54,6 +54,32 @@ namespace :gen_data do
     end
   end
 
+  desc 'gen unformatting sku info backwards'
+  task gen_unformatting_product_backwards: :environment do
+    last_letter_array = ('A'..'Z').to_a
+    count = 0
+    a = Time.now
+    MerchantSkuRelation.where(product_id: nil).limit(100000).each do |r|
+      count = count + 1
+      r_sku = r.sku
+      if r_sku.present?
+        if last_letter_array.include? r_sku.last
+          sku_part = r_sku[0..-2]
+        else
+          sku_part = r_sku
+        end
+        product = Product.select(:id).where(sku1: sku_part).first
+        product = Product.select(:id).where(sku: sku_part).first unless product.present?
+        r.update_attributes(product_id: product.id) if product.present?
+      end
+
+      if Time.now - a > 60
+        puts r.id, count
+        count, a = 0, Time.now
+      end
+    end
+  end
+
   desc 'gen new sku'
   task :gen_new_sku_to_product => :environment do
     Product.where(sku1:nil).find_each do |p|
