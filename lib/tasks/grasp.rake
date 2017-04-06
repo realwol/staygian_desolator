@@ -16,7 +16,9 @@ def start
 	tmall_link = ungrasp_tmall_link
     if tmall_link.present?
       # if TmallLink.where(product_link_id: tmall_link.product_link_id).count > 1
-      if Product.where.not(auto_flag: 13, shield_type: 6).find_by(product_link_id: tmall_link.product_link_id).present?
+      if Product.where.not(auto_flag: 13, shield_type: 6)
+                .find_by(product_link_id: tmall_link.product_link_id,
+                         user_id: tmall_link.user_id).present?
         tmall_link.update_attributes(status:true)
         puts 'duplicate product'
         return false
