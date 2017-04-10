@@ -12,3 +12,6 @@ development:
 production:
   <<: *default
   database: amazon_tmall_development
+test:
+  <<: *default
+  database: amazon_tmall_development
