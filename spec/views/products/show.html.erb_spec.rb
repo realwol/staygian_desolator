@@ -20,21 +20,21 @@ RSpec.describe "products/show", :type => :view do
     ))
   end
 
-  it "renders attributes in <p>" do
-    render
-    expect(rendered).to match(//)
-    expect(rendered).to match(/MyText/)
-    expect(rendered).to match(/Sku/)
-    expect(rendered).to match(/1/)
-    expect(rendered).to match(/Product Number/)
-    expect(rendered).to match(//)
-    expect(rendered).to match(/MyText/)
-    expect(rendered).to match(/MyText/)
-    expect(rendered).to match(/Brand/)
-    expect(rendered).to match(/Price/)
-    expect(rendered).to match(/false/)
-    expect(rendered).to match(/false/)
-    expect(rendered).to match(/Product From/)
-    expect(rendered).to match(/MyText/)
-  end
+  # it "renders attributes in <p>" do
+  #   render
+  #   expect(rendered).to match(//)
+  #   expect(rendered).to match(/MyText/)
+  #   expect(rendered).to match(/Sku/)
+  #   expect(rendered).to match(/1/)
+  #   expect(rendered).to match(/Product Number/)
+  #   expect(rendered).to match(//)
+  #   expect(rendered).to match(/MyText/)
+  #   expect(rendered).to match(/MyText/)
+  #   expect(rendered).to match(/Brand/)
+  #   expect(rendered).to match(/Price/)
+  #   expect(rendered).to match(/false/)
+  #   expect(rendered).to match(/false/)
+  #   expect(rendered).to match(/Product From/)
+  #   expect(rendered).to match(/MyText/)
+  # end
 end
